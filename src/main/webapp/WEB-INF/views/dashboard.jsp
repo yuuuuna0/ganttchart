@@ -72,7 +72,7 @@
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="index.jsp">Login</a>
+                                            <a class="nav-link" href="login.jsp">Login</a>
                                             <a class="nav-link" href="register.jsp">Register</a>
                                             <a class="nav-link" href="password.jsp">Forgot Password</a>
                                         </nav>
