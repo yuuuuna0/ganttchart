@@ -2,7 +2,6 @@ package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.UsersService;
 import com.weaverloft.ganttchart.dto.Users;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,8 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UsersController {
     private UsersService usersService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    public UsersController(UsersService usersService,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UsersController(UsersService usersService) {
         this.usersService=usersService;
-        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
     }
 
     @GetMapping("/login")
