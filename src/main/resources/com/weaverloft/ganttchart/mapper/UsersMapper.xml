@@ -36,8 +36,24 @@
     <select id="isExistedUsersByIdEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id} and email=#{email}
     </select>
-
-    <!-- 9. 회원 이미지 등록 -->
+    <!-- 9. 메일 인증여부 확인 -->
+    <select id="findMailAuth" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM users
+        WHERE id = #{id} AND mail_auth = 1
+    </select>
+    <!-- 10. 메일 인증번호 업데이트 -->
+    <update id="updateMailKey" parameterType="com.itwill.my_real_korea.dto.user.User">
+        UPDATE  user_info
+        SET mail_key = #{mailKey}
+        WHERE user_id = #{userId} AND email = #{email}
+    </update>
+    <!-- 11. 메일 인증여부 업데이트 -->
+    <update id="updateMailAuth" parameterType="com.itwill.my_real_korea.dto.user.User">
+        UPDATE  user_info
+        SET mail_auth = 1
+        WHERE email = #{email} AND mail_key = #{mailKey}
+    </update>
 
 
 

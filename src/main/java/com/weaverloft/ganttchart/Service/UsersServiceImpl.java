@@ -96,7 +96,10 @@ public class UsersServiceImpl implements UsersService{
     //6. 로그인
     public Users login(String id, String password) throws Exception {
         Users users=usersDao.findUsersById(id);
-        return null;
+        if(users==null){
+            System.out.println(users.getId()+"는 존재하지 않는 아이디입니다");
+        }
+        return users;
     }
 
     @Override

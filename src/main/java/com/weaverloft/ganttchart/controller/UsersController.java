@@ -23,13 +23,6 @@ public class UsersController {
     //1. 로그인 페이지
     public String login(HttpServletRequest request, Model model){
         HttpSession session=request.getSession();
-
-        String prevPage = request.getHeader("Referer");
-        if(prevPage ==null || prevPage.contains("/login")){
-            prevPage = request.getContextPath() +"/index";
-        }
-        session.setAttribute("prevPage",prevPage);
-        model.addAttribute("prevPage",prevPage);
         return "login";
     }
     //2. 로그인 액션
