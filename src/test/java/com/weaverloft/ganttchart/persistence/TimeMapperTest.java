@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {com.weaverloft.ganttchart.config.RootConfig.class})
+@ContextConfiguration(classes = {com.weaverloft.ganttchart.config.ApplicationConfig.class})
 @Log4j
 public class TimeMapperTest {
     @Autowired

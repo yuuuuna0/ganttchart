@@ -5,6 +5,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +16,8 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan(basePackages = {"com.weaverloft.ganttchart"})
 @MapperScan(basePackages = {"com.weaverloft.ganttchart.mapper"})
-public class RootConfig {
+public class ApplicationConfig {
+
     @Bean
     //jdbc 연결
     public DataSource dataSource(){
@@ -27,6 +30,7 @@ public class RootConfig {
         HikariDataSource dataSource=new HikariDataSource(hikariConfig);
         return dataSource;
     }
+
     @Bean
     //mybatis 연결
     public SqlSessionFactory sqlSessionFactory() throws Exception{
