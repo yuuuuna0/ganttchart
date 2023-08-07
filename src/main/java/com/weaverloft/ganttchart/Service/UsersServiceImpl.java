@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class UsersServiceImpl implements UsersService{
     private UsersDao usersDao;
 
-    public UsersServiceImpl() {
+    public UsersServiceImpl(UsersDao usersDao) {
         this.usersDao=usersDao;
     }
 
@@ -64,8 +64,8 @@ public class UsersServiceImpl implements UsersService{
     @Override
     //2. 내 정보 조회
     public Users findUsersById(String id) throws Exception {
-        Users findUsers=usersDao.findUsersById(id);
-        return findUsers;
+        Users users=usersDao.findUsersById(id);
+        return users;
     }
 
     @Override
