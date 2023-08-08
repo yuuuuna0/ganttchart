@@ -18,5 +18,5 @@ public interface UsersService {
     //6. 로그인
     Users login(String id,String password) throws Exception;
     //7. 아이디 찾기
-    int findUsersByIdEmail(String id, String email) throws Exception;
+    String findUsersByIdEmail(String id, String email) throws Exception;
 }

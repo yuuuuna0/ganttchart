@@ -19,15 +19,21 @@ public class UsersServiceImpl implements UsersService{
     //1. 회원가입
     public int createUsers(Users users) throws Exception {
         int result;
+        //비밀번호 유효성 검증
         try{
-            //비밀번호 유효성 검증
             isValidPassword(users.getPassword());
         } catch (Exception e){
             e.getMessage();
         }
+        //아이디 중복 확인
+        int existedUser=usersDao.isExistedId(users.getId());
+        if(existedUser==1){
+            System.out.println("존재하는 아이디입니다.");
+        }
         result=usersDao.createUsers(users);
         return result;
     }
+
     /*
     1-1. 비밀번호 유효성 검증
     1) 8~15글자
@@ -99,12 +105,22 @@ public class UsersServiceImpl implements UsersService{
         if(users==null){
             System.out.println(users.getId()+"는 존재하지 않는 아이디입니다");
         }
+        int result;
+        result=usersDao.isMatchPassword(id,password);   //0(실패), 1(성공)
+        if(result == 0){
+            System.out.println("비밀번호가 일치하지 않습니다.");
+        }
         return users;
     }
 
     @Override
     //7. 아이디 찾기
-    public int findUsersByIdEmail(String id, String email) throws Exception {
-        return 0;
+    public String findUsersByIdEmail(String id, String email) throws Exception {
+        int result;
+        result=usersDao.isExistedUsersByIdEmail(id,email);
+        if(result == 0){
+            System.out.println("회원이 존재하지 않습니다.");
+        }
+        return id;
     }
 }
