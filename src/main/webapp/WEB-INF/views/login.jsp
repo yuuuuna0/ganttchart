@@ -29,8 +29,8 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                        <label for="inputEmail">Email address</label>
+                                        <input class="form-control" id="inputId" placeholder="Id" />
+                                        <label for="inputId">Id</label>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
