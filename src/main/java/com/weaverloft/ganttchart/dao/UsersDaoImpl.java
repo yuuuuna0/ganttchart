@@ -5,6 +5,9 @@ import com.weaverloft.ganttchart.mapper.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Repository
 public class UsersDaoImpl implements UsersDao {
     @Autowired
@@ -25,7 +28,20 @@ public class UsersDaoImpl implements UsersDao {
     public Users findUsersById(String id) throws Exception {
         return usersMapper.findUsersById(id);
     }
+    //3. 비밀번호 일치 확인
+    @Override
+    public int isMatchPassword(String id, String password) throws Exception {
+        return usersMapper.isMatchPassword(id,password);
+    }
+    //4. 아이디 중복 체크
+    @Override
+    public int isExistedId(String id) throws Exception {
+        return usersMapper.isExistedId(id);
+    }
 
+
+
+    /*
     @Override
     //3. 정보 수정
     public int updateUsers(Users users) throws Exception {
@@ -61,5 +77,6 @@ public class UsersDaoImpl implements UsersDao {
     public int isExistedUsersByIdEmail(String id, String email) throws Exception {
         return usersMapper.isExistedUsersByIdEmail(id,email);
     }
+     */
 
 }

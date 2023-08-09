@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
     <!-- 1. 회원가입 -->
-    <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
-        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email)
-        values(#{id},#{grade},#{password},#{name},#{photo},#{birth},0,#{phone},#{address},#{email})
+    <insert id="createUsers" parameterType="java.util.Map">
+        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,IS_EMAIL_AUTH)
+        values(#{id},0,#{password},#{name},'default.jpg',#{birth},0,#{phone},#{address},#{email},0)
     </insert>
     <!--2. 내 정보 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
@@ -16,15 +16,7 @@
         set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
         where id=#{id}
     </update>
-    <!-- 4. 회원 탈퇴 -->
-    <delete id="deleteUsers" parameterType="java.lang.String">
-        delete users where id=#{id}
-    </delete>
-    <!-- 5. 비밀번호 변경 -->
-    <update id="updatePassword" parameterType="java.util.Map">
-        update USERS set password=#{password} where id=#{id} and email=#{email}
-    </update>
-    <!-- 6. 비밀번호 일치 확인 -->
+    <!-- 6. 비밀번호 일치 확인-->
     <select id="isMatchPassword" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id} and password=#{password}
     </select>
@@ -32,21 +24,35 @@
     <select id="isExistedId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id}
     </select>
-    <!-- 8. 이메일, 이름으로 회원 존재여부 확인 -->
+    <!-- 4. 회원 탈퇴
+    <delete id="deleteUsers" parameterType="java.lang.String">
+        delete users where id=#{id}
+    </delete>
+    -->
+    <!-- 5. 비밀번호 변경
+    <update id="updatePassword" parameterType="java.util.Map">
+        update USERS set password=#{password} where id=#{id} and email=#{email}
+    </update>
+    -->
+
+
+    <!-- 8. 이메일, 이름으로 회원 존재여부 확인
     <select id="isExistedUsersByIdEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id} and email=#{email}
     </select>
-    <!-- 9. 메일 인증번호 업데이트 -->
+    -->
+    <!-- 9. 메일 인증번호 업데이트
     <update id="updateMailKey" parameterType="com.weaverloft.ganttchart.dto.EmailAuth">
         UPDATE  EMAIL_AUTH
         SET mail_key = #{mailKey}
         WHERE id = #{id}
     </update>
-    <!-- 10. 메일 인증여부 업데이트 -->
+    -->
+    <!-- 10. 메일 인증여부 업데이트
     <update id="updateMailAuth" parameterType="com.weaverloft.ganttchart.dto.Users">
         UPDATE  users
         SET IS_EMAIL_AUTH = 1
         WHERE email = #{email}
     </update>
-
+    -->
 </mapper>

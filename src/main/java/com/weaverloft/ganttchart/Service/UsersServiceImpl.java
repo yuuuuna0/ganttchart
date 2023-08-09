@@ -1,7 +1,11 @@
 package com.weaverloft.ganttchart.Service;
 
+
 import com.weaverloft.ganttchart.dao.UsersDao;
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.exception.PasswordMismatchException;
+import com.weaverloft.ganttchart.exception.UserNotFoundException;
+import com.weaverloft.ganttchart.exception.isInvalidPasswordException;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
@@ -10,63 +14,94 @@ import java.util.regex.Pattern;
 @Service
 public class UsersServiceImpl implements UsersService{
     private UsersDao usersDao;
+    private SHA256Service sha256Service;
 
-    public UsersServiceImpl(UsersDao usersDao) {
+    public UsersServiceImpl(UsersDao usersDao, SHA256Service sha256Service) {
+        System.out.println("UserServiceImpl 생성");
         this.usersDao=usersDao;
+        this.sha256Service = sha256Service;
     }
+    //1. 로그인
+    @Override
+    public Users login(String id, String password) throws Exception {
+        Users users=usersDao.findUsersById(id);
+        if(users==null){
+            throw new UserNotFoundException("존재하지 않는 아이디입니다.");
+        }
+        if(!password.equals(users.getPassword())){
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+        }
+        return users;
+    }
+
 
     @Override
-    //1. 회원가입
+    //2. 회원가입
     public int createUsers(Users users) throws Exception {
-        int result;
-        //비밀번호 유효성 검증
-        try{
-            isValidPassword(users.getPassword());
-        } catch (Exception e){
-            e.getMessage();
-        }
-        //아이디 중복 확인
-        int existedUser=usersDao.isExistedId(users.getId());
-        if(existedUser==1){
-            System.out.println("존재하는 아이디입니다.");
-        }
-        result=usersDao.createUsers(users);
+        int result=0;
+
         return result;
     }
-
-    /*
-    1-1. 비밀번호 유효성 검증
-    1) 8~15글자
-    2) 영어, 숫자, 특수문자 포함
-    3) 공백 안됨
-    4)
-     */
-    public String isValidPassword(String password){
-        //정규식 검사 객체
-        Matcher matcher;
-        //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
-        final String REGEX= "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,15}$";
-        //공백 문자 정규식
-        final String BLANKPT="(\\s)";
+    //3. 비밀번호 정규식 체크
+    @Override
+    public boolean isValidPassword(String password) throws Exception {
+        /*
+          1) 8~15글자
+          2) 영어, 숫자, 특수문자 포함
+          3) 공백 안됨
+        */
+        Matcher matcher;    //정규식 검사 객체
+        String msg="";
+        final String REGEX= "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,15}$";     //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
+        final String BLANKPT="(\\s)";       //공백 문자 정규식
 
         if(password == null || password.isEmpty()){
             //입력한 내용이 없을 경우
-            return "문자를 입력하세요";
+            msg= "문자를 입력하세요";
+            return false;
         } else if(password.length()<8 || password.length()>15){
             //8~15글자의 비밀번호
-            return "비밀번호는 8글자 이상 15글자 이하입니다.";
+            msg= "비밀번호는 8글자 이상 15글자 이하입니다.";
+            return false;
         } else if(password.matches(REGEX)){
             //영문, 숫자, 특수문자 포함 확인
-            return "비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.";
+            msg= "비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.";
+            return false;
         } else if(Pattern.compile(BLANKPT).matcher(password).find()){
             //공백 포함된 경우
-            return "비밀번호에는 공백이 포함될 수 없습니다.";
+            msg= "비밀번호에는 공백이 포함될 수 없습니다.";
+            return false;
         } else{
             //성공
-            return "사용 가능한 비밀번호입니다.";
+            msg= "사용 가능한 비밀번호입니다.";
+            return true;
         }
     }
+    //4. 아이디 중복 확인
+    @Override
+    public boolean isExistedId(String id) throws Exception {
+        int result=usersDao.isExistedId(id);    //0:중복X, 1: 중복O
+        if(result==1){
+            return true;
+        }
+        return false;
+    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     @Override
     //2. 내 정보 조회
     public Users findUsersById(String id) throws Exception {
@@ -103,11 +138,9 @@ public class UsersServiceImpl implements UsersService{
     public Users login(String id, String password) throws Exception {
         Users users=usersDao.findUsersById(id);
         if(users==null){
-            System.out.println(users.getId()+"는 존재하지 않는 아이디입니다");
+            System.out.println(id+"는 존재하지 않는 아이디입니다");
         }
-        int result;
-        result=usersDao.isMatchPassword(id,password);   //0(실패), 1(성공)
-        if(result == 0){
+        if(!password.equals(users.getPassword())){
             System.out.println("비밀번호가 일치하지 않습니다.");
         }
         return users;
@@ -123,4 +156,5 @@ public class UsersServiceImpl implements UsersService{
         }
         return id;
     }
+    */
 }
