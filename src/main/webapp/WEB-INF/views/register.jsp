@@ -97,10 +97,27 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-floating mb-3">
-                                                    <input class="form-control" id="email" name="email" type="email" placeholder="Email" />
-                                                    <label for="email">Email address</label>
+                                                <!-- email 입력 및 인증 시작 -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-9">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" id="email" name="email" type="email" placeholder="Email" />
+                                                            <label for="password">Email</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-floating mb-2 mb-md-0">
+                                                            <button type="button" class="btn btn-outline-primary" id="showDiv" onclick = "fn_sendEmail_Ajax()">
+                                                                <i>Verify</i>
+                                                            </button>
+                                                            <div style="display: none;" id="checkCodeDiv">
+                                                                <input type="text" id="inputCode" style="width: 60%; display: inline;" placeholder="인증코드 입력" class="form-control"  />
+                                                                <button type="button" class="btn btn-outline-primary" onclick="fn_checkCode()">확인</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                <!-- email 입력 및 인증 끝 -->
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
@@ -187,5 +204,42 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
+<script>
+    //이메일 인증
+    function fn_sendEmail_Ajax() {
+        var userEmail = $("#email").val().trim();
+        // 메일이 입력 안되면 튕기기
+        if (userEmail == "" || userEmail == null) {
+            flag_dupl_mail = false;
+            alert("이메일 주소를 입력해야 합니다.");
+            return;
+        }
+        if(flag_dupl_use_mail == false){
+            flag_dupl_mail = false;
+            $("#resultMailBox").html("이미 가입된 이메일 입니다").css('color', 'red');
+            return;
+        }
+        var form = {
+            email : userEmail
+        }
+
+        $.ajax({
+            url : "/checkEmailAjax.do",
+            data : JSON.stringify(form),
+            dataType : "JSON",
+            type : "post",
+            contentType : "application/json; charset=utf-8;",
+            async : false,
+            success : function(data) {
+                alert("입력하신 이메일 주소에서 발급된 코드를 확인하세요.");
+                resultCode = data.joinCode;
+                $("#checkCodeDiv").show();
+            },
+            error : function() {
+                alert("네트워크가 불안정합니다. 다시 시도해 주세요.222");
+            }
+        })
+    }
+</script>
 </body>
 </html>

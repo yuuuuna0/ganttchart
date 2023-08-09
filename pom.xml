@@ -102,6 +102,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <!-- @Inject -->
         <dependency>
             <groupId>javax.inject</groupId>
@@ -236,6 +237,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
             <version>6.0.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <version>2.0.2</version>
         </dependency>
     </dependencies>
 
