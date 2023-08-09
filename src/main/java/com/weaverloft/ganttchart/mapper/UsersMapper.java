@@ -21,6 +21,8 @@ public interface UsersMapper {
     int isExistedId(String id) throws Exception;
     //8. 이메일, 이름으로 회원 존재 여부 확인
     int isExistedUsersByIdEmail(String id, String email) throws Exception;
-    //9. 회원 이미지 등록
-    int createUsersImg(String photo) throws Exception;
+    //10. 이메일인증 업데이트
+    int updateAuthKey(int authKey) throws Exception;
+    //11. 이미지 업로드
+    int updatePhoto(String id, String photo);
 }

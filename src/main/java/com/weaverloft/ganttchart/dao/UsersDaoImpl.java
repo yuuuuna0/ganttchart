@@ -38,6 +38,11 @@ public class UsersDaoImpl implements UsersDao {
     public int isExistedId(String id) throws Exception {
         return usersMapper.isExistedId(id);
     }
+    //5. 이미지 업로드
+    @Override
+    public int updatePhoto(String id, String photo) {
+        return usersMapper.updatePhoto(id,photo);
+    }
 
 
 

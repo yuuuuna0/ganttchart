@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@page import="java.util.*"%>
+<%
+    request.setCharacterEncoding("UTF-8");
+%>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,52 +26,6 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        //1. 주소 apo --> 한글 깨짐 수정해야 함
-        window.onload=function() {
-            document.getElementById('createAddress').addEventListener('click', function () {
-                new daum.Postcode({
-                    oncomplete: function (data) { //선택시 입력값 세팅
-                        document.getElementById("createAddress").value = data.address; // 주소 넣기
-                        document.querySelector("input[name=detailedAddress]").focus(); //상세입력 포커싱
-                    }
-                }).open();
-            })
-        };
-        //2. datepicket
-        $( function() {
-            $( "#datepicker" ).datepicker({ dateFormat: 'yyyy-MM-dd' });    //시간되면 년도 옮기는 옵션 추가하기
-        } );
-        //3. 회원가입 버튼 클릭
-        /*
-        function createUser(){
-            if(document.getElementById('id').value == ''){
-                alert('아이디를 입력하세요');
-                newUserInfo.id.focus();
-            } else if(document.getElementById('password').value ==''){
-                alert('비밀번호를 입력하세요');
-                newUserInfo.password.focus();
-            } else if(document.getElementById('name') == ''){
-                alert('이름을 입력하세요');
-                newUserInfo.name.focus();
-            } else if(document.getElementById('phone') == ''){
-                alert('전화번호를 입력하세요');
-                newUserInfo.phone.focus();
-            } else if(document.getElementById('address') == ''){
-                alert('주소를 입력하세요');
-                newUserInfo.address.focus();
-            } else if(document.getElementById('password') == document.getElementById('passwordConfirm')){
-                alert('비밀번호와 비밀번호 확인은 일치하여야 합니다.');
-                newUserInfo.passwordConfirm.focus();
-            }
-            newUserInfo.action='register-action';
-            newUserInfo.method='POST';
-            newUserInfo.submit();
-            userImage.submit();
-        };
-
-         */
-    </script>
 </head>
 <body class="bg-primary">
 <div id="layoutAuthentication">
@@ -81,7 +39,8 @@
                             <div class="card-body">
                                 <table>
                                     <tr>
-                                        <form id="newUserInfo" accept-charset="utf-8">
+                                        <!-- 회원가입 정보 입력 시작 -->
+                                        <form method="POST" action="register-action" accept-charset="utf-8">
                                             <td>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
@@ -147,16 +106,24 @@
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0">
+                                                        <div class="form-floating mb-3 mb-md-0 btn-group btn-group-toggle" data-toggle="buttons">
+                                                            <label class="btn btn-secondary active">
+                                                                <input type="radio" name="gender" id="gender1" value="0"> 남
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                                <input type="radio" name="gender" id="gender2" value="1"> 여
+                                                            </label>
+                                                            <!--
                                                             <input class="form-control" id="gender" name="gender" type="text" placeholder="Gender" />
-                                                            <!-- toggle로 해서 gender 0:남자 / 1: 여자 숫자 value로 할 예정 -->
+                                                            toggle로 해서 gender 0:남자 / 1: 여자 숫자 value로 할 예정
                                                             <label for="gender">Gender</label>
+                                                            -->
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="datepicker" name="birth" type="text" />
-                                                            <label for="datepicker">Birth</label>
+                                                            <input class="form-control" id="birth" name="birth" type="text" />
+                                                            <label for="birth">Birth</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -167,11 +134,12 @@
                                                 </div>
                                             </td>
                                         </form>
+                                        <!-- 회원가입 정보 입력 끝 -->
                                         <form id="userImage" method="post" enctype="multipart/form-data">
                                             <td>
                                                 <!-- 회원가입 시 사진 업로드 부분 -->
                                                 <div class="mt-4 mb-0">
-                                                    <input type="file" name="uploadfile" multiple>
+                                                    <input type="file" name="photo">
                                                 </div>
                                             </td>
                                         </form>
@@ -205,7 +173,78 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script>
-    //이메일 인증
+    //1. 주소 api --> 한글 깨짐 수정해야 함
+    window.onload=function() {
+        document.getElementById('address').addEventListener('click', function () {
+            new daum.Postcode({
+                oncomplete: function (data) { //선택시 입력값 세팅
+                    document.getElementById("address").value = data.address; // 주소 넣기
+                    document.querySelector("input[name=address]").focus(); //상세입력 포커싱
+                }
+            }).open();
+        })
+    };
+
+    //2. birth -> datepicker 이용
+    window.onload=function() {
+        $("#birth" ).datepicker({ dateFormat: 'yyyy-MM-dd' });    //시간되면 년도 옮기는 옵션 추가하기
+    };
+/*
+    //3. 회원가입 버튼 클릭
+    function createUser(){
+        var user = {};
+        user.id=$("id").val();
+        user.password=$("password").val();
+        user.passwordConfirm=$("passwordConfirm").val();
+        user.email=$("email").val();
+        user.name=$("name").val();
+        user.phone=$("phone").val();
+        user.address=$("address").val();
+        user.detailedAddress=$('detailedAddress').val();
+        user.gender=$("input[name=gender]:checked").val();
+        user.birth=$("birth").val();
+
+        if(user.id == ''){
+            alert('아이디를 입력하세요');
+            user.id.focus();
+        } else if(user.name == ''){
+            alert('이름을 입력하세요');
+            user.name.focus();
+        } else if(user.password ==''){
+            alert('비밀번호를 입력하세요');
+            user.password.focus();
+        } else if(user.passwordConfirm =='') {
+            alert('비밀번호 확인을 입력하세요');
+            user.passwordConfirm.focus();
+        } else if(user.email == ''){
+            alert('이메일을 입력하세요');
+            user.email.focus();
+        } else if(user.phone == ''){
+            alert('전화번호를 입력하세요');
+            user.phone.focus();
+        } else if(user.address == '' || user.detailedAddress == ''){
+            alert('주소를 입력하세요');
+            user.address.focus();
+        } else if(user.password != user.passwordConfirm){
+            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+            user.passwordConfirm.focus();
+        }
+        $.ajax({
+            url:'./login-action',
+            async:true,
+            type:'POST',
+            dataType:'json',
+            data:Json.stringify(user),
+            contentType:'application/json;charset=UTF-8',
+            success:function(data) {
+                if (data.status == 0) {window.location.href = './index'}},
+            error:function(xhr,status,error){
+                console.error(error);}
+        });
+    };
+ */
+
+//4. 이메일 인증
     function fn_sendEmail_Ajax() {
         var userEmail = $("#email").val().trim();
         // 메일이 입력 안되면 튕기기
@@ -214,15 +253,9 @@
             alert("이메일 주소를 입력해야 합니다.");
             return;
         }
-        if(flag_dupl_use_mail == false){
-            flag_dupl_mail = false;
-            $("#resultMailBox").html("이미 가입된 이메일 입니다").css('color', 'red');
-            return;
-        }
         var form = {
             email : userEmail
-        }
-
+        };
         $.ajax({
             url : "/checkEmailAjax.do",
             data : JSON.stringify(form),
@@ -233,12 +266,10 @@
             success : function(data) {
                 alert("입력하신 이메일 주소에서 발급된 코드를 확인하세요.");
                 resultCode = data.joinCode;
-                $("#checkCodeDiv").show();
-            },
+                $("#checkCodeDiv").show();},
             error : function() {
-                alert("네트워크가 불안정합니다. 다시 시도해 주세요.222");
-            }
-        })
+                alert("네트워크가 불안정합니다. 다시 시도해 주세요.222");}
+        });
     }
 </script>
 </body>

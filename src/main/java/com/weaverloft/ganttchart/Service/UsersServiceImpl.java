@@ -86,6 +86,11 @@ public class UsersServiceImpl implements UsersService{
         }
         return false;
     }
+    //5. 이미지 업로드
+    @Override
+    public void updatePhoto(String id, String photo) {
+      int result=usersDao.updatePhoto(id,photo);
+    }
 
 
 

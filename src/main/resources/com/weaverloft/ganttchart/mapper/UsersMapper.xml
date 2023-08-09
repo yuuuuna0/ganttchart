@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
     <!-- 1. 회원가입 -->
-    <insert id="createUsers" parameterType="java.util.Map">
-        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,IS_EMAIL_AUTH)
-        values(#{id},0,#{password},#{name},'default.jpg',#{birth},0,#{phone},#{address},#{email},0)
+    <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
+        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,IS_EMAIL_AUTH,AUTH_KEY)
+        values(#{id},0,#{password},#{name},#{photo},#{birth},0,#{phone},#{address},#{email},0,0)
     </insert>
     <!--2. 내 정보 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
@@ -16,14 +16,25 @@
         set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
         where id=#{id}
     </update>
-    <!-- 6. 비밀번호 일치 확인-->
-    <select id="isMatchPassword" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select count(*) from USERS where id=#{id} and password=#{password}
-    </select>
     <!-- 7. 아이디 중복 체크 -->
     <select id="isExistedId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id}
     </select>
+    <!-- 6. 비밀번호 일치 확인-->
+    <select id="isMatchPassword" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from USERS where id=#{id} and password=#{password}
+    </select>
+    <!-- 이메일 인증 업데이트 -->
+    <update id="updateAuthKey" parameterType="java.util.Map">
+        update users set AUTH_KEY=#{authKey}, IS_EMAIL_AUTH=#{isemailAuth} where id=#{id}
+    </update>
+    <!-- 이미지 업로드  -->
+    <update id="updatePhoto" parameterType="java.util.Map">
+        update users set PHOTO=#{photo} where id=#{id}
+    </update>
+
+
+
     <!-- 4. 회원 탈퇴
     <delete id="deleteUsers" parameterType="java.lang.String">
         delete users where id=#{id}

@@ -12,6 +12,8 @@ public interface UsersDao {
     int isMatchPassword(String id, String password) throws Exception;
     //4. 아이디 중복 체크
     int isExistedId(String id) throws Exception;
+    //5. 이미지 업로드
+    int updatePhoto(String id, String photo);
 
 
     /*

@@ -11,6 +11,8 @@ public interface UsersService {
     boolean isValidPassword(String password) throws Exception;
     //7. 아이디 중복 체크
     boolean isExistedId(String id) throws Exception;
+    //8. 이미지 업로드
+    void updatePhoto(String id, String photo);
 
     /*
     //2. 내 정보 조회
