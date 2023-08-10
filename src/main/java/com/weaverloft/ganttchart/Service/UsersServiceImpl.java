@@ -14,12 +14,10 @@ import java.util.regex.Pattern;
 @Service
 public class UsersServiceImpl implements UsersService{
     private UsersDao usersDao;
-    private SHA256Service sha256Service;
 
-    public UsersServiceImpl(UsersDao usersDao, SHA256Service sha256Service) {
+    public UsersServiceImpl(UsersDao usersDao) {
         System.out.println("UserServiceImpl 생성");
         this.usersDao=usersDao;
-        this.sha256Service = sha256Service;
     }
     //1. 로그인
     @Override
@@ -28,7 +26,7 @@ public class UsersServiceImpl implements UsersService{
         if(users==null){
             throw new UserNotFoundException("존재하지 않는 아이디입니다.");
         }
-        if(!users.getPassword().equals(sha256Service.encrypt(password))){
+        if(!users.getPassword().equals(password)){
             //저장된 비밀번호와 암호화된 비밀번호를 비교
             throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
         }
@@ -79,12 +77,9 @@ public class UsersServiceImpl implements UsersService{
     }
     //4. 아이디 중복 확인
     @Override
-    public boolean isExistedId(String id) throws Exception {
-        int result=usersDao.isExistedId(id);    //0:중복X, 1: 중복O
-        if(result==1){
-            return true;
-        }
-        return false;
+    public Users findUsersById(String id) throws Exception {
+        Users users=usersDao.findUsersById(id);    //0:중복X, 1: 중복O
+        return users;
     }
     //5. 정보 업데이트
     @Override
@@ -97,6 +92,24 @@ public class UsersServiceImpl implements UsersService{
     public int updateAuthStatus(String id, int authStatus) throws Exception{
         int result=usersDao.updateAuthStatus(id,authStatus);
         return result;
+    }
+    //7. 이름,이메일로 아이디 찾기
+    @Override
+    public String findIdByNameEmail(String name, String email) throws Exception{
+        String findId=usersDao.findIdByNameEmail(name,email);
+        return findId;
+    }
+    //8. 아이디, 이메일로 비밀번호 변경하기
+    @Override
+    public int findPasswordByIdEmail(String id, String email) throws Exception{
+        int result=usersDao.findPasswordByIdEmail(id,email);
+        return result;
+    }
+    //9. 비밀번호 변경
+    @Override
+    public int updatePassword(String id, String encryptTempPassword) throws Exception{
+        int result=usersDao.updatePassword(id,encryptTempPassword);
+        return 0;
     }
 
 

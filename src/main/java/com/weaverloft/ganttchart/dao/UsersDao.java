@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UsersDao {
     //1. 회원가입
     int createUsers(Users users) throws Exception;
-    //2. 내 정보 조회
+    //2. 회원 조회
     Users findUsersById(String id) throws Exception;
     //3. 비밀번호 일치 확인
     int isMatchPassword(String id, String password) throws Exception;
@@ -16,6 +16,12 @@ public interface UsersDao {
     int updateUsers(Users users) throws Exception;
     //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
     int updateAuthStatus(String id, int authStatus) throws Exception;
+    //7. 이름, 이메일로 아이디 찾기
+    String findIdByNameEmail(String name, String email) throws Exception;
+    //8. 아이디, 이메일로 비밀번호 변경하기
+    int findPasswordByIdEmail(String id, String email) throws Exception;
+    //9. 비밀번호 변경
+    int updatePassword(String id, String encryptTempPassword) throws Exception;
 
 
     /*

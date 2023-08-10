@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,19 +26,30 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-5">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Password Recovery</h3></div>
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Find ID</h3></div>
                             <div class="card-body">
                                 <div class="small mb-3 text-muted">Enter your email address and we will send you a link to reset your password.</div>
-                                <form>
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                        <label for="inputEmail">Email address</label>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <a class="small" href="login">Return to login</a>
-                                        <a class="btn btn-primary" href="login">Reset Password</a>
-                                    </div>
-                                </form>
+                                    <form action="findId-action" method="POST" accept-charset="utf-8">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="name" name="name" type="text" placeholder="name" />
+                                            <label for="name">Name</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="email" name="email" type="email" placeholder="email@example.com" />
+                                            <label for="email">Email</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            <a class="small" href="login">Return to login</a>
+                                            <input class="btn btn-primary" type="submit" value="Find Id">
+                                        </div>
+                                    </form>
+                                <!--
+                                <c:if test="${findId}!=null">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" value="${findId}">
+                                        </div>
+                                </c:if>
+                                -->
                             </div>
                             <div class="card-footer text-center py-3">
                                 <div class="small"><a href="register">Need an account? Sign up!</a></div>

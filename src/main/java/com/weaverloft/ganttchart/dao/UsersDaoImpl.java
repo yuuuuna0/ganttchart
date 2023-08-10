@@ -22,9 +22,8 @@ public class UsersDaoImpl implements UsersDao {
     public int createUsers(Users users) throws Exception {
         return usersMapper.createUsers(users);
     }
-
     @Override
-    //2. 내 정보 조회
+    //2. 회원 조회
     public Users findUsersById(String id) throws Exception {
         return usersMapper.findUsersById(id);
     }
@@ -47,6 +46,21 @@ public class UsersDaoImpl implements UsersDao {
     @Override
     public int updateAuthStatus(String id, int authStatus) throws Exception{
         return usersMapper.updateAuthStatus(id, authStatus);
+    }
+    //7. 이름, 이메일로 아이디 찾기
+    @Override
+    public String findIdByNameEmail(String name, String email) throws Exception{
+        return usersMapper.findIdByNameEmail(name,email);
+    }
+    //8. 아이디, 이메일로 비밀번호 변경하기
+    @Override
+    public int findPasswordByIdEmail(String id, String email) throws Exception{
+        return usersMapper.findPasswordByIdEmail(id,email);
+    }
+    //9. 비밀번호 변경
+    @Override
+    public int updatePassword(String id, String encryptTempPassword) throws Exception{
+        return usersMapper.updatePassword(id,encryptTempPassword);
     }
 
 

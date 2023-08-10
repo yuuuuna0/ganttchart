@@ -40,7 +40,7 @@
                                 <table>
                                     <tr>
                                         <!-- 회원가입 정보 입력 시작 -->
-                                        <form method="POST" action="register-action" accept-charset="utf-8">
+                                        <form method="POST" action="register-action" accept-charset="utf-8" >
                                             <td>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
@@ -56,7 +56,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- email 입력 및 인증 시작 -->
                                                 <div class="row mb-3">
                                                     <div class="col-md-9">
                                                         <div class="form-floating mb-3 mb-md-0">
@@ -64,19 +63,7 @@
                                                             <label for="password">Email</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-floating mb-2 mb-md-0">
-                                                            <button type="button" class="btn btn-outline-primary" id="showDiv" onclick = "fn_sendEmail_Ajax()">
-                                                                <i>Verify</i>
-                                                            </button>
-                                                            <div style="display: none;" id="checkCodeDiv">
-                                                                <input type="text" id="inputCode" style="width: 60%; display: inline;" placeholder="인증코드 입력" class="form-control"  />
-                                                                <button type="button" class="btn btn-outline-primary" onclick="fn_checkCode()">확인</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                                <!-- email 입력 및 인증 끝 -->
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">

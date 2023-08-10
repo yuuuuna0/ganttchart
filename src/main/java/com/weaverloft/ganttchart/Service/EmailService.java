@@ -14,9 +14,10 @@ public class EmailService {
     private JavaMailSender emailSender;
     private String senderEmail = "owing0624@gmail.com";
     private int authCode; //인증코드
+    private String tempPassword;    //임시비밀번호
 
+    ////6자리 이메일 인증코드 생성
     public void createAuthCode(){
-        //6자리 이메일 인증코드  생성
         authCode=0;
         Random random=new Random();
         for(int i=0; i<6;i++){
@@ -24,7 +25,30 @@ public class EmailService {
         }
     }
 
-    public MimeMessage CreateEMail(String email){
+    //10자리 임시 비밀번호 생성
+    public void createTempPassword(){
+        StringBuffer key=new StringBuffer();
+        Random random=new Random();
+        tempPassword="";
+        for(int i=0;i<10;i++){  //10자리 임시 비밀번호
+            int index=random.nextInt(3); //case 0~2까지 랜덤
+            switch(index){
+                case 0:
+                    key.append((char)((int)(random.nextInt(26))+97));   //a~z (ex.1+97=98 =>(char)98 ='b')
+                    break;
+                case 2:
+                    key.append((char)((int)(random.nextInt(26))+65)); //A~Z (ex.1+65=66 =>(char)66 ='B')
+                    break;
+                case 3:
+                    key.append(random.nextInt(10)); //0~9
+                    break;
+            }
+        }
+        tempPassword=key.toString();
+    }
+
+    /***************************인증메일 발송******************************/
+    public int sendAuthEmail(String email){
         createAuthCode();   //인증코드 생성
         MimeMessage message= emailSender.createMimeMessage();
         try{
@@ -39,13 +63,33 @@ public class EmailService {
         } catch (MessagingException e){
             e.printStackTrace();
         }
-        return message;
-    }
-
-    public int sendMail(String email){
-        MimeMessage message = CreateEMail(email);
         emailSender.send(message);
         return authCode;
     }
+    /***************************임시비번메일 발송******************************/
+    public String sendTempPasswordEmail(String email){
+        createTempPassword();   //임시비번 생성
+        MimeMessage message= emailSender.createMimeMessage();
+        try{
+            message.setFrom(senderEmail);
+            message.setRecipients(MimeMessage.RecipientType.TO,email);
+            message.setSubject("임시비밀번호");
+            String body="";
+            body += "<h3>" + "임시비밀번호 입니다." + "</h3>";
+            body += "<h1>" + tempPassword + "</h1>";
+            body += "<h3>" + "로그인 후 비밀번호를 변경 해 주세요" + "</h3>";
+            message.setText(body,"UTF-8", "html");
+        } catch (MessagingException e){
+            e.printStackTrace();
+        }
+        emailSender.send(message);
+        return tempPassword;
+    }
+
+
+
+
+
+
 }
 
