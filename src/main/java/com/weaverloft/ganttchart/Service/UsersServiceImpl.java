@@ -28,7 +28,8 @@ public class UsersServiceImpl implements UsersService{
         if(users==null){
             throw new UserNotFoundException("존재하지 않는 아이디입니다.");
         }
-        if(!password.equals(users.getPassword())){
+        if(!users.getPassword().equals(sha256Service.encrypt(password))){
+            //저장된 비밀번호와 암호화된 비밀번호를 비교
             throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
         }
         return users;
@@ -38,8 +39,7 @@ public class UsersServiceImpl implements UsersService{
     @Override
     //2. 회원가입
     public int createUsers(Users users) throws Exception {
-        int result=0;
-
+        int result=usersDao.createUsers(users);
         return result;
     }
     //3. 비밀번호 정규식 체크
@@ -86,10 +86,17 @@ public class UsersServiceImpl implements UsersService{
         }
         return false;
     }
-    //5. 이미지 업로드
+    //5. 정보 업데이트
     @Override
-    public void updatePhoto(String id, String photo) {
-      int result=usersDao.updatePhoto(id,photo);
+    public int updateUsers(Users users) throws Exception {
+      int result=usersDao.updateUsers(users);
+      return result;
+    }
+    //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
+    @Override
+    public int updateAuthStatus(String id, int authStatus) throws Exception{
+        int result=usersDao.updateAuthStatus(id,authStatus);
+        return result;
     }
 
 

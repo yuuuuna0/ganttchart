@@ -5,14 +5,16 @@ import com.weaverloft.ganttchart.dto.Users;
 public interface UsersService {
     //1. 로그인
     Users login(String id,String password) throws Exception;
-    //1. 회원가입
+    //2. 회원가입
     int createUsers(Users users) throws Exception;
-    //1-1. 비밀번호 유효성 검증
+    //3. 비밀번호 정규식 체크
     boolean isValidPassword(String password) throws Exception;
-    //7. 아이디 중복 체크
+    //4. 아이디 중복 체크
     boolean isExistedId(String id) throws Exception;
-    //8. 이미지 업로드
-    void updatePhoto(String id, String photo);
+    //5. 정보 업데이트
+    int updateUsers(Users users) throws Exception;
+    //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
+    int updateAuthStatus(String id, int authStatus) throws Exception;
 
     /*
     //2. 내 정보 조회

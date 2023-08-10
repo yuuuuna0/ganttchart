@@ -12,8 +12,10 @@ public interface UsersDao {
     int isMatchPassword(String id, String password) throws Exception;
     //4. 아이디 중복 체크
     int isExistedId(String id) throws Exception;
-    //5. 이미지 업로드
-    int updatePhoto(String id, String photo);
+    //5. 정보 수정
+    int updateUsers(Users users) throws Exception;
+    //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
+    int updateAuthStatus(String id, int authStatus) throws Exception;
 
 
     /*

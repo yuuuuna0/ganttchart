@@ -28,14 +28,13 @@
                             <div class="card-header"><h3 class="text-center font-weight-light my-4">Enter secret code</h3></div>
                             <div class="card-body">
                                 <div class="small mb-3 text-muted">Enter your secret code to verify your ID!!</div>
-                                <form>
+                                <form method="post" action="/emailAuth-action" accept-charset="utf-8">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                        <label for="inputEmail">Email address</label>
+                                        <input class="form-control" id="authKey" name="authKey" type="text"/>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                         <a class="small" href="login">Return to login</a>
-                                        <a class="btn btn-primary" href="login">Reset Password</a>
+                                        <input class="btn btn-primary" type="submit" value="Verify">
                                     </div>
                                 </form>
                             </div>

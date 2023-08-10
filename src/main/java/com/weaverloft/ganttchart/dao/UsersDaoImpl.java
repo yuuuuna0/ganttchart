@@ -40,8 +40,13 @@ public class UsersDaoImpl implements UsersDao {
     }
     //5. 이미지 업로드
     @Override
-    public int updatePhoto(String id, String photo) {
-        return usersMapper.updatePhoto(id,photo);
+    public int updateUsers(Users users) throws Exception {
+        return usersMapper.updateUsers(users);
+    }
+    //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
+    @Override
+    public int updateAuthStatus(String id, int authStatus) throws Exception{
+        return usersMapper.updateAuthStatus(id, authStatus);
     }
 
 

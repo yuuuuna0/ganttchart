@@ -22,6 +22,6 @@ public class Users {
     private String phone;
     private String address;
     private String email;
-    private int isEmailAuth;
-    private int authKey;
+    private int authStatus;
+    private String authKey;
 }

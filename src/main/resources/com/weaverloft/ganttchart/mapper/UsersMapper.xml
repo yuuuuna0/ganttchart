@@ -3,7 +3,7 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
     <!-- 1. 회원가입 -->
     <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
-        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,IS_EMAIL_AUTH,AUTH_KEY)
+        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY)
         values(#{id},0,#{password},#{name},#{photo},#{birth},0,#{phone},#{address},#{email},0,0)
     </insert>
     <!--2. 내 정보 조회 -->
@@ -13,7 +13,7 @@
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
         update USERS
-        set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
+        set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email},AUTH_STATUS=#{authStatus},AUTH_KEY=#{authKey}
         where id=#{id}
     </update>
     <!-- 7. 아이디 중복 체크 -->
@@ -25,8 +25,8 @@
         select count(*) from USERS where id=#{id} and password=#{password}
     </select>
     <!-- 이메일 인증 업데이트 -->
-    <update id="updateAuthKey" parameterType="java.util.Map">
-        update users set AUTH_KEY=#{authKey}, IS_EMAIL_AUTH=#{isemailAuth} where id=#{id}
+    <update id="updateAuthStatus" parameterType="java.util.Map">
+        update users set AUTH_STATUS=#{authStatus} where id=#{id}
     </update>
     <!-- 이미지 업로드  -->
     <update id="updatePhoto" parameterType="java.util.Map">
@@ -62,7 +62,7 @@
     <!-- 10. 메일 인증여부 업데이트
     <update id="updateMailAuth" parameterType="com.weaverloft.ganttchart.dto.Users">
         UPDATE  users
-        SET IS_EMAIL_AUTH = 1
+        SET AUTH_STATUS = 1
         WHERE email = #{email}
     </update>
     -->
