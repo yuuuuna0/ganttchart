@@ -29,7 +29,7 @@
                             <div class="card-header"><h3 class="text-center font-weight-light my-4">Find ID</h3></div>
                             <div class="card-body">
                                 <div class="small mb-3 text-muted">Enter your email address and we will send you a link to reset your password.</div>
-                                    <form action="findId-action" method="POST" accept-charset="utf-8">
+                                    <form action="findId-action" method="POST" accept-charset="utf-8" >
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="name" name="name" type="text" placeholder="name" />
                                             <label for="name">Name</label>
@@ -43,13 +43,6 @@
                                             <input class="btn btn-primary" type="submit" value="Find Id">
                                         </div>
                                     </form>
-                                <!--
-                                <c:if test="${findId}!=null">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" value="${findId}">
-                                        </div>
-                                </c:if>
-                                -->
                             </div>
                             <div class="card-footer text-center py-3">
                                 <div class="small"><a href="register">Need an account? Sign up!</a></div>

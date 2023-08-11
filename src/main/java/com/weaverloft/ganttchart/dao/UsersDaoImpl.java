@@ -5,6 +5,8 @@ import com.weaverloft.ganttchart.mapper.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,22 +47,39 @@ public class UsersDaoImpl implements UsersDao {
     //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
     @Override
     public int updateAuthStatus(String id, int authStatus) throws Exception{
-        return usersMapper.updateAuthStatus(id, authStatus);
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("authStatus",authStatus);
+        return usersMapper.updateAuthStatus(map);
     }
     //7. 이름, 이메일로 아이디 찾기
     @Override
     public String findIdByNameEmail(String name, String email) throws Exception{
-        return usersMapper.findIdByNameEmail(name,email);
+        Map<String,Object> map = new HashMap<>();
+        map.put("name",name);
+        map.put("email",email);
+        return usersMapper.findIdByNameEmail(map);
     }
     //8. 아이디, 이메일로 비밀번호 변경하기
     @Override
     public int findPasswordByIdEmail(String id, String email) throws Exception{
-        return usersMapper.findPasswordByIdEmail(id,email);
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("email",email);
+        return usersMapper.findPasswordByIdEmail(map);
     }
     //9. 비밀번호 변경
     @Override
-    public int updatePassword(String id, String encryptTempPassword) throws Exception{
-        return usersMapper.updatePassword(id,encryptTempPassword);
+    public int updatePassword(String id, String password) throws Exception{
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("password",password);
+        return usersMapper.updatePassword(map);
+    }
+    @Override
+    //10. 회원 탈퇴
+    public int deleteUsers(String id) throws Exception {
+        return usersMapper.deleteUsers(id);
     }
 
 
@@ -72,11 +91,7 @@ public class UsersDaoImpl implements UsersDao {
         return usersMapper.updateUsers(users);
     }
 
-    @Override
-    //4. 회원 탈퇴
-    public int deleteUsers(String id) throws Exception {
-        return usersMapper.deleteUsers(id);
-    }
+
 
     @Override
     //5. 비밀번호 변경

@@ -8,7 +8,7 @@ public class HomeController {
     @GetMapping("/")
     //시작 페이지
     public String index(){
-        return "login";
+        return "index";
     }
 
     @GetMapping("/error")

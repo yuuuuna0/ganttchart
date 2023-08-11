@@ -51,29 +51,28 @@ public class UsersServiceImpl implements UsersService {
           3) 공백 안됨
         */
         Matcher matcher;    //정규식 검사 객체
-        String msg = "";
         final String REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,15}$";     //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
         final String BLANKPT = "(\\s)";       //공백 문자 정규식
 
         if (password == null || password.isEmpty()) {
             //입력한 내용이 없을 경우
-            msg = "문자를 입력하세요";
+            System.out.println("문자를 입력하세요");
             return false;
         } else if (password.length() < 8 || password.length() > 15) {
             //8~15글자의 비밀번호
-            msg = "비밀번호는 8글자 이상 15글자 이하입니다.";
+            System.out.println("비밀번호는 8글자 이상 15글자 이하여야합니다.");
             return false;
         } else if (password.matches(REGEX)) {
             //영문, 숫자, 특수문자 포함 확인
-            msg = "비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.";
+            System.out.println("비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.");
             return false;
         } else if (Pattern.compile(BLANKPT).matcher(password).find()) {
             //공백 포함된 경우
-            msg = "비밀번호에는 공백이 포함될 수 없습니다.";
+            System.out.println("비밀번호에는 공백이 포함될 수 없습니다.");
             return false;
         } else {
             //성공
-            msg = "사용 가능한 비밀번호입니다.";
+            System.out.println("사용 가능한 비밀번호입니다.");
             return true;
         }
     }
@@ -119,6 +118,13 @@ public class UsersServiceImpl implements UsersService {
         int result = usersDao.updatePassword(id, encryptTempPassword);
         return 0;
     }
+    @Override
+    //10. 회원 탈퇴
+    public int deleteUsers(String id) throws Exception {
+        int result;
+        result=usersDao.deleteUsers(id);
+        return result;
+    }
 
 
 
@@ -150,13 +156,7 @@ public class UsersServiceImpl implements UsersService {
         return result;
     }
 
-    @Override
-    //4. 회원 탈퇴
-    public int deleteUsers(String id) throws Exception {
-        int result;
-        result=usersDao.deleteUsers(id);
-        return result;
-    }
+
 
     @Override
     //5. 비밀번호 변경

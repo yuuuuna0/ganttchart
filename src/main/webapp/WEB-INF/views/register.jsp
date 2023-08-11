@@ -60,14 +60,14 @@
                                                     <div class="col-md-9">
                                                         <div class="form-floating mb-3 mb-md-0">
                                                             <input class="form-control" id="email" name="email" type="email" placeholder="Email" />
-                                                            <label for="password">Email</label>
+                                                            <label for="email">Email</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="password" name="password" type="text" placeholder="Password" />
+                                                            <input class="form-control" id="password" name="password" type="password" placeholder="Password" />
                                                             <label for="password">Password</label>
                                                         </div>
                                                     </div>

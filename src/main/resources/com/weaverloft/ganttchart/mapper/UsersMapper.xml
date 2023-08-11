@@ -8,7 +8,7 @@
     </insert>
     <!--2. 회원 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
-        select id,grade,password,name,photo,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY from USERS where id = #{id}
+        select * from USERS where id = #{id}
     </select>
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="java.util.Map">
@@ -45,13 +45,11 @@
     <update id="updatePassword" parameterType="java.util.Map">
         update USERS set PASSWORD=#{password} where ID=#{id}
     </update>
-
-
-    <!-- 4. 회원 탈퇴
+    <!-- 회원 탈퇴 -->
     <delete id="deleteUsers" parameterType="java.lang.String">
         delete users where id=#{id}
     </delete>
-    -->
+
 
 
 
