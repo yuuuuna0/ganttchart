@@ -3,13 +3,33 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.BoardMapper">
     <!--1. 게시글 쓰기-->
     <insert id="createBoard" parameterType="java.util.Map">
+        <selectKey resultType="java.lang.Integer" keyProperty="boardNo" order="BEFORE">
+            select BOARD_SEQ.nextval from dual
+        </selectKey>
         insert into board(board_no, board_title, id, board_date, board_content)
         values (#{boardNo},#{boardTitle},#{id},sysdate,#{boardContent})
     </insert>
-    <!--2. 게시글 전체 리스트 보기 ==> 페이징처리 필요 -->
-    <select id="selectBoardList" resultType="com.weaverloft.ganttchart.dto.Board">
+    <!--2. 게시글 전체 리스트 보기 ==> 페이징처리 -->
+    <select id="selectBoardList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Board">
+        select *
+        from ( select rownum idx, b.*
+               from ( select *
+                      from board
+                      order by BOARD_NO desc
+                    ) b
+                where 1=1
+                      <if test="keyword !=null">
+                          and b.BOARD_TITLE like '%'||#{keyword}||'%'
+                      </if>
+             )
+        <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
+    </select>
+    <!--2-1. 게시글 전체 리스트 보기 ==> 페이징 안한 것
+    <select id="selectBoardList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Board">
         select * from board
     </select>
+    -->
+
     <!-- 3. 게시글 상세보기 -->
     <select id="selectByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Board">
         select * from BOARD where BOARD_NO=#{boardNo}
@@ -22,6 +42,10 @@
     <update id="updateBoard" parameterType="java.util.Map">
         update BOARD set BOARD_TITLE=#{boardTitle}, BOARD_CONTENT=#{boardContent} where id=#{id}
     </update>
+    <!-- 6. 게시글 전체 개수 -->
+    <select id="findBoardCount" resultType="java.lang.Integer">
+        select count(*) from board
+    </select>
 
 
 

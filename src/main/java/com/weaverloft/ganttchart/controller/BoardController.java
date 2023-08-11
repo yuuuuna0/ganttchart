@@ -2,16 +2,16 @@ package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
 import com.weaverloft.ganttchart.dto.Board;
+import com.weaverloft.ganttchart.util.PageMakerDto;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class BoardController {
@@ -22,12 +22,13 @@ public class BoardController {
     }
     //1. 게시글 전체보기
     @GetMapping("boardList")
-    public ModelAndView boardList(@RequestParam Map map){
-        ModelAndView mv = new ModelAndView();
-        List<Board> boardList=new ArrayList<Board>();
+    public ModelAndView boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                  @RequestParam(required = false) String keyword,
+                                  HttpSession session,
+                                  ModelAndView mv) throws Exception{
         try{
-            boardList=boardService.selectBoardList();
-            mv.addObject("boardList",boardList);
+            PageMakerDto<Board> boardListPage = boardService.selectBoardList(pageNo,keyword);
+            mv.addObject("boardListPage",boardListPage);
             mv.setViewName("boardList");
         } catch (Exception e){
             e.printStackTrace();

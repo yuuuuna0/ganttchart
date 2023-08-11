@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: jyn93
@@ -6,7 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -39,7 +41,7 @@
                 <li><a class="dropdown-item" href="#!">Settings</a></li>
                 <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="/login-action">Logout</a></li>
+                <li><a class="dropdown-item" href="#!">Logout</a></li>
             </ul>
         </li>
     </ul>
@@ -138,36 +140,33 @@
                         <table id="datatablesSimple">
                             <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Title</th>
                                 <th>Content</th>
                                 <th>Writer</th>
-                                <th>Comment</th>
                                 <th>Date</th>
-                                <th>Read</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
+                                <th>No</th>
                                 <th>Title</th>
                                 <th>Content</th>
                                 <th>Writer</th>
-                                <th>Comment</th>
                                 <th>Date</th>
-                                <th>Read</th>
                             </tr>
                             </tfoot>
-                            <!-- 게시글 리스트 출력 시작-->
                             <tbody>
-                            <tr onclick="location.href='board'">
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                                <td>$320,800</td>
-                            </tr>
+                            <c:forEach items="${boardListPage.itemList}" var="board">
+                                <tr>
+                                    <td>${board.boardNo}</td>
+                                    <td>${board.boardTitle}</td>
+                                    <td>${board.boardContent}</td>
+                                    <td>${board.id}</td>
+                                    <td>${board.boardDate}</td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
-                            <!-- 게시글 리스트 출력 끝 -->
                         </table>
                     </div>
                 </div>
@@ -192,4 +191,7 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="js/datatables-simple-demo.js"></script>
 </body>
+<script>
+    new DataTable('#datatablesSimple');
+</script>
 </html>
