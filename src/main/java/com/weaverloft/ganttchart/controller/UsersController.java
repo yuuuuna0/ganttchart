@@ -34,8 +34,7 @@ public class UsersController {
     }
     //1-2. 회원가입 액션
     @PostMapping("register-action")
-    public ModelAndView registerAction(@RequestParam Map map) throws Exception{
-        ModelAndView mv=new ModelAndView();
+    public ModelAndView registerAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String id=(String)map.get("id");
         String password=(String)map.get("password");
         String name=(String)map.get("name");
@@ -128,8 +127,7 @@ public class UsersController {
     }
     //2-5. 이메일 인증 액션
     @PostMapping("emailAuth-action")
-    public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map){
-        ModelAndView mv=new ModelAndView();
+    public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
         System.out.println("인증을 위해 session에서 꺼낸 loginUser: "+loginUser);
@@ -155,8 +153,7 @@ public class UsersController {
     }
     //3-2. 아이디 찾기 액션
     @PostMapping("/findId-action")
-    public ModelAndView findIdAction(@RequestParam Map map) throws Exception{
-        ModelAndView mv=new ModelAndView();
+    public ModelAndView findIdAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String name=(String)map.get("name");
         String email=(String)map.get("email");
         try{
@@ -175,8 +172,7 @@ public class UsersController {
     }
     //4-2. 비밀번호 찾기 액션 --> 메일로 임시 비밀번호 전송 후 로그인 하면 비밀번호 변경하기
     @PostMapping("/findPassword-action")
-    public ModelAndView findPasswordAction(@RequestParam Map map) throws Exception{
-        ModelAndView mv=new ModelAndView();
+    public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String id=(String)map.get("id");
         String email=(String)map.get("email");
         try{
