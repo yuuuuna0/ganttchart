@@ -1,12 +1,15 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.EmailService;
+import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.Service.SHA256Service;
 import com.weaverloft.ganttchart.Service.UsersService;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -18,11 +21,13 @@ public class UsersController {
     private UsersService usersService;
     private SHA256Service sha256Service;
     private EmailService emailService;
+    private FileService fileService;
 
-    public UsersController(UsersService usersService,SHA256Service sha256Service,EmailService emailService) {
+    public UsersController(UsersService usersService,SHA256Service sha256Service,EmailService emailService,FileService fileService) {
         this.usersService = usersService;
         this.sha256Service = sha256Service;
         this.emailService = emailService;
+        this.fileService = fileService;
     }
     //1-1. 회원가입 페이지 --> 완료
     @GetMapping("/register")
@@ -38,9 +43,9 @@ public class UsersController {
         String email=(String)map.get("email");
         String phone=(String)map.get("phone");
         String address=(String)map.get("address");
-        String photo=(String)map.get("photo");
         int gender=0;       //Integer.parseInt((String)map.get("gender"));
-        System.out.println("address: "+address);
+        MultipartHttpServletRequest photoFile=(MultipartHttpServletRequest)map.get("photoFile");
+        String photo=fileService.uploadFile(photoFile);
         try {
             if (usersService.findUsersById(id)!=null) {
                 //1) 아이디 중복 확인
@@ -64,9 +69,9 @@ public class UsersController {
             //5) 파일 업로드
             if (photo != null) {
                 System.out.println("사진 있다");
-                // newUsers.setPhoto(photo);
+                //fileService.uploadFile(photo);
             }
-            Users newUsers = new Users(id, 0, encryptPassword, name, "", new Date(), gender, phone, address, email, 0, authKeyStr);
+            Users newUsers = new Users(id, 0, encryptPassword, name, photo, new Date(), gender, phone, address, email, 0, authKeyStr);
             int result = usersService.createUsers(newUsers);
             mv.setViewName("redirect:/login");
         } catch (Exception e){

@@ -21,9 +21,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor);
     }
 
-//    //파일 업로드
-//    @Override
-//    protected void customizerRegistration(){
-//
-//    }
 }

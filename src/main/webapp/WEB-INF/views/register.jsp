@@ -1,25 +1,30 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
-<%--<%--%>
-<%--    request.setCharacterEncoding("UTF-8");--%>
-<%--    response.setContentType("text/html; charset=UTF-8");--%>
-<%--%>--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <%--    <meta charset="utf-8" />--%>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>Register - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet"/>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- 다음 주소 API 사용 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <!-- 다음 주소 API 사용 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+    // //3. 회원가입 버튼 클릭
+    function createUser() {
+        //파일 ajax로 보내야할거같음,,,
+        registerForm.action="/register-action";
+        registerForm.method="POST";
+        registerForm.submit();
+    }
+</script>
 </head>
 <body class="bg-primary">
 <div id="layoutAuthentication">
@@ -35,7 +40,7 @@
                                 <table>
                                     <tr>
                                         <!-- 회원가입 정보 입력 시작 -->
-                                        <form name="registerForm" method="POST" action="register-action" accept-charset="utf-8">
+                                        <form name="registerForm" accept-charset="utf-8" enctype="multipart/form-data">
                                             <td>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
@@ -54,7 +59,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-12">
                                                         <div class="form-floating mb-3 mb-md-0">
                                                             <input class="form-control" id="email" name="email"
                                                                    type="email" placeholder="Email"/>
@@ -125,21 +130,19 @@
                                                 </div>
                                                 <div class="mt-4 mb-0">
                                                     <div class="d-grid">
-                                                        <button type="button" class="btn btn-primary btn-block"
-                                                                id="register" onclick="checkForm()">Create Account
-                                                        </button>
+                                                        <input type="button" class="btn btn-primary btn-block"
+                                                               id="register" onclick="createUser()" value="Create Account">
                                                     </div>
                                                 </div>
                                             </td>
-                                        </form>
-                                        <!-- 회원가입 정보 입력 끝 -->
-                                        <form id="userImage" method="post" enctype="multipart/form-data">
                                             <td>
                                                 <!-- 회원가입 시 사진 업로드 부분 -->
-                                                <div class="mt-4 mb-0">
-                                                    <input type="file" name="photo">
+                                                <div class="imageDiv">
+                                                    <img style="width:500px;" id="prevPhoto" />
+                                                    <input style="display: block" type="file" id="photoFile" name="photoFile" onchange="uploadImg(this);">
                                                 </div>
-                                            </td>
+                                             </td>
+                                        <!-- 회원가입 정보 입력 끝 -->
                                         </form>
                                     </tr>
                                 </table>
@@ -168,11 +171,8 @@
         </footer>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-<script src="js/scripts.js"></script>
 <script>
-    //1. 주소 api --> 한글 깨짐 수정해야 함
+    //1. 주소 api
     window.onload = function () {
         document.getElementById('address').addEventListener('click', function () {
             new daum.Postcode({
@@ -189,25 +189,31 @@
         $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
     };
 
-    function checkForm() {
-
-
-        console.log(document.getElementById("name").value);
-
-        document.registerForm.submit();
-
-
+    //이미지 업로드시
+    function uploadImg(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload=function(e){
+                document.getElementById('prevPhoto').src=e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else{
+            document.getElementById('prevPhoto').src='C:/temp/upload/default.jpg';
+        }
     }
 
-    // $("#register").click(function(e){
-    //     var address=$("#address").val();
-    //     alert(address);
-    //     e.preventDefault();
-    // });
 
-    //
+
     // //3. 회원가입 버튼 클릭
     // function createUser(){
+    //     var registerForm=document.getElementById('registerForm');
+    //     var imageForm=document.getElementById('imageForm');
+    //     registerForm.action='register-action';
+    //     registerForm.method='POST';
+    //     imageForm.method='POST';
+    //     registerForm.submit();
+    //     imageForm.submit();
+
     //     var user = {};
     //     user.id=$("id").val();
     //     user.password=$("password").val();

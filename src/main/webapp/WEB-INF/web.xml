@@ -27,12 +27,12 @@
         <load-on-startup>1</load-on-startup>
 
         <!-- 파일업로드 -->
-        <multipart-config>
-            <location>C:\\upload\\temp</location>
-            <max-file-size>20971520</max-file-size>     <!-- 1MB * 20 -->
-            <max-request-size>41943040</max-request-size>   <!-- 40 MB -->
-            <file-size-threshold>20971520</file-size-threshold> <!-- 20MB -->
-        </multipart-config>
+<!--        <multipart-config>-->
+<!--            <location>C:\\temp\\upload</location>-->
+<!--            <max-file-size>20971520</max-file-size>     &lt;!&ndash; 1MB * 20 &ndash;&gt;-->
+<!--            <max-request-size>41943040</max-request-size>   &lt;!&ndash; 40 MB &ndash;&gt;-->
+<!--            <file-size-threshold>20971520</file-size-threshold> &lt;!&ndash; 20MB &ndash;&gt;-->
+<!--        </multipart-config>-->
     </servlet>
 
     <servlet-mapping>
