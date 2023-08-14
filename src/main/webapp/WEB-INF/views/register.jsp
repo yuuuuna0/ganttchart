@@ -1,17 +1,17 @@
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
-<%
-    request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/html; charset=UTF-8");
-%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.*" %>
+<%--<%--%>
+<%--    request.setCharacterEncoding("UTF-8");--%>
+<%--    response.setContentType("text/html; charset=UTF-8");--%>
+<%--%>--%>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <%--    <meta charset="utf-8" />--%>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <title>Register - SB Admin</title>
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet"/>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- 다음 주소 API 사용 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -29,23 +29,26 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-9">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3>
+                            </div>
                             <div class="card-body">
                                 <table>
                                     <tr>
                                         <!-- 회원가입 정보 입력 시작 -->
-                                        <form method="POST" action="register-action" accept-charset="utf-8" >
+                                        <form name="registerForm" method="POST" action="register-action" accept-charset="utf-8">
                                             <td>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="id" name="id" type="text" placeholder="ID" />
+                                                            <input class="form-control" id="id" name="id" type="text"
+                                                                   placeholder="ID"/>
                                                             <label for="id">ID</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-floating">
-                                                            <input class="form-control" id="name" name="name" type="text" placeholder="Name" />
+                                                            <input class="form-control" id="name" name="name"
+                                                                   type="text" placeholder="Name"/>
                                                             <label for="name">Name</label>
                                                         </div>
                                                     </div>
@@ -53,7 +56,8 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-9">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="email" name="email" type="email" placeholder="Email" />
+                                                            <input class="form-control" id="email" name="email"
+                                                                   type="email" placeholder="Email"/>
                                                             <label for="email">Email</label>
                                                         </div>
                                                     </div>
@@ -61,38 +65,48 @@
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="password" name="password" type="password" placeholder="Password" />
+                                                            <input class="form-control" id="password" name="password"
+                                                                   type="password" placeholder="Password"/>
                                                             <label for="password">Password</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="confirmPAssword" name="confirmPassword" type="password" placeholder="Confirm password" />
+                                                            <input class="form-control" id="confirmPAssword"
+                                                                   name="confirmPassword" type="password"
+                                                                   placeholder="Confirm password"/>
                                                             <label for="confirmPassword">Confirm Password</label>
                                                         </div>
                                                     </div>
                                                     <!-- <input value="영문, 숫자, 특수문자를 포함한 8글자 이상 15글자 이하"> -->
                                                 </div>
                                                 <div class="form-floating mb-3">
-                                                    <input class="form-control" id="phone" name="phone" type="text" placeholder="Phone number" />
+                                                    <input class="form-control" id="phone" name="phone" type="text"
+                                                           placeholder="Phone number"/>
                                                     <label for="phone">Phone</label>
                                                 </div>
                                                 <div class="form-floating mb-3">
-                                                    <input class="form-control" id="address" name="address" type="text" placeholder="Address" />
+                                                    <input class="form-control" id="address" name="address" type="text"
+                                                           placeholder="Address"/>
                                                     <label for="address">Address</label>
                                                 </div>
                                                 <div class="form-floating mb-3">
-                                                    <input class="form-control" id="detailedAddress" name="detailedAddress" type="text" placeholder="Detailed Address" />
+                                                    <input class="form-control" id="detailedAddress"
+                                                           name="detailedAddress" type="text"
+                                                           placeholder="Detailed Address"/>
                                                     <label for="detailedAddress">Detailed Address</label>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0 btn-group btn-group-toggle" data-toggle="buttons">
+                                                        <div class="form-floating mb-3 mb-md-0 btn-group btn-group-toggle"
+                                                             data-toggle="buttons">
                                                             <label class="btn btn-secondary active">
-                                                                <input type="radio" name="gender" id="gender1" value="0"> 남
+                                                                <input type="radio" name="gender" id="gender1"
+                                                                       value="0"> 남
                                                             </label>
                                                             <label class="btn btn-secondary">
-                                                                <input type="radio" name="gender" id="gender2" value="1"> 여
+                                                                <input type="radio" name="gender" id="gender2"
+                                                                       value="1"> 여
                                                             </label>
                                                             <!--
                                                             <input class="form-control" id="gender" name="gender" type="text" placeholder="Gender" />
@@ -103,14 +117,17 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="birth" name="birth" type="text" />
+                                                            <input class="form-control" id="birth" name="birth"
+                                                                   type="text"/>
                                                             <label for="birth">Birth</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="mt-4 mb-0">
                                                     <div class="d-grid">
-                                                        <button class="btn btn-primary btn-block" id="register" type="submit">Create Account</button>
+                                                        <button type="button" class="btn btn-primary btn-block"
+                                                                id="register" onclick="checkForm()">Create Account
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -151,11 +168,12 @@
         </footer>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script>
     //1. 주소 api --> 한글 깨짐 수정해야 함
-    window.onload=function() {
+    window.onload = function () {
         document.getElementById('address').addEventListener('click', function () {
             new daum.Postcode({
                 oncomplete: function (data) { //선택시 입력값 세팅
@@ -167,9 +185,19 @@
     };
 
     //2. birth -> datepicker 이용
-    window.onload=function() {
-        $("#birth" ).datepicker({ dateFormat: 'yyyy-MM-dd' });    //시간되면 년도 옮기는 옵션 추가하기
+    window.onload = function () {
+        $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
     };
+
+    function checkForm() {
+
+
+        console.log(document.getElementById("name").value);
+
+        document.registerForm.submit();
+
+
+    }
 
     // $("#register").click(function(e){
     //     var address=$("#address").val();

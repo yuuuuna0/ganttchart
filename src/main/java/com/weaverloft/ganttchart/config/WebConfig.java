@@ -2,6 +2,7 @@ package com.weaverloft.ganttchart.config;
 
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.internal.CustomizerRegistry;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,4 +20,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor);
     }
+
+//    //파일 업로드
+//    @Override
+//    protected void customizerRegistration(){
+//
+//    }
 }
