@@ -5,16 +5,10 @@ import com.weaverloft.ganttchart.Service.SHA256Service;
 import com.weaverloft.ganttchart.Service.UsersService;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Users;
-import com.weaverloft.ganttchart.exception.ExistedUserException;
-import com.weaverloft.ganttchart.exception.isInvalidPasswordException;
-import oracle.jdbc.proxy.annotation.Post;
-import org.apache.ibatis.annotations.Param;
-import org.apache.logging.log4j.core.appender.rewrite.MapRewritePolicy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.Map;
@@ -30,12 +24,12 @@ public class UsersController {
         this.sha256Service = sha256Service;
         this.emailService = emailService;
     }
-    //1-1. 회원가입 페이지
+    //1-1. 회원가입 페이지 --> 완료
     @GetMapping("/register")
     public String register(){
         return "register";
     }
-    //1-2. 회원가입 액션
+    //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @PostMapping("register-action")
     public ModelAndView registerAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String id=(String)map.get("id");
@@ -46,45 +40,50 @@ public class UsersController {
         String address=(String)map.get("address");
         String photo=(String)map.get("photo");
         int gender=0;       //Integer.parseInt((String)map.get("gender"));
+        System.out.println("address: "+address);
         try {
             if (usersService.findUsersById(id)!=null) {
                 //1) 아이디 중복 확인
                 System.out.println("이미 존재하는 아이디입니다.");
                 mv.setViewName("redirect:/login");
-            } else if(usersService.isValidPassword(password)){
+                return mv;
+            }
+/*
+            if(usersService.isValidPassword(password)){
                 //2) 비밀번호 정규식 체크 --> 적용 안됨,, 왜죠?
                 System.out.println("비밀번호는 영문,숫자,특수문자를 포함한 8글자 이상 15글자 이하여야합니다.");
                 mv.setViewName("redirect:/register");
-            } else {
-                //3) 비밀번호 암호화
-                String encryptPassword = sha256Service.encrypt(password);
-                //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
-                int authKey = emailService.sendAuthEmail(email);
-                String authKeyStr = Integer.toString(authKey);
-                //5) 파일 업로드
-                if (photo != null) {
-                    System.out.println("사진 있다");
-                    // newUsers.setPhoto(photo);
-                }
-                Users newUsers = new Users(id, 0, encryptPassword, name, "", new Date(), gender, phone, address, email, 0, authKeyStr);
-                int result = usersService.createUsers(newUsers);
-                mv.setViewName("redirect:/login");
+                return mv;
             }
+*/
+            //3) 비밀번호 암호화
+            String encryptPassword = sha256Service.encrypt(password);
+            //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
+            int authKey = emailService.sendAuthEmail(email);
+            String authKeyStr = Integer.toString(authKey);
+            //5) 파일 업로드
+            if (photo != null) {
+                System.out.println("사진 있다");
+                // newUsers.setPhoto(photo);
+            }
+            Users newUsers = new Users(id, 0, encryptPassword, name, "", new Date(), gender, phone, address, email, 0, authKeyStr);
+            int result = usersService.createUsers(newUsers);
+            mv.setViewName("redirect:/login");
         } catch (Exception e){
-            e.printStackTrace();;
+            e.printStackTrace();
         }
         return mv;
     }
 
-    //2-1. 로그인 페이지
+    //2-1. 로그인 페이지 --> 완료
     @GetMapping("/login")
     public String login(){
         return "login";
     }
-    //2-2. 로그인 액션
+    //2-2. 로그인 액션 --> 완료
     @PostMapping("/login-action")
     public ModelAndView loginAction(HttpSession session,ModelAndView mv,
-                              @RequestParam Map map) throws Exception{
+                                    @RequestParam Map map) throws Exception{
         String id=(String)map.get("id");
         String password=(String)map.get("password");
         try{
@@ -92,7 +91,7 @@ public class UsersController {
             System.out.println(loginUser);
             session.setAttribute("loginUser", loginUser);
             if(loginUser.getAuthStatus()==0){
-                //미인증 사용자(첫번째 로그인) -> 이메일 인증 필요!
+                //미인증 사용자(첫번째 로그인)
                 mv.setViewName("redirect:/emailAuth");
             } else if(loginUser.getAuthStatus()==1) {
                 //인증된 사용자
@@ -107,29 +106,29 @@ public class UsersController {
         }
         return mv;
     }
-    //2-3. 로그아웃 액션
+    //2-3. 로그아웃 액션 --> 완료
     @LoginCheck
     @GetMapping("/logout-action")
     public String logoutAction(HttpSession session){
         session.invalidate();
         return "redirect:/";
     }
-    //2-4. 이메일 인증 페이지
+    //2-4. 이메일 인증 페이지 --> 완료
     @LoginCheck
     @GetMapping("emailAuth")
     public String emailAuth(){
         return "emailAuth";
     }
-    //2-5. 이메일 인증 액션
+    //2-5. 이메일 인증 액션 --> 완료
     @LoginCheck
     @PostMapping("emailAuth-action")
     public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
-        System.out.println("인증을 위해 session에서 꺼낸 loginUser: "+loginUser);
         try{
             if(authKey.equals(loginUser.getAuthKey())){
-                usersService.updateAuthStatus(loginUser.getId(),1);
+                loginUser.setAuthStatus(1);
+                usersService.updateUsers(loginUser);
             } else{
                 System.out.println("인증번호가 다릅니다");   //인증이 안됨,,,,
                 mv.setViewName("redirect:/emailAuth");
@@ -142,12 +141,12 @@ public class UsersController {
         return mv;
     }
 
-    //3-1. 아이디 찾기 페이지
+    //3-1. 아이디 찾기 페이지 --> 완료
     @GetMapping("/findId")
     public String findId(){
         return "findId";
     }
-    //3-2. 아이디 찾기 액션
+    //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함
     @PostMapping("/findId-action")
     public ModelAndView findIdAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String name=(String)map.get("name");
@@ -161,12 +160,12 @@ public class UsersController {
         }
         return mv;
     }
-    //4-1. 비밀번호 찾기 페이지
+    //4-1. 비밀번호 찾기 페이지 --> 완료
     @GetMapping("/findPassword")
     public String findPassword(){
         return "findPassword";
     }
-    //4-2. 비밀번호 찾기 액션 --> 메일로 임시 비밀번호 전송 후 로그인 하면 비밀번호 변경하기
+    //4-2. 비밀번호 찾기 액션 --> 완료
     @PostMapping("/findPassword-action")
     public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String id=(String)map.get("id");
@@ -191,13 +190,17 @@ public class UsersController {
         return mv;
     }
 
-    //5.마이페이지
+    //5.마이페이지 --> 완료
     @LoginCheck
-    @GetMapping(value="mypage",params = "id")
-    public ModelAndView mypage(@RequestParam String id, HttpSession session,ModelAndView mv){
+    @GetMapping(value="mypage")
+    public ModelAndView mypage(HttpSession session,ModelAndView mv){
         try{
-            Users users=(Users)session.getAttribute("loginUser");
-            mv.addObject("users",users);
+            Users loginUser=(Users)session.getAttribute("loginUser");
+            if(loginUser==null){
+                mv.setViewName("redirect:/login");
+                return mv;
+            }
+            mv.addObject("loginUser",loginUser);
             mv.setViewName("mypage");
         } catch (Exception e){
             e.printStackTrace();
@@ -206,9 +209,13 @@ public class UsersController {
     }
 
     //6-1. 정보 수정 페이지
-    @GetMapping(value="modifyUser")
-    public String modifyUser(){
-        return "정보수정페이지.jsp";
+    @LoginCheck
+    @GetMapping(value="modifyUser", params = "id")
+    public ModelAndView modifyUser(HttpSession session, ModelAndView mv){
+        Users loginUser = (Users)session.getAttribute("loginUser");
+        mv.addObject(loginUser);
+        mv.setViewName("modifyUser");
+        return mv;
     }
     //6-2. 정보 수정 액션
     @PostMapping("modifyUser")
@@ -226,12 +233,14 @@ public class UsersController {
         }
         return mv;
     }
-    //6-2. 회원탈퇴
-    @GetMapping(value="deleteUser-action", params = "id")
-    public String deleteUserAction(@RequestParam String id,HttpSession session){
+    //6-2. 회원탈퇴 --> 완료
+    @LoginCheck
+    @GetMapping(value="deleteUser-action", params="id")
+    public String deleteUserAction(HttpSession session){
         String forwardPath="";
+        Users loginUser=(Users)session.getAttribute("loginUser");
         try{
-            int result=usersService.deleteUsers(id);
+            int result=usersService.deleteUsers(loginUser.getId());
             session.invalidate();
             forwardPath="redirect:login";
         } catch (Exception e){

@@ -1,3 +1,5 @@
+login.jsp
+
 <%--
   Created by IntelliJ IDEA.
   User: jyn93
@@ -30,8 +32,8 @@
                             <div class="card-body">
                                 <form id="loginuser" method="post" action="login-action">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputId" name="id" type="text" placeholder="ID" />
-                                        <label for="inputId">ID</label>
+                                        <input class="form-control" id="id" name="id" type="text" placeholder="ID" />
+                                        <label for="id">ID</label>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="password" name="password" type="password" placeholder="Password" />
@@ -78,33 +80,33 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script>
-  //로그인 액션
-    function login(){
-        if(document.loginuser.id.value == ''){
-            alert("아이디를 입력하세요")
-            document.loginuser.id.focus();
-            return false;
-        }
-        if(document.loginuser.password.value == ''){
-            alert('비밀번호를 입력하세요");
-            document.loginuser.password.focus();
-            return false;
-        }
-        //ajax 데이터
-        var url='login-action';
-        var method='POST';
-        var contentType='application/json;charset=UTF-8';
-        var sendData={
-            id:document.getElementById('id').value,
-            password:document.getElementById('password').value};
-        var async=true;
-        Request.ajaxRequest(url,method,contentType,sendData,
-                            JSON.stringify(sendData),
-                            function(resultJson){
-                            if(resultJson.code==1){window.location.href='index'}
-                            else{alert(resultJson.msg);}
-                            }, async);
-    }
+    // //로그인 액션
+    //   function login(){
+    //       if(document.loginuser.id.value == ''){
+    //           alert("아이디를 입력하세요")
+    //           document.loginuser.id.focus();
+    //           return false;
+    //       }
+    //       if(document.loginuser.password.value == ''){
+    //           alert('비밀번호를 입력하세요");
+    //           document.loginuser.password.focus();
+    //           return false;
+    //       }
+    //       //ajax 데이터
+    //       var url='login-action';
+    //       var method='POST';
+    //       var contentType='application/json;charset=UTF-8';
+    //       var sendData={
+    //           id:document.getElementById('id').value,
+    //           password:document.getElementById('password').value};
+    //       var async=true;
+    //       Request.ajaxRequest(url,method,contentType,sendData,
+    //                           JSON.stringify(sendData),
+    //                           function(resultJson){
+    //                           if(resultJson.code==1){window.location.href='index'}
+    //                           else{alert(resultJson.msg);}
+    //                           }, async);
+    //   }
 
 
 </script>

@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 
 import static org.junit.Assert.fail;
 
-@Log4j
+//@Log4j
 public class JDBCTest {
     static {
         try {
@@ -20,7 +20,7 @@ public class JDBCTest {
     @Test
     public void testConnection(){
         try(Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","c##gantt","1234")){
-            log.info(con);
+            //log.info(con);
         } catch (Exception e){
             fail(e.getMessage());
         }

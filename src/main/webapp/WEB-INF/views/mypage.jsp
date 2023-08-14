@@ -20,19 +20,26 @@
     <title>Register - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- 다음 주소 API 사용 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
-<body class="bg-primary">
-<div id="layoutAuthentication">
-    <div id="layoutAuthentication_content">
+<body class="bg-nav-fixed">
+<!-- header start -->
+<div class="header">
+    <jsp:include page="include-common-top.jsp"/>
+</div>
+<!-- header end -->
+<div id="layoutSidenav">
+    <!-- left side nav start -->
+    <div id="navigation">
+        <jsp:include page="include-common-left.jsp"/>
+    </div>
+    <!-- left side nav end -->
+    <div id="layoutSidenav_content">
         <main>
-            <div class="container">
+            <div class="container-fluid px-4">
                 <div class="row justify-content-center">
                     <div class="col-lg-9">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -40,102 +47,91 @@
                             <div class="card-body">
                                 <table>
                                     <tr>
-                                        <!-- 회원가입 정보 입력 시작 -->
-                                        <form method="POST" action="register-action" accept-charset="utf-8" >
-                                            <td>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0">
-                                                            <input readonly  class="form-control" id="id" name="id" type="text" placeholder="ID" value="${users.id}"/>
-                                                            <label for="id">ID</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input class="form-control" id="name" name="name" type="text" placeholder="Name" value="${users.name}"/>
-                                                            <label for="name">Name</label>
-                                                        </div>
+                                        <!-- 회원정보 시작 -->
+                                        <td>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input readonly  class="form-control" id="id" name="id" type="text" placeholder="ID" value="${loginUser.id}"/>
+                                                        <label for="id">ID</label>
                                                     </div>
                                                 </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-9">
-                                                        <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="email" name="email" type="email" placeholder="Email" value="${users.email}"/>
-                                                            <label for="email">Email</label>
-                                                        </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input readonly class="form-control" id="name" name="name" type="text" placeholder="Name" value="${loginUser.name}"/>
+                                                        <label for="name">Name</label>
                                                     </div>
                                                 </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="password" name="password" type="text" placeholder="Password" />
-                                                            <label for="password">Password</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confirm password" />
-                                                            <label for="passwordConfirm">Confirm Password</label>
-                                                        </div>
-                                                    </div>
-                                                    <!-- <input value="영문, 숫자, 특수문자를 포함한 8글자 이상 15글자 이하"> -->
-                                                </div>
-                                                <div class="form-floating mb-3">
-                                                    <input class="form-control" id="phone" name="phone" type="text" placeholder="Phone number" value="${users.phone}" />
-                                                    <label for="phone">Phone</label>
-                                                </div>
-                                                <div class="form-floating mb-3">
-                                                    <input class="form-control" id="address" name="address" type="text" placeholder="Address" value="${users.address}" />
-                                                    <label for="address">Address</label>
-                                                </div>
-                                                <div class="form-floating mb-3">
-                                                    <input class="form-control" id="detailedAddress" name="detailedAddress" type="text" placeholder="Detailed Address" />
-                                                    <label for="detailedAddress">Detailed Address</label>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0 btn-group btn-group-toggle" data-toggle="buttons">
-                                                            <label class="btn btn-secondary active">
-                                                                <input type="radio" name="gender" id="gender1" value="0"> 남
-                                                            </label>
-                                                            <label class="btn btn-secondary">
-                                                                <input type="radio" name="gender" id="gender2" value="1"> 여
-                                                            </label>
-                                                            <!--
-                                                            <input class="form-control" id="gender" name="gender" type="text" placeholder="Gender" />
-                                                            toggle로 해서 gender 0:남자 / 1: 여자 숫자 value로 할 예정
-                                                            <label for="gender">Gender</label>
-                                                            -->
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating mb-3 mb-md-0">
-                                                            <input class="form-control" id="birth" name="birth" type="text" value="${users.birth}" />
-                                                            <label for="birth">$Birth</label>
-                                                        </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-9">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input readonly class="form-control" id="email" name="email" type="email" placeholder="Email" value="${loginUser.email}"/>
+                                                        <label for="email">Email</label>
                                                     </div>
                                                 </div>
-                                                <div class="mt-4 mb-0">
-                                                    <div class="d-grid">
-                                                        <button class="btn btn-primary btn-block" type="submit">Modify</button>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input readonly class="form-control" id="password" name="password" type="text" placeholder="Password" />
+                                                        <label for="password">Password</label>
                                                     </div>
                                                 </div>
-                                                <div class="mt-4 mb-0">
-                                                    <div class="d-grid">
-                                                        <button class="btn btn-primary btn-block" onclick="location.href='deleteUser-action/${users.id}'">Withdrawal account</button>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input class="form-control" id="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confirm password" />
+                                                        <label for="passwordConfirm">Confirm Password</label>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </form>
-                                        <!-- 회원가입 정보 입력 끝 -->
-                                        <form id="userImage" method="post" enctype="multipart/form-data">
-                                            <td>
-                                                <!-- 회원가입 시 사진 업로드 부분 -->
-                                                <div class="mt-4 mb-0">
-                                                    <input type="file" name="photo">
+                                                <!-- <input value="영문, 숫자, 특수문자를 포함한 8글자 이상 15글자 이하"> -->
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input readonly class="form-control" id="phone" name="phone" type="text" placeholder="Phone number" value="${loginUser.phone}" />
+                                                <label for="phone">Phone</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input readonly class="form-control" id="address" name="address" type="text" placeholder="Address" value="${loginUser.address}" />
+                                                <label for="address">Address</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input readonly class="form-control" id="detailedAddress" name="detailedAddress" type="text" placeholder="Detailed Address" />
+                                                <label for="detailedAddress">Detailed Address</label>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0 btn-group btn-group-toggle" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="gender" id="gender1" value="0"> 남
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="gender" id="gender2" value="1"> 여
+                                                        </label>
+                                                        <!--
+                                                        <input class="form-control" id="gender" name="gender" type="text" placeholder="Gender" />
+                                                        toggle로 해서 gender 0:남자 / 1: 여자 숫자 value로 할 예정
+                                                        <label for="gender">Gender</label>
+                                                        -->
+                                                    </div>
                                                 </div>
-                                            </td>
-                                        </form>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <input readonly class="form-control" id="birth" name="birth" type="text" value="${loginUser.birth}" />
+                                                        <label for="birth">$Birth</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid">
+                                                    <button class="btn btn-primary btn-block" onclick="location.href='modifyUser?id=${loginUser.id}'">Modify</button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid">
+                                                    <button class="btn btn-primary btn-block" onclick="location.href='deleteUser-action?id=${loginUser.id}'">Withdrawal account</button>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -148,20 +144,7 @@
             </div>
         </main>
     </div>
-    <div id="layoutAuthentication_footer">
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                    <div>
-                        <a href="#">Privacy Policy</a>
-                        &middot;
-                        <a href="#">Terms &amp; Conditions</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
@@ -182,62 +165,62 @@
     window.onload=function() {
         $("#birth" ).datepicker({ dateFormat: 'yyyy-MM-dd' });    //시간되면 년도 옮기는 옵션 추가하기
     };
-/*
-    //3. 회원가입 버튼 클릭
-    function createUser(){
-        var user = {};
-        user.id=$("id").val();
-        user.password=$("password").val();
-        user.passwordConfirm=$("passwordConfirm").val();
-        user.email=$("email").val();
-        user.name=$("name").val();
-        user.phone=$("phone").val();
-        user.address=$("address").val();
-        user.detailedAddress=$('detailedAddress').val();
-        user.gender=$("input[name=gender]:checked").val();
-        user.birth=$("birth").val();
+    /*
+        //3. 회원가입 버튼 클릭
+        function createUser(){
+            var user = {};
+            user.id=$("id").val();
+            user.password=$("password").val();
+            user.passwordConfirm=$("passwordConfirm").val();
+            user.email=$("email").val();
+            user.name=$("name").val();
+            user.phone=$("phone").val();
+            user.address=$("address").val();
+            user.detailedAddress=$('detailedAddress').val();
+            user.gender=$("input[name=gender]:checked").val();
+            user.birth=$("birth").val();
 
-        if(user.id == ''){
-            alert('아이디를 입력하세요');
-            user.id.focus();
-        } else if(user.name == ''){
-            alert('이름을 입력하세요');
-            user.name.focus();
-        } else if(user.password ==''){
-            alert('비밀번호를 입력하세요');
-            user.password.focus();
-        } else if(user.passwordConfirm =='') {
-            alert('비밀번호 확인을 입력하세요');
-            user.passwordConfirm.focus();
-        } else if(user.email == ''){
-            alert('이메일을 입력하세요');
-            user.email.focus();
-        } else if(user.phone == ''){
-            alert('전화번호를 입력하세요');
-            user.phone.focus();
-        } else if(user.address == '' || user.detailedAddress == ''){
-            alert('주소를 입력하세요');
-            user.address.focus();
-        } else if(user.password != user.passwordConfirm){
-            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-            user.passwordConfirm.focus();
-        }
-        $.ajax({
-            url:'./login-action',
-            async:true,
-            type:'POST',
-            dataType:'json',
-            data:Json.stringify(user),
-            contentType:'application/json;charset=UTF-8',
-            success:function(data) {
-                if (data.status == 0) {window.location.href = './index'}},
-            error:function(xhr,status,error){
-                console.error(error);}
-        });
-    };
- */
+            if(user.id == ''){
+                alert('아이디를 입력하세요');
+                user.id.focus();
+            } else if(user.name == ''){
+                alert('이름을 입력하세요');
+                user.name.focus();
+            } else if(user.password ==''){
+                alert('비밀번호를 입력하세요');
+                user.password.focus();
+            } else if(user.passwordConfirm =='') {
+                alert('비밀번호 확인을 입력하세요');
+                user.passwordConfirm.focus();
+            } else if(user.email == ''){
+                alert('이메일을 입력하세요');
+                user.email.focus();
+            } else if(user.phone == ''){
+                alert('전화번호를 입력하세요');
+                user.phone.focus();
+            } else if(user.address == '' || user.detailedAddress == ''){
+                alert('주소를 입력하세요');
+                user.address.focus();
+            } else if(user.password != user.passwordConfirm){
+                alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+                user.passwordConfirm.focus();
+            }
+            $.ajax({
+                url:'./login-action',
+                async:true,
+                type:'POST',
+                dataType:'json',
+                data:Json.stringify(user),
+                contentType:'application/json;charset=UTF-8',
+                success:function(data) {
+                    if (data.status == 0) {window.location.href = './index'}},
+                error:function(xhr,status,error){
+                    console.error(error);}
+            });
+        };
+     */
 
-//4. 이메일 인증
+    //4. 이메일 인증
     function fn_sendEmail_Ajax() {
         var userEmail = $("#email").val().trim();
         // 메일이 입력 안되면 튕기기

@@ -18,7 +18,7 @@ import java.sql.Connection;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/*.xml")
 //Java 설정을 하는 경우
 //@ContextConfiguration(classes = {RootConfig.class})
-@Log4j
+//@Log4j
 public class DataSourceTest {
 
     @Autowired
@@ -29,7 +29,7 @@ public class DataSourceTest {
     @Test
     public void testConnection(){
         try(Connection con = dataSource.getConnection()){
-            log.info(con);
+            //log.info(con);
         } catch (Exception e){
             fail(e.getMessage());
         }
@@ -38,8 +38,8 @@ public class DataSourceTest {
     public void testMyBatis(){
         try(SqlSession session = sqlSessionFactory.openSession();
             Connection con = session.getConnection();){
-            log.info(session);
-            log.info(con);
+            //log.info(session);
+            //log.info(con);
         } catch (Exception e){
             fail(e.getMessage());
         }
