@@ -52,6 +52,7 @@ login.jsp
                                         <a class="btn btn-primary" href="index">Login</a>
                                         -->
                                     </div>
+<%--                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
                                 </form>
                             </div>
                             <div class="card-footer text-center py-3">

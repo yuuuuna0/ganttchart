@@ -4,17 +4,14 @@ import com.weaverloft.ganttchart.Service.EmailService;
 import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.Service.SHA256Service;
 import com.weaverloft.ganttchart.Service.UsersService;
-import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.awt.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -119,20 +116,17 @@ public class UsersController {
         return mv;
     }
     //2-3. 로그아웃 액션 --> 완료
-    @LoginCheck
     @GetMapping("/logout-action")
     public String logoutAction(HttpSession session){
         session.invalidate();
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
-    @LoginCheck
     @GetMapping("emailAuth")
     public String emailAuth(){
         return "emailAuth";
     }
     //2-5. 이메일 인증 액션 --> 완료
-    @LoginCheck
     @PostMapping("emailAuth-action")
     public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
         String authKey=(String)map.get("authKey");
@@ -203,7 +197,6 @@ public class UsersController {
     }
 
     //5.마이페이지 --> 완료
-    @LoginCheck
     @GetMapping(value="mypage")
     public ModelAndView mypage(HttpSession session,ModelAndView mv){
         try{
@@ -221,7 +214,6 @@ public class UsersController {
     }
 
     //6-1. 정보 수정 페이지
-    @LoginCheck
     @GetMapping(value="modifyUser", params = "id")
     public ModelAndView modifyUser(HttpSession session, ModelAndView mv){
         Users loginUser = (Users)session.getAttribute("loginUser");
@@ -246,7 +238,6 @@ public class UsersController {
         return mv;
     }
     //6-2. 회원탈퇴 --> 완료
-    @LoginCheck
     @GetMapping(value="deleteUser-action", params="id")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";

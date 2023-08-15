@@ -1,7 +1,6 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
-import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
@@ -56,13 +55,11 @@ public class BoardController {
     }
 
     //3. 게시글 작성하기 페이지
-    @LoginCheck
     @GetMapping("boardCreate")
     public String boardCreate(){
         return "boardCreate";
     }
     //3-1 게시글 작성하기 액션
-    @LoginCheck
     @PostMapping("boardCreate-action")
     public ModelAndView boardCreateAction(@RequestParam Map map, ModelAndView mv,HttpSession session){
         String boardTitle=(String)map.get("boardTitle");

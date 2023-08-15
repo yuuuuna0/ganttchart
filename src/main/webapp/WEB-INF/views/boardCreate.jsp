@@ -35,7 +35,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Create Board</h1>
+                <h1 class="mt-4">게시글 작성하기</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="boardList">Return to BoardList</a></li>
                 </ol>
@@ -44,14 +44,14 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <p></p>
-                                <label>공지사항 제목</label>
-                                <input class="form-control" name="boardTitle" id="boardTitle" type="text" style="font-size: 30px" required="required">
+                                <label>제목</label>
+                                <input class="form-control" name="boardTitle" id="boardTitle" type="text" style="font-size: 30px" placeholder="제목을 작성해주세요" required="required">
                                 <label for="boardTitle">제목을 작성해주세요.</label>
                             </div>
                             <p></p>
                             <div class="form-group">
-                                <label>공지사항 내용</label>
-                                <input type="text" style="height:500px;font-size:20px;" class="form-control" name="boardContent" id="boardContent" placeholder="" required="required">
+                                <label>내용</label>
+                                <input type="text" style="height:500px;font-size:20px;" class="form-control" name="boardContent" id="boardContent" placeholder="내용을 작성해주세요" required="required">
                                 <label for="boardContent">내용을 작성해주세요.</label>
                             </div>
                         </div>

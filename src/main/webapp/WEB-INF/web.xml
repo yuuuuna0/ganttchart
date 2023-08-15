@@ -8,12 +8,12 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/root-context.xml
+<!--            /WEB-INF/security-context.xml-->
         </param-value>
     </context-param>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+        <listener>
+            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        </listener>
 
     <servlet>
         <servlet-name>appServlet</servlet-name>
@@ -25,21 +25,13 @@
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
-
-        <!-- 파일업로드 -->
-<!--        <multipart-config>-->
-<!--            <location>C:\\temp\\upload</location>-->
-<!--            <max-file-size>20971520</max-file-size>     &lt;!&ndash; 1MB * 20 &ndash;&gt;-->
-<!--            <max-request-size>41943040</max-request-size>   &lt;!&ndash; 40 MB &ndash;&gt;-->
-<!--            <file-size-threshold>20971520</file-size-threshold> &lt;!&ndash; 20MB &ndash;&gt;-->
-<!--        </multipart-config>-->
     </servlet>
+        <servlet-mapping>
+            <servlet-name>appServlet</servlet-name>
+            <url-pattern>/</url-pattern>
+        </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>appServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
+    <!--Encoding Filter -->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -52,15 +44,14 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-
-    <filter-mapping>
-        <filter-name>encodingFilter</filter-name>
-        <url-pattern>/</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>encodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+        <filter-mapping>
+            <filter-name>encodingFilter</filter-name>
+            <url-pattern>/</url-pattern>
+        </filter-mapping>
+        <filter-mapping>
+            <filter-name>encodingFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
     <!-- jsp 파일 utf-8 페이지 인코딩 설정 <%@ page pageEncoding="UTF-8" %> -->
     <jsp-config>
         <jsp-property-group>
@@ -69,5 +60,13 @@
         </jsp-property-group>
     </jsp-config>
 
-
+<!--    &lt;!&ndash; Spring security 적용&ndash;&gt;-->
+<!--    <filter>-->
+<!--        <filter-name>springSecurityFilterChain</filter-name>-->
+<!--        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+<!--    </filter>-->
+<!--        <filter-mapping>-->
+<!--            <filter-name>springSecurityFilterChain</filter-name>-->
+<!--            <url-pattern>/*</url-pattern>-->
+<!--        </filter-mapping>-->
 </web-app>

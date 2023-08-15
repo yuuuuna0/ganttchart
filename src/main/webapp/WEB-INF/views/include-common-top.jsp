@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -34,10 +35,16 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/mypage">Mypage</a></li>
+                    <li><a class="dropdown-item" href="/mypage">마이페이지</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="/login">Login</a></li>
-                    <li><a class="dropdown-item" href="/logout-action">Logout</a></li>
+                    <li><a class="dropdown-item" href="/login">로그인</a></li>
+                    <li><a class="dropdown-item" href="/logout-action">로그아웃</a></li>
+<%--                    <sec:authorize>--%>
+<%--                        <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout').submit()">로그아웃</a></li>--%>
+<%--                    </sec:authorize>--%>
+<%--                    <form id="logout" action="/logout-action" method="POST">--%>
+<%--                        <input name="${_csrf_parameterName}" type="hidden" value="${_csrf.token}"/>--%>
+<%--                    </form>--%>
                 </ul>
             </li>
         </ul>
