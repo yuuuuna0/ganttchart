@@ -21,4 +21,5 @@ public class Board {
     private Date boardDate;
     private List<String> boardFileList;
     private String id;
+    private int boardReadcount;
 }

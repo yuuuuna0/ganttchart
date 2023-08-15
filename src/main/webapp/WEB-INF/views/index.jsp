@@ -133,7 +133,7 @@
                                     <td>${board.boardTitle}</td>
                                     <td>${board.boardContent}</td>
                                     <td>${board.id}</td>
-                                    <td>Comment갯수</td>
+                                    <td>${board.boardReadcount}</td>
                                     <td>${board.boardDate}</td>
                                     <td>조회수</td>
                                 </tr>

@@ -70,7 +70,7 @@ public class BoardController {
         Users loginUser=(Users)session.getAttribute("loginUser");
         List<String> fileList=new ArrayList<>();
         try{
-            Board board=new Board(0,boardTitle,boardContent,new Date(),fileList,loginUser.getId());
+            Board board=new Board(0,boardTitle,boardContent,new Date(),fileList,loginUser.getId(),0);
             int result=boardService.createBoard(board);
             mv.setViewName("redirect:boardList");
         } catch (Exception e){

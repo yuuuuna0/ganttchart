@@ -6,8 +6,8 @@
         <selectKey resultType="java.lang.Integer" keyProperty="boardNo" order="BEFORE">
             select BOARD_SEQ.nextval from dual
         </selectKey>
-        insert into board(board_no, board_title, id, board_date, board_content)
-        values (#{boardNo},#{boardTitle},#{id},sysdate,#{boardContent})
+        insert into board(board_no, board_title, id, board_date, board_content,board_Readcount)
+        values (#{boardNo},#{boardTitle},#{id},sysdate,#{boardContent},0)
     </insert>
     <!--2. 게시글 전체 리스트 보기 ==> 페이징처리 -->
     <select id="selectBoardList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Board">

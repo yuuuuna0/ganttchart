@@ -1,5 +1,6 @@
 package com.weaverloft.ganttchart.util;
 
+
 public class PageMaker {
     // 페이지 당 게시글 수
     public static final int PAGE_SCALE = 10;

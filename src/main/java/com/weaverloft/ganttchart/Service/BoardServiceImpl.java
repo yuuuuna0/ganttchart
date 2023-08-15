@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dao.BoardDao;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,9 +26,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public PageMakerDto<Board> selectBoardList(int pageNo,String keyword) throws Exception {
         int totBoardCount=boardDao.findBoardCount();    //전체 글 개수
+        System.out.println("게시판 글 개수: "+totBoardCount);
         PageMaker pageMaker=new PageMaker(totBoardCount,pageNo);    //page 계산
         //게시글 데이터 얻기
-        List<Board> boardList=boardDao.selectBoardList(pageMaker.getBlockBegin(),pageMaker.getBlockEnd(),keyword);
+        List<Board> boardList=boardDao.selectBoardList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);
         System.out.println("BoardService: "+boardList);
         PageMakerDto<Board> pageMakerBoardList=new PageMakerDto<Board>(boardList,pageMaker,totBoardCount);
         return pageMakerBoardList;
