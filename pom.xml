@@ -127,8 +127,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
         <!-- @Inject -->
         <dependency>
             <groupId>javax.inject</groupId>
@@ -234,6 +238,12 @@
             <artifactId>jackson-core</artifactId>
             <version>2.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

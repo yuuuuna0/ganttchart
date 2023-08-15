@@ -49,14 +49,13 @@
                             <div class="form-group">
                                 <p></p>
                                 <label>공지사항 제목</label>
-                                <input class="form-control" name="boardTitle" id="boardTitle" type="text" required="required">
+                                <input class="form-control" name="boardTitle" id="boardTitle" type="text" style="font-size: 30px" required="required">
                                 <label for="boardTitle">제목을 작성해주세요.</label>
                             </div>
                             <p></p>
                             <div class="form-group">
                                 <label>공지사항 내용</label>
-                                <input type="text" class="form-control" name="boardContent" id="boardContent"
-                                       placeholder="" required="required">
+                                <input type="text" style="height:500px;font-size:20px;" class="form-control" name="boardContent" id="boardContent" placeholder="" required="required">
                                 <label for="boardContent">내용을 작성해주세요.</label>
                             </div>
                         </div>

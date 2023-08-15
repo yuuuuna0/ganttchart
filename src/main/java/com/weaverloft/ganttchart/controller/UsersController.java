@@ -7,12 +7,14 @@ import com.weaverloft.ganttchart.Service.UsersService;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -35,16 +37,21 @@ public class UsersController {
         return "register";
     }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
-    @PostMapping("register-action")
-    public ModelAndView registerAction(@RequestParam Map map, ModelAndView mv) throws Exception{
-        String id=(String)map.get("id");
-        String password=(String)map.get("password");
-        String name=(String)map.get("name");
-        String email=(String)map.get("email");
-        String phone=(String)map.get("phone");
-        String address=(String)map.get("address");
-        int gender=0;       //Integer.parseInt((String)map.get("gender"));
-        MultipartHttpServletRequest photoFile=(MultipartHttpServletRequest)map.get("photoFile");
+
+    @ResponseBody
+    @PostMapping(value = "register-action")
+    public ModelAndView registerAction(@RequestBody Model model ,
+                                       @RequestParam(name="photoFile", required = false) MultipartHttpServletRequest photoFile,
+                                       ModelAndView mv) throws Exception{
+        String id=(String)model.getAttribute("id");
+        String password=(String)model.getAttribute("password");
+        String name=(String)model.getAttribute("name");
+        String email=(String)model.getAttribute("email");
+        String phone=(String)model.getAttribute("phone");
+        String address=(String)model.getAttribute("address");
+        int gender=0;
+        System.out.println("gender Type: "+model.getAttribute("gender").getClass().getName());
+        //Integer.parseInt((String)map.get("gender"));
         String photo=fileService.uploadFile(photoFile);
         try {
             if (usersService.findUsersById(id)!=null) {
