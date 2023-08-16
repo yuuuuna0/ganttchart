@@ -19,7 +19,6 @@ public class Board {
     private String boardContent;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date boardDate;
-    private List<String> boardFileList;
     private String id;
     private int boardReadcount;
 }

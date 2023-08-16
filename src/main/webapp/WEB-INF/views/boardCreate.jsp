@@ -5,7 +5,7 @@
   Time: 오전 9:23
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,9 +17,9 @@
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 <body class="sb-nav-fixed">
 <!-- header start -->
 <div class="header">
@@ -39,30 +39,26 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="boardList">Return to BoardList</a></li>
                 </ol>
-                <form method="post" action="boardCreate-action" accept-charset="UTF-8">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <p></p>
                                 <label>제목</label>
                                 <input class="form-control" name="boardTitle" id="boardTitle" type="text" style="font-size: 30px" placeholder="제목을 작성해주세요" required="required">
-                                <label for="boardTitle">제목을 작성해주세요.</label>
                             </div>
                             <p></p>
                             <div class="form-group">
                                 <label>내용</label>
-                                <input type="text" style="height:500px;font-size:20px;" class="form-control" name="boardContent" id="boardContent" placeholder="내용을 작성해주세요" required="required">
-                                <label for="boardContent">내용을 작성해주세요.</label>
+                                <input type="text" style="height:500px;font-size:20px;" class="form-control" name="boardContent" id="boardContent" placeholder="내용을 작성해주세요" required="required"/>
                             </div>
                         </div>
                     </div>
                     <div class="d-grid">
-                        <button type="submit"class="btn btn-primary btn-block">작성 완료</button>
+                        <button type="button"class="btn btn-primary btn-block" onclick="createBoard()">작성 완료</button>
                     </div>
                     <div class="card-footer text-center py-3">
                         <div class="small"><a href="boardList">작성 취소</a></div>
                     </div>
-                </form>
             </div>
         </main>
         <footer class="py-4 bg-light mt-auto">
@@ -80,4 +76,28 @@
     </div>
 </div>
 </body>
+<script>
+    function createBoard(){
+        var data = {};
+        data.boardTitle = document.getElementById("boardTitle").value;
+        data.boardContent = document.getElementById("boardContent").value;
+        $.ajax({
+            type : 'POST',
+            url : 'boardCreate-action',
+            dataType : 'json',
+            contentType : "application/json; charset=UTF-8",
+            data : JSON.stringify(data),
+            success : function(){
+                alert("게시글 작성 성공");
+                window.location.href="boardList";
+            },
+            error : function(){
+                console.log("게시글 작성 실패");
+            }
+        });
+
+
+    }
+
+</script>
 </html>

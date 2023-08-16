@@ -27,7 +27,6 @@ public class BoardDaoImpl implements BoardDao {
         map.put("pageBegin", pageBegin);
         map.put("pageEnd", pageEnd);
         map.put("keyword",keyword);
-        System.out.println("boardDao boardList: "+boardMapper.selectBoardList(map));
         return boardMapper.selectBoardList(map);
     }
 

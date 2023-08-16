@@ -5,15 +5,11 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,7 +20,7 @@ public class BoardController {
         this.boardService = boardService;
     }
     //1. 게시글 전체보기
-    @GetMapping("boardList")
+    @RequestMapping("boardList")
     public ModelAndView boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
                                   @RequestParam(required = false) String keyword,
                                   HttpSession session,
@@ -41,7 +37,7 @@ public class BoardController {
     //2. 게시글 상세보기
     @GetMapping(value="board")
     public ModelAndView boardDetail(ModelAndView mv) throws Exception{
-        int boardNo=81;
+        int boardNo=201;
         try {
             Board board = boardService.selectByBoardNo(boardNo);
             if(board!=null){
@@ -60,16 +56,15 @@ public class BoardController {
         return "boardCreate";
     }
     //3-1 게시글 작성하기 액션
-    @PostMapping("boardCreate-action")
-    public ModelAndView boardCreateAction(@RequestParam Map map, ModelAndView mv,HttpSession session){
+    @RequestMapping("boardCreate-action")
+    public ModelAndView boardCreateAction(@RequestBody Map map, ModelAndView mv, HttpSession session){
         String boardTitle=(String)map.get("boardTitle");
         String boardContent=(String)map.get("boardContent");
         Users loginUser=(Users)session.getAttribute("loginUser");
-        List<String> fileList=new ArrayList<>();
         try{
-            Board board=new Board(0,boardTitle,boardContent,new Date(),fileList,loginUser.getId(),0);
-            int result=boardService.createBoard(board);
-            mv.setViewName("redirect:boardList");
+            Board createBoard=new Board(0,boardTitle,boardContent,new Date(),loginUser.getId(),0);
+            System.out.println(createBoard);
+            int result=boardService.createBoard(createBoard);
         } catch (Exception e){
             e.printStackTrace();
         }
