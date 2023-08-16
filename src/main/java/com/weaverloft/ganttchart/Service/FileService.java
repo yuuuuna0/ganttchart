@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,9 +17,9 @@ public class FileService {
     String fileExt;     //파일 확장자명
 
     //파일업로드 후 파일 이름 반환
-    public String uploadFile(MultipartHttpServletRequest multiRequest) throws Exception{
+    public String uploadFile(MultipartFile multipartFile) throws Exception{
         //키:파라미터이름 값:파라미터의 파일 정보를 값으로 하는 Map
-        Map<String, MultipartFile> files=multiRequest.getFileMap();
+        Map<String, MultipartFile> files=new HashMap<>();
         if(files.isEmpty()){
             System.out.println("들어온 파라미터가 음슴");
             return null;

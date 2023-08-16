@@ -118,7 +118,7 @@
                                                 <!-- 회원가입 시 사진 업로드 부분 -->
                                                 <div class="col-md-6">
                                                     <div class="imageDiv">
-                                                        <img style="width:500px;" id="prevPhoto" />
+                                                        <img style="width:500px;" id="prevPhoto" name="prevPhoto" />
                                                         <input style="display: block" type="file" id="photoFile" name="photoFile" onchange="uploadImg(this);">
                                                     </div>
                                                 </div>
@@ -184,7 +184,7 @@
         } else{
             document.getElementById('prevPhoto').src='C:/temp/upload/default.jpg';
         }
-    }
+    };
 
     //3. 회원가입 버튼 클릭 -> 유효성 검사 -> register-action 실행
     function createUser(){

@@ -20,4 +20,6 @@ public interface BoardMapper {
     int updateBoard(Board board) throws Exception;
     //6. 게시글 전체 개수
     int findBoardCount() throws Exception;
+    //7. 게시글 조회수 1 올리기
+    int updateBoardReadcount(int boardNo) throws Exception;
 }

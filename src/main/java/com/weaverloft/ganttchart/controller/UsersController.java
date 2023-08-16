@@ -1,13 +1,11 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.weaverloft.ganttchart.Service.EmailService;
-import com.weaverloft.ganttchart.Service.FileService;
-import com.weaverloft.ganttchart.Service.SHA256Service;
-import com.weaverloft.ganttchart.Service.UsersService;
+import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,37 +19,44 @@ public class UsersController {
     private SHA256Service sha256Service;
     private EmailService emailService;
     private FileService fileService;
+    private UsersLogService usersLogService;
 
-    public UsersController(UsersService usersService,SHA256Service sha256Service,EmailService emailService,FileService fileService) {
+    public UsersController(UsersService usersService,
+                           SHA256Service sha256Service,
+                           EmailService emailService,
+                           FileService fileService,
+                           UsersLogService usersLogService) {
         this.usersService = usersService;
         this.sha256Service = sha256Service;
         this.emailService = emailService;
         this.fileService = fileService;
+        this.usersLogService = usersLogService;
     }
-    //1-1. 회원가입 페이지 --> 완료
+    //1-1. 회원가입 페이지
     @GetMapping("/register")
     public String register(){
         return "register";
     }
+    //1-2. 회원 이미지 업로드
+    @RequestMapping("/uploadPhoto")
+    public void uploadPhoto(MultipartFile photoFile) throws Exception{
+        String photo;
+        try{
+            if(photoFile == null){
+                photo = "default.jpg";
+            }
+            photo = fileService.uploadFile(photoFile);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
-
     @ResponseBody
     @PostMapping(value = "register-action")
-    public ModelAndView registerAction(@RequestBody Model model ,
-                                       @RequestParam(name="photoFile", required = false) MultipartHttpServletRequest photoFile,
-                                       ModelAndView mv) throws Exception{
-        String id=(String)model.getAttribute("id");
-        String password=(String)model.getAttribute("password");
-        String name=(String)model.getAttribute("name");
-        String email=(String)model.getAttribute("email");
-        String phone=(String)model.getAttribute("phone");
-        String address=(String)model.getAttribute("address");
-        int gender=0;
-        System.out.println("gender Type: "+model.getAttribute("gender").getClass().getName());
-        //Integer.parseInt((String)map.get("gender"));
-        String photo=fileService.uploadFile(photoFile);
+    public ModelAndView registerAction(@ModelAttribute Users users, MultipartFile multipartFile, ModelAndView mv) throws Exception{
+        MultipartFile photoFile = multipartFile;
         try {
-            if (usersService.findUsersById(id)!=null) {
+            if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
                 System.out.println("이미 존재하는 아이디입니다.");
                 mv.setViewName("redirect:/login");
@@ -66,17 +71,26 @@ public class UsersController {
             }
 */
             //3) 비밀번호 암호화
-            String encryptPassword = sha256Service.encrypt(password);
+            String encryptPassword = sha256Service.encrypt(users.getPassword());
+            users.setPassword(encryptPassword);
             //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
-            int authKey = emailService.sendAuthEmail(email);
+            int authKey = emailService.sendAuthEmail(users.getEmail());
             String authKeyStr = Integer.toString(authKey);
+            users.setAuthKey(authKeyStr);
             //5) 파일 업로드
-            if (photo != null) {
-                System.out.println("사진 있다");
-                //fileService.uploadFile(photo);
+            if(photoFile !=null){
+                String photo = fileService.uploadFile(photoFile);
+                users.setPhoto(photo);
+            } else{
+                String photo = "default.jpg";
+                users.setPhoto(photo);
             }
-            Users newUsers = new Users(id, 0, encryptPassword, name, photo, new Date(), gender, phone, address, email, 0, authKeyStr);
-            int result = usersService.createUsers(newUsers);
+            //6) 회원가입 완료
+            int result = usersService.createUsers(users);
+            //7) 회원가입 로그 추가
+            String id= users.getId();
+            System.out.println(id);
+            //usersLogService.registerUser(id);       //에러남 -> missing select keyword
             mv.setViewName("redirect:/login");
         } catch (Exception e){
             e.printStackTrace();
@@ -105,6 +119,7 @@ public class UsersController {
             } else if(loginUser.getAuthStatus()==1) {
                 //인증된 사용자
                 System.out.println("로그인 성공");
+                int result=usersLogService.loginUser(loginUser.getId());
                 mv.addObject("loginUser",loginUser);
                 mv.setViewName("redirect:/");
             }
@@ -117,8 +132,10 @@ public class UsersController {
     }
     //2-3. 로그아웃 액션 --> 완료
     @GetMapping("/logout-action")
-    public String logoutAction(HttpSession session){
+    public String logoutAction(HttpSession session) throws Exception{
+        Users users=(Users)session.getAttribute("loginUser");
         session.invalidate();
+        usersLogService.logoutUser(users.getId());
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
@@ -133,8 +150,8 @@ public class UsersController {
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
             if(authKey.equals(loginUser.getAuthKey())){
-                loginUser.setAuthStatus(1);
-                usersService.updateUsers(loginUser);
+                usersService.updateAuthStatus(loginUser.getId());   //회원 인증 완료
+                usersLogService.authUser(loginUser.getId());        //로그남기기
             } else{
                 System.out.println("인증번호가 다릅니다");   //인증이 안됨,,,,
                 mv.setViewName("redirect:/emailAuth");

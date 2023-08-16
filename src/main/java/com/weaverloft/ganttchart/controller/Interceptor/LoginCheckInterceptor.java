@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 @Component
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
-    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object handler) throws Exception {
 
         //HandlerMethod: @Controller 객체에 @RequestMapping이 붙은 메소드

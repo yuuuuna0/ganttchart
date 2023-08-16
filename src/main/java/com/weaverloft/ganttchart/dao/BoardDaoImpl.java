@@ -49,4 +49,9 @@ public class BoardDaoImpl implements BoardDao {
     public int findBoardCount() throws Exception {
         return boardMapper.findBoardCount();
     }
+
+    @Override
+    public int updateBoardReadcount(int boardNo) throws Exception {
+        return boardMapper.updateBoardReadcount(boardNo);
+    }
 }

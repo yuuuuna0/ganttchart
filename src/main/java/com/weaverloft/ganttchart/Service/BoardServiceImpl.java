@@ -50,4 +50,10 @@ public class BoardServiceImpl implements BoardService {
         int result=boardDao.updateBoard(board);
         return result;
     }
+
+    @Override
+    public int updateBoardReadcount(int boardNo) throws Exception {
+        int result=boardDao.updateBoardReadcount(boardNo);
+        return result;
+    }
 }

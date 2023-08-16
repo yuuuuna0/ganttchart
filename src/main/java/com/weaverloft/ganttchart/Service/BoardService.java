@@ -18,4 +18,6 @@ public interface BoardService {
     int deleteBoard(int boardNo) throws Exception;
     //5. 게시글 수정
     int updateBoard(Board board) throws Exception;
+    //6. 게시글 조회수 1 올리기
+    int updateBoardReadcount(int boardNo) throws Exception;
 }

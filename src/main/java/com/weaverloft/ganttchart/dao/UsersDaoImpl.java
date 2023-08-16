@@ -46,11 +46,8 @@ public class UsersDaoImpl implements UsersDao {
     }
     //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
     @Override
-    public int updateAuthStatus(String id, int authStatus) throws Exception{
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("authStatus",authStatus);
-        return usersMapper.updateAuthStatus(map);
+    public int updateAuthStatus(String id) throws Exception{
+        return usersMapper.updateAuthStatus(id);
     }
     //7. 이름, 이메일로 아이디 찾기
     @Override

@@ -5,22 +5,24 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 @Controller
 public class BoardController {
     private BoardService boardService;
-
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
+
     //1. 게시글 전체보기
-    @RequestMapping("boardList")
+    @GetMapping("boardList")
     public ModelAndView boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
                                   @RequestParam(required = false) String keyword,
                                   HttpSession session,
@@ -35,14 +37,14 @@ public class BoardController {
         return mv;
     }
     //2. 게시글 상세보기
-    @GetMapping(value="board")
-    public ModelAndView boardDetail(ModelAndView mv) throws Exception{
-        int boardNo=201;
+    @GetMapping("/boardDetail/{boardNo}")
+    public ModelAndView boardDetail(@PathVariable int boardNo,ModelAndView mv) throws Exception{
         try {
+            int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.selectByBoardNo(boardNo);
             if(board!=null){
                 mv.addObject("board", board);
-                mv.setViewName("board");
+                mv.setViewName("boardDetail");
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -51,20 +53,19 @@ public class BoardController {
     }
 
     //3. 게시글 작성하기 페이지
-    @GetMapping("boardCreate")
+    @GetMapping("boardWrite")
     public String boardCreate(){
-        return "boardCreate";
+        return "boardWrite";
     }
     //3-1 게시글 작성하기 액션
-    @RequestMapping("boardCreate-action")
-    public ModelAndView boardCreateAction(@RequestBody Map map, ModelAndView mv, HttpSession session){
-        String boardTitle=(String)map.get("boardTitle");
-        String boardContent=(String)map.get("boardContent");
+    @PostMapping("/boardWrite-action")
+    public ModelAndView boardCreateAction(@ModelAttribute Board board, MultipartFile multipartFile, ModelAndView mv,HttpSession session){
+        MultipartFile boardFile =multipartFile;
         Users loginUser=(Users)session.getAttribute("loginUser");
+        board.setId(loginUser.getId());
         try{
-            Board createBoard=new Board(0,boardTitle,boardContent,new Date(),loginUser.getId(),0);
-            System.out.println(createBoard);
-            int result=boardService.createBoard(createBoard);
+            int result = boardService.createBoard(board);
+            mv.setViewName("redirect:/boardList");
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -41,6 +41,10 @@
     <select id="findBoardCount" resultType="java.lang.Integer">
         select count(*) from board
     </select>
+    <!-- 7. 게시글 조회수 올리기 -->
+    <update id="updateBoardReadcount" parameterType="java.lang.Integer">
+        update BOARD set BOARD_READCOUNT=BOARD_READCOUNT+1 where BOARD_NO=#{boardNo}
+    </update>
 
 
 

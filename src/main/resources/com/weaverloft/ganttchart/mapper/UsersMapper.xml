@@ -13,8 +13,12 @@
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="java.util.Map">
         update USERS
-        set name=#{name}, PASSWORD=#{password}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}, AUTH_STATUS=#{authStatus}, AUTH_KEY=#{authKey}
+        set name=#{name}, PASSWORD=#{password}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
         where id=#{id}
+    </update>
+    <!-- 4. 인증 완료 -->
+    <update id="updateAuthStatus" parameterType="java.lang.String">
+        update USERS set AUTH_STATUS=1 where id=#{id}
     </update>
     <!-- 7. 아이디 중복 체크 -->
     <select id="isExistedId" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -24,10 +28,6 @@
     <select id="isMatchPassword" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id} and password=#{password}
     </select>
-    <!-- 이메일 인증 업데이트 -->
-    <update id="updateAuthStatus" parameterType="java.util.Map">
-        update users set AUTH_STATUS=#{authStatus} where id=#{id}
-    </update>
     <!-- 이미지 업로드  -->
     <update id="updatePhoto" parameterType="java.util.Map">
         update users set PHOTO=#{photo} where id=#{id}

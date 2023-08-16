@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 public class MultiFile {
     private int fileNo;
     private String fileName;
-    private String fileExtension;
-    private String fileSrc;
     private int boardNo;
 }

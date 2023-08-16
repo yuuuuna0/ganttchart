@@ -93,8 +93,8 @@ public class UsersServiceImpl implements UsersService {
 
     //6. 이메일 인증 후 인증확인으로 상태 변경 (isEmailAuth: 0->1)
     @Override
-    public int updateAuthStatus(String id, int authStatus) throws Exception {
-        int result = usersDao.updateAuthStatus(id, authStatus);
+    public int updateAuthStatus(String id) throws Exception {
+        int result = usersDao.updateAuthStatus(id);
         return result;
     }
 
