@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
+    <script src="js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
 
 <body>
@@ -46,21 +48,21 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">게시글 작성하기</h4>
-                            <form name="boardWriteF" enctype="multipart/form-data">
+                            <form name="boardWriteF" id="boardWriteF" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="boardTitle">제목</label>
                                     <input type="text" class="form-control" id="boardTitle" name="boardTitle" placeholder="제목을 입력하세요">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" >
                                     <label for="boardContent">내용</label>
                                     <textarea class="form-control" id="boardContent" name="boardContent" rows="4" placeholder="내용을 입력하세요"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="boardFile">첨부파일</label> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-                                    <input type="file" id="boardFile" name="boardFile">
+                                    <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
+                                    <input type="file" id="boardFileList" name="boardFileList" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                                    <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                     <div class="input-group col-xs-12">
-                                        <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;"
-                                               id="fileList" disabled placeholder="파일을 업로드하세요">
+                                        <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
                                         </div>
                                     </div>
                                 </div>
@@ -106,107 +108,90 @@
 <script src="../../js/select2.js"></script>
 <!-- End custom js for this page-->
 <script>
-    //1. 게시글 작성
-    function boardWrite(){
-        var boardTitle = document.getElementById("boardTitle").value;
-        var boardContent = document.getElementById("boardContent").value;
-
-        if(boardTitle === ''){
-            alert("제목을 입력하세요");
-            document.getElementById("boardTitle").focus();
-            return false;
+//1. 게시글 작성
+var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
+var maxCount = 5;     // 최대 첨부 갯수
+var fileNo = 0;         //파일 고유번호
+var fileList = new Array(); //첨부파일리스트 (파일타입)
+var fileListArray; //첨부파일 어레이타입
+const dataTransfer = new DataTransfer();
+//1. 다중 파일 처리
+    //1) 버튼클릭시 submit 안하기
+    document.addEventListener('DOMContentLoaded', function() {
+        // input file 파일 첨부시 fileCheck 함수 실행
+        document.getElementById('boardFileList').addEventListener('change', fileCheck);
+    });
+    //2) 첨부파일 로직
+    function fileCheck(e){
+        var files = e.target.files;
+        var filesArray = Array.prototype.slice.call(files); //파일 배열 담기
+        //파일 갯수 확인
+        if(fileCount + filesArray.length > maxCount){
+            alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
+            return;
+        } else {
+            fileCount = fileCount + filesArray.length;
         }
-        if(boardContent === ''){
-            alert("내용을 입력하세요");
-            document.getElementById("boardContent").focus();
-            return false;
+        //각각의 파일 배열담기 및 기타
+        filesArray.forEach(function(f){
+           var reader = new FileReader();
+           reader.onload = function(e){
+               fileList.push(f);
+               console.log('왜 출력이 안되니');
+               var divHtml = document.getElementById('fileList');
+               document.getElementById("fileList").innerHTML +=
+                   '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
+                   + f.name
+                   + '<img src="../../resources/static/images/icon_minus.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>'
+                   + '</div>';
+               fileNo++;
+            };
+           reader.readAsDataURL(f);
+        });
+        for(let i=0;fileList.length;i++){
+            dataTransfer.items.add(fileList.indexOf(i));
         }
+        console.log(fileList);
+        //초기화
+        document.getElementById("boardFileList").value='';
+    }
+//3. 파일 부분 삭제 함수
+    function fileDelete(fileNo){
+        //html 처리
+        var no = fileNo.replace(/[^0-9]/g, "");     //fileNo(ex.file1,file2)의 index
+        if(no <= maxCount){
+            fileList[no].is_delete = true;
+            document.getElementById(fileNo).remove();
+            fileCount--;
+        }
+        // input 태그 처리
+        fileListArray = Array.from(fileList);	////변수에 할당된 배열을 파일로 변환(Array -> fileList)
+        fileListArray.splice(no, 1);	            //해당하는 index의 파일을 배열에서 제거
+        for(let i=0;i<fileListArray.length;i++){
+            let file = fileListArray[i];
+            dataTransfer.items.add(file);
+        }
+        $('#boardFileList')[0].files=dataTransfer.files;    //제거처리된 FileList를 input태그에 담아줌
+    }
+        function boardWrite() {
+            var boardTitle = document.getElementById("boardTitle").value;
+            var boardContent = document.getElementById("boardContent").value;
+            if(boardTitle === ''){
+                alert("제목을 입력하세요");
+                document.getElementById("boardTitle").focus();
+                return false;
+            }
+            if(boardContent === ''){
+                alert("내용을 입력하세요");
+                document.getElementById("boardContent").focus();
+                return false;
+            }
+            fileDelete("file"+(maxCount+1));
 
-        document.boardWriteF.method = 'POST';
-        document.boardWriteF.action = '/boardWrite-action';
-        document.boardWriteF.submit();
-    };
-
-    // //2. 파일 여러개 업로드
-    // var fileNo = 0;
-    // var filesArray = new Array();
-    // function uploadFiles(obj){
-    //     var maxFileCount = 5;   //첨부파일 최대 개수
-    //     var attFileCount = document.querySelectorAll('.filebox').length; //기존 추가된 첨부파일 개수
-    //     var remailFileCount = maxFileCount - attFileCount;      //추가 첨부 가능한 개수
-    //     var curFileCount = obj.files.length();
-    //
-    //     //1) 첨부파일 개수 확인
-    //     if(curFileCount > remailFileCount){
-    //         alert("첨부파일은 최대 "+ maxFileCount +"개까지 첨부 가능합니다.");
-    //     } else {
-    //         for(var file of obj.files){
-    //             var validation = validation(file);
-    //             if(validation){
-    //                 var reader =new FileReader();
-    //                 reader.onload = function(){
-    //                     filesArray.push(file);
-    //                 };
-    //                 reader.readAsDataURL(file);
-    //                 //목록 추가
-    //                 var htmlData= "";
-    //                 htmlData += '<div name="file' + fileNo + '" class="filebox">';
-    //                 htmlData += '   <p class="name">' + file.name + '</p>';
-    //                 htmlData += '   <a class="delete" onclick = "deleteFile('+ fileNo + ');"><i class="far fa-minus-square"/></a>';
-    //                 htmlData += '</div>';
-    //                 document.getElementById("fileList").append(htmlData);
-    //                 fileNo++;
-    //             } else {
-    //                 continue;
-    //             }
-    //         }
-    //     }
-    //     //초기화
-    //     document.getElementById("boardFiles").value="";
-    // };
-    // //2) 첨부파일 용량(100MB), 글자수(50자) 검증
-    // function validation(obj){
-    //     if(obj.name.length() > 100){
-    //         alert("파일명이 100자 잇상인 파일은 제외되었습니다.");
-    //         return false;
-    //     }
-    //     if(obj.size > (100*1024*1024)){
-    //         alert("최대 파일 용량인 100MB를 초과하는 파일은 제외되었습니다.");
-    //         return false;
-    //     }
-    //     return true;
-    // };
-    // //3) 첨부파일 삭제
-    // function deleteFile(num){
-    //     document.querySelector("#file" + num).remove();
-    //     filesArray[num].is_delete = true;
-    // };
-    // //4) 폼 전송
-    // function boardFileUpload(){
-    //     //폼데이터 담기
-    //     var form = document.boardFilesF;
-    //     var formData = new FormData(form);
-    //     for(var i=0; i<filesArray.length ; i++){
-    //         //삭제되지 않은 파일만 폼데이터에 담기
-    //         if(!filesArray[i].is_delete){
-    //             formData.append("boardFiles", filesArray[i]);
-    //         }
-    //     }
-    //     $.ajax({
-    //         method : 'POST',
-    //         url : '/board/write-action',
-    //         dataType : 'json',
-    //         data : formData,
-    //         async : false,
-    //         success : function(result){
-    //             console.log(result);
-    //             window.location.href='/board/list';
-    //         },
-    //         error : function(xhr,status,error){
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+            document.getElementById("boardWriteF").method = 'POST';
+            document.getElementById("boardWriteF").action = '/boardWrite-action';
+            document.getElementById("boardWriteF").submit();
+        }
 </script>
 
 </html>

@@ -25,7 +25,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="../../images/favicon.png" />
+    <link rel="shortcut icon" href="../../images/favicon.png"/>
     <!-- 다음 주소 API 사용 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
@@ -41,93 +41,106 @@
         <!-- partial:partials/_sidebar.html -->
         <jsp:include page="include/sidebar.jsp"/>
         <!-- partial -->
-    <div class="main-panel">
-        <div class="content-wrapper">
-            <div class="row">
-                <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">회원가입</h4>
-                            <form class="forms-sample" name="registerF" id="registerF" enctype="multipart/form-data">
-                            <!-- 프로필사진 업로드 -->
-                            <div class="row form-group">
-<%--                                <img id="prevPhoto" style="width: 500px; height:500px; "/>--%>
-                                <input type="file" id="photoFile" name="photoFile" accept="img/*">
-<%--                                <input class="file-upload-browse btn btn-primary" type="button" name="photoFileBtn" id="photoFileBtn" onclick="uploadPhoto(this)" value="업로드">--%>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">회원가입</h4>
+                                <form class="forms-sample" name="registerF" id="registerF"
+                                      enctype="multipart/form-data">
+                                    <!-- 프로필사진 업로드 -->
+                                    <div class="row form-group">
+                                        <%--                                <img id="prevPhoto" style="width: 500px; height:500px; "/>--%>
+                                        <input type="file" id="photoFile" name="photoFile" accept="img/*">
+                                        <%--                                <input class="file-upload-browse btn btn-primary" type="button" name="photoFileBtn" id="photoFileBtn" onclick="uploadPhoto(this)" value="업로드">--%>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <label for="id">아이디</label>
+                                            <input type="text" class="form-control" id="id" name="id"
+                                                   placeholder="아이디를 입력하세요">
+                                        </div>
+                                        <div class="col-6">
+                                            <label></label>
+                                            <input type="button" value="중복확인" onclick="validateId()"
+                                                   class="btn btn-primary mr-2">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <label for="password">비밀번호</label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                   placeholder="비밀번호를 입력하세요">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="confirmPassword">비밀번호 확인</label>
+                                            <input type="password" class="form-control" id="confirmPassword"
+                                                   name="confirmPassword" placeholder="비밀번호 확인을 입력하세요">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <label for="name">이름</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                   placeholder="이름을 입력하세요">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="gender">성별</label>
+                                            <select class="form-control" id="gender" name="gender">
+                                                <option value="1">남</option>
+                                                <option value="2">여</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">이메일</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               placeholder="이메일을 입력하세요">
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <label for="phone">전화번호</label>
+                                            <input type="text" class="form-control" id="phone" name="phone"
+                                                   placeholder="전화번호를 입력하세요">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="birth">생일</label>
+                                            <input type="date" class="form-control" id="birth" name="birth"
+                                                   placeholder="생일을 입력하세요">
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <label for="address">주소</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                   placeholder="주소를 입력하세요">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="detailedAddress">&nbsp;</label>
+                                            <input type="text" class="form-control" id="detailedAddress"
+                                                   name="detailedAddress" placeholder="상세주소를 입력하세요">
+                                        </div>
+                                    </div>
+                                    <input type="button" onclick="createUser()" class="btn btn-primary mr-2"
+                                           value="회원가입">
+                                    <input type="button" class="btn btn-light" value="취소"
+                                           onclick="location.href='/login'">
+                                </form>
                             </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                    <label for="id">아이디</label>
-                                    <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요">
-                                    </div>
-                                    <div class="col-6">
-                                        <label></label>
-                                        <input type="button" value="중복확인" onclick="validateId()" class="btn btn-primary mr-2">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                        <label for="password">비밀번호</label>
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="confirmPassword">비밀번호 확인</label>
-                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인을 입력하세요">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                        <label for="name">이름</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="gender">성별</label>
-                                        <select class="form-control" id="gender" name="gender">
-                                            <option value="1">남</option>
-                                            <option value="2">여</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                        <label for="phone">전화번호</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="전화번호를 입력하세요">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth" placeholder="생일을 입력하세요">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                        <label for="address">주소</label>
-                                        <input type="text" class="form-control" id="address" name="address" placeholder="주소를 입력하세요">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="detailedAddress">&nbsp;</label>
-                                        <input type="text" class="form-control" id="detailedAddress" name="detailedAddress" placeholder="상세주소를 입력하세요">
-                                    </div>
-                                </div>
-                                <input type="button" onclick="createUser()" class="btn btn-primary mr-2" value="회원가입">
-                                <input type="button" class="btn btn-light" value="취소" onclick="location.href='/login'">
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- content-wrapper ends -->
+            <!-- partial:../../partials/_footer.html -->
+            <jsp:include page="include/footer.jsp"/>
+            <!-- partial -->
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <jsp:include page="include/footer.jsp"/>
-        <!-- partial -->
+        <!-- main-panel ends -->
     </div>
-    <!-- main-panel ends -->
-</div>
-<!-- page-body-wrapper ends -->
+    <!-- page-body-wrapper ends -->
 </div>
 <!-- container-scroller -->
 <!-- plugins:js -->
@@ -168,7 +181,7 @@
     };
 
 
-    function createUser(){
+    function createUser() {
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
@@ -180,39 +193,39 @@
         var birth = document.getElementById("birth").value;
 
         /**************************** 유효성 검사 ****************************************/
-        if(id === ''){
-            document.getElementById("id").innerText='아이디를 입력하세요';
+        if (id === '') {
+            document.getElementById("id").innerText = '아이디를 입력하세요';
             document.getElementById("id").focus();
             return false;
         }
-        if(password ===''){
-            document.getElementById("passwordVal").innerText="비밀번호를 입력하세요";
+        if (password === '') {
+            document.getElementById("passwordVal").innerText = "비밀번호를 입력하세요";
             document.getElementById("password").focus();
             return false;
         }
-        if(confirmPassword ==='') {
-            document.getElementById("confirmPasswordVal").innerText="비밀번호 확인을 입력하세요";
+        if (confirmPassword === '') {
+            document.getElementById("confirmPasswordVal").innerText = "비밀번호 확인을 입력하세요";
             document.getElementById("confirmPassword").focus();
             return false;
         }
-        if(name === ''){
-            document.getElementById("nameVal").innerText="이름을 입력하세요";
+        if (name === '') {
+            document.getElementById("nameVal").innerText = "이름을 입력하세요";
             document.getElementById("name").focus();
             return false;
         }
 
-        if(email === ''){
-            document.getElementById("emailVal").innerText="이메일을 입력하세요";
+        if (email === '') {
+            document.getElementById("emailVal").innerText = "이메일을 입력하세요";
             document.getElementById("email").focus();
             return false;
         }
-        if(phone === ''){
-            document.getElementById("phoneVal").innerText="전화번호를 입력하세요";
+        if (phone === '') {
+            document.getElementById("phoneVal").innerText = "전화번호를 입력하세요";
             document.getElementById("phone").focus();
             return false;
         }
-        if(password !== confirmPassword){
-            document.getElementById("confirmPasswordVal").innerText="비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+        if (password !== confirmPassword) {
+            document.getElementById("confirmPasswordVal").innerText = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
             document.getElementById("confirmPassword").focus();
             return false;
         }

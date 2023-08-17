@@ -47,21 +47,19 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">아이디 찾기</h4>
+                            <h4 class="card-title">이메일 인증</h4>
                             <p class="card-description">
                             </p>
-                            <form class="forms-sample">
-                                <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+                            <div class="small mb-3 text-muted">Enter your secret code to verify your ID!!</div>
+                            <form method="post" action="/emailAuth-action" accept-charset="utf-8">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="authKey" name="authKey" type="text"/>
+                                    <label for="authKey"></label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
+                                <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                    <a class="small" href="login">Return to login</a>
+                                    <button class="btn btn-primary" type="submit">Verify</button>
                                 </div>
-                                <input id="findIdBtn" type="submit" class="btn btn-primary mr-2" value="아이디찾기">
-                                <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
-                                <a href="register" class="auth-link text-black">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>

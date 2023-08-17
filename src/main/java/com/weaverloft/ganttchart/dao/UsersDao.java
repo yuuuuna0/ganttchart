@@ -3,6 +3,8 @@ package com.weaverloft.ganttchart.dao;
 import com.weaverloft.ganttchart.dto.Users;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UsersDao {
     //1. 회원가입
     int createUsers(Users users) throws Exception;
@@ -18,12 +20,16 @@ public interface UsersDao {
     int updateAuthStatus(String id) throws Exception;
     //7. 이름, 이메일로 아이디 찾기
     String findIdByNameEmail(String name, String email) throws Exception;
-    //8. 아이디, 이메일로 비밀번호 변경하기
-    int findPasswordByIdEmail(String id, String email) throws Exception;
+    //8. 아이디, 이름, 이메일로 비밀번호 변경하기
+    int findPasswordByIdNameEmail(String id, String name, String email) throws Exception;
     //9. 비밀번호 변경
     int updatePassword(String id, String encryptTempPassword) throws Exception;
     //10. 회원 탈퇴
     int deleteUsers(String id) throws Exception;
+    //11. 전체회원 수
+    int findUsersCount();
+    //12. 회원리스트 -> 페이징,검색
+    List<Users> findUserList(int pageBegin, int pageEnd, String keyword);
 
     /*
     //3. 정보 수정

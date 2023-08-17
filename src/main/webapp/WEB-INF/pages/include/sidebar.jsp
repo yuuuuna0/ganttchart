@@ -61,8 +61,8 @@
             </a>
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/login"> 회원리스트 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/register"> 회원로그 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/userList"> 회원리스트 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/userLog"> 회원로그 </a></li>
                 </ul>
             </div>
         </li>

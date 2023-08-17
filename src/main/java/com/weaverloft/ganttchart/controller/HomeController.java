@@ -26,11 +26,12 @@ public class HomeController {
     @GetMapping("/")
     //시작 페이지
     public ModelAndView index(ModelAndView mv) throws Exception{
-        int pageNo=1;
         String keyword =null;
         try{
-            PageMakerDto<Board> boardListPage = boardService.selectBoardList(pageNo,keyword);
-            mv.addObject("boardListPage", boardListPage);
+            //조회수 탑5 게시글 붙이기
+            int no = 5;
+            List<Board> boardTopList = boardService.findBoardTopList(no);
+            mv.addObject("boardTopList", boardTopList);
             mv.setViewName("index");
         } catch (Exception e){
             e.printStackTrace();

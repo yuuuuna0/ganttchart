@@ -1,9 +1,12 @@
 package com.weaverloft.ganttchart.dao;
 
+import com.weaverloft.ganttchart.dto.UsersLog;
 import com.weaverloft.ganttchart.mapper.UsersLogMapper;
+import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -15,24 +18,25 @@ public class UsersLogDaoImpl implements UsersLogDao{
     }
 
     @Override
-    public int registerUser(String id) throws Exception{
+    public int createLog(String id, int logStatus) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
-        return usersLogMapper.registerUser(map);
+        map.put("logStatus",logStatus);
+        return usersLogMapper.createLog(map);
     }
 
     @Override
-    public int authUser(String id) throws Exception{
-        return usersLogMapper.authUser(id);
+    public List<UsersLog> findUsersLogList(int pageBegin, int pageEnd, String keyword) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("pageBegin",pageBegin);
+        map.put("pageEnd",pageEnd);
+        map.put("keyword",keyword);
+        return usersLogMapper.findUserLog(map);
     }
 
     @Override
-    public int loginUser(String id) throws Exception{
-        return usersLogMapper.loginUser(id);
+    public int findUsersLogCount() {
+        return usersLogMapper.findUsersLogCount();
     }
 
-    @Override
-    public int logoutUser(String id) throws Exception{
-        return usersLogMapper.logoutUser(id);
-    }
 }

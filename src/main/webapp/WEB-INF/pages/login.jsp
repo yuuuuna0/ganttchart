@@ -54,7 +54,8 @@
                                         Keep me signed in
                                     </label>
                                 </div>
-                                <a href="#" class="auth-link text-black">Forgot password?</a>
+                                <a href="findId" class="auth-link text-black">Forgot Id?</a>
+                                <a href="findPassword" class="auth-link text-black">Forgot password?</a>
                             </div>
                             <div class="mb-2">
                                 <button type="button" class="btn btn-block btn-facebook auth-form-btn">

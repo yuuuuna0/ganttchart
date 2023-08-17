@@ -22,17 +22,17 @@ public class BoardDaoImpl implements BoardDao {
     }
 
     @Override
-    public List<Board> selectBoardList(int pageBegin, int pageEnd, String keyword) throws Exception {
+    public List<Board> findBoardList(int pageBegin, int pageEnd, String keyword) throws Exception {
         Map<String,Object> map=new HashMap<>();
         map.put("pageBegin", pageBegin);
         map.put("pageEnd", pageEnd);
         map.put("keyword",keyword);
-        return boardMapper.selectBoardList(map);
+        return boardMapper.findBoardList(map);
     }
 
     @Override
-    public Board selectByBoardNo(int boardNo) throws Exception {
-        return boardMapper.selectByBoardNo(boardNo);
+    public Board findByBoardNo(int boardNo) throws Exception {
+        return boardMapper.findByBoardNo(boardNo);
     }
 
     @Override
@@ -53,5 +53,15 @@ public class BoardDaoImpl implements BoardDao {
     @Override
     public int updateBoardReadcount(int boardNo) throws Exception {
         return boardMapper.updateBoardReadcount(boardNo);
+    }
+
+    @Override
+    public int findCurKey() throws Exception {
+        return boardMapper.findCurKey();
+    }
+
+    @Override
+    public List<Board> findBoardTopList(int no) throws Exception{
+        return boardMapper.findBoardTopList(no);
     }
 }

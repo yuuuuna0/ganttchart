@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersLogMapper">
-    <!-- 1. 회원가입 로그 남기기 -->
-    <insert id="registerUser" parameterType="java.util.Map">
+    <!-- 1. 로그 남기기 -->
+    <insert id="createLog" parameterType="java.util.Map">
         <selectKey resultType="java.lang.Integer" keyProperty="logNo" order="BEFORE">
             select USERS_LOG_LOG_NO_SEQ.nextval from DUAL
         </selectKey>
-        insert into (log_no, log_date, log_status, id)
-        values (0,sysdate,0,#{id})
+        insert into USERS_LOG(log_no, log_date, log_status,id)
+        values (#{logNo},sysdate,#{logStatus},#{id})
     </insert>
-    <!-- 2. 인증 로그 남기기 -->
-    <insert id="authUser" parameterType="java.lang.String">
-        <selectKey resultType="java.lang.Integer" keyProperty="logNo" order="BEFORE">
-            select USERS_LOG_LOG_NO_SEQ.nextval from dual
-        </selectKey>
-        insert into (log_no, log_date, log_status, id)
-        values (0,sysdate,1,#{id})
-    </insert>
-    <!-- 3. 로그인 로그 남기기 -->
-    <insert id="loginUser" parameterType="java.lang.String">
-        <selectKey resultType="java.lang.Integer" keyProperty="logNo" order="BEFORE">
-            select USERS_LOG_LOG_NO_SEQ.nextval from dual
-        </selectKey>
-        insert into (log_no, log_date, log_status, id)
-        values (0,sysdate,10,#{id})
-    </insert>
-    <!-- 4. 로그아웃 로그 남기기 -->
-    <insert id="logoutUser" parameterType="java.lang.String">
-        <selectKey resultType="java.lang.Integer" keyProperty="logNo" order="BEFORE">
-            select USERS_LOG_LOG_NO_SEQ.nextval from dual
-        </selectKey>
-        insert into (log_no, log_date, log_status, id)
-        values (0,sysdate,11,#{id})
-    </insert>
+    <!-- 2. 로그 전체 수 -->
+    <select id="findUsersLogCount">
+        select * from USERS_LOG
+    </select>
+    <!-- 3. 로그리스트 출력 -> 페이징, 검색 -->
+    <select id="findUserLog" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.UsersLog">
+        select  *
+        from (  select rownum idx, ul.*
+                from (  select *
+                        from USERS_LOG
+                    ) ul
+                 where 1=1
+                    <if test="keyword !=null">
+                        and ul.id like '%'||#{keyword}||'%'
+                    </if>
+            )
+        <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
+    </select>
+
+
 </mapper>

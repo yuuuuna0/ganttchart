@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.PageMakerDto;
 
 public interface UsersService {
     //1. 로그인
@@ -17,12 +18,16 @@ public interface UsersService {
     int updateAuthStatus(String id) throws Exception;
     //7. 이름,이메일로 아이디 찾기
     String findIdByNameEmail(String name, String email) throws Exception;
-    //8. 아이디, 이메일로 비밀번호 변경하기
-    int findPasswordByIdEmail(String id, String email) throws Exception;
+    //8. 아이디, 이름, 이메일로 비밀번호 변경하기
+    int findPasswordByIdNameEmail(String id, String name, String email) throws Exception;
     //9. 비밀번호 변경
     int updatePassword(String id, String encryptTempPassword) throws Exception;
     //10. 회원 탈퇴
     int deleteUsers(String id) throws Exception;
+    //11. 회원 전체 조회 --> 페이징
+    PageMakerDto findUserList(int pageNo, String keyword) throws Exception;
+    //12. 회원리스트 엑셀
+    void userListExcelDown(Users users,int pageNo, String keyword) throws Exception;
 
     /*
     //2. 내 정보 조회

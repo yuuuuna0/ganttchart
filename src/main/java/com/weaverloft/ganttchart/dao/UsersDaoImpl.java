@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,11 +60,12 @@ public class UsersDaoImpl implements UsersDao {
     }
     //8. 아이디, 이메일로 비밀번호 변경하기
     @Override
-    public int findPasswordByIdEmail(String id, String email) throws Exception{
+    public int findPasswordByIdNameEmail(String id, String name, String email) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
+        map.put("name",name);
         map.put("email",email);
-        return usersMapper.findPasswordByIdEmail(map);
+        return usersMapper.findPasswordByIdNameEmail(map);
     }
     //9. 비밀번호 변경
     @Override
@@ -77,6 +79,20 @@ public class UsersDaoImpl implements UsersDao {
     //10. 회원 탈퇴
     public int deleteUsers(String id) throws Exception {
         return usersMapper.deleteUsers(id);
+    }
+
+    @Override
+    public int findUsersCount() {
+        return usersMapper.findUsersCount();
+    }
+
+    @Override
+    public List<Users> findUserList(int pageBegin, int pageEnd, String keyword) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("pageBegin",pageBegin);
+        map.put("pageEnd",pageEnd);
+        map.put("keyword",keyword);
+        return usersMapper.findUserList(map);
     }
 
 

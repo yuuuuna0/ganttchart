@@ -47,9 +47,8 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Default form</h4>
+                            <h4 class="card-title">비밀번호 찾기</h4>
                             <p class="card-description">
-                                Basic form layout
                             </p>
                             <form class="forms-sample">
                                 <div class="form-group">
@@ -64,14 +63,9 @@
                                     <label for="email">이메일</label>
                                     <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
                                 </div>
-                                <div class="form-check form-check-flat form-check-primary">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input">
-                                        Remember me
-                                    </label>
-                                </div>
-                                <input type="button" id="findPasswordBtn" onclick="findPassword()" class="btn btn-primary mr-2" value="비밀번호찾기">
-                                <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-primary mr-2" value="취소">
+                                <input type="submit" id="findPasswordBtn" class="btn btn-primary mr-2" value="비밀번호찾기">
+                                <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
+                                <a href="register" class="auth-link text-black right">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>

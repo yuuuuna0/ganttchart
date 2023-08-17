@@ -24,18 +24,18 @@ public class BoardServiceImpl implements BoardService {
     }
     //2. 게시글 전체 리스트 보기 --> 페이징처리 필요
     @Override
-    public PageMakerDto<Board> selectBoardList(int pageNo,String keyword) throws Exception {
+    public PageMakerDto<Board> findBoardList(int pageNo,String keyword) throws Exception {
         int totBoardCount=boardDao.findBoardCount();    //전체 글 개수
         PageMaker pageMaker=new PageMaker(totBoardCount,pageNo);    //page 계산
         //게시글 데이터 얻기
-        List<Board> boardList=boardDao.selectBoardList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);
+        List<Board> boardList=boardDao.findBoardList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);
         PageMakerDto<Board> pageMakerBoardList=new PageMakerDto<Board>(boardList,pageMaker,totBoardCount);
         return pageMakerBoardList;
     }
     //3. 게시글 상세보기
     @Override
-    public Board selectByBoardNo(int boardNo) throws Exception {
-        Board board=boardDao.selectByBoardNo(boardNo);
+    public Board findByBoardNo(int boardNo) throws Exception {
+        Board board=boardDao.findByBoardNo(boardNo);
         return board;
     }
     //4. 게시글 삭제
@@ -56,4 +56,15 @@ public class BoardServiceImpl implements BoardService {
         int result=boardDao.updateBoardReadcount(boardNo);
         return result;
     }
+
+    @Override
+    public int findCurKey() throws Exception {
+        return boardDao.findCurKey();
+    }
+
+    @Override
+    public List<Board> findBoardTopList(int no) throws Exception{
+        return boardDao.findBoardTopList(no);
+    }
+
 }

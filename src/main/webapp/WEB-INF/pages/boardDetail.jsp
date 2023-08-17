@@ -64,41 +64,18 @@
                                     <label for="boardContent">내용</label>
                                     <textarea class="form-control" id="boardContent" name="boardContent" rows="4" disabled>${board.boardContent}</textarea>
                                 </div>
-                                <form name="boardFilesF" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label for="boardFiles">첨부파일</label> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-                                        <input type="file" id="boardFiles" name="boardFiles" onchange="uploadFiles(this)" multiple>
+                                        <label for="fileList">첨부파일</label>
                                         <div class="input-group col-xs-12">
-                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;"
-                                                 id="fileList" disabled placeholder="파일을 업로드하세요">
+                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
                                             </div>
                                         </div>
                                     </div>
-                                </form>
                             </div>
-                            <br><br><hr>
+                            <hr>
                             <!-- 댓글 시작 -->
-<%--                            < div class="card mb-2">--%>
-<%--                            <div class="card-header bg-light">--%>
-<%--                                <i class="fa fa-comment fa"></i> REPLY--%>
-<%--                            </div>--%>
-<%--                            <div class="card-body">--%>
-<%--                                <ul class="list-group list-group-flush">--%>
-<%--                                    <li class="list-group-item">--%>
-<%--                                        <div class="form-inline mb-2">--%>
-<%--                                            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>--%>
-<%--                                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">--%>
-<%--                                            <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>--%>
-<%--                                            <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">--%>
-<%--                                        </div>--%>
-<%--                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>--%>
-<%--                                        <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>--%>
-<%--                                    </li>--%>
-<%--                                </ul>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
                             <div class="card-body">
-                            <!-- 작성폼 -->
+                                <!-- 작성폼 -->
                                 <form class="mb-4">
                                     <textarea class="form-control" row="3" placeholder="댓글을 남겨주세요"></textarea>
                                 </form>
@@ -123,6 +100,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

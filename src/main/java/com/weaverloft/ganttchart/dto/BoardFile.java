@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MultiFile {
+public class BoardFile {
     private int fileNo;
     private String fileName;
     private int boardNo;

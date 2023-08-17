@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <!-- Required meta tags -->
@@ -358,63 +359,36 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7 grid-margin stretch-card">
+                    <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <p class="card-title mb-0">Top Products</p>
+                                <p class="card-title mb-0">BEST 5 게시글</p>
+                                <br>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-borderless">
                                         <thead>
                                         <tr>
-                                            <th>Product</th>
-                                            <th>Price</th>
+                                            <th>No</th>
+                                            <th>Title</th>
+                                            <th>Content</th>
+                                            <th>Writer</th>
+                                            <th>Comment</th>
                                             <th>Date</th>
-                                            <th>Status</th>
+                                            <th>Read</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>Search Engine Marketing</td>
-                                            <td class="font-weight-bold">$362</td>
-                                            <td>21 Sep 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-success">Completed</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Search Engine Optimization</td>
-                                            <td class="font-weight-bold">$116</td>
-                                            <td>13 Jun 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-success">Completed</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Display Advertising</td>
-                                            <td class="font-weight-bold">$551</td>
-                                            <td>28 Sep 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-warning">Pending</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pay Per Click Advertising</td>
-                                            <td class="font-weight-bold">$523</td>
-                                            <td>30 Jun 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-warning">Pending</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>E-Mail Marketing</td>
-                                            <td class="font-weight-bold">$781</td>
-                                            <td>01 Nov 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-danger">Cancelled</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Referral Marketing</td>
-                                            <td class="font-weight-bold">$283</td>
-                                            <td>20 Mar 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-warning">Pending</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Social media marketing</td>
-                                            <td class="font-weight-bold">$897</td>
-                                            <td>26 Oct 2018</td>
-                                            <td class="font-weight-medium"><div class="badge badge-success">Completed</div></td>
-                                        </tr>
+                                        <c:forEach items="${boardTopList}" var="board">
+                                            <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <td>${board.boardNo}</td>
+                                                <td>${board.boardTitle}</td>
+                                                <td>${board.boardContent}</td>
+                                                <td>${board.id}</td>
+                                                <td>${board.boardReadcount}</td>
+                                                <td>${board.boardDate}</td>
+                                                <td>${board.boardReadcount}</td>
+                                            </tr>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

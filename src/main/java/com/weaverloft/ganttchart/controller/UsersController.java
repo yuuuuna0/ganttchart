@@ -1,7 +1,10 @@
 package com.weaverloft.ganttchart.controller;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.PageMaker;
+import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,24 +40,11 @@ public class UsersController {
     public String register(){
         return "register";
     }
-    //1-2. 회원 이미지 업로드
-    @RequestMapping("/uploadPhoto")
-    public void uploadPhoto(MultipartFile photoFile) throws Exception{
-        String photo;
-        try{
-            if(photoFile == null){
-                photo = "default.jpg";
-            }
-            photo = fileService.uploadFile(photoFile);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @ResponseBody
     @PostMapping(value = "register-action")
-    public ModelAndView registerAction(@ModelAttribute Users users, MultipartFile multipartFile, ModelAndView mv) throws Exception{
-        MultipartFile photoFile = multipartFile;
+    public ModelAndView registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile, ModelAndView mv) throws Exception{
+        MultipartFile photoFile = multipartFile.getFile("photoFile");
         try {
             if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
@@ -79,8 +69,10 @@ public class UsersController {
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
             if(photoFile !=null){
-                String photo = fileService.uploadFile(photoFile);
+                String filePath = "C:\\temp\\upload\\images\\";
+                String photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
+                System.out.println("사진 있다");
             } else{
                 String photo = "default.jpg";
                 users.setPhoto(photo);
@@ -90,7 +82,7 @@ public class UsersController {
             //7) 회원가입 로그 추가
             String id= users.getId();
             System.out.println(id);
-            //usersLogService.registerUser(id);       //에러남 -> missing select keyword
+            usersLogService.createLog(id,0);
             mv.setViewName("redirect:/login");
         } catch (Exception e){
             e.printStackTrace();
@@ -119,7 +111,7 @@ public class UsersController {
             } else if(loginUser.getAuthStatus()==1) {
                 //인증된 사용자
                 System.out.println("로그인 성공");
-                int result=usersLogService.loginUser(loginUser.getId());
+                int result=usersLogService.createLog(loginUser.getId(),10);
                 mv.addObject("loginUser",loginUser);
                 mv.setViewName("redirect:/");
             }
@@ -135,7 +127,7 @@ public class UsersController {
     public String logoutAction(HttpSession session) throws Exception{
         Users users=(Users)session.getAttribute("loginUser");
         session.invalidate();
-        usersLogService.logoutUser(users.getId());
+        //usersLogService.createLog(users.getId(),11);
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
@@ -151,7 +143,7 @@ public class UsersController {
         try{
             if(authKey.equals(loginUser.getAuthKey())){
                 usersService.updateAuthStatus(loginUser.getId());   //회원 인증 완료
-                usersLogService.authUser(loginUser.getId());        //로그남기기
+                usersLogService.createLog(loginUser.getId(),1);        //로그남기기
             } else{
                 System.out.println("인증번호가 다릅니다");   //인증이 안됨,,,,
                 mv.setViewName("redirect:/emailAuth");
@@ -192,10 +184,10 @@ public class UsersController {
     @PostMapping("/findPassword-action")
     public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) throws Exception{
         String id=(String)map.get("id");
+        String name = (String)map.get("name");
         String email=(String)map.get("email");
         try{
-            System.out.println("id: "+id+" / email: "+email);
-            int result=usersService.findPasswordByIdEmail(id,email);   //String으로 binding 에러?
+            int result=usersService.findPasswordByIdNameEmail(id,name,email);   //String으로 binding 에러?
             if(result == 1){
                 Users users=usersService.findUsersById(id);
                 //아이디 이메일 조합 존재 -> 메일로 임시 비번 발송
@@ -254,7 +246,7 @@ public class UsersController {
         }
         return mv;
     }
-    //6-2. 회원탈퇴 --> 완료
+    //7. 회원탈퇴 --> 완료
     @GetMapping(value="deleteUser-action", params="id")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";
@@ -269,6 +261,39 @@ public class UsersController {
         return forwardPath;
     }
 
+    //8. 회원리스트 출력 -> admin 전용
+    //@GetMapping("userList")
+    public ModelAndView userList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                 @RequestParam(required = false) String keyword,
+                                 HttpSession session,
+                                 ModelAndView mv){
+        try{
+            PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
+            mv.addObject("userListPage",userListPage);
+            mv.setViewName("userList");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return mv;
+    }
+
+    //8. 회원로그 출력 -> admin 전용
+   // @GetMapping("userList")
+    public ModelAndView userLog(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                 @RequestParam(required = false) String keyword,
+                                 HttpSession session,
+                                 ModelAndView mv){
+        try{
+            PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
+            mv.addObject("usersLoPage",usersLogPage);
+            mv.setViewName("userList");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return mv;
+    }
+
+}
 
 
 
@@ -309,4 +334,3 @@ public class UsersController {
     }
 */
 
-}

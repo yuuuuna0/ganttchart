@@ -47,7 +47,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
-                                        <h4 class="card-title">게시글 목록</h4>
+                                        <h4 class="card-title">회원리스트</h4>
                                     </div>
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
@@ -66,25 +66,32 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Title</th>
-                                            <th>Content</th>
-                                            <th>Writer</th>
-                                            <th>Comment</th>
-                                            <th>Date</th>
-                                            <th>Read</th>
+                                            <th>아이디</th>
+                                            <th>회원등급</th>
+                                            <th>이름</th>
+                                            <th>생일</th>
+                                            <th>성별</th>
+                                            <th>전화번호</th>
+                                            <th>이메일</th>
+                                            <th>주소</th>
+                                            <th>인증상태</th>
+                                            <th>가입일</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${boardListPage.itemList}" var="board">
-                                            <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${board.boardNo}</td>
-                                                <td>${board.boardTitle}</td>
-                                                <td>${board.boardContent}</td>
-                                                <td>${board.id}</td>
-                                                <td>${board.boardReadcount}</td>
-                                                <td>${board.boardDate}</td>
-                                                <td>${board.boardReadcount}</td>
+                                        <c:forEach items="${userListPage.itemList}" var="user">
+                                            <tr onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <td>${user.id}</td>
+                                                <td>${user.grade}</td>
+                                                <td>${user.name}</td>
+                                                <td>${user.birth}</td>
+                                                <td>${user.gender}</td>
+                                                <td>${user.phone}</td>
+                                                <td>${user.phone}</td>
+                                                <td>${user.email}</td>
+                                                <td>${user.address}</td>
+                                                <td>${user.authStatus}</td>
+                                                <td>가입일</td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -95,10 +102,10 @@
                                 <!-- pagination -->
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                            <c:set var="page" value="${boardListPage.pageMaker.curPage}"/>
+                                            <c:set var="page" value="${userListPage.pageMaker.curPage}"/>
                                             <!-- page maxpage를 넘었을 경우 제한 -->
-                                            <c:if test="${page > boardListPage.pageMaker.totPage}">
-                                                <c:set var="page" value="${boardListPage.pageMaker.totPage}"/>
+                                            <c:if test="${page > userListPage.pageMaker.totPage}">
+                                                <c:set var="page" value="${userListPage.pageMaker.totPage}"/>
                                             </c:if>
 
                                             <!-- 페이지를 5개씩 나누기 위해 현재 페이지에 보여줄 max값 설정 -->
@@ -148,9 +155,9 @@
                                                 <li class="page-item"><a class="page-link" href="#">${page}</a></li>
 
                                             <!-- 다음 페이지 -->
-                                            <c:if test="${page != boardListPage.pageMaker.totPage}">
+                                            <c:if test="${page != userListPage.pageMaker.totPage}">
                                                 <c:forEach var="i" begin="1" end="${next-1}">
-                                                    <c:if test="${boardListPage.pageMaker.totPage >= page+i}">
+                                                    <c:if test="${userListPage.pageMaker.totPage >= page+i}">
 <%--                                                        <span class="no">${page+i}</span>--%>
                                                         <li class="page-item"><a class="page-link" href="#">${page+i}</a></li>
                                                     </c:if>
@@ -158,7 +165,7 @@
                                             </c:if>
 
                                             <!-- next 버튼 -->
-                                            <c:if test="${boardListPage.pageMaker.totPage >= page + next}">
+                                            <c:if test="${userListPage.pageMaker.totPage >= page + next}">
                                                 <fmt:formatNumber value="${(page-1)/3 - (((page-1)/3) % 1)}" type="pattern" pattern="0" var="nextb"/>
                                                 <c:set value="${(nextb+1)*3 + 1}" var="nextb"/>
             <%--                                                <span id="prevBtn" class="prev button" value="${nextb}"></span>--%>
@@ -203,10 +210,5 @@
 <!-- Custom js for this page-->
 <!-- End custom js for this page-->
 </body>
-<script>
-    function goToBoardList(boardNo){
-        window.location.href='/boardDetail/'+boardNo;
-    }
-</script>
 
 </html>

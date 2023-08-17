@@ -1,7 +1,14 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dao.UsersLogDao;
+import com.weaverloft.ganttchart.dto.UsersLog;
+import com.weaverloft.ganttchart.util.PageMaker;
+import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UsersLogServiceImpl implements UsersLogService{
@@ -12,22 +19,16 @@ public class UsersLogServiceImpl implements UsersLogService{
     }
 
     @Override
-    public int registerUser(String id) throws Exception{
-        return usersLogDao.registerUser(id);
+    public int createLog(String id, int logStatus) throws Exception{
+        return usersLogDao.createLog(id,logStatus);
     }
 
     @Override
-    public int authUser(String id) throws Exception{
-        return usersLogDao.authUser(id);
-    }
-
-    @Override
-    public int loginUser(String id) throws Exception{
-        return usersLogDao.loginUser(id);
-    }
-
-    @Override
-    public int logoutUser(String id) throws Exception{
-        return usersLogDao.logoutUser(id);
+    public PageMakerDto findUserLog(int pageNo, String keyword) {
+        int totUsersLogCount = usersLogDao.findUsersLogCount();
+        PageMaker pageMaker = new PageMaker(totUsersLogCount,pageNo);
+        List<UsersLog> usersLogList = usersLogDao.findUsersLogList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);
+        PageMakerDto<UsersLog> pageMakerUsersLogList = new PageMakerDto<>(usersLogList,pageMaker,totUsersLogCount);
+        return pageMakerUsersLogList;
     }
 }
