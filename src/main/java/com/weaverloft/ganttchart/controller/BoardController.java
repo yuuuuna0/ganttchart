@@ -29,12 +29,13 @@ public class BoardController {
     }
 
     //1. 게시글 전체보기
-    @GetMapping("boardList")
-    public ModelAndView boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+    @GetMapping(value="/boardList/{pageNo}")
+    public ModelAndView boardList(@PathVariable int pageNo,
                                   @RequestParam(required = false) String keyword,
                                   HttpSession session,
                                   ModelAndView mv) throws Exception{
         try{
+            System.out.println(pageNo);
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
             mv.addObject("boardListPage",boardListPage);
             mv.setViewName("boardList");
@@ -52,6 +53,7 @@ public class BoardController {
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
             if(board!=null){
                 mv.addObject("board", board);
+                mv.addObject("boardFileList",boardFileList);
                 mv.setViewName("boardDetail");
             }
         } catch (Exception e){

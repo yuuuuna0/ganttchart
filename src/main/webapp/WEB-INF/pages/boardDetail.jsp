@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <!-- Required meta tags -->
@@ -68,6 +69,12 @@
                                         <label for="fileList">첨부파일</label>
                                         <div class="input-group col-xs-12">
                                             <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
+                                                <c:forEach items="${boardFileList}" var="boardFile">
+                                                <div id="file'+ fileNo + '" style="font-size:12px;">
+                                                ${boardFile.fileName}
+                                                <img src="../../resources/static/images/icon_download.jpg" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
+                                                </div>
+                                                </c:forEach>
                                             </div>
                                         </div>
                                     </div>

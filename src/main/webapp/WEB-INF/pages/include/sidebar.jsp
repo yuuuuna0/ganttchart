@@ -34,9 +34,9 @@
             </a>
             <div class="collapse" id="board">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="boardList">게시판</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="boardWrite">게시글쓰기</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/boardDetail">게시글상세보기</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/boardList/1">게시판</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/boardWrite">게시글쓰기</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/boardDetail/581">게시글상세보기</a></li>
                 </ul>
             </div>
         </li>
