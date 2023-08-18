@@ -34,7 +34,7 @@
             </a>
             <div class="collapse" id="board">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/boardList/1">게시판</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/boardList">게시판</a></li>
                     <li class="nav-item"> <a class="nav-link" href="/boardWrite">게시글쓰기</a></li>
                     <li class="nav-item"> <a class="nav-link" href="/boardDetail/581">게시글상세보기</a></li>
                 </ul>
@@ -63,6 +63,18 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="/userList"> 회원리스트 </a></li>
                     <li class="nav-item"> <a class="nav-link" href="/userLog"> 회원로그 </a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#user" aria-expanded="false" aria-controls="auth">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">메뉴관리</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" >
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="/menuWrite"> 메뉴페이지만들기 </a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </li>

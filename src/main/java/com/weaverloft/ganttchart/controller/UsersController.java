@@ -98,7 +98,7 @@ public class UsersController {
     //2-2. 로그인 액션 --> 완료
     @PostMapping("/login-action")
     public ModelAndView loginAction(HttpSession session,ModelAndView mv,
-                                    @RequestParam Map map) throws Exception{
+                                    @RequestParam Map map) {
         String id=(String)map.get("id");
         String password=(String)map.get("password");
         try{
@@ -124,7 +124,7 @@ public class UsersController {
     }
     //2-3. 로그아웃 액션 --> 완료
     @GetMapping("/logout-action")
-    public String logoutAction(HttpSession session) throws Exception{
+    public String logoutAction(HttpSession session) {
         Users users=(Users)session.getAttribute("loginUser");
         session.invalidate();
         //usersLogService.createLog(users.getId(),11);
@@ -163,7 +163,7 @@ public class UsersController {
     }
     //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함
     @PostMapping("/findId-action")
-    public ModelAndView findIdAction(@RequestParam Map map, ModelAndView mv) throws Exception{
+    public ModelAndView findIdAction(@RequestParam Map map, ModelAndView mv) {
         String name=(String)map.get("name");
         String email=(String)map.get("email");
         try{
@@ -182,7 +182,7 @@ public class UsersController {
     }
     //4-2. 비밀번호 찾기 액션 --> 완료
     @PostMapping("/findPassword-action")
-    public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) throws Exception{
+    public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) {
         String id=(String)map.get("id");
         String name = (String)map.get("name");
         String email=(String)map.get("email");

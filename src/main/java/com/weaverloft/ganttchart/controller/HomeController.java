@@ -25,7 +25,7 @@ public class HomeController {
 
     @GetMapping("/")
     //시작 페이지
-    public ModelAndView index(ModelAndView mv) throws Exception{
+    public ModelAndView index(ModelAndView mv) {
         String keyword =null;
         try{
             //조회수 탑5 게시글 붙이기
