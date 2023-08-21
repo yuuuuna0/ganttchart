@@ -52,10 +52,12 @@
                                 <form class="forms-sample" name="registerF" id="registerF"
                                       enctype="multipart/form-data">
                                     <!-- 프로필사진 업로드 -->
-                                    <div class="row form-group">
-                                        <%--                                <img id="prevPhoto" style="width: 500px; height:500px; "/>--%>
-                                        <input type="file" id="photoFile" name="photoFile" accept="img/*">
-                                        <%--                                <input class="file-upload-browse btn btn-primary" type="button" name="photoFileBtn" id="photoFileBtn" onclick="uploadPhoto(this)" value="업로드">--%>
+                                    <div class="form-group" style="text-align: center">
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/default.png"/>
+                                        <br>
+                                        <br>
+                                        <label for="photoFile" class="file-upload-browse btn btn-primary">사진 추가</label>
+                                        <input type="file"  id="photoFile" name="photoFile" accept="img/*" style="display: none;" onchange="uploadPhoto(this)">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
@@ -63,7 +65,7 @@
                                             <input type="text" class="form-control" id="id" name="id"
                                                    placeholder="아이디를 입력하세요">
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 mt-4">
                                             <label></label>
                                             <input type="button" value="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
@@ -124,10 +126,12 @@
                                                    name="detailedAddress" placeholder="상세주소를 입력하세요">
                                         </div>
                                     </div>
+                                    <div style="text-align:center;">
                                     <input type="button" onclick="createUser()" class="btn btn-primary mr-2"
                                            value="회원가입">
                                     <input type="button" class="btn btn-light" value="취소"
                                            onclick="location.href='/login'">
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -181,6 +185,16 @@
     //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
     // };
 
+    //3. 파일 업로드시 이미지 보여주기
+    function uploadPhoto(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                document.getElementById("prevPhoto").src=e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
     function createUser() {
         var id = document.getElementById("id").value;
@@ -190,6 +204,7 @@
         var confirmPassword = document.getElementById("confirmPassword").value;
         var phone = document.getElementById("phone").value;
         var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
+        $('#address').val(address);
         var gender = 0;
         var birth = document.getElementById("birth").value;
 
@@ -232,7 +247,7 @@
         }
 
         document.registerF.method = 'POST';
-        document.registerF.action = 'register-action'
+        document.registerF.action = 'register-action';
         document.registerF.submit();
 
     }
@@ -240,19 +255,4 @@
 
 </body>
 </html>
-<%--//3. 파일 업로드시 이미지 보여주기--%>
-<%--// var photoFileBtn = document.getElementById("photoFileBtn");--%>
-<%--// var photofile = document.getElementById("photoFile");--%>
-<%--// photoFileBtn.addEventListener('click',function(){--%>
-<%--//     photofile.click(function(input){--%>
-<%--//         if(input.files && input.files[0]){--%>
-<%--//             var reader = new FileReader();--%>
-<%--//             reader.onload = function(e){--%>
-<%--//                 document.getElementById("prevPhoto").src=e.target.result;--%>
-<%--//             };--%>
-<%--//             reader.readAsDataURL(input.files[0]);--%>
-<%--//         } else {--%>
-<%--//             document.getElementById("prevPhoto").src = 'C:/temp/upload/default.jpg';--%>
-<%--//         }--%>
-<%--//     });--%>
-<%--// });--%>
+

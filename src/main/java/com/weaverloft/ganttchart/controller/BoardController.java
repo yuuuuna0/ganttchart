@@ -130,14 +130,14 @@ public class BoardController {
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
             System.out.println("boardNo = " + boardNo);
-            String filePath = "C:\\temp\\upload\\board\\";
+            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
             for(MultipartFile boardFile : boardFileList){
                 String fileName = fileService.uploadFile(boardFile,filePath);
                 System.out.println("fileName = " + fileName);
                 BoardFile file = new BoardFile(0,fileName,boardNo);
                 boardFileService.createBoardFile(file);
             }
-            mv.setViewName("redirect:/boardList");
+            mv.setViewName("redirect:/boardList/1");
         } catch (Exception e){
             e.printStackTrace();
         }

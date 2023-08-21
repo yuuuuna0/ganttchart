@@ -14,5 +14,11 @@ public interface CommentsService {
     //4. 최근 pk 값 불러오기
     int findCurCommentsNo() throws Exception;
     //5. 모댓글 groupNo 업데이트
-    int updateGroupNo(int curKey);
+    int updateGroupNo(int curKey) throws Exception;
+    //6. 댓글 삭제
+    int deleteComments(int commentsNo) throws Exception;
+    //7. 댓글번호로 댓글 찾기
+    Comments findCommentByCommentsNo(int commentsNo) throws Exception;
+    //8. 댓글 내용 수정
+    int updateComments(int commentsNo,String commentsContent) throws Exception;
 }

@@ -140,8 +140,8 @@
                var divHtml = document.getElementById('fileList');
                document.getElementById("fileList").innerHTML +=
                    '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
+                   + '<img src="../../images/icon_minus.png" style="width:15px; height:15px; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>&nbsp; &nbsp;'
                    + f.name
-                   + '<img src="file:///C:/home/01.Project/01.InteliJ/ganttchart/src/main/webapp/resources/static/images/icon_minus.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>'
                    + '</div>';
                fileNo++;
             };

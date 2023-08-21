@@ -79,4 +79,55 @@ public class CommentsController {
         resultMap.put("data",data);
         return resultMap;
     }
+
+    //3. 댓글 삭제
+    @ResponseBody
+    @PostMapping("/deleteComment-ajax")
+    public Map<String,Object> deleteCommentAjax(@RequestParam Map<String,Object> map){
+        Map<String,Object> resultMap = new HashMap<>();
+        int commentsNo = Integer.parseInt(map.get("commentsNo").toString());
+        int boardNo = Integer.parseInt(map.get("boardNo").toString());
+        int code = 1;
+        String msg = "성공";
+        List<Comments> data = new ArrayList<>();
+        try{
+            int result = commentsService.deleteComments(commentsNo);
+            List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
+            data = commentsList;
+        } catch (Exception e){
+            e.printStackTrace();
+            code = 2;
+            msg = "실패";
+        }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("data",data);
+        return resultMap;
+    }
+
+    //4. 댓글 수정하기
+    @ResponseBody
+    @PostMapping("/modifyComment-ajax")
+    public Map<String,Object> modifyCommentAjax(@RequestParam Map<String,Object> map){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 1;
+        String msg = "";
+        List<Comments> data = new ArrayList<>();
+        int commentsNo = Integer.parseInt(map.get("commentsNo").toString());
+        int boardNo = Integer.parseInt(map.get("boardNo").toString());
+        String commentsContent = (String)map.get("commentsContent");
+        try{
+            int result = commentsService.updateComments(commentsNo,commentsContent);
+            List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
+            data = commentsList;
+        } catch (Exception e){
+            e.printStackTrace();
+            code = 2;
+            msg = "실패";
+        }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("data",data);
+        return resultMap;
+    }
 }

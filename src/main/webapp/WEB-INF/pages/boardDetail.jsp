@@ -48,15 +48,10 @@
                         <div class="card">
                             <!-- 게시글 -->
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-8">
-                                        <h4 class="card-title">게시글 목록</h4>
-                                    </div>
-                                    <div class="col-4">
+                                <h4 class="card-title">게시글 상세보기</h4>
+                                <div style="text-align: right">
                                         <input type="button" id="boardCreateBtn" name="boardCreateBtn" class="btn btn-primary mr-2" onclick="boardCreate()" value="수정">
                                         <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" value="삭제">
-
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="boardTitle">제목</label>
@@ -73,7 +68,7 @@
                                                 <c:forEach items="${boardFileList}" var="boardFile">
                                                 <div id="file'+ fileNo + '" style="font-size:12px;">
                                                 ${boardFile.fileName}
-                                                <img src="../../images/icon_download.jpg" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
+                                                <img src="../../images/icon_download.jpg" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
                                                 </div>
                                                 </c:forEach>
                                             </div>
@@ -88,29 +83,32 @@
                                 <div class="comment-group">
                                     <div class="row" id="commentListDiv">
                                         <c:forEach items="${commentsList}" var="comment">
+                                            <input type="hidden" value="${comment.commentsNo}" id="commentsNo">
                                             <c:if test="${comment.classNo == 1}">
-                                                <div class="col-8 mt-3">
+                                                <div class="col-12 mt-3">
                                                     <span class="mr-3">${comment.id}</span>
-                                                    <span class="mr-3">${comment.commentsContent}</span>
-                                                    <span >${comment.commentsDate}</span>
-                                                </div>
-                                                <div class="col-4 mt-3">
-                                                    <img src="../../images/icon_subCommentCreate.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" onclick="createComments(2)"/>
-                                                    <img src="../../images/icon_deleteComment.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" />
+                                                    <span class="mr-3" id="commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
+                                                    <span class="mr-2">${comment.commentsDate}</span>
+                                                    <span >
+                                                        <img src="../../images/icon_subCommentCreate.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="createComments(2)"/>
+                                                        <img src="../../images/icon_modifyComment.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
+                                                        <img src="../../images/icon_deleteComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
+                                                    </span>
                                                 </div>
                                             </c:if>
                                             <c:if  test="${comment.classNo == 2}">
                                                 <div class="col-1">
                                                     &nbsp
                                                 </div>
-                                                <div class="col-7">
-                                                    <img src="../../images/icon_subComment.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" />
+                                                <div class="col-11">
+                                                    <img src="../../images/icon_subComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
                                                     <span class="mr-3">${comment.id}</span>
-                                                    <span class="mr-3">${comment.commentsContent}</span>
-                                                    <span >${comment.commentsDate}</span>
-                                                </div>
-                                                <div class="col-4">
-                                                    <img src="../../images/icon_deleteComment.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>
+                                                    <span class="mr-3" id="commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
+                                                    <span class="mr-2">${comment.commentsDate}</span>
+                                                    <span>
+                                                        <img src="../../images/icon_modifyComment.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
+                                                        <img src="../../images/icon_deleteComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
+                                                    </span>
                                                 </div>
                                             </c:if>
                                         </c:forEach>
@@ -125,42 +123,11 @@
                                             <textarea class="form-control" id="commentsContent" name="commentsContent" row="3" placeholder="댓글을 남겨주세요"></textarea>
                                         </div>
                                         <div class="col-3">
-                                            <input type="button" onclick="createComments(1)" value="남기기">
+                                            <input type="button" id="createCommentsBtn" onclick="createComments(1)" value="남기기">
+                                            <input type="hidden" id="modifyCommentsBtn" onclick="modifyCommentsAction()" value="수정하기">
                                         </div>
                                     </div>
                                 </form>
-<%--                                <c:forEach items="${commentsList}" var="comments">--%>
-<%--                                    <div class="d-flex mb-4">--%>
-<%--                                    <c:if test="${comments.classNo == 1}">--%>
-<%--                                        <!-- 상위댓글 -->--%>
-<%--                                        <div class="flex-shrink-0">--%>
-<%--                                            <img class="rounded-circle" src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fi.namu.wiki%2Fi%2FsP0VOvMOCyYzjPuXM7BDJRyE3mXqdK9bC2o5D1bT6VSxX1IGzUVpLKa8oIWxvWCzpV5d_4kHCMR2Jct3jwFILw.webp&tbnid=jXA1ajKi6Vli4M&vet=12ahUKEwitkOrk7uCAAxVBplYBHVtDDagQMygAegUIARCVAQ..i&imgrefurl=https%3A%2F%2Fnamu.wiki%2Fw%2F%25EC%25BC%2580%25EC%259D%25B4%25ED%2581%25AC&docid=_wnLp2XecgoieM&w=1000&h=750&q=%EC%BC%80%EC%9D%B4%ED%81%AC&ved=2ahUKEwitkOrk7uCAAxVBplYBHVtDDagQMygAegUIARCVAQ">--%>
-<%--                                        </div>--%>
-<%--                                        <div class="ms-10">--%>
-<%--                                            <div class="fw-bold">--%>
-<%--                                                    ${comments.id}--%>
-<%--                                            </div>--%>
-<%--                                            ${comments.commentsContent}--%>
-<%--                                        </div>--%>
-<%--                                        <div class="ms-3">--%>
-<%--                                            <img src="../../resources/static/images/icon_subComment.png">--%>
-<%--                                        </div>--%>
-<%--                                    </c:if>--%>
-<%--                                    <c:if test="${comments.classNo == 2}">--%>
-<%--                                        <!-- 하위댓글 -->--%>
-<%--                                        <div class="flex-shrink-0">--%>
-<%--                                            <img class="rounded-circle" src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F6e%2FGolde33443.jpg%2F280px-Golde33443.jpg&tbnid=fQqBLX9avtI8rM&vet=12ahUKEwis9vf17uCAAxWYxjQHHTe8CWAQMygGegQIARB_..i&imgrefurl=https%3A%2F%2Fko.wikipedia.org%2Fwiki%2F%25EA%25B0%2595%25EC%2595%2584%25EC%25A7%2580&docid=XjDC2xaeLV6mKM&w=280&h=338&q=%EA%B0%95%EC%95%84%EC%A7%80&ved=2ahUKEwis9vf17uCAAxWYxjQHHTe8CWAQMygGegQIARB_">--%>
-<%--                                        </div>--%>
-<%--                                        <div class="ms-10">--%>
-<%--                                            <div class="fw-bold">--%>
-<%--                                                    ${comments.id}--%>
-<%--                                            </div>--%>
-<%--                                                ${comments.commentsContent}--%>
-<%--                                        </div>--%>
-<%--                                    </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </c:forEach>--%>
-
                             </div>
                         </div>
                     </div>
@@ -215,42 +182,7 @@
                 'boardNo' : boardNo
             },
             success : function(resultJson){
-                if(resultJson.code === 1){
-                    $('#commentListDiv').empty();
-                    let html = '';
-                    for(let i=0; i<resultJson.data;i++){
-                        let dataItem = data[i];
-                        if(dataItem.classNo === 1){
-                            //부모댓글일 때 ==> classNo=1
-                            html += "<div class='col-8 mt-3'>\n" +
-                                "         <span class='mr-3'>"+dataItem.id+"</span>\n" +
-                                "         <span class=\"mr-3\">"+dataItem.commentsContent+"</span>\n" +
-                                "         <span >"+dataItem.commentsDate+"</span>\n" +
-                                "         </div>\n" +
-                                "         <div class='col-4 mt-3'>\n" +
-                                "         <img src='../../images/icon_subComment.png' style='width:20px; height:auto; vertical-align: middle; cursor: pointer;' alt='default.jpg' onclick='createComments(2)'/>\" +
-                                "         <img src='../../images/icon_deleteComment.png' style='width:20px; height:auto; vertical-align: middle; cursor: pointer;' />"+
-                                "         </div>";
-                        } else{
-                            //답글일 때 ==> classNo=2
-                            html += "<div class='col-1'>\n" +
-                                "         &nbsp\n" +
-                                "         </div>\n" +
-                                "         <div class='col-8'>\" +
-                                "         <img src='../../images/icon_subComment.png' style='width:20px; height:auto; vertical-align: middle; cursor: pointer;' />"
-                                "         <span class='mr-3'>"+dataItem.id+"</span>\n" +
-                                "         <span class='mr-3'>"+dataItem.commentsContent+"</span>\n" +
-                                "         <span >"+dataItem.commentsDate+"</span>\n" +
-                                "         </div>\n" +
-                                "         <div class='col-4'>\n" +
-                                "        <img src='../../images/icon_deleteComment.png' style='width:20px; height:auto; vertical-align: middle; cursor: pointer;' />" +
-                                "         </div>";
-                        }
-                    }
-                    $('#commentListDiv').append(html);
-                } else {
-                    alert(resultJson.msg);
-                }
+                reload(resultJson);
             },
             error : function(e){
                 console.log(e);
@@ -258,9 +190,100 @@
             },
             async : true
         });
+    }
+    /******************************** 2. 댓글 삭제 **********************************/
+    function deleteComments(commentsNo){
+        let boardNo = $('#boardNo').val();
+        $.ajax({
+            url : '/deleteComment-ajax',
+            method : 'POST',
+            data : {
+                'commentsNo' : commentsNo,
+                'boardNo' : boardNo
+            },
+            success : function(resultJson){
+                reload(resultJson);
+            },
+            error : function (e) {
+                console.log(e);
+            },
+            async : true
+        });
+    }
+    /******************************** 3. 댓글 수정 **********************************/
+    function modifyComments(commentNo,commentsContent){
+        $('#commentsContent').val(commentsContent);
+        $('#commentsNo'+commentNo).css('color','red');
+        $('#createCommentsBtn').prop('type','hidden');
+        $('#modifyCommentsBtn').prop('type','button');
+    }
+    // //수정하는 댓글 색만 변경하기
+    // $('img[name="modifyComment"]').click(function(){
+    //     $('.mr-3').css('color','black');
+    //     $(this).css('color','red');
+    // });
 
+    function modifyCommentsAction(commentsNo) {
+        let commentsContent = $('#commentsContent').val();
+        let boardNo = $('#boardNo').val();
+        $.ajax({
+            url: '/modifyComment-ajax',
+            method: 'POST',
+            data: {
+                'commentsNo' : commentsNo,
+                'commentsContent' : commentsContent,
+                'boardNo' : boardNo
+            },
+            success: function(resultJson){
+                reload(resultJson);
+            },
+            error : function(e){
+                alert(e);
+            },
+           async : true
+        });
     }
 
-
+    /******************************** 공통함수(화면 다시 뿌리기) **********************************/
+    function reload(resultData){
+        if(resultData.code === 1){
+            $('#commentListDiv').empty();
+            let html = '';
+            for(let i=0; i<resultData.data;i++){
+                let dataItem = data[i];
+                if(dataItem.classNo === 1){
+                    //부모댓글일 때 ==> classNo=1
+                    html += " <div class='col-12 mt-3'>\n" +
+                        "                                                    <span class='mr-3'>"+dataItem.id+"</span>\n" +
+                        "                                                    <span class='mr-3' id='commentsNo"+dataItem.commentsNo+"'>"+dataItem.commentsContent+"</span>\n" +
+                        "                                                    <span class='mr-2'>"+dataItem.commentsDate+"</span>\n" +
+                        "                                                    <span >\n" +
+                        "                                                        <img src='../../images/icon_subCommentCreate.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n" +
+                        "                                                        <img src='../../images/icon_modifyComment.png' name='modifyComment' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments("+dataItem.commentsNo+")'/>\n" +
+                        "                                                        <img src='../../images/icon_deleteComment.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments("+dataItem.commentsNo+")'/>\n" +
+                        "                                                    </span>\n" +
+                        "                                                </div>\n";
+                } else{
+                    //답글일 때 ==> classNo=2
+                    html += " <div class='col-1'>\n" +
+                        "                                                    &nbsp\n" +
+                        "                                                </div>\n" +
+                        "                                                <div class='col-11'>\n" +
+                        "                                                    <img src='../../images/icon_subComment.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
+                        "                                                    <span class='mr-3'>"+dataItem.id+"</span>\n" +
+                        "                                                    <span class='mr-3' id='commentsNo"+dataItem.commentsNo+"'>"+dataItem.commentsContent+"</span>\n" +
+                        "                                                    <span class='mr-2'>"+dataItem.commentsDate+"</span>\n" +
+                        "                                                    <span >\n" +
+                        "                                                        <img src='../../images/icon_modifyComment.png' name='modifyComment' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments("+dataItem.commentsNo+")'/>\n" +
+                        "                                                        <img src='../../images/icon_deleteComment.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments("+dataItem.commentsNo+")'/>\n" +
+                        "                                                    </span>\n" +
+                        "                                                </div>\n";
+                }
+            }
+            $('#commentListDiv').append(html);
+        } else {
+            alert(resultData.msg);
+        }
+    }
 </script>
 </html>

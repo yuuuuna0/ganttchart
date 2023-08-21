@@ -69,7 +69,7 @@ public class UsersController {
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
             if(photoFile !=null){
-                String filePath = "C:\\temp\\upload\\images\\";
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
                 String photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
                 System.out.println("사진 있다");
@@ -103,7 +103,6 @@ public class UsersController {
         String password=(String)map.get("password");
         try{
             Users loginUser=usersService.login(id,sha256Service.encrypt(password));
-            System.out.println(loginUser);
             session.setAttribute("loginUser", loginUser);
             if(loginUser.getAuthStatus()==0){
                 //미인증 사용자(첫번째 로그인)
@@ -218,6 +217,7 @@ public class UsersController {
                 mv.setViewName("redirect:/login");
                 return mv;
             }
+
             mv.addObject("loginUser",loginUser);
             mv.setViewName("mypage");
         } catch (Exception e){
@@ -227,11 +227,11 @@ public class UsersController {
     }
 
     //6-1. 정보 수정 페이지
-    @GetMapping(value="modifyUser", params = "id")
+    @GetMapping("/modify")
     public ModelAndView modifyUser(HttpSession session, ModelAndView mv){
         Users loginUser = (Users)session.getAttribute("loginUser");
         mv.addObject(loginUser);
-        mv.setViewName("modifyUser");
+        mv.setViewName("modify");
         return mv;
     }
     //6-2. 정보 수정 액션
@@ -251,15 +251,15 @@ public class UsersController {
         return mv;
     }
     //7. 회원탈퇴 --> 완료
-    @GetMapping(value="deleteUser-action", params="id")
+    @GetMapping("/deleteUser-action")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
-            int result=usersService.deleteUsers(loginUser.getId());
             usersLogService.createLog(loginUser.getId(),5);
+            int result=usersService.deleteUsers(loginUser.getId());
             session.invalidate();
-            forwardPath="redirect:login";
+            forwardPath="redirect:/";
         } catch (Exception e){
             e.printStackTrace();
         }
