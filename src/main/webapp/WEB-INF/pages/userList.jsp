@@ -132,7 +132,7 @@
                                                 <c:set value="${(prevb-1)*3 + 1}" var="prevb"/>
 <%--                                                <span id="prevBtn" class="prev button" value="${prevb}"></span>--%>
                                                 <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                    <a class="page-link" href="/admin/userList/${prevb}" valu="${prevb}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
@@ -146,21 +146,21 @@
                                                     <c:set var="j" value="${j - 1}"/>
                                                     <c:if test="${(page - j) > 0}">
 <%--                                                        <span class="no">${page - j}</span>--%>
-                                                        <li class="page-item"><a class="page-link" href="#">${page-j}</a></li>
+                                                        <li class="page-item"><a class="page-link" href="/admin/userList/${page-j}">${page-j}</a></li>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:if>
 
                                             <!-- 현재 페이지 -->
 <%--                                            <span class="no selected">${page}</span>--%>
-                                                <li class="page-item"><a class="page-link" href="#">${page}</a></li>
+                                                <li class="page-item"><a class="page-link" href="/admin/userList/${page}">${page}</a></li>
 
                                             <!-- 다음 페이지 -->
                                             <c:if test="${page != userListPage.pageMaker.totPage}">
                                                 <c:forEach var="i" begin="1" end="${next-1}">
                                                     <c:if test="${userListPage.pageMaker.totPage >= page+i}">
 <%--                                                        <span class="no">${page+i}</span>--%>
-                                                        <li class="page-item"><a class="page-link" href="#">${page+i}</a></li>
+                                                        <li class="page-item"><a class="page-link" href="/admin/userList/${page+i}">${page+i}</a></li>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:if>
@@ -170,7 +170,7 @@
                                                 <fmt:formatNumber value="${(page-1)/3 - (((page-1)/3) % 1)}" type="pattern" pattern="0" var="nextb"/>
                                                 <c:set value="${(nextb+1)*3 + 1}" var="nextb"/>
             <%--                                                <span id="prevBtn" class="prev button" value="${nextb}"></span>--%>
-                                                <a class="page-link" id="nextBtn" href="#" value="${nextb}" aria-label="Next">
+                                                <a class="page-link" id="nextBtn" href="/admin/userList/${nextb}" value="${nextb}" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                     <span class="sr-only">Next</span>
                                                 </a>

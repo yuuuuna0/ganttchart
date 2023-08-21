@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <!-- Required meta tags -->
@@ -48,7 +49,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
-                                        <h4 class="card-title">회원리스트</h4>
+                                        <h4 class="card-title">회원로그</h4>
                                     </div>
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
@@ -67,32 +68,35 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th>아이디</th>
-                                            <th>회원등급</th>
-                                            <th>이름</th>
-                                            <th>생일</th>
-                                            <th>성별</th>
-                                            <th>전화번호</th>
-                                            <th>이메일</th>
-                                            <th>주소</th>
-                                            <th>인증상태</th>
-                                            <th>가입일</th>
+                                            <th>로그</th>
+                                            <th>날짜</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${userListPage.itemList}" var="user">
+                                        <c:forEach items="${usersLogPage.itemList}" var="usersLog">
                                             <tr onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${user.id}</td>
-                                                <td>${user.grade}</td>
-                                                <td>${user.name}</td>
-                                                <td>${user.birth}</td>
-                                                <td>${user.gender}</td>
-                                                <td>${user.phone}</td>
-                                                <td>${user.phone}</td>
-                                                <td>${user.email}</td>
-                                                <td>${user.address}</td>
-                                                <td>${user.authStatus}</td>
-                                                <td>가입일</td>
+                                                <td>${usersLog.logNo}</td>
+                                                <td>${usersLog.id}</td>
+                                                <c:choose>
+                                                    <c:when test="${usersLog.logStatus == 0}">
+                                                        <td>회원가입</td>
+                                                    </c:when>
+                                                    <c:when test="${usersLog.logStatus == 1}">
+                                                        <td>인증완료</td>
+                                                    </c:when>
+                                                    <c:when test="${usersLog.logStatus == 1}">
+                                                        <td>회원탈퇴</td>
+                                                    </c:when>
+                                                    <c:when test="${usersLog.logStatus == 10}">
+                                                        <td>로그인</td>
+                                                    </c:when>
+                                                    <c:when test="${usersLog.logStatus == 11}">
+                                                        <td>아웃</td>
+                                                    </c:when>
+                                                </c:choose>
+                                                <td>${usersLog.logDate}</td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -103,10 +107,10 @@
                                 <!-- pagination -->
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                            <c:set var="page" value="${userListPage.pageMaker.curPage}"/>
+                                            <c:set var="page" value="${usersLogPage.pageMaker.curPage}"/>
                                             <!-- page maxpage를 넘었을 경우 제한 -->
-                                            <c:if test="${page > userListPage.pageMaker.totPage}">
-                                                <c:set var="page" value="${userListPage.pageMaker.totPage}"/>
+                                            <c:if test="${page > usersLogPage.pageMaker.totPage}">
+                                                <c:set var="page" value="${usersLogPage.pageMaker.totPage}"/>
                                             </c:if>
 
                                             <!-- 페이지를 5개씩 나누기 위해 현재 페이지에 보여줄 max값 설정 -->
@@ -132,7 +136,7 @@
                                                 <c:set value="${(prevb-1)*3 + 1}" var="prevb"/>
 <%--                                                <span id="prevBtn" class="prev button" value="${prevb}"></span>--%>
                                                 <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                    <a class="page-link" href="/admin/userLog/${prevb}" value="${prevb}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
@@ -146,31 +150,31 @@
                                                     <c:set var="j" value="${j - 1}"/>
                                                     <c:if test="${(page - j) > 0}">
 <%--                                                        <span class="no">${page - j}</span>--%>
-                                                        <li class="page-item"><a class="page-link" href="#">${page-j}</a></li>
+                                                        <li class="page-item"><a class="page-link" href="/admin/userLog/${page-j}">${page-j}</a></li>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:if>
 
                                             <!-- 현재 페이지 -->
 <%--                                            <span class="no selected">${page}</span>--%>
-                                                <li class="page-item"><a class="page-link" href="#">${page}</a></li>
+                                                <li class="page-item"><a class="page-link" href="/admin/userLog/${page}">${page}</a></li>
 
                                             <!-- 다음 페이지 -->
-                                            <c:if test="${page != userListPage.pageMaker.totPage}">
+                                            <c:if test="${page != usersLogPage.pageMaker.totPage}">
                                                 <c:forEach var="i" begin="1" end="${next-1}">
-                                                    <c:if test="${userListPage.pageMaker.totPage >= page+i}">
+                                                    <c:if test="${usersLogPage.pageMaker.totPage >= page+i}">
 <%--                                                        <span class="no">${page+i}</span>--%>
-                                                        <li class="page-item"><a class="page-link" href="#">${page+i}</a></li>
+                                                        <li class="page-item"><a class="page-link" href="/admin/userLog/${page+i}">${page+i}</a></li>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:if>
 
                                             <!-- next 버튼 -->
-                                            <c:if test="${userListPage.pageMaker.totPage >= page + next}">
+                                            <c:if test="${usersLogPage.pageMaker.totPage >= page + next}">
                                                 <fmt:formatNumber value="${(page-1)/3 - (((page-1)/3) % 1)}" type="pattern" pattern="0" var="nextb"/>
                                                 <c:set value="${(nextb+1)*3 + 1}" var="nextb"/>
             <%--                                                <span id="prevBtn" class="prev button" value="${nextb}"></span>--%>
-                                                <a class="page-link" id="nextBtn" href="#" value="${nextb}" aria-label="Next">
+                                                <a class="page-link" id="nextBtn" href="/admin/userLog/${nextb}" value="${nextb}" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                     <span class="sr-only">Next</span>
                                                 </a>

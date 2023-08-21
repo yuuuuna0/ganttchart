@@ -121,7 +121,7 @@
                                             <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">
                                                 <li class="page-item">
                                                     <a class="page-link" href="/boardList/${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
-                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span aria-hidden="true">&raquo;</span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
                                                 </li>

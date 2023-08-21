@@ -176,10 +176,10 @@
             }).open();
         })
     };
-    //2. birth -> datepicker 이용
-    window.onload = function () {
-        $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
-    };
+    // //2. birth -> datepicker 이용
+    // window.onload = function () {
+    //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
+    // };
 
 
     function createUser() {

@@ -99,8 +99,8 @@
                                         <input type="text" class="form-control" id="address" name="address" value="${loginUser.address}">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary mr-2">회원수정</button>
-                                <button class="btn btn-light">회원탈퇴</button>
+                                <input type="button" class="btn btn-primary mr-2" value="회원수정" onclick="modify();">
+                                <input type="button" class="btn btn-light" value="회원탈퇴" onclick="deleteUser();" >
                             </form>
                         </div>
                     </div>

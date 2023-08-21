@@ -125,9 +125,13 @@ public class UsersController {
     //2-3. 로그아웃 액션 --> 완료
     @GetMapping("/logout-action")
     public String logoutAction(HttpSession session) {
-        Users users=(Users)session.getAttribute("loginUser");
-        session.invalidate();
-        //usersLogService.createLog(users.getId(),11);
+        try{
+            Users users=(Users)session.getAttribute("loginUser");
+            session.invalidate();
+            usersLogService.createLog(users.getId(),11);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
@@ -253,6 +257,7 @@ public class UsersController {
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
             int result=usersService.deleteUsers(loginUser.getId());
+            usersLogService.createLog(loginUser.getId(),5);
             session.invalidate();
             forwardPath="redirect:login";
         } catch (Exception e){
@@ -261,37 +266,6 @@ public class UsersController {
         return forwardPath;
     }
 
-    //8. 회원리스트 출력 -> admin 전용
-    //@GetMapping("userList")
-    public ModelAndView userList(@RequestParam(required = false, defaultValue = "1") int pageNo,
-                                 @RequestParam(required = false) String keyword,
-                                 HttpSession session,
-                                 ModelAndView mv){
-        try{
-            PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
-            mv.addObject("userListPage",userListPage);
-            mv.setViewName("userList");
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return mv;
-    }
-
-    //8. 회원로그 출력 -> admin 전용
-   // @GetMapping("userList")
-    public ModelAndView userLog(@RequestParam(required = false, defaultValue = "1") int pageNo,
-                                 @RequestParam(required = false) String keyword,
-                                 HttpSession session,
-                                 ModelAndView mv){
-        try{
-            PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
-            mv.addObject("usersLoPage",usersLogPage);
-            mv.setViewName("userList");
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return mv;
-    }
 
 }
 

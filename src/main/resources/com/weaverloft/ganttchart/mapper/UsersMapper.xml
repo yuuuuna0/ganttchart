@@ -8,7 +8,8 @@
     </insert>
     <!--2. 회원 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
-        select * from USERS where id = #{id}
+        select id, grade, password, name, photo, birth , gender, phone, address, email, auth_status, auth_key
+        from USERS where id = #{id}
     </select>
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="java.util.Map">
@@ -50,8 +51,8 @@
         delete users where id=#{id}
     </delete>
     <!-- 12. 전체회원 수 -->
-    <select id="findUsersCount">
-        select * from USERS
+    <select id="findUsersCount" resultType="java.lang.Integer">
+        select count(*) from USERS
     </select>
     <!-- 13. 회원리스트 출력 -> 페이징, 검색 -->
     <select id="findUserList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Users">

@@ -10,8 +10,8 @@
         values (#{logNo},sysdate,#{logStatus},#{id})
     </insert>
     <!-- 2. 로그 전체 수 -->
-    <select id="findUsersLogCount">
-        select * from USERS_LOG
+    <select id="findUsersLogCount" resultType="java.lang.Integer">
+        select count(*) from USERS_LOG
     </select>
     <!-- 3. 로그리스트 출력 -> 페이징, 검색 -->
     <select id="findUserLog" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.UsersLog">
@@ -26,6 +26,7 @@
                     </if>
             )
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
+        order by LOG_DATE desc
     </select>
 
 
