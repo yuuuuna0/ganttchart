@@ -90,7 +90,7 @@
                                                     <span class="mr-3" id="commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                                     <span class="mr-2">${comment.commentsDate}</span>
                                                     <span >
-                                                        <img src="../../images/icon_subCommentCreate.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="createComments(2)"/>
+                                                        <img src="../../images/icon_subCommentCreate.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="subComments('${comment.id}')"/>
                                                         <img src="../../images/icon_modifyComment.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
                                                         <img src="../../images/icon_deleteComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
                                                     </span>
@@ -127,6 +127,7 @@
                                             <input type="hidden" id="modifyCommentsBtn" onclick="modifyCommentsAction()" value="수정하기">
                                         </div>
                                     </div>
+                                    <label id="msgLabel" ></label>
                                 </form>
                             </div>
                         </div>
@@ -168,6 +169,13 @@
 <!-- End custom js for this page-->
 <script>
     /******************************** 1. 댓글 작성 **********************************/
+    //하위타입 댓글 작성
+    function subComments(id){
+        $('#commentsContent').focus();
+        $('#msgLabel').text(id+'님에게 댓글 다는 중,,,,');
+        $('#createCommentsBtn').prop('onclick','createComments(2)');    //-> classNo 2 넘기는 방법?
+    }
+
     //상위타입 댓글 작성
     function createComments(classNo){
         let commentsContent = $('#commentsContent').val();
