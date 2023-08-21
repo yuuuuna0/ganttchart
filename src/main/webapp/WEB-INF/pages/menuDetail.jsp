@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -72,7 +73,7 @@
                                                 <c:forEach items="${boardFileList}" var="boardFile">
                                                 <div id="file'+ fileNo + '" style="font-size:12px;">
                                                 ${boardFile.fileName}
-                                                <img src="../../resources/static/images/icon_download.jpg" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
+                                                <img src="../../images/icon_download.jpg" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
                                                 </div>
                                                 </c:forEach>
                                             </div>

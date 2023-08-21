@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -47,7 +48,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
-                                        <h4 class="card-title">게시글 목록</h4>
+                                        <h4 class="card-title">메뉴 목록</h4>
                                     </div>
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
@@ -67,24 +68,24 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Group No</th>
                                             <th>Title</th>
-                                            <th>Content</th>
-                                            <th>Writer</th>
-                                            <th>Comment</th>
-                                            <th>Date</th>
-                                            <th>Read</th>
+                                            <th>Url</th>
+                                            <th>Description</th>
+                                            <th>Using</th>
+                                            <th>Parent Id</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
-                                        <c:forEach items="${boardListPage.itemList}" var="board">
-                                            <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${board.boardNo}</td>
-                                                <td>${board.boardTitle}</td>
-                                                <td>${board.boardContent}</td>
-                                                <td>${board.id}</td>
-                                                <td>${board.boardReadcount}</td>
-                                                <td>${board.boardDate}</td>
-                                                <td>${board.boardReadcount}</td>
+                                        <c:forEach items="${menuListPage.itemList}" var="menu">
+                                            <tr style="cursor: pointer;" onclick="goToBoardList('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <td>${menu.menuNo}</td>
+                                                <td>${menu.menuOrder}</td>
+                                                <td>${menu.menuTitle}</td>
+                                                <td>${menu.menuUrl}</td>
+                                                <td>${menu.menuDesc}</td>
+                                                <td>${menu.userYN}</td>
+                                                <td>${menu.parentId}</td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -96,30 +97,30 @@
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination">
                                             <!-- preview -->
-                                            <c:if test="${boardListPage.pageMaker.prevGroupStartPage > 0}">
+                                            <c:if test="${menuListPage.pageMaker.prevGroupStartPage > 0}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/boardList/${boardListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                    <a class="page-link" href="/menuList/${menuListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
                                                 </li>
                                             </c:if>
                                             <!-- n개 고정 -->
-                                                <c:forEach begin="${boardListPage.pageMaker.blockBegin}" end="${boardListPage.pageMaker.blockEnd}" var="no">
-                                                            <c:if test="${no == boardListPage.pageMaker.curPage}">
+                                                <c:forEach begin="${menuListPage.pageMaker.blockBegin}" end="${menuListPage.pageMaker.blockEnd}" var="no">
+                                                            <c:if test="${no == menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item active">
-                                                                    <a class="page-link" href="/boardList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/menuList/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
-                                                            <c:if test="${no != boardListPage.pageMaker.curPage}">
+                                                            <c:if test="${no != menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="/boardList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/menuList/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                 </c:forEach>
-                                            <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">
+                                            <c:if test="${menuListPage.pageMaker.nextGroupStartPage <= menuListPage.pageMaker.totPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/boardList/${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                    <a class="page-link" href="/menuList/${menuListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
@@ -159,18 +160,18 @@
 <!-- End custom js for this page-->
 </body>
 <script>
-    function goToBoardList(boardNo){
-        window.location.href='/boardDetail/'+boardNo;
+    function goTomenuList(menuNo){
+        window.location.href='/menuDetail/'+menuNo;
     }
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            findBoardList();
+            findmenuList();
             e.preventDefault();
         }
     });
     // 게시글 검색하기
-    function searchBoardList(){
+    function searchmenuList(){
         let sendData;
         let keyword = $('#keyword').val();
         console.log(keyword);

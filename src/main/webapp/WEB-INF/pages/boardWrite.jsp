@@ -25,8 +25,7 @@
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
-    <script src="js/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -108,14 +107,14 @@
 <script src="../../js/select2.js"></script>
 <!-- End custom js for this page-->
 <script>
-//1. 게시글 작성
-var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
-var maxCount = 5;     // 최대 첨부 갯수
-var fileNo = 0;         //파일 고유번호
-var fileList = new Array(); //첨부파일리스트 (파일타입)
-var fileListArray; //첨부파일 어레이타입
-const dataTransfer = new DataTransfer();
-//1. 다중 파일 처리
+/******************************** 1. 게시글 작성 **********************************/
+    var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
+    var maxCount = 5;     // 최대 첨부 갯수
+    var fileNo = 0;         //파일 고유번호
+    var fileList = new Array(); //첨부파일리스트 (파일타입)
+    var fileListArray; //첨부파일 어레이타입
+    const dataTransfer = new DataTransfer();
+    //1. 다중 파일 처리
     //1) 버튼클릭시 submit 안하기
     document.addEventListener('DOMContentLoaded', function() {
         // input file 파일 첨부시 fileCheck 함수 실행
@@ -155,7 +154,7 @@ const dataTransfer = new DataTransfer();
         //초기화
         document.getElementById("boardFileList").value='';
     }
-//3. 파일 부분 삭제 함수
+    //2. 파일 부분 삭제 함수
     function fileDelete(fileNo){
         //html 처리
         var no = fileNo.replace(/[^0-9]/g, "");     //fileNo(ex.file1,file2)의 index
@@ -173,25 +172,28 @@ const dataTransfer = new DataTransfer();
         }
         $('#boardFileList')[0].files=dataTransfer.files;    //제거처리된 FileList를 input태그에 담아줌
     }
-        function boardWrite() {
-            var boardTitle = document.getElementById("boardTitle").value;
-            var boardContent = document.getElementById("boardContent").value;
-            if(boardTitle === ''){
-                alert("제목을 입력하세요");
-                document.getElementById("boardTitle").focus();
-                return false;
-            }
-            if(boardContent === ''){
-                alert("내용을 입력하세요");
-                document.getElementById("boardContent").focus();
-                return false;
-            }
-            fileDelete("file"+(maxCount+1));
-
-            document.getElementById("boardWriteF").method = 'POST';
-            document.getElementById("boardWriteF").action = '/boardWrite-action';
-            document.getElementById("boardWriteF").submit();
+    //3. 게시글 작성
+    function boardWrite() {
+        var boardTitle = document.getElementById("boardTitle").value;
+        var boardContent = document.getElementById("boardContent").value;
+        if(boardTitle === ''){
+            alert("제목을 입력하세요");
+            document.getElementById("boardTitle").focus();
+            return false;
         }
+        if(boardContent === ''){
+            alert("내용을 입력하세요");
+            document.getElementById("boardContent").focus();
+            return false;
+        }
+        fileDelete("file"+(maxCount+1));
+
+        document.getElementById("boardWriteF").method = 'POST';
+        document.getElementById("boardWriteF").action = '/boardWrite-action';
+        document.getElementById("boardWriteF").submit();
+    }
+
+
 </script>
 
 </html>

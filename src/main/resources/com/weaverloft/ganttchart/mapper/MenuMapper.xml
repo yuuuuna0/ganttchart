@@ -13,5 +13,20 @@
     <select id="fineMenuByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
         select * from MENU where MENU_NO=#{menuNo}
     </select>
-
+<!-- 3. 메뉴 삭제하기   -->
+    <delete id="deleteMenu" parameterType="java.lang.Integer">
+        delete menu where MENU_NO=#{menuNo}
+    </delete>
+<!-- 4. 메뉴리스트 전체 불러오기   -->
+    <select id="findMenuList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select *
+        from (select rownum idx, m.*
+              from menu m
+              order by  MENU_NO desc )
+        <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
+    </select>
+<!-- 5. 전체 메뉴 개수    -->
+    <select id="findMenuCount" resultType="java.lang.Integer">
+        select count(*) from menu
+    </select>
 </mapper>

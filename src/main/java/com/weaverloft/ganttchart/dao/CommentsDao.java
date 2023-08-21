@@ -1,15 +1,13 @@
-package com.weaverloft.ganttchart.mapper;
+package com.weaverloft.ganttchart.dao;
 
 import com.weaverloft.ganttchart.dto.Comments;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
 
-@Mapper
-public interface CommentsMapper {
+public interface CommentsDao {
     //1. 게시글 번호로 댓글리스트 찾기
-    List<Comments> findCommentsByBoardNo(Map<String,Object> map) throws Exception;
+    List<Comments> findCommentsByBoardNo(int boardNo) throws Exception;
     //2. 댓글번호로 댓글 찾기
     Comments findCommentsByCommentsNo(int CommentsNo) throws Exception;
     //3. 댓글 남기기

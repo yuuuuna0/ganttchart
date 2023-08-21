@@ -1,0 +1,18 @@
+package com.weaverloft.ganttchart.Service;
+
+import com.weaverloft.ganttchart.dto.Comments;
+
+import java.util.List;
+
+public interface CommentsService {
+    //1. 게시글 번호로 댓글 리스트 찾기
+    List<Comments> findCommentsByBoardNo(int boardNo) throws Exception;
+    //2. 댓글 달기
+    int createComments(Comments comments) throws Exception;
+    //3. 같은 그룹의 댓글 개수
+    int findCommentsCountByGroupNo(int groupNo) throws Exception;
+    //4. 최근 pk 값 불러오기
+    int findCurCommentsNo() throws Exception;
+    //5. 모댓글 groupNo 업데이트
+    int updateGroupNo(int curKey);
+}

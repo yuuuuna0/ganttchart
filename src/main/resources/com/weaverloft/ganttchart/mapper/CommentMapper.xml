@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.CommentsMapper">
+<!-- 1. 게시글 번호로 댓글리스트 찾기   -->
+    <select id="findCommentsByBoardNo" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Comments">
+        select * from COMMENTS where BOARD_NO=#{boardNo} order by GROUP_NO,ORDERS
+    </select>
+<!-- 2. 댓글 번호로 댓글 찾기    -->
+    <select id="findCommentsByCommentsNo" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Comments">
+        select * from COMMENTS where COMMENTS_NO=#{commentsNo}
+    </select>
+<!-- 3. 댓글 달기   -->
+    <insert id="createComments">
+        <selectKey resultType="java.lang.Integer" keyProperty="commentsNo" order="BEFORE">
+            select COMMENTS_COMMENTS_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into COMMENTS(comments_no,comments_content,comments_date,class_no,orders,group_no,board_no,id)
+        values (#{commentsNo},#{commentsContent},sysdate,#{classNo},#{orders},null,#{boardNo},#{id})
+    </insert>
+<!-- 4. 같은 그룹의 댓글 개수   -->
+    <select id="findCommentsCountByGroupNo" parameterType="java.lang.Integer">
+        select * from COMMENTS where GROUP_NO=#{groupNo}
+    </select>
+<!-- 5. 최근 값 불러오기 -->
+    <select id="findCurCommentsNo" resultType="java.lang.Integer">
+        select COMMENTS_COMMENTS_NO_SEQ.currval from dual
+    </select>
+<!-- 6. 모댓글 groupNo 업데이트   -->
+    <update id="updateGroupNo" parameterType="java.lang.Integer">
+        update COMMENTS set GROUP_NO=#{curKey} where COMMENTS_NO=#{curKey}
+    </update>
+</mapper>

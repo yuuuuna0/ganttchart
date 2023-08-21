@@ -1,10 +1,12 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
+import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.Service.BoardFileService;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.BoardFile;
+import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +27,13 @@ public class BoardController {
     private BoardService boardService;
     private BoardFileService boardFileService;
     private FileService fileService;
+    private CommentsService commentsService;
 
-    public BoardController(BoardService boardService, BoardFileService boardFileService, FileService fileService) {
+    public BoardController(BoardService boardService, BoardFileService boardFileService, FileService fileService, CommentsService commentsService) {
         this.boardService = boardService;
         this.boardFileService = boardFileService;
         this.fileService = fileService;
+        this.commentsService = commentsService;
     }
 
     //1. 게시글 전체보기
@@ -40,6 +45,7 @@ public class BoardController {
         try{
             Users loginUser = (Users)session.getAttribute("loginUser");
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
+//            model.addAttribute("boardCommentCount",boardCommentCount);
             model.addAttribute("boardListPage",boardListPage);
             model.addAttribute("loginUser",loginUser);
             forwardPath="/boardList";
@@ -95,9 +101,11 @@ public class BoardController {
             int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
+            List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
             if(board!=null){
                 mv.addObject("board", board);
                 mv.addObject("boardFileList",boardFileList);
+                mv.addObject("commentsList", commentsList);
                 mv.setViewName("boardDetail");
             }
         } catch (Exception e){

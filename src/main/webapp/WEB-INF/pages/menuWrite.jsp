@@ -107,6 +107,7 @@
 <script src="../../js/typeahead.js"></script>
 <script src="../../js/select2.js"></script>
 <!-- End custom js for this page-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 //1. 게시글 작성
 var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
