@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.mapper;
 
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.security.dto.CustomUsers;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -8,6 +9,9 @@ import java.util.Map;
 
 @Mapper
 public interface UsersMapper {
+    //0. 스프링 시큐리티
+    CustomUsers loginID(String id) throws Exception;
+
     //1. 회원가입
     int createUsers(Users users) throws Exception;
     //2. 회원 조회

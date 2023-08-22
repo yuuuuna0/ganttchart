@@ -20,6 +20,8 @@
     <bean id="customAccessDenied" class="com.weaverloft.ganttchart.security.CustomAccessDeniedHandler"/>
     <bean id="customLoginSuccess" class="com.weaverloft.ganttchart.security.CustomLoginSuccessHandler"/>
     <bean id="customPasswordEncoder" class="com.weaverloft.ganttchart.security.CustomPasswordEncoder"/>
+    <bean id="customUserDetailsService" class="com.weaverloft.ganttchart.security.CustomUserDetailService"/>
+
 <!--    &lt;!&ndash; 단순한 문자열만들 사용하는 -> 표현식을 사용하지 않는 경우 &ndash;&gt;-->
 <!--    <security:http auto-config="true" use-expressions="false">-->
 <!--        <security:intercept-url pattern="/sample/user" access="ROLE_MEMBER"/>-->
@@ -27,12 +29,12 @@
 <!--        <security:form-login/>-->
 <!--        <security:access-denied-handler error-page="/accessError"/>-->
 <!--    </security:http>-->
-
     <security:authentication-manager>
-        <security:authentication-provider>
+        <security:authentication-provider user-service-ref="customUserDetailsService">
             <security:password-encoder ref="customPasswordEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
+
 
 
 <!--    &lt;!&ndash; 보안 미적용 &ndash;&gt;-->
