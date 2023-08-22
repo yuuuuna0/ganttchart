@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.MenuService;
+import com.weaverloft.ganttchart.controller.Interceptor.AdminCheck;
 import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,13 @@ public class MenuController {
     }
 
     //1. 메뉴 만들기 페이지
+    @AdminCheck
     @GetMapping("menuWrite")
     public String menuCreate(){
         return "menuWrite";
     }
     //1-1. 메뉴(메뉴) 만들기 액션    //상위메뉴(parentId:0) 하위메뉴
+    @AdminCheck
     @PostMapping("menuWrite-action")
     public String menuCreateAction(@ModelAttribute Menu menu){
         String forwardPath="";
@@ -44,6 +47,7 @@ public class MenuController {
 
 
     //2-2. 메뉴 상세보기 페이지
+    @AdminCheck
     @GetMapping("menuDetail/{menuNo}")
     public String menuDetail(@PathVariable int menuNo,Model model){
         try{
@@ -56,6 +60,7 @@ public class MenuController {
     }
 
     //2-1. 메뉴 수정하기 액션
+    @AdminCheck
     @PostMapping("menuModify-action")
     public Map<String,Object> menuModifyAction(){
         Map<String,Object> resultMap = new HashMap<>();
@@ -64,6 +69,7 @@ public class MenuController {
 
 
     //3. 메뉴 전체리스트 불러오기
+    @AdminCheck
     @GetMapping("menuList/{pageNo}")
     public String menuList(@PathVariable int pageNo, Model model){
         String forwardPath;
@@ -77,6 +83,7 @@ public class MenuController {
     }
 
     //4. 메뉴 삭제 액션
+    @AdminCheck
     @PostMapping("menuDelete-action")
     public String menuDeleteAction(int menuNo){
         try{
@@ -84,7 +91,6 @@ public class MenuController {
         } catch (Exception e){
             e.printStackTrace();
         }
-
         return "redirect:menuList";
     }
 }

@@ -13,6 +13,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,10 +21,12 @@ import java.util.regex.Pattern;
 @Service
 public class UsersServiceImpl implements UsersService {
     private UsersDao usersDao;
+    private HttpSession session;
 
-    public UsersServiceImpl(UsersDao usersDao) {
+    public UsersServiceImpl(UsersDao usersDao, HttpSession session) {
         System.out.println("UserServiceImpl 생성");
         this.usersDao = usersDao;
+        this.session = session;
     }
 
     //1. 로그인
@@ -190,6 +193,11 @@ public class UsersServiceImpl implements UsersService {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Users getLoginUser() throws Exception {
+        return (Users)session.getAttribute("loginUser");
     }
 }
 

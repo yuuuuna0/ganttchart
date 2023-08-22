@@ -28,6 +28,8 @@ public interface UsersService {
     PageMakerDto findUserList(int pageNo, String keyword) throws Exception;
     //12. 회원리스트 엑셀
     void userListExcelDown(Users users,int pageNo, String keyword) throws Exception;
+    //13. 로그인 한 유저 반환
+    Users getLoginUser() throws Exception;
 
     /*
     //2. 내 정보 조회

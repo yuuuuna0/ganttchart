@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.CommentsService;
+import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ public class CommentsController {
     }
 
     //2. 댓글 남기기
+    @LoginCheck
     @ResponseBody
     @PostMapping("createComments-ajax")
     private Map<String,Object> createCommentsAjax(@RequestParam Map<String,Object> map, Model model, HttpSession session){

@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <a class="navbar-brand brand-logo mr-5" href="/"><img src="../images/logo.svg" class="mr-2" alt="logo"/></a>
@@ -78,7 +80,12 @@
             </li>
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <img src="../images/faces/face28.jpg" alt="profile"/>
+                        <c:if test = "${loginUser != null && loginUser.photo != null}">
+                            <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${loginUser.photo}"/>
+                        </c:if>
+                        <c:if test = "${loginUser == null || loginUser.photo == null}">
+                            <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/default.png"/>
+                        </c:if>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                     <a class="dropdown-item">

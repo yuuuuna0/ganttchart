@@ -14,9 +14,11 @@
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="java.util.Map">
         update USERS
-        set name=#{name}, PASSWORD=#{password}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
+        set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
         where id=#{id}
     </update>
+    <!-- 4. 비밀번호 수정 -->
+
     <!-- 4. 인증 완료 -->
     <update id="updateAuthStatus" parameterType="java.lang.String">
         update USERS set AUTH_STATUS=1 where id=#{id}
@@ -39,7 +41,7 @@
         from users where NAME=#{name} and EMAIL=#{email}
     </select>
     <!-- 아이디, 이름, 이메일로 비밀번호 변경하기 ==> 유저 1 찾기 +  -->
-    <select id="findPasswordByIdEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
+    <select id="findPasswordByIdNameEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where ID=#{id} and name=#{name} and EMAIL=#{email}
     </select>
     <!-- 비밀번호 변경 -->

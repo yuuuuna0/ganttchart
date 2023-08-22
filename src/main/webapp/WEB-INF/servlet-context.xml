@@ -44,8 +44,14 @@
     <!-- Interceptors -->
     <mvc:interceptors>
         <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--            <mvc:exclude-mapping path=""/>-->
+            <bean id="adminCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.AdminCheckInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
             <mvc:mapping path="/**" />
-            <bean class="com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor" />
+            <!--            <mvc:exclude-mapping path=""/>-->
+            <bean id="loginCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
     <!-- 프로젝트 패키지이름 확인 -->

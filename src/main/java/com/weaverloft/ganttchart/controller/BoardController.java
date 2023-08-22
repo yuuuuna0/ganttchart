@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.Service.BoardService;
 import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.Service.BoardFileService;
+import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.BoardFile;
 import com.weaverloft.ganttchart.dto.Comments;
@@ -115,32 +116,83 @@ public class BoardController {
     }
 
     //3. 게시글 작성하기 페이지
+    @LoginCheck
     @GetMapping("boardWrite")
     public String boardCreate(){
         return "boardWrite";
     }
     //3-1 게시글 작성하기 액션
+    @LoginCheck
     @PostMapping("/boardWrite-action")
     public ModelAndView boardCreateAction(@ModelAttribute Board board, MultipartHttpServletRequest mf, HttpSession session, ModelAndView mv){
         List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
-        System.out.println("boardFileList = " + boardFileList);
         Users loginUser=(Users)session.getAttribute("loginUser");
         board.setId(loginUser.getId());
         try{
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
-            System.out.println("boardNo = " + boardNo);
-            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
+            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
             for(MultipartFile boardFile : boardFileList){
                 String fileName = fileService.uploadFile(boardFile,filePath);
-                System.out.println("fileName = " + fileName);
                 BoardFile file = new BoardFile(0,fileName,boardNo);
                 boardFileService.createBoardFile(file);
             }
-            mv.setViewName("redirect:/boardList");
+            mv.setViewName("redirect:/boardList/1");
         } catch (Exception e){
             e.printStackTrace();
         }
         return mv;
+    }
+
+    //4. 게시글 삭제하기
+    @LoginCheck
+    @GetMapping("/deleteBoard-action/{boardNo}")
+    public String deleteBoardAction(@PathVariable int boardNo){
+        String forwardPath ="";
+        try{
+            boardService.deleteBoard(boardNo);
+            forwardPath = "redirect:/boardList/1";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
+    //5. 게시글 수정하기
+        //1) 수정폼
+    @LoginCheck
+    @GetMapping("/modifyBoard/{boardNo}")
+    public String modifyBoard(@PathVariable int boardNo, Model model){
+        String fowardPath = "";
+        try{
+            List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
+            Board board = boardService.findByBoardNo(boardNo);
+            model.addAttribute("board",board);
+            model.addAttribute("boardFileList",boardFileList);
+            fowardPath="boardModify";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return fowardPath;
+    }
+        //2) 수정액션
+    @LoginCheck
+    @PostMapping("/modifyBoard-action")
+    public String modifyBoardAction(@ModelAttribute Board board, MultipartHttpServletRequest mf){
+        String forwardPath = "";
+        List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
+        try{
+            int result = boardService.updateBoard(board);
+            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
+            for(MultipartFile boardFile : boardFileList){
+                String fileName = fileService.uploadFile(boardFile,filePath);
+                BoardFile file = new BoardFile(0,fileName,board.getBoardNo());
+                boardFileService.createBoardFile(file);
+            }
+            forwardPath = "redirect:/modifyBoard/"+board.getBoardNo();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
     }
 }

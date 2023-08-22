@@ -2,9 +2,12 @@ package com.weaverloft.ganttchart.controller;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.weaverloft.ganttchart.Service.*;
+import com.weaverloft.ganttchart.controller.Interceptor.AdminCheck;
+import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +72,7 @@ public class UsersController {
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
             if(photoFile !=null){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\users\\";
                 String photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
                 System.out.println("사진 있다");
@@ -82,7 +85,7 @@ public class UsersController {
             //7) 회원가입 로그 추가
             String id= users.getId();
             System.out.println(id);
-            usersLogService.createLog(id,0);
+            usersLogService.createLog(id,0);    //가입완료 로그:0 남기기
             mv.setViewName("redirect:/login");
         } catch (Exception e){
             e.printStackTrace();
@@ -105,6 +108,7 @@ public class UsersController {
             Users loginUser=usersService.login(id,sha256Service.encrypt(password));
             System.out.println(loginUser);
             session.setAttribute("loginUser", loginUser);
+            session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
             if(loginUser.getAuthStatus()==0){
                 //미인증 사용자(첫번째 로그인)
                 mv.setViewName("redirect:/emailAuth");
@@ -123,6 +127,7 @@ public class UsersController {
         return mv;
     }
     //2-3. 로그아웃 액션 --> 완료
+    @LoginCheck
     @GetMapping("/logout-action")
     public String logoutAction(HttpSession session) {
         try{
@@ -135,11 +140,13 @@ public class UsersController {
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
+    @LoginCheck
     @GetMapping("emailAuth")
     public String emailAuth(){
         return "emailAuth";
     }
     //2-5. 이메일 인증 액션 --> 완료
+    @LoginCheck
     @PostMapping("emailAuth-action")
     public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
         String authKey=(String)map.get("authKey");
@@ -147,7 +154,7 @@ public class UsersController {
         try{
             if(authKey.equals(loginUser.getAuthKey())){
                 usersService.updateAuthStatus(loginUser.getId());   //회원 인증 완료
-                usersLogService.createLog(loginUser.getId(),1);        //로그남기기
+                usersLogService.createLog(loginUser.getId(),1);        //인증완료 로그:1 남기기
             } else{
                 System.out.println("인증번호가 다릅니다");   //인증이 안됨,,,,
                 mv.setViewName("redirect:/emailAuth");
@@ -210,14 +217,11 @@ public class UsersController {
     }
 
     //5.마이페이지 --> 완료
+    @LoginCheck
     @GetMapping(value="mypage")
     public ModelAndView mypage(HttpSession session,ModelAndView mv){
         try{
             Users loginUser=(Users)session.getAttribute("loginUser");
-            if(loginUser==null){
-                mv.setViewName("redirect:/login");
-                return mv;
-            }
             mv.addObject("loginUser",loginUser);
             mv.setViewName("mypage");
         } catch (Exception e){
@@ -227,39 +231,52 @@ public class UsersController {
     }
 
     //6-1. 정보 수정 페이지
-    @GetMapping(value="modifyUser", params = "id")
-    public ModelAndView modifyUser(HttpSession session, ModelAndView mv){
+    @LoginCheck
+    @GetMapping("/modify")
+    public String modifyUser( HttpSession session, Model model){
+        String forwardPath = "";
         Users loginUser = (Users)session.getAttribute("loginUser");
-        mv.addObject(loginUser);
-        mv.setViewName("modifyUser");
-        return mv;
+        model.addAttribute("loginUser",loginUser);
+        forwardPath = "modify";
+        return forwardPath;
     }
     //6-2. 정보 수정 액션
-    @PostMapping("modifyUser")
-    public ModelAndView modifyUserAction(@RequestParam Map map, ModelAndView mv){
-        String name=(String)map.get("name");
-        Date birth=(Date)map.get("birth");
-        String genderStr=(String)map.get("gender");
-        int gender=Integer.parseInt(genderStr);
-        String phone=(String)map.get("phone");
-        String address=(String)map.get("address");
-        String email=(String)map.get("email");
+    @LoginCheck
+    @PostMapping("modifyUser-action")
+    public String modifyUserAction(@ModelAttribute Users users, HttpSession session, MultipartHttpServletRequest multipartFile){
+        String forwardPath ="";
+        Users loginUser = (Users)session.getAttribute("loginUser");
+        MultipartFile photoFile = multipartFile.getFile("photoFile");
+        String photo="";
         try{
+            if(photoFile !=null){
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\users\\";
+                photo = fileService.uploadFile(photoFile,filePath);
+                users.setPhoto(photo);
+            } else{
+                photo = loginUser.getPhoto();
+            }
+            int result = usersService.updateUsers(users);
+            Users updateUser = usersService.findUsersById(loginUser.getId());
+            session.setAttribute("loginUser",updateUser);   //업데이트 한 유저 세션에 담기
+            forwardPath = "redirect:/";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
+
     //7. 회원탈퇴 --> 완료
-    @GetMapping(value="deleteUser-action", params="id")
+    @LoginCheck
+    @GetMapping("/deleteUser")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
+            usersLogService.createLog(loginUser.getId(),999);   //탈퇴 로그:999 남기기
             int result=usersService.deleteUsers(loginUser.getId());
-            usersLogService.createLog(loginUser.getId(),5);
             session.invalidate();
-            forwardPath="redirect:login";
+            forwardPath="redirect:/";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -268,6 +285,7 @@ public class UsersController {
 
 
     //1. 회원리스트 출력
+    @AdminCheck
     @GetMapping("/admin/userList/{pageNo}")
     public ModelAndView userList(@PathVariable int pageNo,
                                  @RequestParam(required = false) String keyword,
@@ -283,6 +301,7 @@ public class UsersController {
         return mv;
     }
     //2. 회원 로그 출력
+    @AdminCheck
     @GetMapping("/admin/userLog/{pageNo}")
     public ModelAndView userLog(@PathVariable int pageNo,
                                 @RequestParam(required = false) String keyword,
