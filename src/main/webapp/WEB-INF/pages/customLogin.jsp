@@ -44,7 +44,7 @@
                         <h6 class="font-weight-light">Sign in to continue.</h6>
 <%--                        <h6 class="font-weight-light"><c:out value="${error}"/></h6>--%>
 <%--                        <h6 class="font-weight-light"><c:out value="${logout}"/></h6>--%>
-                        <form class="pt-3" name="loginF">
+                        <form class="pt-3" name="loginF" method="post" action="/login">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-lg" id="id" name="username" placeholder="ID">
                             </div>
@@ -53,7 +53,7 @@
                             </div>
                             <div class="mt-3">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                <input type="button" id="loginBtn" name="loginBtn" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
+                                <input type="submit" id="loginBtn" name="loginBtn" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
                             </div>
                             <div class="my-2 d-flex justify-content-between align-items-center">
                                 <div class="form-check">
@@ -95,13 +95,13 @@
 <script src="../../js/settings.js"></script>
 <script src="../../js/todolist.js"></script>
 <!-- endinject -->
-<script>
-    document.getElementById("loginBtn").onclick=function(){
-        document.loginF.method = 'POST';
-        document.loginF.action = 'login-action';
-        document.loginF.submit();
-    }
-</script>
+<%--<script>--%>
+<%--    document.getElementById("loginBtn").onclick=function(){--%>
+<%--        document.loginF.method = 'POST';--%>
+<%--        document.loginF.action = 'login-action';--%>
+<%--        document.loginF.submit();--%>
+<%--    }--%>
+<%--</script>--%>
 </body>
 
 </html>

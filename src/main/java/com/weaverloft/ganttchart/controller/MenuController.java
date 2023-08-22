@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpSession;
-import javax.xml.catalog.Catalog;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -29,7 +26,7 @@ public class MenuController {
     //1. 메뉴 만들기 페이지
     @GetMapping("/admin/menuWrite")
     public String menuCreate(){
-        return "/admin/menuWrite";
+        return "menuWrite";
     }
     //1-1. 메뉴(메뉴) 만들기 액션    //상위메뉴(parentId:0) 하위메뉴
     @Secured("ROLE_ADMIN")
@@ -56,7 +53,7 @@ public class MenuController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "/admin/menuDetail";
+        return "menuDetail";
     }
 
     //2-1. 메뉴 수정하기 액션
@@ -79,7 +76,7 @@ public class MenuController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "/admin/menuList";
+        return "menuList";
     }
 
     //4. 메뉴 삭제 액션

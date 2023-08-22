@@ -1,10 +1,10 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.Users;
-import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.Map;
-
+@Log4j2
 @Controller
 public class UsersController {
     private UsersService usersService;
@@ -38,11 +38,11 @@ public class UsersController {
     //1-1. 회원가입 페이지
     @GetMapping("/register")
     public String register(){
-        return "register";
+        return "/register";
     }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @ResponseBody
-    @PostMapping(value = "register-action")
+    @PostMapping(value = "/register-action")
     public ModelAndView registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile, ModelAndView mv) throws Exception{
         MultipartFile photoFile = multipartFile.getFile("photoFile");
         try {
@@ -91,8 +91,16 @@ public class UsersController {
     }
 
     //2-1. 로그인 페이지 --> 완료
-    @GetMapping("login")
-    public String login(){
+    @GetMapping("/login")
+    public String login(String error,String logout, Model model){
+        log.info("error : "+error);
+        log.info("logout : "+logout);
+        if(error !=null){
+            model.addAttribute("error", "Login Error Check Your Account");
+        }
+        if(logout !=null){
+            model.addAttribute("logout","Logout!!!");
+        }
         return "/login";
     }
     //2-2. 로그인 액션 --> 완료
@@ -127,19 +135,19 @@ public class UsersController {
         try{
             Users users=(Users)session.getAttribute("loginUser");
             session.invalidate();
-            usersLogService.createLog(users.getId(),11);
+            //usersLogService.createLog(users.getId(),11);
         } catch (Exception e){
             e.printStackTrace();
         }
         return "redirect:/";
     }
     //2-4. 이메일 인증 페이지 --> 완료
-    @GetMapping("emailAuth")
+    @GetMapping("/emailAuth")
     public String emailAuth(){
         return "emailAuth";
     }
     //2-5. 이메일 인증 액션 --> 완료
-    @PostMapping("emailAuth-action")
+    @PostMapping("/emailAuth-action")
     public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
@@ -172,7 +180,7 @@ public class UsersController {
         try{
             String findId=usersService.findIdByNameEmail(name,email);
             mv.addObject("findId",findId);
-            mv.setViewName("complete");  //출력 창 만들기?
+            mv.setViewName("/complete");  //출력 창 만들기?
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -181,7 +189,7 @@ public class UsersController {
     //4-1. 비밀번호 찾기 페이지 --> 완료
     @GetMapping("/findPassword")
     public String findPassword(){
-        return "findPassword";
+        return "/findPassword";
     }
     //4-2. 비밀번호 찾기 액션 --> 완료
     @PostMapping("/findPassword-action")
@@ -200,7 +208,7 @@ public class UsersController {
                 String encryptTempPassword = sha256Service.encrypt(tempPassword);
                 System.out.println("임시비번 암호화: "+encryptTempPassword);
                 usersService.updatePassword(id,encryptTempPassword);
-                mv.setViewName("login");
+                mv.setViewName("/login");
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -209,7 +217,7 @@ public class UsersController {
     }
 
     //5.마이페이지 --> 완료
-    @GetMapping(value="mypage")
+    @GetMapping("/mypage")
     public ModelAndView mypage(HttpSession session,ModelAndView mv){
         try{
             Users loginUser=(Users)session.getAttribute("loginUser");
@@ -219,7 +227,7 @@ public class UsersController {
             }
 
             mv.addObject("loginUser",loginUser);
-            mv.setViewName("mypage");
+            mv.setViewName("/mypage");
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -231,11 +239,11 @@ public class UsersController {
     public ModelAndView modifyUser(HttpSession session, ModelAndView mv){
         Users loginUser = (Users)session.getAttribute("loginUser");
         mv.addObject(loginUser);
-        mv.setViewName("modify");
+        mv.setViewName("/modify");
         return mv;
     }
     //6-2. 정보 수정 액션
-    @PostMapping("modifyUser")
+    @PostMapping("/modify-action")
     public ModelAndView modifyUserAction(@RequestParam Map map, ModelAndView mv){
         String name=(String)map.get("name");
         Date birth=(Date)map.get("birth");
@@ -265,6 +273,42 @@ public class UsersController {
         }
         return forwardPath;
     }
+
+/************************************************** 관리자 권한 ****************************************/
+
+    //1. 회원리스트 출력
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/userList/{pageNo}")
+    public ModelAndView userList(@PathVariable int pageNo,
+                                 @RequestParam(required = false) String keyword,
+                                 HttpSession session,
+                                 ModelAndView mv){
+        try{
+            PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
+            mv.addObject("userListPage",userListPage);
+            mv.setViewName("userList");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return mv;
+    }
+    //2. 회원 로그 출력
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/userLog/{pageNo}")
+    public ModelAndView userLog(@PathVariable int pageNo,
+                                @RequestParam(required = false) String keyword,
+                                HttpSession session,
+                                ModelAndView mv){
+        try{
+            PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
+            mv.addObject("usersLogPage",usersLogPage);
+            mv.setViewName("userLog");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return mv;
+    }
+
 
 
 }

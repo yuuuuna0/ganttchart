@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -34,7 +36,9 @@
                 <div class="col-lg-7 mx-auto text-white">
                     <div class="row align-items-center d-flex flex-row">
                         <div class="col-lg-6 text-lg-right pr-lg-4">
-                            <h1 class="display-1 mb-0">Access Denied</h1>
+                            <h4 class="display-1 mb-0">Access Denied</h4>
+                            <h4 class="display-1 mb-0"><c:out value="${SPRING_SECURITY_LAST_EXCEPTION.toString()}"/></h4>
+                            <h4 class="display-1 mb-0"><c:out value="${msg}"/></h4>
                         </div>
                         <div class="col-lg-6 error-page-divider text-lg-left pl-lg-4">
                             <h2>SORRY!</h2>
