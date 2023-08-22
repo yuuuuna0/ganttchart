@@ -32,14 +32,14 @@
 <body>
 <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
-    <jsp:include page="include/navbar.jsp"/>
+    <jsp:include page="../include/navbar.jsp"/>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_settings-panel.html -->
-        <jsp:include page="include/settings-panel.jsp"/>
+        <jsp:include page="../include/settings-panel.jsp"/>
         <!-- partial -->
         <!-- partial:partials/_sidebar.html -->
-        <jsp:include page="include/sidebar.jsp"/>
+        <jsp:include page="../include/sidebar.jsp"/>
         <!-- partial -->
     <div class="main-panel">
         <div class="content-wrapper">
@@ -77,7 +77,7 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
-        <jsp:include page="include/footer.jsp"/>
+        <jsp:include page="../include/footer.jsp"/>
         <!-- partial -->
     </div>
     <!-- main-panel ends -->

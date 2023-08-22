@@ -91,9 +91,9 @@ public class UsersController {
     }
 
     //2-1. 로그인 페이지 --> 완료
-    @GetMapping("/login")
+    @GetMapping("login")
     public String login(){
-        return "login";
+        return "/login";
     }
     //2-2. 로그인 액션 --> 완료
     @PostMapping("/login-action")

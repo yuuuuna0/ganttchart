@@ -3,9 +3,11 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd">
     <!-- annotation 활성화 -->
     <mvc:annotation-driven></mvc:annotation-driven>
 
@@ -48,6 +50,9 @@
             <bean class="com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!-- security annotation  -->
+    <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
     <!-- 프로젝트 패키지이름 확인 -->
     <context:component-scan base-package="com.weaverloft.ganttchart"/>
 </beans>

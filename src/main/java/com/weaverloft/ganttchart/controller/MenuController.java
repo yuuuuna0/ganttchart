@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.controller;
 import com.weaverloft.ganttchart.Service.MenuService;
 import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,18 +25,20 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    @Secured("ROLE_ADMIN")
     //1. 메뉴 만들기 페이지
-    @GetMapping("menuWrite")
+    @GetMapping("/admin/menuWrite")
     public String menuCreate(){
-        return "menuWrite";
+        return "/admin/menuWrite";
     }
     //1-1. 메뉴(메뉴) 만들기 액션    //상위메뉴(parentId:0) 하위메뉴
-    @PostMapping("menuWrite-action")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/menuWrite-action")
     public String menuCreateAction(@ModelAttribute Menu menu){
         String forwardPath="";
         try{
             int result = menuService.createMenu(menu);
-            forwardPath = "redirect:menuList";
+            forwardPath = "redirect:/admin/menuList";
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -44,7 +47,8 @@ public class MenuController {
 
 
     //2-2. 메뉴 상세보기 페이지
-    @GetMapping("menuDetail/{menuNo}")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/menuDetail/{menuNo}")
     public String menuDetail(@PathVariable int menuNo,Model model){
         try{
             Menu menu = menuService.findMenuByNo(menuNo);
@@ -52,11 +56,12 @@ public class MenuController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "menuDetail";
+        return "/admin/menuDetail";
     }
 
     //2-1. 메뉴 수정하기 액션
-    @PostMapping("menuModify-action")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/menuModify-action")
     public Map<String,Object> menuModifyAction(){
         Map<String,Object> resultMap = new HashMap<>();
         return resultMap;
@@ -64,7 +69,8 @@ public class MenuController {
 
 
     //3. 메뉴 전체리스트 불러오기
-    @GetMapping("menuList/{pageNo}")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/menuList/{pageNo}")
     public String menuList(@PathVariable int pageNo, Model model){
         String forwardPath;
         try{
@@ -73,18 +79,18 @@ public class MenuController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "menuList";
+        return "/admin/menuList";
     }
 
     //4. 메뉴 삭제 액션
-    @PostMapping("menuDelete-action")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/admin/menuDelete-action")
     public String menuDeleteAction(int menuNo){
         try{
             int result = menuService.deleteMenu(menuNo);
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        return "redirect:menuList";
+        return "redirect:/admin/menuList";
     }
 }

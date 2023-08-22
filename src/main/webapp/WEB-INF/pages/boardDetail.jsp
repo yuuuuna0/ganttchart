@@ -91,7 +91,7 @@
                                                     <span class="mr-2">${comment.commentsDate}</span>
                                                     <span >
                                                         <img src="../../images/icon_subCommentCreate.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="subComments('${comment.id}')"/>
-                                                        <img src="../../images/icon_modifyComment.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
+                                                        <img src="../../images/icon_modifyComment.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifycomments(${comment.commentsNo},'${comment.commentsContent}');"/>
                                                         <img src="../../images/icon_deleteComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
                                                     </span>
                                                 </div>
@@ -117,6 +117,7 @@
 
                                 <hr>
                                 <!-- 작성폼 -->
+                                <label id="msgLabel" ></label>
                                 <form class="mb-4" id="createCommentsF" name="createCommentsF">
                                     <div class="row">
                                         <div class="col-9">
@@ -124,10 +125,9 @@
                                         </div>
                                         <div class="col-3">
                                             <input type="button" id="createCommentsBtn" onclick="createComments(1)" value="남기기">
-                                            <input type="hidden" id="modifyCommentsBtn" onclick="modifyCommentsAction()" value="수정하기">
                                         </div>
                                     </div>
-                                    <label id="msgLabel" ></label>
+
                                 </form>
                             </div>
                         </div>
@@ -170,7 +170,8 @@
 <script>
     /******************************** 1. 댓글 작성 **********************************/
     //하위타입 댓글 작성
-    function subComments(id){
+    function subComments(e,id){
+        console.log(e.target.parentElement);
         $('#commentsContent').focus();
         $('#msgLabel').text(id+'님에게 댓글 다는 중,,,,');
         $('#createCommentsBtn').prop('onclick','createComments(2)');    //-> classNo 2 넘기는 방법?
@@ -219,11 +220,11 @@
         });
     }
     /******************************** 3. 댓글 수정 **********************************/
-    function modifyComments(commentNo,commentsContent){
-        $('#commentsContent').val(commentsContent);
-        $('#commentsNo'+commentNo).css('color','red');
-        $('#createCommentsBtn').prop('type','hidden');
-        $('#modifyCommentsBtn').prop('type','button');
+    function modifyComments(commentsNo,commentsContent){
+        $('#commentsNo'+commentsNo).empty();
+        let html = "<input type='text' class='mr-3' id='commentsNo"+commentsNo+"' value='"+commentsContent+"'/>"+
+        "<button onclick='modifyCommentsAction("+commentsNo+")'>수정하기</button>";
+        $('#commentsNo'+commentsNo).append(html);
     }
     // //수정하는 댓글 색만 변경하기
     // $('img[name="modifyComment"]').click(function(){
@@ -232,7 +233,7 @@
     // });
 
     function modifyCommentsAction(commentsNo) {
-        let commentsContent = $('#commentsContent').val();
+        let commentsContent = $('#commentsNo'+commentsNo).val();    //왜 ""로 들어가지?
         let boardNo = $('#boardNo').val();
         $.ajax({
             url: '/modifyComment-ajax',
@@ -261,7 +262,7 @@
                 let dataItem = data[i];
                 if(dataItem.classNo === 1){
                     //부모댓글일 때 ==> classNo=1
-                    html += " <div class='col-12 mt-3'>\n" +
+                    html += " <div class='col-12 mt-3' >\n" +
                         "                                                    <span class='mr-3'>"+dataItem.id+"</span>\n" +
                         "                                                    <span class='mr-3' id='commentsNo"+dataItem.commentsNo+"'>"+dataItem.commentsContent+"</span>\n" +
                         "                                                    <span class='mr-2'>"+dataItem.commentsDate+"</span>\n" +

@@ -12,8 +12,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java-version>17</java-version>
-        <org.springframework-version>5.3.20</org.springframework-version>
+        <org.springframework-version>5.3.27</org.springframework-version>
         <org.slf4j-version>1.7.25</org.slf4j-version>
+        <org.aspectj-version>1.7.2</org.aspectj-version>
     </properties>
 
     <dependencies>
@@ -31,7 +32,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>5.3.20</version>
+            <version>5.3.27</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -47,22 +48,22 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>6.1.2</version>
+            <version>5.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>6.1.2</version>
+            <version>5.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>6.1.2</version>
+            <version>5.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>6.1.2</version>
+            <version>5.3.4.RELEASE</version>
         </dependency>
 
 
@@ -326,9 +327,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <compilerArgument>Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
         </plugins>

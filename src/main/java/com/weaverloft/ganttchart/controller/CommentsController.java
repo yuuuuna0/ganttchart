@@ -116,6 +116,7 @@ public class CommentsController {
         int commentsNo = Integer.parseInt(map.get("commentsNo").toString());
         int boardNo = Integer.parseInt(map.get("boardNo").toString());
         String commentsContent = (String)map.get("commentsContent");
+        System.out.println("commentsContent = " + commentsContent);
         try{
             int result = commentsService.updateComments(commentsNo,commentsContent);
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
