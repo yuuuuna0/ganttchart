@@ -1,85 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-    <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
-    <security:http>
-        <security:csrf disabled="true"/>
-        <security:intercept-url pattern="/sample/all" access="permitAll"/>
-        <security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
-        <security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
-        <security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
-        <security:access-denied-handler ref="customAccessDenied" />
-        <security:logout logout-url="/customLogout" invalidate-session="true"/>
-    </security:http>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xmlns:security="http://www.springframework.org/schema/security"-->
+<!--       xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd-->
+<!--       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">-->
+<!--&lt;!&ndash;-->
+<!--1. #SpEL문법-->
+<!--        hasRole("admin") - admin권한을 가지고 있어야 접근가능-->
+<!--        hasAnyRole("admin", "user") - admin, user권한중 한가지만 가지고 있으면 접근가능-->
+<!--        permitAll - 모두 접근가능-->
+<!--        denyAll - 모두 접근불가능-->
+<!--        isAnonymous() - 인증을 하지 않은 사용자일 경우(로그인하지 않은 사용자)-->
+<!--        isRememberMe() - Remember-me 기능으로 로그인한 사용자일 경우(자동로그인 사용자)-->
+<!--        isAuthenticated() - 인증을 한 사용자일 경우(로그인한 사용자)-->
 
-    <bean id="customAccessDenied" class="com.weaverloft.ganttchart.security.CustomAccessDeniedHandler"/>
-    <bean id="customLoginSuccess" class="com.weaverloft.ganttchart.security.CustomLoginSuccessHandler"/>
-    <bean id="customPasswordEncoder" class="com.weaverloft.ganttchart.security.CustomPasswordEncoder"/>
-    <bean id="customUserDetailsService" class="com.weaverloft.ganttchart.security.CustomUserDetailService"/>
+<!--2. #form-login & logout 속성-->
+<!--        username-parameter : input 태그의 name(계정) 속성 값(여기서 말하는 username-parameter의 username은 아이디를 의미한다)-->
+<!--        password-parameter : input 태그의 비밀번호 name 속성 값 (default: password)-->
+<!--        login-page : 로그인 화면 url-->
+<!--        login-processing-url form : 태그의 action 속성 (default : /login)-->
+<!--        default-target-url : 로그인 성공시 url-->
+<!--        authentication-failure-url : 로그인 실패시 url (default: /login?error=1)-->
+<!--        authentication-success-handler-ref : 로그인 성공시 default-target-url이 아닌 핸들러로 리다이렉트-->
+<!--        authentication-failure-handler-ref : 로그인 실패시 authentication-failure-url이 아닌 핸들러로 리다이렉트-->
+<!--        always-use-default-target : 무조건 핸들러가 지정한 페이지로 이동 (default: false)-->
 
-<!--    &lt;!&ndash; 단순한 문자열만들 사용하는 -> 표현식을 사용하지 않는 경우 &ndash;&gt;-->
-<!--    <security:http auto-config="true" use-expressions="false">-->
-<!--        <security:intercept-url pattern="/sample/user" access="ROLE_MEMBER"/>-->
-<!--        <security:intercept-url pattern="/sample/puser" access="ROLE_MEMBER"/>-->
-<!--        <security:form-login/>-->
-<!--        <security:access-denied-handler error-page="/accessError"/>-->
-<!--    </security:http>-->
-    <security:authentication-manager>
-        <security:authentication-provider user-service-ref="customUserDetailsService">
-            <security:password-encoder ref="customPasswordEncoder"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
-
-
-
-<!--    &lt;!&ndash; 보안 미적용 &ndash;&gt;-->
-<!--    <security:http pattern="/**/*" security="none" />-->
+<!--         logout-url : 로그아웃 URL-->
+<!--         logout-success-url : 로그아웃 성공시, 이동할 URL. (default: /login?logout)-->
+<!--         invalidate-session : 로그아웃 시, session을 무효화할 지 선택. (default: true)-->
+<!--         delete-cookies : 로그아웃 성공시, 삭제할 쿠키 이름 지정-->
+<!--         success-handler-ref : 로그아웃 성공시, logout-success-url 이 아닌 핸들러로 리다이렉트-->
+<!--&ndash;&gt;-->
 
 <!--    <security:http auto-config="true" use-expressions="true">-->
-<!--        <security:csrf disabled="true"/>-->
-<!--&lt;!&ndash;        누구나&ndash;&gt;-->
-<!--        <security:intercept-url pattern="/*" access="permitAll"/>-->
-<!--&lt;!&ndash;        USER만&ndash;&gt;-->
-<!--        <security:intercept-url pattern="/boardWrite" access="hasRole('ROLE_USER')"/>-->
-<!--        <security:intercept-url pattern="/myPage" access="hasRole('ROLE_USER')"/>-->
-<!--        <security:intercept-url pattern="/emailAuth" access="hasRole('ROLE_USER')"/>-->
-<!--        <security:intercept-url pattern="/findId" access="hasRole('ROLE_USER')"/>-->
-<!--        <security:intercept-url pattern="/findPassword" access="hasRole('ROLE_USER')"/>-->
-<!--        <security:intercept-url pattern="/modify" access="hasRole('ROLE_USER')"/>-->
-<!--&lt;!&ndash;        ADMIN 권한&ndash;&gt;-->
+<!--        &lt;!&ndash; 아래의 순서 중요함! permitAll을 맨 위로 올리면 필터링 없이 다 들어가짐  &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/member/**" access="hasAnyRole('ROLE_USER','ROLE_GUEST')"/>-->
 <!--        <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>-->
-<!--&lt;!&ndash;        로그인&로그아웃 상세 ==> default-target-url:로그인 성공시 이동할 사이트 &ndash;&gt;-->
-<!--        <security:form-login login-page="/login" default-target-url="/" username-parameter="id" password-parameter="password"/>-->
-<!--        <security:logout logout-url="/*" logout-success-url="/logout-action"/>-->
-<!--        <security:access-denied-handler ref="customAccessDenied" />-->
+<!--        <security:intercept-url pattern="/**" access="permitAll"/>-->
+<!--            <security:form-login-->
+<!--                username-parameter="id"-->
+<!--                password-parameter="password"-->
+<!--                login-processing-url="/login-action"-->
+<!--                login-page="/login"-->
+<!--                default-target-url="/"-->
+<!--            />-->
+<!--            <security:logout-->
+<!--                logout-url="/logout-action"-->
+<!--                logout-success-url="/"-->
+<!--                delete-cookies=""-->
+<!--            />-->
 <!--    </security:http>-->
-<!--    <bean id="customAccessDenied" class="com.weaverloft.ganttchart.security.CustomAccessDeniedHandler"/>-->
-<!--&lt;!&ndash;    데이터베이스 연결&ndash;&gt;-->
-<!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-<!--        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />-->
-<!--        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />-->
-<!--        <property name="username" value="c##gantt" />-->
-<!--        <property name="password" value="1234" />-->
-<!--    </bean>-->
-<!--&lt;!&ndash;    사용자 세부 계정 서비스&ndash;&gt;-->
-<!--    <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">-->
-<!--        <property name="dataSource" ref="dataSource" />-->
-<!--        <property name="usersByUsernameQuery" value="select id,password,grade from users where id = ?" />-->
-<!--        <property name="authoritiesByUsernameQuery" value="select id,grade from users where id = ?" />-->
-<!--    </bean>-->
-<!--&lt;!&ndash;    Provider&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Mybatis와 연동 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <security:authentication-manager>&ndash;&gt;-->
+<!--&lt;!&ndash;            <security:jdbc-user-service data-source-ref="dataSource"&ndash;&gt;-->
+<!--&lt;!&ndash;            users-by-username-query="SELECT USERS.ID,USERS.PASSWORD from USERS where id=?"&ndash;&gt;-->
+<!--&lt;!&ndash;            authorities-by-username-query="SELECT USERS.ID, USERS.PASSWORD from USERS where id=?"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <security:authentication-provider>&ndash;&gt;-->
+<!--&lt;!&ndash;        </security:authentication-provider>&ndash;&gt;-->
+<!--&lt;!&ndash;    </security:authentication-manager>&ndash;&gt;-->
+
+
+
+
 <!--    <security:authentication-manager>-->
-<!--        <security:authentication-provider user-service-ref="userDetailsService">-->
-<!--&lt;!&ndash;            <security:user-service>&ndash;&gt;-->
-<!--&lt;!&ndash;                <security:user name="user" password="{noop}password" authorities="ROLE_USER"/>&ndash;&gt;-->
-<!--&lt;!&ndash;                <security:user name="admin" password="{noop}password" authorities="ROLE_USER,ROLE_ADMIN"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            </security:user-service>&ndash;&gt;-->
+<!--        <security:authentication-provider>-->
+<!--            <security:user-service>-->
+<!--                <security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIM"/>-->
+<!--                <security:user name="user" password="{noop}user" authorities="ROLE_USER"/>-->
+<!--            </security:user-service>-->
 <!--        </security:authentication-provider>-->
 <!--    </security:authentication-manager>-->
-
-</beans>
+<!--</beans>-->

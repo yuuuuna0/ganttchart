@@ -63,9 +63,9 @@
             </a>
             <div class="collapse" id="menu">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/admin/menuWrite"> 메뉴만들기 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/admin/menuList/1"> 메뉴리스트 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/admin/menuDetail"> 메뉴상세보기 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menuWrite"> 메뉴만들기 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menuList/1"> 메뉴리스트 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menuDetail"> 메뉴상세보기 </a></li>
                 </ul>
             </div>
         </li>

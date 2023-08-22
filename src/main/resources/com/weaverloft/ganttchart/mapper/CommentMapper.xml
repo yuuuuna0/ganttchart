@@ -29,16 +29,4 @@
     <update id="updateGroupNo" parameterType="java.lang.Integer">
         update COMMENTS set GROUP_NO=#{curKey} where COMMENTS_NO=#{curKey}
     </update>
-<!-- 7. 댓글 삭제   -->
-    <delete id="deleteComments" parameterType="java.lang.Integer">
-        delete COMMENTS where COMMENTS_NO=#{commentsNo}
-    </delete>
-<!-- 8. 댓글번호로 댓글 찾기   -->
-    <select id="findCommentByCommentsNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Comments">
-        select * from COMMENTS where COMMENTS_NO = #{commentsNo}
-    </select>
-<!-- 9. 댓글 내용 수정    -->
-    <update id="updateComments" parameterType="java.util.Map">
-        update COMMENTS set COMMENTS_CONTENT=#{commentsContent} where COMMENTS_NO=#{commentsNo}
-    </update>
 </mapper>

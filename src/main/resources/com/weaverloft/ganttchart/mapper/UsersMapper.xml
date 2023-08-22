@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
-    <!-- 스프링시큐리티 -->
-    <select id="loginID" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.security.dto.CustomUsers">
-        select * from users where id=#{id};
-    </select>
     <!-- 1. 회원가입 -->
     <insert id="createUsers" parameterType="java.util.Map">
         insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY)

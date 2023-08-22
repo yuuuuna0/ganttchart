@@ -19,11 +19,5 @@ public interface CommentsMapper {
     //5. 최근 pk값 불러오기
     int findCurCommentsNo() throws Exception;
     //6. 모댓글 groupNo 업데이트
-    int updateGroupNo(int curKey) throws Exception;
-    //7. 댓글 삭제
-    int deleteComments(int commentsNo) throws Exception;
-    //8. 댓글번호로 댓글 찾기
-    Comments findCommentByCommentsNo(int commentsNo);
-    //9. 댓글내용 수정
-    int updateComments(Map<String,Object> map) throws Exception;
+    int updateGroupNo(int curKey);
 }

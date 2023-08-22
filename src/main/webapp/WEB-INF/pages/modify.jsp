@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -50,17 +49,10 @@
                         <div class="card-body">
                             <h4 class="card-title">회원가입</h4>
                             <!-- 프로필사진 업로드 -->
-                            <div class="form-group" style="text-align: center">
-                                <c:if test="${loginUser.photo != null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../upload/users/${loginUser.photo}"/>
-                                </c:if>
-                                <c:if test="${loginUser.photo == null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/default.png"/>
-                                </c:if>
-                                <br>
-                                <br>
-                                <label for="photoFile" class="file-upload-browse btn btn-primary">사진 추가</label>
-                                <input type="file"  id="photoFile" name="photoFile" accept="img/*" style="display: none;" onchange="uploadPhoto(this)">
+                            <div class="row form-group">
+<%--                                <img id="prevPhoto" style="width: 500px; height:500px; "/>--%>
+                                <input type="file" id="photoFile" name="photoFile" accept="img/*">
+<%--                                <input class="file-upload-browse btn btn-primary" type="button" name="photoFileBtn" id="photoFileBtn" onclick="uploadPhoto(this)" value="업로드">--%>
                             </div>
                             <form class="forms-sample" name="registerF" id="registerF" accept-charset="utf-8">
                                 <div class="row form-group">
@@ -78,7 +70,7 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="name">이름</label>
-                                        <input  type="text" class="form-control" id="name" name="name" value="${loginUser.name}">
+                                        <input readonly type="text" class="form-control" id="name" name="name" value="${loginUser.name}">
                                     </div>
                                     <div class="col-6">
                                         <label for="gender">성별</label>
@@ -90,17 +82,16 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">이메일</label>
-                                    <input  type="email" class="form-control" id="email" name="email" value="${loginUser.email}">
+                                    <input readonly type="email" class="form-control" id="email" name="email" value="${loginUser.email}">
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="phone">전화번호</label>
-                                        <input  type="text" class="form-control" id="phone" name="phone" value="${loginUser.phone}">
+                                        <input readonly type="text" class="form-control" id="phone" name="phone" value="${loginUser.phone}">
                                     </div>
                                     <div class="col-6">
                                         <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth" value="${loginUser.birth}"
-                                               placeholder="${loginUser.birth}">
+                                        <input readonly type="text" class="form-control" id="birth" name="birth" value="${loginUser.birth}">
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -109,10 +100,8 @@
                                         <input type="text" class="form-control" id="address" name="address" value="${loginUser.address}">
                                     </div>
                                 </div>
-                                <div style="text-align:center;">
-                                    <input type="button" id="modifyUserBtn" class="btn btn-primary mr-2" value="수정완료" onclick="modifyUser();">
-                                    <input type="button" id="cancelBtn" class="btn btn-light" value="취소" >
-                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">회원수정</button>
+                                <button class="btn btn-light">회원탈퇴</button>
                             </form>
                         </div>
                     </div>
@@ -162,24 +151,30 @@
             }).open();
         })
     };
-    // //2. birth -> datepicker 이용
-    // window.onload = function () {
-    //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
-    // };
+    //2. birth -> datepicker 이용
+    window.onload = function () {
+        $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
+    };
 
     //3. 파일 업로드시 이미지 보여주기
-    function uploadPhoto(input){
-        if(input.files && input.files[0]){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                document.getElementById("prevPhoto").src=e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+    // var photoFileBtn = document.getElementById("photoFileBtn");
+    // var photofile = document.getElementById("photoFile");
+    // photoFileBtn.addEventListener('click',function(){
+    //     photofile.click(function(input){
+    //         if(input.files && input.files[0]){
+    //             var reader = new FileReader();
+    //             reader.onload = function(e){
+    //                 document.getElementById("prevPhoto").src=e.target.result;
+    //             };
+    //             reader.readAsDataURL(input.files[0]);
+    //         } else {
+    //             document.getElementById("prevPhoto").src = 'C:/temp/upload/default.jpg';
+    //         }
+    //     });
+    // });
 
     //3. 회원가입 버튼 클릭 -> 유효성 검사 -> register-action 실행
-    function modifyUser(){
+    function createUser(){
         var formData = new FormData();
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;

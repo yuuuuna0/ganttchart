@@ -137,7 +137,7 @@ public class BoardController {
                 BoardFile file = new BoardFile(0,fileName,boardNo);
                 boardFileService.createBoardFile(file);
             }
-            mv.setViewName("redirect:/boardList/1");
+            mv.setViewName("redirect:/boardList");
         } catch (Exception e){
             e.printStackTrace();
         }

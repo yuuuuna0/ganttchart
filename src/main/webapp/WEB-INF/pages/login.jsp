@@ -6,8 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <!-- Required meta tags -->
@@ -39,20 +37,15 @@
                             <img src="../../images/logo.svg" alt="logo">
                         </div>
                         <h4>Hello! let's get started</h4>
-                        <h4><c:out value="${error}"/></h4>
-                        <h4><c:out value="${logout}"/></h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
-<%--                        <h6 class="font-weight-light"><c:out value="${error}"/></h6>--%>
-<%--                        <h6 class="font-weight-light"><c:out value="${logout}"/></h6>--%>
                         <form class="pt-3" name="loginF">
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-lg" id="id" name="username" placeholder="ID">
+                                <input type="text" class="form-control form-control-lg" id="id" name="id" placeholder="ID">
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
                             </div>
                             <div class="mt-3">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input type="button" id="loginBtn" name="loginBtn" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
                             </div>
                             <div class="my-2 d-flex justify-content-between align-items-center">
