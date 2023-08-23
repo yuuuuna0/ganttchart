@@ -39,4 +39,19 @@ public class CommentsServiceImpl implements CommentsService{
     public int updateGroupNo(int curKey) {
         return commentsDao.updateGroupNo(curKey);
     }
+
+    @Override
+    public int deleteComments(int commentsNo) throws Exception{
+        return commentsDao.deleteComments(commentsNo);
+    }
+
+    @Override
+    public Comments findCommentByCommentsNo(int commentsNo) throws Exception{
+        return commentsDao.findCommentByCommentsNo(commentsNo);
+    }
+
+    @Override
+    public int updateComments(int commentsNo,String commentsContent) throws Exception {
+        return commentsDao.updateComments(commentsNo,commentsContent);
+    }
 }

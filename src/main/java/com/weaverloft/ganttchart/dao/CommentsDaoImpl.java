@@ -49,4 +49,22 @@ public class CommentsDaoImpl implements CommentsDao {
     public int updateGroupNo(int curKey) {
         return commentsMapper.updateGroupNo(curKey);
     }
+
+    @Override
+    public int deleteComments(int commentsNo) throws Exception {
+        return commentsMapper.deleteComments(commentsNo);
+    }
+
+    @Override
+    public Comments findCommentByCommentsNo(int commentsNo) throws Exception {
+        return commentsMapper.findCommentByCommentsNo(commentsNo);
+    }
+
+    @Override
+    public int updateComments(int commentsNo,String commentsContent) throws Exception {
+        Map<String,Object> map =new HashMap<>();
+        map.put("commentsNo", commentsNo);
+        map.put("commentsContent", commentsContent);
+        return commentsMapper.updateComments(map);
+    }
 }

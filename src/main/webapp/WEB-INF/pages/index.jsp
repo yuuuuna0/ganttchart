@@ -21,19 +21,19 @@
     <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="vendors/feather/feather.css">
-    <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../../vendors/feather/feather.css">
+    <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" type="text/css" href="js/select.dataTables.min.css">
+    <link rel="stylesheet" href="../../vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="../../js/select.dataTables.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="css/vertical-layout-light/style.css">
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="images/favicon.png" />
+    <link rel="shortcut icon" href="../../images/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -681,25 +681,25 @@
 <!-- container-scroller -->
 
 <!-- plugins:js -->
-<script src="vendors/js/vendor.bundle.base.js"></script>
+<script src="../../vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
-<script src="vendors/chart.js/Chart.min.js"></script>
-<script src="vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-<script src="js/dataTables.select.min.js"></script>
+<script src="../../vendors/chart.js/Chart.min.js"></script>
+<script src="../../vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="../../vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="../../js/dataTables.select.min.js"></script>
 
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="js/off-canvas.js"></script>
-<script src="js/hoverable-collapse.js"></script>
-<script src="js/template.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/todolist.js"></script>
+<script src="../../js/off-canvas.js"></script>
+<script src="../../js/hoverable-collapse.js"></script>
+<script src="../../js/template.js"></script>
+<script src="../../js/settings.js"></script>
+<script src="../../js/todolist.js"></script>
 <!-- endinject -->
 <!-- Custom js for this page-->
-<script src="js/dashboard.js"></script>
-<script src="js/Chart.roundedBarCharts.js"></script>
+<script src="../../js/dashboard.js"></script>
+<script src="../../js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
 </body>
 </html>

@@ -52,10 +52,10 @@
                             <form class="forms-sample" name="modifyF" id="modifyF" enctype="multipart/form-data">
                             <!-- 프로필사진 업로드 -->
                             <div class="form-group" style="text-align: center">
-                                <c:if test = "${ loginUser.photo != null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${loginUser.photo}"/>
+                                <c:if test = "${ session.loginUser.photo != null}">
+                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${session.loginUser.photo}"/>
                                 </c:if>
-                                <c:if test = "${ loginUser.photo == null}">
+                                <c:if test = "${ session.loginUser.photo == null}">
                                     <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/default.png"/>
                                 </c:if>
                                 <br>
@@ -66,7 +66,7 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                     <label for="id">아이디</label>
-                                    <input readonly  type="text" class="form-control" id="id" name="id" value="${loginUser.id}">
+                                    <input readonly  type="text" class="form-control" id="id" name="id" value="${session.loginUser.id}">
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -78,7 +78,7 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="name">이름</label>
-                                        <input  type="text" class="form-control" id="name" name="name" value="${loginUser.name}">
+                                        <input  type="text" class="form-control" id="name" name="name" value="${session.loginUser.name}">
                                     </div>
                                     <div class="col-6">
                                         <label for="gender">성별</label>
@@ -90,22 +90,22 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">이메일</label>
-                                    <input  type="email" class="form-control" id="email" name="email" value="${loginUser.email}">
+                                    <input  type="email" class="form-control" id="email" name="email" value="${session.loginUser.email}">
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="phone">전화번호</label>
-                                        <input  type="text" class="form-control" id="phone" name="phone" value="${loginUser.phone}">
+                                        <input  type="text" class="form-control" id="phone" name="phone" value="${session.loginUser.phone}">
                                     </div>
                                     <div class="col-6">
                                         <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth" placeholder="${loginUser.birth}">
+                                        <input type="date" class="form-control" id="birth" name="birth" placeholder="${session.loginUser.birth}">
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="address">주소</label>
-                                        <input type="text" class="form-control" id="address" name="address" value="${loginUser.address}">
+                                        <input type="text" class="form-control" id="address" name="address" value="${session.loginUser.address}">
                                     </div>
                                     <div class="col-6">
                                         <label for="detailedAddress">&nbsp;</label>

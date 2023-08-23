@@ -15,13 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/board/*")
@@ -121,26 +117,28 @@ public class BoardController {
     @LoginCheck
     @GetMapping("/register")
     public String boardCreate(){
-        return "/board/register";
+        return "board/register";
     }
     //3-1 게시글 작성하기 액션
     @LoginCheck
     @PostMapping("/register-action")
     public String boardCreateAction(@ModelAttribute Board board, MultipartHttpServletRequest mf, HttpSession session){
         String forwardPath = "";
-        List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
         Users loginUser=(Users)session.getAttribute("loginUser");
+        List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
         board.setId(loginUser.getId());
         try{
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
-            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
-            for(MultipartFile boardFile : boardFileList){
-                String fileName = fileService.uploadFile(boardFile,filePath);
-                BoardFile file = new BoardFile(0,fileName,boardNo);
-                boardFileService.createBoardFile(file);
+            if(boardFileList.get(0).getSize() != 0){
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
+                for(MultipartFile boardFile : boardFileList){
+                    String fileName = fileService.uploadFile(boardFile,filePath);
+                    BoardFile file = new BoardFile(0,fileName,boardNo);
+                    boardFileService.createBoardFile(file);
+                }
             }
-            forwardPath = "redirect:/detail/"+boardNo;
+            forwardPath = "redirect:/board/detail/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -154,7 +152,7 @@ public class BoardController {
         String forwardPath ="";
         try{
             boardService.deleteBoard(boardNo);
-            forwardPath = "redirect:/list/1";
+            forwardPath = "redirect:/board/list/1";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -186,13 +184,15 @@ public class BoardController {
         List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
         try{
             int result = boardService.updateBoard(board);
-            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
-            for(MultipartFile boardFile : boardFileList){
-                String fileName = fileService.uploadFile(boardFile,filePath);
-                BoardFile file = new BoardFile(0,fileName,board.getBoardNo());
-                boardFileService.createBoardFile(file);
+            if(boardFileList.get(0).getSize() != 0){
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
+                for(MultipartFile boardFile : boardFileList){
+                    String fileName = fileService.uploadFile(boardFile,filePath);
+                    BoardFile file = new BoardFile(0,fileName,boardNo);
+                    boardFileService.createBoardFile(file);
+                }
             }
-            forwardPath = "redirect:/modify/"+boardNo;
+            forwardPath = "redirect:/board/modify/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
         }

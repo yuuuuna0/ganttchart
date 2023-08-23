@@ -29,16 +29,16 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#user" aria-expanded="false" aria-controls="auth">
+            <a class="nav-link" data-toggle="collapse" href="#user" aria-expanded="false" aria-controls="user">
                 <i class="icon-head menu-icon"></i>
                 <span class="menu-title">유저</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="user">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/user/login"> 로그인 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/login"> 로그인 </a></li>
                     <li class="nav-item"> <a class="nav-link" href="/user/register"> 회원가입 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/user/detail/admin"> 마이페이지 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/detail"> 마이페이지 </a></li>
                 </ul>
             </div>
         </li>
@@ -56,7 +56,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="auth">
+            <a class="nav-link" data-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="menu">
                     <i class="icon-head menu-icon"></i>
                     <span class="menu-title">메뉴관리</span>
                     <i class="menu-arrow"></i>

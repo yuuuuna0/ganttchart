@@ -31,14 +31,14 @@
 <body>
 <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
-    <jsp:include page="include/navbar.jsp"/>
+    <jsp:include page="../include/navbar.jsp"/>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_settings-panel.html -->
-        <jsp:include page="include/settings-panel.jsp"/>
+        <jsp:include page="../include/settings-panel.jsp"/>
         <!-- partial -->
         <!-- partial:partials/_sidebar.html -->
-        <jsp:include page="include/sidebar.jsp"/>
+        <jsp:include page="../include/sidebar.jsp"/>
         <!-- partial -->
     <div class="main-panel">
         <div class="content-wrapper">
@@ -66,9 +66,10 @@
                                     </div>
                                 </div>
                             </form>
+                            <div style="text-align: center">
                                 <input type="button" id="boardWriteBtn" name="boardWriteBtn" class="btn btn-primary mr-2" onclick="boardWrite()" value="작성">
                                 <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" value="취소">
-
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +77,7 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
-        <jsp:include page="include/footer.jsp"/>
+        <jsp:include page="../include/footer.jsp"/>
         <!-- partial -->
     </div>
     <!-- main-panel ends -->
@@ -141,7 +142,7 @@
                document.getElementById("fileList").innerHTML +=
                    '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
                    + f.name
-                   + '<img src="file:///C:/home/01.Project/01.InteliJ/ganttchart/src/main/webapp/resources/static/images/icon_minus.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>'
+                   + '<img src="file:///C:/home/01.Project/01.InteliJ/ganttchart/src/main/webapp/resources/static/images/icon_X.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>'
                    + '</div>';
                fileNo++;
             };
@@ -186,10 +187,10 @@
             document.getElementById("boardContent").focus();
             return false;
         }
-        fileDelete("file"+(maxCount+1));
+        fileDelete("file"+(maxCount+1));    //이거 왜한거더라
 
         document.getElementById("boardWriteF").method = 'POST';
-        document.getElementById("boardWriteF").action = '/boardWrite-action';
+        document.getElementById("boardWriteF").action = '/board/register-action';
         document.getElementById("boardWriteF").submit();
     }
 

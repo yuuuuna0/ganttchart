@@ -31,14 +31,14 @@
 <body>
 <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
-    <jsp:include page="include/navbar.jsp"/>
+    <jsp:include page="../include/navbar.jsp"/>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_settings-panel.html -->
-        <jsp:include page="include/settings-panel.jsp"/>
+        <jsp:include page="../include/settings-panel.jsp"/>
         <!-- partial -->
         <!-- partial:partials/_sidebar.html -->
-        <jsp:include page="include/sidebar.jsp"/>
+        <jsp:include page="../include/sidebar.jsp"/>
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
@@ -99,7 +99,7 @@
                                             <!-- preview -->
                                             <c:if test="${boardListPage.pageMaker.prevGroupStartPage > 0}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/boardList/${boardListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                    <a class="page-link" href="/board/list/${boardListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
@@ -109,18 +109,18 @@
                                                 <c:forEach begin="${boardListPage.pageMaker.blockBegin}" end="${boardListPage.pageMaker.blockEnd}" var="no">
                                                             <c:if test="${no == boardListPage.pageMaker.curPage}">
                                                                 <li class="page-item active">
-                                                                    <a class="page-link" href="/boardList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/board/list/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                             <c:if test="${no != boardListPage.pageMaker.curPage}">
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="/boardList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/board/list/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                 </c:forEach>
                                             <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/boardList/${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                    <a class="page-link" href="/board/list/${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
                                                         <span aria-hidden="true">&raquo;</span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
@@ -136,7 +136,7 @@
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:../../partials/_footer.html -->
-            <jsp:include page="include/footer.jsp"/>
+            <jsp:include page="../include/footer.jsp"/>
             <!-- partial -->
         </div>
         <!-- main-panel ends -->
@@ -161,7 +161,7 @@
 </body>
 <script>
     function goToBoardList(boardNo){
-        window.location.href='/boardDetail/'+boardNo;
+        window.location.href='/board/detail/'+boardNo;
     }
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
@@ -214,18 +214,6 @@
             },
             async : true
         });
-    }
-
-    function render(templateId, jsonResult={},contentId) {
-        // let templateHtml = $(templateId).html(); // id로 메인페이지 화면의 html 얻기
-        // let bindTemplate = Handlebars.compile(templateHtml);
-        // let resultTemplate = bindTemplate(jsonResult); // {}에 JSON객체/JSON Array 넣어줌 => 메인페이지 화면 + JSON 데이터 합친 결과 = resultTemplate
-        // $(templateId).html(resultTemplate); // content 부분에 resultTemplate 넣기
-
-        let templateHtml = $(templateId).html(); // id로 메인페이지 화면의 html 얻기
-        let bindTemplate = Handlebars.compile(templateHtml);
-        let resultTemplate = bindTemplate(jsonResult); // {}에 JSON객체/JSON Array 넣어줌 => 메인페이지 화면 + JSON 데이터 합친 결과 = resultTemplate
-        $(contentId).html(resultTemplate); // content 부분에 resultTemplate 넣기
     }
 
 </script>

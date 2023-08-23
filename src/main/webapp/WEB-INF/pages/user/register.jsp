@@ -245,7 +245,7 @@
         }
 
         document.registerF.method = 'POST';
-        document.registerF.action = 'register-action';
+        document.registerF.action = '/user/register-action';
         document.registerF.submit();
 
     }

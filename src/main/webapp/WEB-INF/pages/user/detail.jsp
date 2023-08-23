@@ -50,10 +50,10 @@
                                 <h4 class="card-title">회원가입</h4>
                                 <!-- 프로필사진 업로드 -->
                                 <div class="form-group" style="text-align: center">
-                                    <c:if test = "${ loginUser.photo != null}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${loginUser.photo}"/>
+                                    <c:if test = "${ session.loginUser.photo != null}">
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${session.loginUser.photo}"/>
                                     </c:if>
-                                    <c:if test = "${ loginUser.photo == null}">
+                                    <c:if test = "${ session.loginUser.photo == null}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/default.png"/>
                                     </c:if>
                                 </div>
@@ -61,7 +61,7 @@
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="id">아이디</label>
-                                            <input readonly type="text" class="form-control" id="id" name="id" value="${loginUser.id}">
+                                            <input readonly type="text" class="form-control" id="id" name="id" value="${session.loginUser.getId()}">
                                         </div>
                                     </div>
                                     <div class="row form-group">
@@ -73,16 +73,16 @@
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="name">이름</label>
-                                            <input readonly type="text" class="form-control" id="name" name="name" value="${loginUser.name}">
+                                            <input readonly type="text" class="form-control" id="name" name="name" value="${session.loginUser.name}">
                                         </div>
                                         <div class="col-6">
                                             <label for="gender">성별</label>
                                             <select class="form-control" id="gender" name="gender">
-                                                <c:if test="${loginUser.gender == 1}">
+                                                <c:if test="${session.loginUser.gender == 1}">
                                                     <option selected>남</option>
                                                     <option>여</option>
                                                 </c:if>
-                                                <c:if test="${loginUser.gender == 2}">
+                                                <c:if test="${session.loginUser.gender == 2}">
                                                     <option>남</option>
                                                     <option selected>여</option>
                                                 </c:if>
@@ -91,22 +91,22 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="email">이메일</label>
-                                        <input readonly type="email" class="form-control" id="email" name="email" value="${loginUser.email}">
+                                        <input readonly type="email" class="form-control" id="email" name="email" value="${session.loginUser.email}">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="phone">전화번호</label>
-                                            <input readonly type="text" class="form-control" id="phone" name="phone" value="${loginUser.phone}">
+                                            <input readonly type="text" class="form-control" id="phone" name="phone" value="${session.loginUser.phone}">
                                         </div>
                                         <div class="col-6">
                                             <label for="birth">생일</label>
-                                            <input readonly type="text" class="form-control" id="birth" name="birth" value="${loginUser.birth}">
+                                            <input readonly type="text" class="form-control" id="birth" name="birth" value="${session.loginUser.birth}">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="address">주소</label>
-                                            <input readonly type="text" class="form-control" id="address" name="address" value="${loginUser.address}">
+                                            <input readonly type="text" class="form-control" id="address" name="address" value="${session.loginUser.address}">
                                         </div>
                                     </div>
                                     <div style="text-align:center;">

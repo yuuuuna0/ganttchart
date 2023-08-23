@@ -18,4 +18,10 @@ public interface CommentsDao {
     int findCurCommentsNo() throws Exception;
     //6. 모댓글 groupNo 업데이트
     int updateGroupNo(int curKey);
+    //7. 댓글 삭제
+    int deleteComments(int commentsNo) throws Exception;
+    //8. 댓글 번호로 댓글 찾기
+    Comments findCommentByCommentsNo(int commentsNo) throws Exception;
+    //9. 댓글내용 수정
+    int updateComments(int commentsNo,String commentsContent) throws Exception;
 }

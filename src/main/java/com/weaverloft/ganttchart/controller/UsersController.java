@@ -17,10 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user/*")
 public class UsersController {
     private UsersService usersService;
     private SHA256Service sha256Service;
@@ -40,21 +40,22 @@ public class UsersController {
         this.usersLogService = usersLogService;
     }
     //1-1. 회원가입 페이지
-    @GetMapping("/register")
+    @GetMapping("/user/register")
     public String register(){
-        return "register";
+        return "/user/register";
     }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @ResponseBody
-    @PostMapping(value = "register-action")
-    public ModelAndView registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile, ModelAndView mv) throws Exception{
+    @PostMapping(value = "/user/register-action")
+    public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
+        String forwardPath = "";
         MultipartFile photoFile = multipartFile.getFile("photoFile");
         try {
             if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
                 System.out.println("이미 존재하는 아이디입니다.");
-                mv.setViewName("redirect:/login");
-                return mv;
+                forwardPath = "redirect:/login";
+                return forwardPath;
             }
 /*
             if(usersService.isValidPassword(password)){
@@ -73,7 +74,7 @@ public class UsersController {
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
             if(photoFile !=null){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\users\\";
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
                 String photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
                 System.out.println("사진 있다");
@@ -87,22 +88,22 @@ public class UsersController {
             String id= users.getId();
             System.out.println(id);
             usersLogService.createLog(id,0);    //가입완료 로그:0 남기기
-            mv.setViewName("redirect:/login");
+            forwardPath = "redirect:/login";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //2-1. 로그인 페이지 --> 완료
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "/login";
     }
     //2-2. 로그인 액션 --> 완료
     @PostMapping("/login-action")
-    public ModelAndView loginAction(HttpSession session,ModelAndView mv,
-                                    @RequestParam Map map) {
+    public String loginAction(HttpSession session, @RequestParam Map map) {
+        String forwardPath = "";
         String id=(String)map.get("id");
         String password=(String)map.get("password");
         try{
@@ -112,89 +113,100 @@ public class UsersController {
             session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
             if(loginUser.getAuthStatus()==0){
                 //미인증 사용자(첫번째 로그인)
-                mv.setViewName("redirect:/emailAuth");
+                forwardPath = "redirect:/user/emailAuth";
             } else if(loginUser.getAuthStatus()==1) {
                 //인증된 사용자
                 System.out.println("로그인 성공");
                 int result=usersLogService.createLog(loginUser.getId(),10);
-                mv.addObject("loginUser",loginUser);
-                mv.setViewName("redirect:/");
+                forwardPath = "redirect:/";
             }
         } catch (Exception e){
             e.printStackTrace();
             System.out.println("로그인 실패");
-            mv.setViewName("redirect:/login");
+            forwardPath = "redirect:/login";
         }
-        return mv;
+        return forwardPath;
     }
     //2-3. 로그아웃 액션 --> 완료
     @LoginCheck
-    @GetMapping("/logout-action")
+    @PostMapping("/logout-action")
     public String logoutAction(HttpSession session) {
+        String forwardPath = "";
         try{
             Users users=(Users)session.getAttribute("loginUser");
             session.invalidate();
             usersLogService.createLog(users.getId(),11);
+            forwardPath = "redirect:/";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "redirect:/";
+        return forwardPath;
     }
     //2-4. 이메일 인증 페이지 --> 완료
     @LoginCheck
-    @GetMapping("emailAuth")
+    @GetMapping("/user/emailAuth")
     public String emailAuth(){
-        return "emailAuth";
+        return "/user/emailAuth";
     }
     //2-5. 이메일 인증 액션 --> 완료
     @LoginCheck
-    @PostMapping("emailAuth-action")
-    public ModelAndView emailAuthAction(HttpSession session,@RequestParam Map map, ModelAndView mv){
+    @PostMapping("/user/emailAuth-action")
+    public String emailAuthAction(HttpSession session,@RequestParam Map map){
+        String forwardPath = "";
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
             if(authKey.equals(loginUser.getAuthKey())){
                 usersService.updateAuthStatus(loginUser.getId());   //회원 인증 완료
                 usersLogService.createLog(loginUser.getId(),1);        //인증완료 로그:1 남기기
+                session.setAttribute("loginUser",loginUser);
+                forwardPath = "redirect:/";
             } else{
-                System.out.println("인증번호가 다릅니다");   //인증이 안됨,,,,
-                mv.setViewName("redirect:/emailAuth");
+                System.out.println("인증번호가 다릅니다");
+                forwardPath = "redirect:/user/emailAuth";
             }
-            session.setAttribute("loginUser",loginUser);
-            mv.setViewName("redirect:/");
         }catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //3-1. 아이디 찾기 페이지 --> 완료
-    @GetMapping("/findId")
+    @GetMapping("/user/findId")
     public String findId(){
-        return "findId";
+        return "/user/findId";
     }
-    //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함
-    @PostMapping("/findId-action")
-    public ModelAndView findIdAction(@RequestParam Map map, ModelAndView mv) {
+    //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함 --> ajax
+    @PostMapping("/user/findId-ajax")
+    public Map<String,Object> findIdAjax(@RequestParam Map map) {
+        Map<String, Object> resultMap = new HashMap<>();
+        int code = 1;
+        String msg = "성공";
+        String data = "";
         String name=(String)map.get("name");
         String email=(String)map.get("email");
         try{
             String findId=usersService.findIdByNameEmail(name,email);
-            mv.addObject("findId",findId);
-            mv.setViewName("complete");  //출력 창 만들기?
+            data = findId;
         } catch (Exception e){
             e.printStackTrace();
+            code = 2;
+            msg = "실패";
         }
-        return mv;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("data", data);
+        return resultMap;
     }
     //4-1. 비밀번호 찾기 페이지 --> 완료
-    @GetMapping("/findPassword")
+    @GetMapping("/user/findPassword")
     public String findPassword(){
-        return "findPassword";
+        return "/user/findPassword";
     }
     //4-2. 비밀번호 찾기 액션 --> 완료
-    @PostMapping("/findPassword-action")
-    public ModelAndView findPasswordAction(@RequestParam Map map, ModelAndView mv) {
+    @PostMapping("/user/findPassword-action")
+    public String findPasswordAction(@RequestParam Map map) {
+        String forwardPath = "";
         String id=(String)map.get("id");
         String name = (String)map.get("name");
         String email=(String)map.get("email");
@@ -209,41 +221,42 @@ public class UsersController {
                 String encryptTempPassword = sha256Service.encrypt(tempPassword);
                 System.out.println("임시비번 암호화: "+encryptTempPassword);
                 usersService.updatePassword(id,encryptTempPassword);
-                mv.setViewName("login");
+                forwardPath = "redirect:/login";
             }
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //5.마이페이지 --> 완료
     @LoginCheck
-    @GetMapping(value="mypage")
-    public ModelAndView mypage(HttpSession session,ModelAndView mv){
+    @GetMapping(value="/user/detail")
+    public String mypage( HttpSession session,Model model){
+        String forwardPath = "";
         try{
             Users loginUser=(Users)session.getAttribute("loginUser");
-            mv.addObject("loginUser",loginUser);
-            mv.setViewName("mypage");
+            model.addAttribute("loginUser",loginUser);
+            forwardPath = "/user/detail";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //6-1. 정보 수정 페이지
     @LoginCheck
-    @GetMapping("/modify")
+    @GetMapping("/user/modify")
     public String modifyUser( HttpSession session, Model model){
         String forwardPath = "";
         Users loginUser = (Users)session.getAttribute("loginUser");
         model.addAttribute("loginUser",loginUser);
-        forwardPath = "modify";
+        forwardPath = "/user/modify";
         return forwardPath;
     }
     //6-2. 정보 수정 액션
     @LoginCheck
-    @PostMapping("modifyUser-action")
+    @PostMapping("/user/modifyUser-action")
     public String modifyUserAction(@ModelAttribute Users users, HttpSession session, MultipartHttpServletRequest multipartFile){
         String forwardPath ="";
         Users loginUser = (Users)session.getAttribute("loginUser");
@@ -251,7 +264,7 @@ public class UsersController {
         String photo="";
         try{
             if(photoFile !=null){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\users\\";
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
                 photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
             } else{
@@ -269,7 +282,7 @@ public class UsersController {
 
     //7. 회원탈퇴 --> 완료
     @LoginCheck
-    @GetMapping("/deleteUser")
+    @GetMapping("/delete-action")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";
         Users loginUser=(Users)session.getAttribute("loginUser");
@@ -287,35 +300,37 @@ public class UsersController {
 
     //1. 회원리스트 출력
     @AdminCheck
-    @GetMapping("/admin/userList/{pageNo}")
-    public ModelAndView userList(@PathVariable int pageNo,
+    @GetMapping("/user/list/{pageNo}")
+    public String userList(@PathVariable int pageNo,
                                  @RequestParam(required = false) String keyword,
                                  HttpSession session,
-                                 ModelAndView mv){
+                                 Model model){
+        String forwardPath = "";
         try{
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
-            mv.addObject("userListPage",userListPage);
-            mv.setViewName("userList");
+            model.addAttribute("userListPage",userListPage);
+            forwardPath = "/user/list/"+pageNo;
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
     //2. 회원 로그 출력
     @AdminCheck
-    @GetMapping("/admin/userLog/{pageNo}")
-    public ModelAndView userLog(@PathVariable int pageNo,
+    @GetMapping("/user/log/{pageNo}")
+    public String userLog(@PathVariable int pageNo,
                                 @RequestParam(required = false) String keyword,
                                 HttpSession session,
-                                ModelAndView mv){
+                                Model model){
+        String forwardPath = "";
         try{
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
-            mv.addObject("usersLogPage",usersLogPage);
-            mv.setViewName("userLog");
+            model.addAttribute("usersLogPage",usersLogPage);
+            forwardPath = "/user/log/"+pageNo;
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 }
 
