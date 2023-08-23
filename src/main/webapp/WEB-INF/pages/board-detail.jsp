@@ -138,7 +138,7 @@
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:../../partials/_footer.html -->
-            <jsp:include page="../include/footer.jsp"/>
+            <jsp:include page="include/footer.jsp"/>
             <!-- partial -->
         </div>
         <!-- main-panel ends -->
