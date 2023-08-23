@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators">
+<!-- 데코레이터 적용 안 할 곳   -->
+<!--    <excludes>-->
+<!--        <pattern></pattern>-->
+<!--    </excludes>-->
+<!--    <decorator name="cm_top" page="/views/layout/cm_top.jsp" />-->
+<!--    <decorator name="cm_left" page="/views/layout/cm_left.jsp" />-->
+<!--    <decorator name="cm_bottom" page="/views/layout/cm_bottom.jsp" />-->
+<!--    <decorator name="cm_layout" page="/views/layout/cm_layout.jsp">-->
+<!--        <pattern>/*</pattern>-->
+<!--    </decorator>-->
+    <excludes>
+        <pattern>*ajax.do</pattern>
+        <pattern>*json.do</pattern>
+        <pattern>*save.do</pattern>
+        <pattern>/login</pattern>
+        <pattern>*/include/*</pattern>
+        <pattern>*.html*</pattern>
+    </excludes>
+    <decorator name="webLayout" page="/WEB-INF/views/layout/cm_layout.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+<!--    <decorator name="popupLayout" page="/WEB-INF/views/layout/cm_popup_layout.jsp">-->
+<!--        <pattern>/*_popup.do</pattern>-->
+<!--        <pattern>*redirectAlert.do</pattern>-->
+<!--        &lt;!&ndash; header가 없는 화면 &ndash;&gt;-->
+<!--    </decorator>-->
+</decorators>

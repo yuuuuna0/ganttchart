@@ -45,7 +45,7 @@ public class BoardController {
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
 //            model.addAttribute("boardCommentCount",boardCommentCount);
             model.addAttribute("boardListPage",boardListPage);
-            model.addAttribute("loginUser",loginUser);
+//            model.addAttribute("loginUser",loginUser);
             forwardPath="/board/list";
         } catch (Exception e){
             e.printStackTrace();

@@ -5,6 +5,7 @@ import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +26,19 @@ public class HomeController {
 
     @GetMapping("/")
     //시작 페이지
-    public ModelAndView index(ModelAndView mv) {
+    public String index(Model model) {
+        String forward = "";
         String keyword =null;
         try{
             //조회수 탑5 게시글 붙이기
             int no = 5;
             List<Board> boardTopList = boardService.findBoardTopList(no);
-            mv.addObject("boardTopList", boardTopList);
-            mv.setViewName("index");
+            model.addAttribute("boardTopList", boardTopList);
+            forward = "index";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forward;
     }
 
     @GetMapping("/error")
