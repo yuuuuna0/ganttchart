@@ -14,18 +14,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Skydash Admin</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="../../../vendors/feather/feather.css">
-    <link rel="stylesheet" href="../../../vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="../../../vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../../vendors/feather/feather.css">
+    <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="../../../vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="../../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="../../vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../../../css/vertical-layout-light/style.css">
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="../../../images/favicon.png" />
+    <link rel="shortcut icon" href="../../images/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
@@ -64,7 +64,7 @@
                                             <c:forEach items="${boardFileList}" var="boardFile">
                                                 <div id="file'+ fileNo + '" style="font-size:12px;">
                                                         ${boardFile.fileName}
-                                                    <img src="../../../images/icon_download.jpg" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
+                                                    <img src="images/icon_download.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
                                                 </div>
                                             </c:forEach>
                                         </div>
@@ -101,13 +101,13 @@
                                                     &nbsp
                                                 </div>
                                                 <div class="col-11">
-                                                    <img src="../../../images/icon_subComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
+                                                    <img src="../../images/icon_subComment.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
                                                     <span class="mr-3">${comment.id}</span>
                                                     <span class="mr-3" id="commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                                     <span class="mr-2">${comment.commentsDate}</span>
                                                     <span>
-                                                        <img src="../../../images/icon_modify.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
-                                                        <img src="../../../images/icon_bin.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
+                                                        <img src="../../images/icon_modify.png" name="modifyComment" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="modifyComments(${comment.commentsNo},'${comment.commentsContent}');"/>
+                                                        <img src="/images/icon_bin.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteComments(${comment.commentsNo});"/>
                                                     </span>
                                                 </div>
                                             </c:if>
@@ -148,23 +148,23 @@
 
 
 <!-- plugins:js -->
-<script src="../../../vendors/js/vendor.bundle.base.js"></script>
+<script src="../../vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
-<script src="../../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-<script src="../../../vendors/select2/select2.min.js"></script>
+<script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+<script src="../../vendors/select2/select2.min.js"></script>
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="../../../js/off-canvas.js"></script>
-<script src="../../../js/hoverable-collapse.js"></script>
-<script src="../../../js/template.js"></script>
-<script src="../../../js/settings.js"></script>
-<script src="../../../js/todolist.js"></script>
+<script src="../../js/off-canvas.js"></script>
+<script src="../../js/hoverable-collapse.js"></script>
+<script src="../../js/template.js"></script>
+<script src="../../js/settings.js"></script>
+<script src="../../js/todolist.js"></script>
 <!-- endinject -->
 <!-- Custom js for this page-->
-<script src="../../../js/file-upload.js"></script>
-<script src="../../../js/typeahead.js"></script>
-<script src="../../../js/select2.js"></script>
+<script src="../../js/file-upload.js"></script>
+<script src="../../js/typeahead.js"></script>
+<script src="../../js/select2.js"></script>
 <script src="../../images"></script>
 <!-- End custom js for this page-->
 <script>
