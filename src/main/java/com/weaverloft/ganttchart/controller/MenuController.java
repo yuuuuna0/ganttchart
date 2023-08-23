@@ -27,7 +27,7 @@ public class MenuController {
     @AdminCheck
     @GetMapping("/register")
     public String menuCreate(){
-        return "/register";
+        return "/menu/register";
     }
     //1-1. 메뉴(메뉴) 만들기 액션    //상위메뉴(parentId:0) 하위메뉴
     @AdminCheck
@@ -36,7 +36,7 @@ public class MenuController {
         String forwardPath="";
         try{
             int result = menuService.createMenu(menu);
-            forwardPath = "redirect:menuList";
+            forwardPath = "redirect:/menu/list/1";
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -46,49 +46,59 @@ public class MenuController {
 
     //2-2. 메뉴 상세보기 페이지
     @AdminCheck
-    @GetMapping("menuDetail/{menuNo}")
+    @GetMapping("/detail/{menuNo}")
     public String menuDetail(@PathVariable int menuNo,Model model){
+        String forwardPath = "";
         try{
             Menu menu = menuService.findMenuByNo(menuNo);
             model.addAttribute("menu",menu);
+            forwardPath = "/menu/detail";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "menuDetail";
+        return forwardPath;
     }
 
     //2-1. 메뉴 수정하기 액션
     @AdminCheck
-    @PostMapping("menuModify-action")
-    public Map<String,Object> menuModifyAction(){
-        Map<String,Object> resultMap = new HashMap<>();
-        return resultMap;
-    }
-
-
-    //3. 메뉴 전체리스트 불러오기
-    @AdminCheck
-    @GetMapping("menuList/{pageNo}")
-    public String menuList(@PathVariable int pageNo, Model model){
-        String forwardPath;
+    @PostMapping("/modify-action/{menuNo}")
+    public String menuModifyAction(@PathVariable int menuNo, @ModelAttribute Menu menu) {
+        String forwardPath = "";
         try{
-            PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo);
-            model.addAttribute("menuListPage",menuListPage);
+            int result = menuService.updateMenu(menu);
+            forwardPath = "redirect:/menu/detail/"+menu.getMenuNo();
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "menuList";
+        return forwardPath;
+    }
+
+    //3. 메뉴 전체리스트 불러오기
+    @AdminCheck
+    @GetMapping("/list/{pageNo}")
+    public String menuList(@PathVariable int pageNo, Model model){
+        String forwardPath = "";
+        try{
+            PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo);
+            model.addAttribute("menuListPage",menuListPage);
+            forwardPath = "/menu/list";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
     }
 
     //4. 메뉴 삭제 액션
     @AdminCheck
-    @PostMapping("menuDelete-action")
-    public String menuDeleteAction(int menuNo){
+    @PostMapping("delete-action/{menuNo}")
+    public String menuDeleteAction(@PathVariable int menuNo){
+        String forwardPath = "";
         try{
             int result = menuService.deleteMenu(menuNo);
+            forwardPath = "redirect:/menu/list/1";
         } catch (Exception e){
             e.printStackTrace();
         }
-        return "redirect:menuList";
+        return forwardPath;
     }
 }

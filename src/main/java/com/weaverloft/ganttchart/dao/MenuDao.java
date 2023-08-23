@@ -15,5 +15,6 @@ public interface MenuDao {
     List<Menu> findMenuList(int pageBegin, int pageEnd) throws Exception;
     //5. 전체 메뉴 개수
     int findMenuCount() throws Exception;
-
+    //6. 메뉴 업데이트하기
+    int updateMenu(Menu menu);
 }

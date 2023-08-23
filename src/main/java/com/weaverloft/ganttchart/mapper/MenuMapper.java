@@ -18,4 +18,6 @@ public interface MenuMapper {
     List<Menu> findMenuList(Map<String,Object> map);
     //5. 전체 메뉴 개수
     int findMenuCount();
+    //6. 메뉴 수정하기
+    int updateMenu(Menu menu);
 }

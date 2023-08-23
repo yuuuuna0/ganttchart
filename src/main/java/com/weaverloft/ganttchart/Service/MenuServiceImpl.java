@@ -39,4 +39,9 @@ public class MenuServiceImpl implements MenuService {
         PageMakerDto<Menu> pageMakerMenuList = new PageMakerDto<>(menuList,pageMaker,totMenuCount);
         return pageMakerMenuList;
     }
+
+    @Override
+    public int updateMenu(Menu menu) {
+        return menuDao.updateMenu(menu);
+    }
 }

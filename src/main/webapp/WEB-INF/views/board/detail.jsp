@@ -36,10 +36,12 @@
                                             </c:forEach>
                                         </div>
                                     </div>
+                                    <c:if test="${session.loginUser != null && session.loginUser.id == board.id}">
                                     <div style="text-align: right">
                                         <input type="button" id="boardCreateBtn" name="boardCreateBtn" class="btn btn-primary mr-2" onclick="location.href='/board/modify/${board.boardNo}'" value="수정">
                                         <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/board/delete-action/${board.boardNo}'" value="삭제">
                                     </div>
+                                    </c:if>
                                 </div>
                             </div>
                             <hr>

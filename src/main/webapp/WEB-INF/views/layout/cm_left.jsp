@@ -67,7 +67,7 @@
     <ul class="nav flex-column sub-menu">
     <li class="nav-item"> <a class="nav-link" href="/menu/register"> 메뉴만들기 </a></li>
     <li class="nav-item"> <a class="nav-link" href="/menu/list/1"> 메뉴리스트 </a></li>
-    <li class="nav-item"> <a class="nav-link" href="/menu/detail"> 메뉴상세보기 </a></li>
+    <li class="nav-item"> <a class="nav-link" href="/menu/detail/2"> 메뉴상세보기 </a></li>
     </ul>
     </div>
     </li>

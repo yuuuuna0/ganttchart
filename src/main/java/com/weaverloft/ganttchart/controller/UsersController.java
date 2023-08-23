@@ -273,7 +273,7 @@ public class UsersController {
             int result = usersService.updateUsers(users);
             Users updateUser = usersService.findUsersById(loginUser.getId());
             session.setAttribute("loginUser",updateUser);   //업데이트 한 유저 세션에 담기
-            forwardPath = "redirect:/";
+            forwardPath = "redirect:/user/detail";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -282,7 +282,7 @@ public class UsersController {
 
     //7. 회원탈퇴 --> 완료
     @LoginCheck
-    @GetMapping("/delete-action")
+    @GetMapping("/user/delete-action")
     public String deleteUserAction(HttpSession session){
         String forwardPath="";
         Users loginUser=(Users)session.getAttribute("loginUser");

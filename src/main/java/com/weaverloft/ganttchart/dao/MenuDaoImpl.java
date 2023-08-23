@@ -43,4 +43,9 @@ public class MenuDaoImpl implements MenuDao{
     public int findMenuCount() throws Exception{
         return menuMapper.findMenuCount();
     }
+
+    @Override
+    public int updateMenu(Menu menu) {
+        return menuMapper.updateMenu(menu);
+    }
 }

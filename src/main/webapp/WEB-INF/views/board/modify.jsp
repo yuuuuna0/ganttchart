@@ -41,12 +41,10 @@
                                         </div>
                                     </div>
                                 </form>
-                                <c:if test="${session.loginUser != null && session.loginUser.id == board.id}">
                                     <div style="text-align: center">
                                         <input type="button" id="boardCreateBtn" name="boardCreateBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">
                                         <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/board/detail/${board.boardNo}'" value="취소">
                                     </div>
-                                </c:if>
                             </div>
                             <hr>
                             </div>

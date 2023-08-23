@@ -14,4 +14,6 @@ public interface MenuService {
     int deleteMenu(int menuNo) throws Exception;
     //4. 메뉴리스트 전체 불러오기
     PageMakerDto<Menu> findMenuList(int pageNo) throws Exception;
+    //5. 메뉴 수정하기
+    int updateMenu(Menu menu);
 }
