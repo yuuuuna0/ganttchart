@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/board/*")
 public class BoardController {
     private BoardService boardService;
     private BoardFileService boardFileService;
@@ -38,7 +39,7 @@ public class BoardController {
     }
 
     //1. 게시글 전체보기
-    @GetMapping("/boardList/{pageNo}")
+    @GetMapping("/list/{pageNo}")
     public String boardList(@PathVariable int pageNo,
                             @RequestParam(required = false) String keyword,
                             Model model,HttpSession session) {
@@ -49,21 +50,21 @@ public class BoardController {
 //            model.addAttribute("boardCommentCount",boardCommentCount);
             model.addAttribute("boardListPage",boardListPage);
             model.addAttribute("loginUser",loginUser);
-            forwardPath="/boardList";
+            forwardPath="/board/list";
         } catch (Exception e){
             e.printStackTrace();
             forwardPath="error";
         }
         return forwardPath;
     }
-    //2. 게시글 검색하기, 조회수, 작성일 오름차순 내림차순 적용
-    @ResponseBody
-    @PostMapping("/boardList")
-    public Map<String,Object> searchBoardList(){
-        Map<String,Object> resultMap = new HashMap<>();
-
-        return resultMap;
-    }
+//    //2. 게시글 검색하기, 조회수, 작성일 오름차순 내림차순 적용
+//    @ResponseBody
+//    @PostMapping("/list/{pageNo}")
+//    public Map<String,Object> searchBoardList(){
+//        Map<String,Object> resultMap = new HashMap<>();
+//
+//        return resultMap;
+//    }
 //    //1-1. 게시글 전체보기 --> ajax 적용
 //    @ResponseBody   //Http 응답의 body로 사용될 객체를 반환
 //    @PostMapping(value="/boardList-ajax")
@@ -96,35 +97,37 @@ public class BoardController {
 //    }
 
     //2. 게시글 상세보기
-    @GetMapping("/boardDetail/{boardNo}")
-    public ModelAndView boardDetail(@PathVariable int boardNo,ModelAndView mv) {
+    @GetMapping("/detail/{boardNo}")
+    public String boardDetail(@PathVariable int boardNo,Model model) {
+        String forwardPath = "";
         try {
             int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
             if(board!=null){
-                mv.addObject("board", board);
-                mv.addObject("boardFileList",boardFileList);
-                mv.addObject("commentsList", commentsList);
-                mv.setViewName("boardDetail");
+                model.addAttribute("board", board);
+                model.addAttribute("boardFileList",boardFileList);
+                model.addAttribute("commentsList", commentsList);
+                forwardPath ="/board/detail";
             }
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //3. 게시글 작성하기 페이지
     @LoginCheck
-    @GetMapping("boardWrite")
+    @GetMapping("/register")
     public String boardCreate(){
-        return "boardWrite";
+        return "/board/register";
     }
     //3-1 게시글 작성하기 액션
     @LoginCheck
-    @PostMapping("/boardWrite-action")
-    public ModelAndView boardCreateAction(@ModelAttribute Board board, MultipartHttpServletRequest mf, HttpSession session, ModelAndView mv){
+    @PostMapping("/register-action")
+    public String boardCreateAction(@ModelAttribute Board board, MultipartHttpServletRequest mf, HttpSession session){
+        String forwardPath = "";
         List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
         Users loginUser=(Users)session.getAttribute("loginUser");
         board.setId(loginUser.getId());
@@ -137,21 +140,21 @@ public class BoardController {
                 BoardFile file = new BoardFile(0,fileName,boardNo);
                 boardFileService.createBoardFile(file);
             }
-            mv.setViewName("redirect:/boardList/1");
+            forwardPath = "redirect:/detail/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
         }
-        return mv;
+        return forwardPath;
     }
 
     //4. 게시글 삭제하기
     @LoginCheck
-    @GetMapping("/deleteBoard-action/{boardNo}")
+    @GetMapping("/delete-action/{boardNo}")
     public String deleteBoardAction(@PathVariable int boardNo){
         String forwardPath ="";
         try{
             boardService.deleteBoard(boardNo);
-            forwardPath = "redirect:/boardList/1";
+            forwardPath = "redirect:/list/1";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -161,7 +164,7 @@ public class BoardController {
     //5. 게시글 수정하기
         //1) 수정폼
     @LoginCheck
-    @GetMapping("/modifyBoard/{boardNo}")
+    @GetMapping("/modify/{boardNo}")
     public String modifyBoard(@PathVariable int boardNo, Model model){
         String fowardPath = "";
         try{
@@ -169,7 +172,7 @@ public class BoardController {
             Board board = boardService.findByBoardNo(boardNo);
             model.addAttribute("board",board);
             model.addAttribute("boardFileList",boardFileList);
-            fowardPath="boardModify";
+            fowardPath="/board/modify";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -177,8 +180,8 @@ public class BoardController {
     }
         //2) 수정액션
     @LoginCheck
-    @PostMapping("/modifyBoard-action")
-    public String modifyBoardAction(@ModelAttribute Board board, MultipartHttpServletRequest mf){
+    @PostMapping("/modify-action/{boardNo}")
+    public String modifyBoardAction(@PathVariable int boardNo,@ModelAttribute Board board, MultipartHttpServletRequest mf){
         String forwardPath = "";
         List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
         try{
@@ -189,7 +192,7 @@ public class BoardController {
                 BoardFile file = new BoardFile(0,fileName,board.getBoardNo());
                 boardFileService.createBoardFile(file);
             }
-            forwardPath = "redirect:/modifyBoard/"+board.getBoardNo();
+            forwardPath = "redirect:/modify/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
         }

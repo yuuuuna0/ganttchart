@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/user/*")
 public class UsersController {
     private UsersService usersService;
     private SHA256Service sha256Service;

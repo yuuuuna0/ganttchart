@@ -22,9 +22,9 @@
             </a>
             <div class="collapse" id="board">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/boardList/1">게시판</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/boardWrite">게시글쓰기</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/boardDetail/581">게시글상세보기</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/board/list/1">게시판</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/board/register">게시글쓰기</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/board/detail/581">게시글상세보기</a></li>
                 </ul>
             </div>
         </li>
@@ -36,9 +36,9 @@
             </a>
             <div class="collapse" id="user">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/login"> 로그인 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/register"> 회원가입 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/mypage"> 마이페이지 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/login"> 로그인 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/register"> 회원가입 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/detail/admin"> 마이페이지 </a></li>
                 </ul>
             </div>
         </li>
@@ -50,8 +50,8 @@
             </a>
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/admin/userList/1"> 회원리스트 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/admin/userLog/1"> 회원로그 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/list/1"> 회원리스트 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/user/log/1"> 회원로그 </a></li>
                 </ul>
             </div>
         </li>
@@ -63,9 +63,9 @@
             </a>
             <div class="collapse" id="menu">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/menuWrite"> 메뉴만들기 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/menuList/1"> 메뉴리스트 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/menuDetail"> 메뉴상세보기 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menu/register"> 메뉴만들기 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menu/list/1"> 메뉴리스트 </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/menu/detail"> 메뉴상세보기 </a></li>
                 </ul>
             </div>
         </li>

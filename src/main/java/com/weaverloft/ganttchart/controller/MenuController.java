@@ -6,10 +6,7 @@ import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.catalog.Catalog;
@@ -18,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/menu/*")
 public class MenuController {
     private MenuService menuService;
 
@@ -27,13 +25,13 @@ public class MenuController {
 
     //1. 메뉴 만들기 페이지
     @AdminCheck
-    @GetMapping("menuWrite")
+    @GetMapping("/register")
     public String menuCreate(){
-        return "menuWrite";
+        return "/register";
     }
     //1-1. 메뉴(메뉴) 만들기 액션    //상위메뉴(parentId:0) 하위메뉴
     @AdminCheck
-    @PostMapping("menuWrite-action")
+    @PostMapping("/register-action")
     public String menuCreateAction(@ModelAttribute Menu menu){
         String forwardPath="";
         try{
