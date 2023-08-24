@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Users {
     private String id;
-    private int grade;
+    private int grade;      //admin:0
     private String password;
     private String name;
     private String photo;

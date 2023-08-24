@@ -14,5 +14,5 @@ public class Menu {
     private String menuUrl;
     private String menuDesc;
     private int parentId;
-    private String userYN;
+    private int useYN;   // 0:사용안함 1: 사용함
 }

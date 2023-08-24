@@ -8,38 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<html>
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="../../vendors/feather/feather.css">
-    <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
-    <!-- endinject -->
-    <link rel="shortcut icon" href="../../images/favicon.png" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
 
-<body>
-<div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <jsp:include page="../include/navbar.jsp"/>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_settings-panel.html -->
-        <jsp:include page="../include/settings-panel.jsp"/>
-        <!-- partial -->
-        <!-- partial:partials/_sidebar.html -->
-        <jsp:include page="../include/sidebar.jsp"/>
-        <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
@@ -78,13 +47,13 @@
                                         </thead>
                                         <tbody id="boardTbody">
                                         <c:forEach items="${menuListPage.itemList}" var="menu">
-                                            <tr style="cursor: pointer;" onclick="goToBoardList('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                            <tr style="cursor: pointer;" onclick="goToMenu('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
                                                 <td>${menu.menuNo}</td>
                                                 <td>${menu.menuOrder}</td>
                                                 <td>${menu.menuTitle}</td>
                                                 <td>${menu.menuUrl}</td>
                                                 <td>${menu.menuDesc}</td>
-                                                <td>${menu.userYN}</td>
+                                                <td>${menu.useYN}</td>
                                                 <td>${menu.parentId}</td>
                                             </tr>
                                         </c:forEach>
@@ -99,7 +68,7 @@
                                             <!-- preview -->
                                             <c:if test="${menuListPage.pageMaker.prevGroupStartPage > 0}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/menuList/${menuListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                    <a class="page-link" href="/menu/list/${menuListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
@@ -109,18 +78,18 @@
                                                 <c:forEach begin="${menuListPage.pageMaker.blockBegin}" end="${menuListPage.pageMaker.blockEnd}" var="no">
                                                             <c:if test="${no == menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item active">
-                                                                    <a class="page-link" href="/menuList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/menu/list/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                             <c:if test="${no != menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="/menuList/${no}">${no}</a>
+                                                                    <a class="page-link" href="/menu/list/${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                 </c:forEach>
                                             <c:if test="${menuListPage.pageMaker.nextGroupStartPage <= menuListPage.pageMaker.totPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/menuList/${menuListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                    <a class="page-link" href="/menu/list/${menuListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
@@ -135,33 +104,11 @@
                 </div>
             </div>
             <!-- content-wrapper ends -->
-            <!-- partial:../../partials/_footer.html -->
-            <jsp:include page="../include/footer.jsp"/>
-            <!-- partial -->
         </div>
         <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-<!-- plugins:js -->
-<script src="../../vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<!-- End plugin js for this page -->
-<!-- inject:js -->
-<script src="../../js/off-canvas.js"></script>
-<script src="../../js/hoverable-collapse.js"></script>
-<script src="../../js/template.js"></script>
-<script src="../../js/settings.js"></script>
-<script src="../../js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<!-- End custom js for this page-->
-</body>
 <script>
-    function goTomenuList(menuNo){
-        window.location.href='/menuDetail/'+menuNo;
+    function goToMenu(menuNo){
+        window.location.href='/menu/detail/'+menuNo;
     }
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
@@ -220,18 +167,5 @@
         });
     }
 
-    function render(templateId, jsonResult={},contentId) {
-        // let templateHtml = $(templateId).html(); // id로 메인페이지 화면의 html 얻기
-        // let bindTemplate = Handlebars.compile(templateHtml);
-        // let resultTemplate = bindTemplate(jsonResult); // {}에 JSON객체/JSON Array 넣어줌 => 메인페이지 화면 + JSON 데이터 합친 결과 = resultTemplate
-        // $(templateId).html(resultTemplate); // content 부분에 resultTemplate 넣기
-
-        let templateHtml = $(templateId).html(); // id로 메인페이지 화면의 html 얻기
-        let bindTemplate = Handlebars.compile(templateHtml);
-        let resultTemplate = bindTemplate(jsonResult); // {}에 JSON객체/JSON Array 넣어줌 => 메인페이지 화면 + JSON 데이터 합친 결과 = resultTemplate
-        $(contentId).html(resultTemplate); // content 부분에 resultTemplate 넣기
-    }
-
 </script>
 
-</html>

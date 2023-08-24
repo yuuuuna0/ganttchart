@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.MenuMapper">
-<!--1. 메뉴 작성하기    -->
+<!--1. 상위메뉴 작성하기    -->
     <insert id="createMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
+        <selectKey resultType="java.lang.Integer" keyProperty="menuNo" order="BEFORE">
+            select MENU_MENU_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into menu(menu_no,menu_order,menu_title,menu_url,menu_desc,parent_id,use_yn)
+        values(#{menuNo},#{menuOrder},#{menuTitle},#{menuUrl},#{menuDesc},null,#{useYN})
+    </insert>
+<!--1. 하위메뉴 작성하기    -->
+    <insert id="createSubMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
         <selectKey resultType="java.lang.Integer" keyProperty="menuNo" order="BEFORE">
             select MENU_MENU_NO_SEQ.nextval from dual
         </selectKey>
@@ -10,7 +18,7 @@
         values(#{menuNo},#{menuOrder},#{menuTitle},#{menuUrl},#{menuDesc},#{parentId},#{useYN})
     </insert>
 <!-- 2. 메뉴번호로 메뉴 찾기   -->
-    <select id="fineMenuByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
+    <select id="findMenuByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
         select * from MENU where MENU_NO=#{menuNo}
     </select>
 <!-- 3. 메뉴 삭제하기   -->
@@ -22,8 +30,16 @@
         select *
         from (select rownum idx, m.*
               from menu m
-              order by  MENU_NO desc )
+              order by  MENU_NO asc )
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
+    </select>
+<!-- 4-1. 하위메뉴 전체 불러오기   -->
+    <select id="findSubMenuList" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select * from menu where PARENT_ID=#{menuNo}
+    </select>
+<!-- 4-2. 상위메뉴 전체 불러오기   -->
+    <select id="findPreMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select * from menu where PARENT_ID is null
     </select>
 <!-- 5. 전체 메뉴 개수    -->
     <select id="findMenuCount" resultType="java.lang.Integer">
@@ -31,6 +47,10 @@
     </select>
 <!-- 6. 메뉴 수정하기   -->
     <update id="updateMenu" parameterType="java.util.Map">
-        update menu set MENU_ORDER=#{menuOrder},MENU_TITLE=#{menuTitle}, MENU_URL=#{menuUrl}, MENU_DESC=#{menuDesc},  PARENT_ID=#{parentId}, USE_YN=#{userYN} where MENU_NO=#{menuNo}
+        update menu set MENU_ORDER=#{menuOrder},MENU_TITLE=#{menuTitle}, MENU_URL=#{menuUrl}, MENU_DESC=#{menuDesc},  PARENT_ID=#{parentId}, USE_YN=#{useYN} where MENU_NO=#{menuNo}
+    </update>
+<!-- 6. 메뉴 사용여부 변경하기   -->
+    <update id="updateUse" parameterType="java.util.Map">
+        update menu set USE_YN=#{useYN} where MENU_NO=#{menuNo}
     </update>
 </mapper>

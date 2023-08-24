@@ -7,40 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="../../vendors/feather/feather.css">
-    <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="../../vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
-    <!-- endinject -->
-    <link rel="shortcut icon" href="../../images/favicon.png" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-
-<body>
-<div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <jsp:include page="../include/navbar.jsp"/>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_settings-panel.html -->
-        <jsp:include page="../include/settings-panel.jsp"/>
-        <!-- partial -->
-        <!-- partial:partials/_sidebar.html -->
-        <jsp:include page="../include/sidebar.jsp"/>
-        <!-- partial -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
@@ -48,103 +15,68 @@
                         <div class="card">
                             <!-- 게시글 -->
                             <div class="card-body">
+                                <h4 class="card-title">메뉴 상세보기</h4>
                                 <div class="row">
-                                    <div class="col-8">
-                                        <h4 class="card-title">게시글 목록</h4>
+                                    <div class="form-group col-12">
+                                        <label for="menuNo">메뉴번호</label>
+                                        <input type="text" class="form-control" id="menuNo" name="menuNo" value="${menu.menuNo}" disabled>
                                     </div>
-                                    <div class="col-4">
-                                        <input type="button" id="boardCreateBtn" name="boardCreateBtn" class="btn btn-primary mr-2" onclick="boardCreate()" value="수정">
-                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" value="삭제">
-
+                                    <div class="form-group col-6">
+                                        <label for="menuTitle">메뉴명</label>
+                                        <input type="text" class="form-control" id="menuTitle" name="menuTitle"  value="${menu.menuTitle}" disabled/>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="boardTitle">제목</label>
-                                    <input type="text" class="form-control" id="boardTitle" name="boardTitle" value="${board.boardTitle}" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="boardContent">내용</label>
-                                    <textarea class="form-control" id="boardContent" name="boardContent" rows="4" disabled>${board.boardContent}</textarea>
-                                </div>
-                                    <div class="form-group">
-                                        <label for="fileList">첨부파일</label>
-                                        <div class="input-group col-xs-12">
-                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
-                                                <c:forEach items="${boardFileList}" var="boardFile">
-                                                <div id="file'+ fileNo + '" style="font-size:12px;">
-                                                ${boardFile.fileName}
-                                                <img src="../../images/icon_download.jpg" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>
-                                                </div>
+                                    <div class="form-group col-6">
+                                        <label for="menuDesc">메뉴설명</label>
+                                        <input type="text" class="form-control" id="menuDesc" name="menuDesc"  value="${menu.menuDesc}" disabled/>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="menuUrl">URL</label>
+                                        <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" disabled/>
+                                    </div>
+                                    <div class="form-group col-6"></div>
+                                    <c:choose>
+                                        <c:when test="${menu.parentId == 0}">
+                                        <div class="form-group col-6">
+                                            <label for="parentMenu1">상위탭</label>
+                                                    <input type="text" class="form-control" id="parentMenu1" value="-" disabled/>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="subMenuList">하위탭</label>
+                                            <select class="form-control" id="subMenuList" name="subMenuList">
+                                                <c:forEach items="${subMenuList}" var="subMenu">
+                                                    <option value="${subMenu.menuNo}" disabled>${subMenu.menuTitle}</option>
                                                 </c:forEach>
-                                            </div>
+                                            </select>
                                         </div>
-                                    </div>
-                            </div>
-                            <hr>
-                            <!-- 댓글 시작 -->
-                            <div class="card-body">
-                                <!-- 작성폼 -->
-                                <form class="mb-4">
-                                    <textarea class="form-control" row="3" placeholder="댓글을 남겨주세요"></textarea>
-                                </form>
-                                <div class="d-flex mb-4">
-                                    <!-- 상위댓글 -->
-                                    <div class="flex-shrink-0">
-                                        <!-- 댓글단사람 프로필사진  -->
-                                        <img class="rounded-circle" src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fi.namu.wiki%2Fi%2FsP0VOvMOCyYzjPuXM7BDJRyE3mXqdK9bC2o5D1bT6VSxX1IGzUVpLKa8oIWxvWCzpV5d_4kHCMR2Jct3jwFILw.webp&tbnid=jXA1ajKi6Vli4M&vet=12ahUKEwitkOrk7uCAAxVBplYBHVtDDagQMygAegUIARCVAQ..i&imgrefurl=https%3A%2F%2Fnamu.wiki%2Fw%2F%25EC%25BC%2580%25EC%259D%25B4%25ED%2581%25AC&docid=_wnLp2XecgoieM&w=1000&h=750&q=%EC%BC%80%EC%9D%B4%ED%81%AC&ved=2ahUKEwitkOrk7uCAAxVBplYBHVtDDagQMygAegUIARCVAQ">
-                                    </div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">작성자 이름</div>
-                                        상위댓글입니다
-                                        <!-- 하위댓글 -->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0">
-                                            <img class="rounded-circle" src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F6e%2FGolde33443.jpg%2F280px-Golde33443.jpg&tbnid=fQqBLX9avtI8rM&vet=12ahUKEwis9vf17uCAAxWYxjQHHTe8CWAQMygGegQIARB_..i&imgrefurl=https%3A%2F%2Fko.wikipedia.org%2Fwiki%2F%25EA%25B0%2595%25EC%2595%2584%25EC%25A7%2580&docid=XjDC2xaeLV6mKM&w=280&h=338&q=%EA%B0%95%EC%95%84%EC%A7%80&ved=2ahUKEwis9vf17uCAAxWYxjQHHTe8CWAQMygGegQIARB_">
-                                            </div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">작성자 이름</div>
-                                                하위댓글입니다
-                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <div class="form-group col-6">
+                                            <label for="parentMenu2">상위탭</label>
+                                            <input type="text" class="form-control" id="parentMenu2"  value="${preMenu.menuTitle}" disabled/>
                                         </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="form-group col-12">
+                                        <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
+                                        <div style="text-align: right">
+                                            <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/menu/modify/${menu.menuNo}'" value="수정">
+                                            <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/menu/delete-action/${menu.menuNo}'" value="삭제">
+                                        </div>
+                                        </c:if>
                                     </div>
                                 </div>
-
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- content-wrapper ends -->
-            <!-- partial:../../partials/_footer.html -->
-            <jsp:include page="../include/footer.jsp"/>
-            <!-- partial -->
         </div>
         <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-</body>
+<script>
 
 
-<!-- plugins:js -->
-<script src="../../vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-<script src="../../vendors/select2/select2.min.js"></script>
-<!-- End plugin js for this page -->
-<!-- inject:js -->
-<script src="../../js/off-canvas.js"></script>
-<script src="../../js/hoverable-collapse.js"></script>
-<script src="../../js/template.js"></script>
-<script src="../../js/settings.js"></script>
-<script src="../../js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="../../js/file-upload.js"></script>
-<script src="../../js/typeahead.js"></script>
-<script src="../../js/select2.js"></script>
-<script src="../../images"></script>
-<!-- End custom js for this page-->
+
+</script>
 </html>

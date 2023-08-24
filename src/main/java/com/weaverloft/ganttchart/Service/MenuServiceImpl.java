@@ -22,6 +22,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public int createSubMenu(Menu menu) throws Exception{
+        return menuDao.createSubMenu(menu);
+    }
+
+    @Override
     public Menu findMenuByNo(int menuNo) throws Exception{
         return menuDao.findMenuByNo(menuNo);
     }
@@ -41,7 +46,23 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public int updateMenu(Menu menu) {
+    public int updateMenu(Menu menu) throws Exception{
         return menuDao.updateMenu(menu);
     }
+
+    @Override
+    public int updateUse(int menuNo, int useYN) throws Exception{
+        return menuDao.updateUse(menuNo, useYN);
+    }
+
+    @Override
+    public List<Menu> findSubMenuList(int menuNo) throws Exception {
+        return menuDao.findSubMenuList(menuNo);
+    }
+
+    @Override
+    public List<Menu> findPreMenuList() throws Exception {
+        return menuDao.findPreMenuList();
+    }
+
 }

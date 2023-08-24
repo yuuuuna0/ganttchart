@@ -22,6 +22,11 @@ public class MenuDaoImpl implements MenuDao{
     }
 
     @Override
+    public int createSubMenu(Menu menu) throws Exception{
+        return menuMapper.createSubMenu(menu);
+    }
+
+    @Override
     public Menu findMenuByNo(int menuNo) throws Exception{
         return menuMapper.findMenuByNo(menuNo);
     }
@@ -45,7 +50,22 @@ public class MenuDaoImpl implements MenuDao{
     }
 
     @Override
-    public int updateMenu(Menu menu) {
+    public int updateMenu(Menu menu) throws Exception{
         return menuMapper.updateMenu(menu);
+    }
+
+    @Override
+    public int updateUse(int menuNo, int useYN)throws Exception {
+        return menuMapper.updateUse(menuNo, useYN);
+    }
+
+    @Override
+    public List<Menu> findSubMenuList(int menuNo) throws Exception {
+        return menuMapper.findSubMenuList(menuNo);
+    }
+
+    @Override
+    public List<Menu> findPreMenuList() throws Exception {
+        return menuMapper.findPreMenuList();
     }
 }

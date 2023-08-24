@@ -42,7 +42,7 @@
                                     </div>
                                 </form>
                                     <div style="text-align: center">
-                                        <input type="button" id="boardCreateBtn" name="boardCreateBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">
+                                        <input type="button" id="boardModifyBtn" name="boardModifyBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">
                                         <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/board/detail/${board.boardNo}'" value="취소">
                                     </div>
                             </div>
@@ -135,7 +135,8 @@
             document.getElementById("boardContent").focus();
             return false;
         }
-        fileDelete("file"+(maxCount+1));    //이거 왜한거더라
+        //fileDelete function이 시행되어야 fileList가 input태그에 담기기때문에 삭제가 이루어지지 않더라도 function 시행위해 코드 적어줌 -> 파라미터가 존재하지 않는 값이므로 그냥 임의의 action임
+        fileDelete("file"+(maxCount+1));
 
         document.getElementById("boardModifyF").method = 'POST';
         document.getElementById("boardModifyF").action = '/board/modify-action/'+no;
