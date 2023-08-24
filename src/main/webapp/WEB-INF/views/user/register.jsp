@@ -28,10 +28,18 @@
                                             <input type="text" class="form-control" id="id" name="id"
                                                    placeholder="아이디를 입력하세요">
                                         </div>
-                                        <div class="col-6 mt-4">
+                                        <div class="col-3 mt-4">
                                             <label></label>
                                             <input type="button" value="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="grade">회원 등급</label>
+                                            <select class="form-control" id="grade" name="grade">
+                                                <option disabled selected></option>
+                                                <option value="0">관리자</option>
+                                                <option value="1">일반회원</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row form-group">
@@ -55,8 +63,9 @@
                                         <div class="col-6">
                                             <label for="gender">성별</label>
                                             <select class="form-control" id="gender" name="gender">
-                                                <option value="1">남</option>
-                                                <option value="2">여</option>
+                                                <option disabled selected></option>
+                                                <option value="남">남</option>
+                                                <option value="여">여</option>
                                             </select>
                                         </div>
                                     </div>
@@ -137,6 +146,7 @@
     }
 
     function createUser() {
+        console.log("확인1");
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
@@ -146,7 +156,9 @@
         var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
         $('#address').val(address);
         let gender = $('#gender option:selected').val();
-        console.log(gender);
+        console.log("확인2");
+        let grade = $('#grade option:selected').val();
+        alert(grade);
         var birth = document.getElementById("birth").value;
 
         /**************************** 유효성 검사 ****************************************/
@@ -179,6 +191,10 @@
         if (phone === '') {
             document.getElementById("phoneVal").innerText = "전화번호를 입력하세요";
             document.getElementById("phone").focus();
+            return false;
+        }
+        if (grade === '') {
+            document.getElementById("grade").innerText = "회원등급을 선택하세요";
             return false;
         }
         if (password !== confirmPassword) {

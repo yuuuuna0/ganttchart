@@ -60,30 +60,46 @@ public class UsersServiceImpl implements UsersService {
           3) 공백 안됨
         */
         Matcher matcher;    //정규식 검사 객체
-        final String REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,15}$";     //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
-        final String BLANKPT = "(\\s)";       //공백 문자 정규식
-
         if (password == null || password.isEmpty()) {
-            //입력한 내용이 없을 경우
-            System.out.println("문자를 입력하세요");
-            return false;
-        } else if (password.length() < 8 || password.length() > 15) {
-            //8~15글자의 비밀번호
-            System.out.println("비밀번호는 8글자 이상 15글자 이하여야합니다.");
-            return false;
-        } else if (password.matches(REGEX)) {
-            //영문, 숫자, 특수문자 포함 확인
-            System.out.println("비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.");
-            return false;
-        } else if (Pattern.compile(BLANKPT).matcher(password).find()) {
-            //공백 포함된 경우
-            System.out.println("비밀번호에는 공백이 포함될 수 없습니다.");
-            return false;
-        } else {
-            //성공
-            System.out.println("사용 가능한 비밀번호입니다.");
-            return true;
+            throw new Exception("비밀번호를 입력해주세요.");
         }
+        if (password.matches("(.)\\1{2,}")
+                || password.matches(".*(\\d)\\1{2,}.*")
+                || password.matches(".*([a-zA-Z])\\1{2,}.*")
+                || password.matches(".*(!|@|#|\\$|%|\\^|&|\\*|\\(|\\)).*\\1{2,}.*")) {
+            throw new Exception("같은 문자를 연속으로 3개 이상 사용할 수 없습니다.");
+        }
+        if (password.length() < 6 || password.length() > 12) {
+            throw new Exception("비밀번호는 6글자 이상 12글자 이하여야 합니다.");
+        }
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,12}$")) {
+            throw new Exception("비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.");
+        }
+        return true;
+//        final String REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,15}$";     //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
+//        final String BLANKPT = "(\\s)";       //공백 문자 정규식
+//
+//        if (password == null || password.isEmpty()) {
+//            //입력한 내용이 없을 경우
+//            System.out.println("문자를 입력하세요");
+//            return false;
+//        } else if (password.length() < 6 || password.length() > 15) {
+//            //8~15글자의 비밀번호
+//            System.out.println("비밀번호는 6글자 이상 15글자 이하여야합니다.");
+//            return false;
+//        } else if (password.matches(REGEX)) {
+//            //영문, 숫자, 특수문자 포함 확인
+//            System.out.println("비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.");
+//            return false;
+//        } else if (Pattern.compile(BLANKPT).matcher(password).find()) {
+//            //공백 포함된 경우
+//            System.out.println("비밀번호에는 공백이 포함될 수 없습니다.");
+//            return false;
+//        } else {
+//            //성공
+//            System.out.println("사용 가능한 비밀번호입니다.");
+//            return true;
+//        }
     }
 
     //4. 아이디 중복 확인

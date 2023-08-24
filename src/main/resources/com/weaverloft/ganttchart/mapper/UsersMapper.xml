@@ -4,7 +4,7 @@
     <!-- 1. 회원가입 -->
     <insert id="createUsers" parameterType="java.util.Map">
         insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY,CREATE_DATE)
-        values(#{id},0,#{password},#{name},#{photo},#{birth},0,#{phone},#{address},#{email},0,#{authKey},sysdate)
+        values(#{id},#{grade},#{password},#{name},#{photo},#{birth},#{gender},#{phone},#{address},#{email},0,#{authKey},sysdate)
     </insert>
     <!--2. 회원 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">

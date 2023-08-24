@@ -24,14 +24,15 @@ public class ExcelService {
         this.usersLogDao = usersLogDao;
     }
 
-    public void excelDown(HttpServletResponse response) throws Exception {
+    public void excelDown(HttpServletResponse response,String fileName) throws Exception {
 
         List<Users> userList = usersDao.findUserList();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");   //date 타입 String으로 전환하기 위함
 
         //excel 다운 시작
         Workbook workbook = new HSSFWorkbook();
         //시트 생성
-        Sheet sheet = workbook.createSheet("회원리스트");
+        Sheet sheet = workbook.createSheet(fileName);
         //행,열,열번호
         Row row = null;
         Cell cell = null;
@@ -55,7 +56,7 @@ public class ExcelService {
         bodyStyle.setBorderRight(BorderStyle.THIN);
 
         //헤더명 설정
-        String[] headerArray = {"아이디","회원등급","이름","생일","성별","전화번호","이메일","주소","인증상태","가입일"};
+        String[] headerArray = {"아이디","회원등급(0:관리자/1:일반회원)","이름","생일","성별","전화번호","이메일","주소","인증상태(0:미인증/1:인증)","가입일"};
         row = sheet.createRow(rowNo++);
         for(int i=0; i<headerArray.length; i++){
             cell = row.createCell(i);
@@ -64,11 +65,6 @@ public class ExcelService {
         }
 
         //데이터 입력
-        String grade = null;
-        String gender = null;
-        String authStatus = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String date = null;
         for(Users users : userList){
             row = sheet.createRow(rowNo++);
 
@@ -78,9 +74,7 @@ public class ExcelService {
 
             cell = row.createCell(1);
             cell.setCellStyle(bodyStyle);
-            if(users.getGrade() == 0) grade = "관리자";
-            if(users.getGrade() == 1) grade = "일반회원";
-            cell.setCellValue(grade);
+            cell.setCellValue(users.getGrade());
 
             cell = row.createCell(2);
             cell.setCellStyle(bodyStyle);
@@ -88,14 +82,11 @@ public class ExcelService {
 
             cell = row.createCell(3);
             cell.setCellStyle(bodyStyle);
-            date = format.format(users.getBirth());
-            cell.setCellValue(date);
+            cell.setCellValue(format.format(users.getBirth()));
 
             cell = row.createCell(4);
             cell.setCellStyle(bodyStyle);
-            if(users.getGender() == 1) gender = "남자";
-            if(users.getGender() == 2) gender = "여자";
-            cell.setCellValue(gender);
+            cell.setCellValue(users.getGender());
 
             cell = row.createCell(5);
             cell.setCellStyle(bodyStyle);
@@ -111,19 +102,16 @@ public class ExcelService {
 
             cell = row.createCell(8);
             cell.setCellStyle(bodyStyle);
-            if(users.getAuthStatus() == 0) authStatus = "X";
-            if(users.getAuthStatus() == 1) authStatus = "O";
-            cell.setCellValue(authStatus);
+            cell.setCellValue(users.getAuthStatus());
 
             cell = row.createCell(9);
             cell.setCellStyle(bodyStyle);
-            date = format.format(users.getCreateDate());
-            cell.setCellValue(date);
+            cell.setCellValue(format.format(users.getCreateDate()));
         }
 
         //컨텐트 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
-        response.setHeader("Content-Disposition","attachment;filename="+java.net.URLEncoder.encode("회원리스트.xls","UTF-8"));
+        response.setHeader("Content-Disposition","attachment;filename="+java.net.URLEncoder.encode(fileName+".xls","UTF-8"));
 
         //엑셀 출력
         workbook.write(response.getOutputStream());

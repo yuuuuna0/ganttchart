@@ -62,14 +62,12 @@ public class UsersController {
                 forwardPath = "redirect:/login";
                 return forwardPath;
             }
-/*
-            if(usersService.isValidPassword(password)){
+            if(usersService.isValidPassword(users.getPassword())){
                 //2) 비밀번호 정규식 체크 --> 적용 안됨,, 왜죠?
-                System.out.println("비밀번호는 영문,숫자,특수문자를 포함한 8글자 이상 15글자 이하여야합니다.");
-                mv.setViewName("redirect:/register");
-                return mv;
+                System.out.println("비밀번호는 영문,숫자,특수문자를 포함한 6글자 이상 15글자 이하여야합니다.");
+                forwardPath ="redirect:/register";
+                return forwardPath;
             }
-*/
             //3) 비밀번호 암호화
             String encryptPassword = sha256Service.encrypt(users.getPassword());
             users.setPassword(encryptPassword);
@@ -116,7 +114,7 @@ public class UsersController {
             System.out.println(loginUser);
             session.setAttribute("loginUser", loginUser);
             session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
-            if(loginUser.getAuthStatus()==0){
+            if(loginUser.getAuthStatus() == 0){
                 //미인증 사용자(첫번째 로그인)
                 forwardPath = "redirect:/user/emailAuth";
             } else if(loginUser.getAuthStatus()==1) {
@@ -341,7 +339,7 @@ public class UsersController {
     //엑셀 다운로드
     @RequestMapping("/download")
     public void excelDown( HttpServletRequest request, HttpServletResponse response) throws Exception{
-        excelService.excelDown(response);
+        excelService.excelDown(response,"회원리스트");
     }
 
 
