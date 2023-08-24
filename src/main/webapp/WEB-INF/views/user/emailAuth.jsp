@@ -16,7 +16,7 @@
                             <p class="card-description">
                             </p>
                             <div class="small mb-3 text-muted">Enter your secret code to verify your ID!!</div>
-                            <form method="post" action="/emailAuth-action" accept-charset="utf-8">
+                            <form method="post" action="/user/emailAuth-action" accept-charset="utf-8">
                                 <div class="form-floating mb-3">
                                     <input class="form-control" id="authKey" name="authKey" type="text"/>
                                     <label for="authKey"></label>

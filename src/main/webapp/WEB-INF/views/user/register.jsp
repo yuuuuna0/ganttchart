@@ -145,7 +145,8 @@
         var phone = document.getElementById("phone").value;
         var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
         $('#address').val(address);
-        var gender = 0;
+        let gender = $('#gender option:selected').val();
+        console.log(gender);
         var birth = document.getElementById("birth").value;
 
         /**************************** 유효성 검사 ****************************************/

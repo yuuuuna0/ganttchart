@@ -82,17 +82,22 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     @Override
-    public int findUsersCount() {
+    public int findUsersCount() throws Exception{
         return usersMapper.findUsersCount();
     }
 
     @Override
-    public List<Users> findUserList(int pageBegin, int pageEnd, String keyword) {
+    public List<Users> findUserList(int pageBegin, int pageEnd, String keyword) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("pageBegin",pageBegin);
         map.put("pageEnd",pageEnd);
         map.put("keyword",keyword);
         return usersMapper.findUserList(map);
+    }
+
+    @Override
+    public List<Users> findUserList() throws Exception {
+        return usersMapper.findUserList2();
     }
 
 

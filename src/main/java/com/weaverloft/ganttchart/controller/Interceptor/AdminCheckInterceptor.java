@@ -13,6 +13,12 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        // HandlerMethod : @Controller 객체에 @RequestMapping이 붙은 메소드
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
+
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
         //1. HandlerMethod 객체에 @AdminCheck가 없는 경우, 인증이 필요 없는 요청

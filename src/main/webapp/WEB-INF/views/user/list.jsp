@@ -17,6 +17,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <h4 class="card-title">회원리스트</h4>
+                                        <input type="button" value="회원리스트 엑셀 다운로드" onclick="location.href='/download';">
                                     </div>
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
@@ -56,11 +57,10 @@
                                                 <td>${user.birth}</td>
                                                 <td>${user.gender}</td>
                                                 <td>${user.phone}</td>
-                                                <td>${user.phone}</td>
                                                 <td>${user.email}</td>
                                                 <td>${user.address}</td>
                                                 <td>${user.authStatus}</td>
-                                                <td>가입일</td>
+                                                <td>${user.createDate}</td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -157,3 +157,8 @@
             <!-- content-wrapper ends -->
         </div>
         <!-- main-panel ends -->
+<script>
+    function listdownload(){
+
+    }
+</script>

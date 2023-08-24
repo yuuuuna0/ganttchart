@@ -27,9 +27,11 @@ public interface UsersDao {
     //10. 회원 탈퇴
     int deleteUsers(String id) throws Exception;
     //11. 전체회원 수
-    int findUsersCount();
+    int findUsersCount() throws Exception;
     //12. 회원리스트 -> 페이징,검색
-    List<Users> findUserList(int pageBegin, int pageEnd, String keyword);
+    List<Users> findUserList(int pageBegin, int pageEnd, String keyword) throws Exception;
+    //13.회원리스트
+    List<Users> findUserList() throws Exception;
 
     /*
     //3. 정보 수정

@@ -31,7 +31,9 @@ public interface UsersMapper {
     //11. 회원 탈퇴
     int deleteUsers(String id) throws Exception;
     //12. 전체회원 수
-    int findUsersCount();
+    int findUsersCount() throws Exception;
     //13. 회원리스트 출력 -> 페이징, 검색
-    List<Users> findUserList(Map<String, Object> map);
+    List<Users> findUserList(Map<String, Object> map) throws Exception;
+    //14. 회원리스트 출력
+    List<Users> findUserList2()  throws Exception;
 }

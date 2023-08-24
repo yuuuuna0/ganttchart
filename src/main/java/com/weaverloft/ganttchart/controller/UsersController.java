@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,17 +29,20 @@ public class UsersController {
     private EmailService emailService;
     private FileService fileService;
     private UsersLogService usersLogService;
+    private ExcelService excelService;
 
     public UsersController(UsersService usersService,
                            SHA256Service sha256Service,
                            EmailService emailService,
                            FileService fileService,
-                           UsersLogService usersLogService) {
+                           UsersLogService usersLogService,
+                           ExcelService excelService) {
         this.usersService = usersService;
         this.sha256Service = sha256Service;
         this.emailService = emailService;
         this.fileService = fileService;
         this.usersLogService = usersLogService;
+        this.excelService = excelService;
     }
     //1-1. 회원가입 페이지
     @GetMapping("/user/register")
@@ -309,7 +314,7 @@ public class UsersController {
         try{
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
             model.addAttribute("userListPage",userListPage);
-            forwardPath = "/user/list/"+pageNo;
+            forwardPath = "/user/list";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -326,12 +331,22 @@ public class UsersController {
         try{
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
             model.addAttribute("usersLogPage",usersLogPage);
-            forwardPath = "/user/log/"+pageNo;
+            forwardPath = "/user/log";
         } catch (Exception e){
             e.printStackTrace();
         }
         return forwardPath;
     }
+
+    //엑셀 다운로드
+    @RequestMapping("/download")
+    public void excelDown( HttpServletRequest request, HttpServletResponse response) throws Exception{
+        excelService.excelDown(response);
+    }
+
+
+
+
 }
 
 
