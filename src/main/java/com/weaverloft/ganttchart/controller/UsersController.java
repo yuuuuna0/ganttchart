@@ -111,7 +111,6 @@ public class UsersController {
         String password=(String)map.get("password");
         try{
             Users loginUser=usersService.login(id,sha256Service.encrypt(password));
-            System.out.println(loginUser);
             session.setAttribute("loginUser", loginUser);
             session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
             if(loginUser.getAuthStatus() == 0){
@@ -119,7 +118,6 @@ public class UsersController {
                 forwardPath = "redirect:/user/emailAuth";
             } else if(loginUser.getAuthStatus()==1) {
                 //인증된 사용자
-                System.out.println("로그인 성공");
                 int result=usersLogService.createLog(loginUser.getId(),10);
                 forwardPath = "redirect:/";
             }
@@ -132,7 +130,7 @@ public class UsersController {
     }
     //2-3. 로그아웃 액션 --> 완료
     @LoginCheck
-    @PostMapping("/logout-action")
+    @RequestMapping("/logout-action")
     public String logoutAction(HttpSession session) {
         String forwardPath = "";
         try{
@@ -160,8 +158,9 @@ public class UsersController {
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
             if(authKey.equals(loginUser.getAuthKey())){
-                usersService.updateAuthStatus(loginUser.getId());   //회원 인증 완료
+                usersService.updateAuthStatus1(loginUser.getId());   //회원 인증 완료
                 usersLogService.createLog(loginUser.getId(),1);        //인증완료 로그:1 남기기
+                usersLogService.createLog(loginUser.getId(),10);        //로그인 로그:10 남기기
                 session.setAttribute("loginUser",loginUser);
                 forwardPath = "redirect:/";
             } else{

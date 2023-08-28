@@ -10,6 +10,8 @@ public interface UsersLogDao {
     int createLog(String id, int logStatus) throws Exception;
 
     int findUsersLogCount();
-
+    //3. 1주일동안 인증완료로 안 바뀐 아이디 찾기 (logStatus가 1주일동안 0->1 안변한)
     List<UsersLog> findUsersLogList(int pageBegin, int pageEnd, String keyword);
+    //4. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)
+    List<String> findDormacyUsers() throws Exception;
 }

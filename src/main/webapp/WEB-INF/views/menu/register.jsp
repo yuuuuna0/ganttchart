@@ -9,14 +9,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <div class="main-panel">
-            <div class="content-wrapper">
+            <div class="content-wrapper align-items-center auth px-5 ">
                 <div class="row">
-                    <div class="col-12 grid-margin stretch-card">
+                    <div class="col-lg-8 mx-auto">
                         <div class="card">
                             <!-- 게시글 -->
                             <div class="card-body">
                                 <h4 class="card-title">메뉴 작성하기</h4>
-                                <form name="menuRegisterF" id="menuRegisterF">
+    <hr>
+    <br>
+    <br>
+                                <form class="form-sample" name="menuRegisterF" id="menuRegisterF">
                                     <div class="row">
                                         <div class="form-group col-6">
                                             <label for="menuTitle">메뉴명</label>
@@ -30,8 +33,7 @@
                                             <label for="menuUrl">URL</label>
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"   />
                                         </div>
-                                        <div class="form-group col-6"></div>
-                                            <div class="form-group col-6">
+                                        <div class="form-group col-6">
                                                 <label for="parentId">상위탭</label>
                                                 <select class="form-control" id="parentId" name="parentId">
                                                     <option></option>
@@ -40,7 +42,15 @@
                                                 </c:forEach>
                                                     <option value="0">+ 추가하기</option>
                                                 </select>
-                                            </div>
+                                        </div>
+                                        <div class="form-group col-6">
+                                                <label for="useYN">사용레벨</label>
+                                                <select class="form-control" id="useYN" name="useYN">
+                                                    <option disabled selected></option>
+                                                    <option value="0">관리자</option>
+                                                    <option value="1">일반회원</option>
+                                                </select>
+                                        </div>
                                         <div class="form-group col-12">
                                             <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                                 <div style="text-align: center">
@@ -68,23 +78,31 @@
     let menuUrl = $('#menuUrl').val();
     //--> 상위탭 하위탭 선택한 걸로 등록하는 기능
     let parentId = $('#parentId option:selected').val();
-    console.log(parentId);
+    let useYN = $('#useYN option:selected').val();
 
 
     if(menuTitle === ''){
         alert("메뉴명을 입력하세요");
-        document.getElementById("boardTitle").focus();
+        document.getElementById("menuTitle").focus();
         return false;
     }
     if(menuDesc === ''){
         alert("메뉴설명을 입력하세요");
-        document.getElementById("boardContent").focus();
+        document.getElementById("menuDesc").focus();
         return false;
     }
     if(menuUrl === ''){
         alert("url을 입력하세요");
-        document.getElementById("boardContent").focus();
+        document.getElementById("menuUrl").focus();
         return false;
+    }
+    if(parentId === ''){
+        alert("상위탭을 선택하세요");
+        document.getElementById("parentId").focus();
+    }
+    if(useYN === ''){
+        alert("사용레벨을 선택하세요");
+        document.getElementById("useYN").focus();
     }
 
     document.menuRegisterF.method = 'POST';

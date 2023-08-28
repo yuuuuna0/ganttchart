@@ -31,4 +31,9 @@ public class UsersLogServiceImpl implements UsersLogService{
         PageMakerDto<UsersLog> pageMakerUsersLogList = new PageMakerDto<>(usersLogList,pageMaker,totUsersLogCount);
         return pageMakerUsersLogList;
     }
+
+    @Override
+    public List<String> findDormacyUsers() throws Exception {
+        return usersLogDao.findDormacyUsers();
+    }
 }

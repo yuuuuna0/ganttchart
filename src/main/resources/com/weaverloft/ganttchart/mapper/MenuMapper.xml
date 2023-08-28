@@ -9,6 +9,14 @@
         insert into menu(menu_no,menu_order,menu_title,menu_url,menu_desc,parent_id,use_yn)
         values(#{menuNo},#{menuOrder},#{menuTitle},#{menuUrl},#{menuDesc},null,#{useYN})
     </insert>
+<!-- 2. 상위메뉴 parentId 부여하기   -->
+    <update id="updateParentId" parameterType="java.lang.Integer">
+        update menu set PARENT_ID = #{menuNo} where MENU_NO=#{menuNo}
+    </update>
+    <!-- 5. 최근 값 불러오기 -->
+    <select id="findCurMenuNo" resultType="java.lang.Integer">
+        select MENU_MENU_NO_SEQ.currval from dual
+    </select>
 <!--1. 하위메뉴 작성하기    -->
     <insert id="createSubMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
         <selectKey resultType="java.lang.Integer" keyProperty="menuNo" order="BEFORE">
@@ -39,7 +47,11 @@
     </select>
 <!-- 4-2. 상위메뉴 전체 불러오기   -->
     <select id="findPreMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
-        select * from menu where PARENT_ID is null
+        select * from menu where PARENT_ID = MENU_NO order by MENU_NO
+    </select>
+<!--  4-3. 메뉴리스트 전체 불러오기  -->
+    <select id="findAllMenu" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select * from menu order by MENU_NO desc
     </select>
 <!-- 5. 전체 메뉴 개수    -->
     <select id="findMenuCount" resultType="java.lang.Integer">

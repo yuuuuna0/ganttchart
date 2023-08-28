@@ -65,4 +65,19 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.findPreMenuList();
     }
 
+    @Override
+    public List<Menu> findAllMenu() throws Exception {
+        return menuDao.findAllMenu();
+    }
+
+    @Override
+    public int findCurMenuNo() throws Exception {
+        return menuDao.findCurMenuNo();
+    }
+
+    @Override
+    public int updateParentId(int menuNo) throws Exception {
+        return menuDao.updateParentId(menuNo);
+    }
+
 }

@@ -34,9 +34,16 @@ public class UsersLogDaoImpl implements UsersLogDao{
         return usersLogMapper.findUserLog(map);
     }
 
+
     @Override
     public int findUsersLogCount() {
         return usersLogMapper.findUsersLogCount();
     }
+
+    @Override
+    public List<String> findDormacyUsers() throws Exception {
+        return usersLogMapper.findDormacyUsers();
+    }
+
 
 }

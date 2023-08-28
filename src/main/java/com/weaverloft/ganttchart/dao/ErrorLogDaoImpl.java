@@ -14,7 +14,7 @@ public class ErrorLogDaoImpl implements ErrorLogDao {
     }
 
     @Override
-    public int createLog(ErrorLog errorLog) throws Exception {
+    public int createLog(ErrorLog errorLog)  {
         return errorLogMapper.createLog(errorLog);
     }
 }

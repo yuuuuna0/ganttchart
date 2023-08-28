@@ -13,5 +13,5 @@ public class ErrorLog {
     private int errorNo;
     private String errorDesc;
     private Date errorDate;
-    private String id;
+    private String errorLocation;
 }

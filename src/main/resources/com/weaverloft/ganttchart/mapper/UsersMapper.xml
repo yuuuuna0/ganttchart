@@ -20,8 +20,12 @@
     <!-- 4. 비밀번호 수정 -->
 
     <!-- 4. 인증 완료 -->
-    <update id="updateAuthStatus" parameterType="java.lang.String">
+    <update id="updateAuthStatus1" parameterType="java.lang.String">
         update USERS set AUTH_STATUS=1 where id=#{id}
+    </update>
+    <!-- 4-1. 휴면계정 -->
+    <update id="updateAuthStatus2" parameterType="java.lang.String">
+        update USERS set AUTH_STATUS=2 where id=#{id}
     </update>
     <!-- 7. 아이디 중복 체크 -->
     <select id="isExistedId" parameterType="java.lang.String" resultType="java.lang.Integer">

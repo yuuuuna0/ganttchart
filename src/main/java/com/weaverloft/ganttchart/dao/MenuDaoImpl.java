@@ -68,4 +68,19 @@ public class MenuDaoImpl implements MenuDao{
     public List<Menu> findPreMenuList() throws Exception {
         return menuMapper.findPreMenuList();
     }
+
+    @Override
+    public List<Menu> findAllMenu() throws Exception {
+        return menuMapper.findAllMenu();
+    }
+
+    @Override
+    public int findCurMenuNo() throws Exception {
+        return menuMapper.findCurMenuNo();
+    }
+
+    @Override
+    public int updateParentId(int menuNo) throws Exception {
+        return menuMapper.updateParentId(menuNo);
+    }
 }

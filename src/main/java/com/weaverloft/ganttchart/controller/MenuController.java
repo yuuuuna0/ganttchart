@@ -25,10 +25,14 @@ public class MenuController {
     @GetMapping("/register")
     public String menuCreate(Model model){
         String forwardPath = "";
-        List<Menu> preMenuList = new ArrayList<>();
         List<Menu> subMenuList = new ArrayList<>();
+
         try{
-            preMenuList = menuService.findPreMenuList();
+            //cm_left data
+
+            List<Menu> menuList = menuService.findAllMenu();
+            model.addAttribute("menuList",menuList);
+            List<Menu> preMenuList = menuService.findPreMenuList();
             model.addAttribute("preMenuList",preMenuList);
             forwardPath = "/menu/register";
         } catch (Exception e){
@@ -50,10 +54,12 @@ public class MenuController {
             if(menu.getParentId() == 0 ){
                 menu.setMenuOrder(menuOrder);
                 result = menuService.createMenu(menu);
+                int curNo = menuService.findCurMenuNo();
+                menuService.updateParentId(curNo);
             }
             //2) 하위탭일경우
             if(menu.getParentId() != 0){
-                menu.setMenuOrder(menuOrder+1); //parent거까지 +1 해줘야 함!!
+                menu.setMenuOrder(menuOrder); //parent거까지 +1 해줘야 함!!
                 result = menuService.createSubMenu(menu);
             }
             forwardPath = "redirect:/menu/list/1";
@@ -71,6 +77,12 @@ public class MenuController {
         String forwardPath = "";
         List<Menu> subMenuList = new ArrayList<>();
         try{
+            //cm_left data
+            List<Menu> menuList = menuService.findAllMenu();
+            model.addAttribute("menuList",menuList);
+            List<Menu> preMenuList = menuService.findPreMenuList();
+            model.addAttribute("preMenuList",preMenuList);
+
             Menu menu = menuService.findMenuByNo(menuNo);
             if(menu.getParentId() == 0){
                 //상위탭이면 하위탭리스트 보여주기
@@ -94,9 +106,14 @@ public class MenuController {
     @GetMapping("/modify/{menuNo}")
     public String menumodify(@PathVariable int menuNo, Model model){
         String forwardPath = "";
-        List<Menu> preMenuList = new ArrayList<>();
         List<Menu> subMenuList = new ArrayList<>();
         try{
+            //cm_left data
+            List<Menu> menuList = menuService.findAllMenu();
+            model.addAttribute("menuList",menuList);
+            List<Menu> preMenuList = menuService.findPreMenuList();
+            model.addAttribute("preMenuList",preMenuList);
+
             Menu menu = menuService.findMenuByNo(menuNo);
             if(menu.getParentId() == 0){
                 //상위탭이면 하위탭리스트 보여주기
@@ -132,6 +149,12 @@ public class MenuController {
     public String menuList(@PathVariable int pageNo, Model model){
         String forwardPath = "";
         try{
+            //cm_left data
+            List<Menu> menuList = menuService.findAllMenu();
+            model.addAttribute("menuList",menuList);
+            List<Menu> preMenuList = menuService.findPreMenuList();
+            model.addAttribute("preMenuList",preMenuList);
+
             PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo);
             model.addAttribute("menuListPage",menuListPage);
             forwardPath = "/menu/list";

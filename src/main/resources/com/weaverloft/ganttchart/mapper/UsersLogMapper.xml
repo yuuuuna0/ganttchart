@@ -28,6 +28,30 @@
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
         order by LOG_DATE desc
     </select>
-
-
+<!--    &lt;!&ndash; 4. 1주일동안 인증완료로 안 바뀐 아이디 찾기 (logStatus가 1주일동안 0->1 안변한) &ndash;&gt;-->
+<!--    <select id="findUnAuthUsers" resultType="java.lang.String">-->
+<!--        select id-->
+<!--        from USERS_LOG-->
+<!--        where LOG_STATUS=0-->
+<!--        <![CDATA[ and log_date <= sysdate-7]]>-->
+<!--          AND NOT EXISTS (-->
+<!--                        SELECT *-->
+<!--                        FROM USERS_LOG-->
+<!--                        WHERE LOG_STATUS = 1-->
+<!--                        )-->
+<!--    </select>-->
+    <!-- 5. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)  -->
+    <select id="findDormacyUsers" resultType="java.lang.String">
+        select ul.id, ul.log_no, ul.log_status, ul.log_date
+        from (
+              select id, max(log_no) log_no
+              from(
+                    select *
+                    from users_log
+                    where log_status=10
+                    order by log_no desc)
+                        group by id) a
+        join users_log ul on a.log_no =ul.log_no
+        <![CDATA[ where ul.log_date <= sysdate-60]]>
+    </select>
 </mapper>

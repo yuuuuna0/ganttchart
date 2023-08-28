@@ -3,14 +3,16 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
     <!-- annotation 활성화 -->
-    <mvc:annotation-driven></mvc:annotation-driven>
+    <mvc:annotation-driven/>
+    <task:annotation-driven/>
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-    <mvc:resources mapping="/**" location="/resources/static/"/>
+    <mvc:resources mapping="/**" location="/resources/"/>
 <!--    <mvc:resources location="/resources/" mapping="/resources/static/**" />-->
 
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -68,8 +70,9 @@
     </mvc:interceptors>
     <!-- 프로젝트 패키지이름 확인 -->
     <context:component-scan base-package="com.weaverloft.ganttchart"/>
-    <!-- AOP auto proxy -->
-    <aop:aspectj-autoproxy>    </aop:aspectj-autoproxy>
+
+    <!-- AOP auto proxy : annotation으로 할 수 있게 해줌-->
+    <aop:aspectj-autoproxy/>
 </beans>
 
 

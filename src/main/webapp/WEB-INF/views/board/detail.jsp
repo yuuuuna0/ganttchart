@@ -34,7 +34,7 @@
                                     <c:forEach items="${boardFileList}" var="boardFile">
                                         <div id="file'+ fileNo + '" style="font-size:12px;">
                                                 ${boardFile.fileName}
-                                            <img src="/resources/static/images/icon_download.png"
+                                            <img src="../../images/icons/download.png"
                                                  style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>
                                         </div>
                                     </c:forEach>

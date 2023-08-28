@@ -28,4 +28,10 @@ public interface MenuMapper {
     List<Menu> findSubMenuList(int menuNo) throws Exception;
     //9. 상위메뉴리스트 불러오기
     List<Menu> findPreMenuList() throws Exception;
+    //10. 메뉴전체 불러오기
+    List<Menu> findAllMenu() throws  Exception;
+    //11. 최근 값 불러오기
+    int findCurMenuNo() throws Exception;
+    //12. 상위메뉴 parentId 부여하기
+    int updateParentId(int menuNo) throws Exception;
 }

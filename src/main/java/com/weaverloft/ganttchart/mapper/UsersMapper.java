@@ -21,7 +21,9 @@ public interface UsersMapper {
     //6. 이름, 이메일로 아이디 찾기
     String findIdByNameEmail(Map<String,Object> map) throws Exception;
     //7. 이메일인증 업데이트
-    int updateAuthStatus(String id) throws Exception;
+    int updateAuthStatus1(String id) throws Exception;
+    //7. 휴면계정
+    int updateAuthStatus2(String id) throws Exception;
     //8. 이미지 업로드
     int updatePhoto(String id, String photo);
     //9. 아이디, 이메일로 비밀번호 변경하기
