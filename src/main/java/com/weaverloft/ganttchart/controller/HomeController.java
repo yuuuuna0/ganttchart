@@ -1,9 +1,11 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
+import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.Service.FileService;
 import com.weaverloft.ganttchart.Service.MenuService;
 import com.weaverloft.ganttchart.dto.Board;
+import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.xml.stream.events.Comment;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +29,13 @@ public class HomeController {
     FileService fileService;
     BoardService boardService;
     MenuService menuService;
+    CommentsService commentsService;
 
-    public HomeController(FileService fileService,BoardService boardService,MenuService menuService) {
+    public HomeController(FileService fileService,BoardService boardService,MenuService menuService,CommentsService commentsService) {
         this.fileService = fileService;
         this.boardService=boardService;
         this.menuService = menuService;
+        this.commentsService = commentsService;
     }
 
     @GetMapping("/")

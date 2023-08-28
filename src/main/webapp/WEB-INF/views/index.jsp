@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
         <div class="main-panel">
             <div class="content-wrapper">
@@ -137,7 +138,6 @@
                                             <th>Title</th>
                                             <th>Content</th>
                                             <th>Writer</th>
-                                            <th>Comment</th>
                                             <th>Date</th>
                                             <th>Read</th>
                                         </tr>
@@ -149,8 +149,7 @@
                                                 <td>${board.boardTitle}</td>
                                                 <td>${board.boardContent}</td>
                                                 <td>${board.id}</td>
-                                                <td>${board.boardReadcount}</td>
-                                                <td>${board.boardDate}</td>
+                                                <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>
                                                 <td>${board.boardReadcount}</td>
                                             </tr>
                                         </c:forEach>

@@ -67,4 +67,9 @@ public class CommentsDaoImpl implements CommentsDao {
         map.put("commentsContent", commentsContent);
         return commentsMapper.updateComments(map);
     }
+
+    @Override
+    public List<Comments> findAllComments() throws Exception {
+        return commentsMapper.findAllComments();
+    }
 }

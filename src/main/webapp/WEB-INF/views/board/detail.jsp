@@ -34,8 +34,11 @@
                                     <c:forEach items="${boardFileList}" var="boardFile">
                                         <div id="file'+ fileNo + '" style="font-size:12px;">
                                                 ${boardFile.fileName}
-                                            <img src="../../images/icons/download.png"
-                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>
+                                                    <span>${boardFile.fileSize}</span>
+                                                    <span>
+                                            <img src="/../static/images/icons/download.png"
+                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="fileDownload(${boardFile.fileNo});"/></span>
+
                                         </div>
                                     </c:forEach>
                                 </div>
@@ -67,15 +70,15 @@
                                             <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
                                                                                pattern="yyyy. MM. dd."/></span>
                                             <span>
-                                                        <img src="../../../resources/static/images/icon_comment.png"
-                                                             style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                        <img src="/../static/images/icons/comment.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="subComments('${comment.id}')"/>
-                                                        <img src="../../../resources/static/images/icon_modify.png"
+                                                        <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
-                                                             style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="modifyComments('${comment.commentsNo}','${comment.commentsContent}');"/>
-                                                        <img src="../../../resources/static/images/icon_bin.png"
-                                                             style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                        <img src="/../static/images/icons/bin.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="deleteComments(${comment.commentsNo});"/>
                                                     </span>
                                         </div>
@@ -85,19 +88,19 @@
                                             &nbsp
                                         </div>
                                         <div class="col-11">
-                                            <img src="../../../resources/static/images/icon_subComment.png"
+                                            <img src="/../static/images/icons/subComment.png"
                                                  style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>
                                             <span class="mr-3">${comment.id}</span>
                                             <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                             <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
                                                                                pattern="yyyy. MM. dd."/></span>
                                             <span>
-                                                        <img src="../../../resources/static/imagess/icon_modify.png"
+                                                        <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
-                                                             style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="modifyComments('${comment.commentsNo}',${comment.commentsContent});"/>
-                                                        <img src="../../../resources/static/images/icon_bin.png"
-                                                             style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                        <img src="/../static/images/icons/bin.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="deleteComments(${comment.commentsNo});"/>
                                                     </span>
                                         </div>
@@ -132,6 +135,29 @@
 </div>
 <!-- main-panel ends -->
 <script>
+
+
+    /********************************  파일 다운로드 **********************************/
+    function fileDownload(no){
+        console.log(no);
+        let fileNo = no;
+        $.ajax({
+            url: '/downloadFile-ajax',
+            method: 'POST',
+            data: {
+                'fileNo': fileNo
+            },
+            success: function (resultJson) {
+                console.log(resultJson);
+            },
+            error: function (e) {
+                console.log(e);
+                console.log('에러확인');
+            },
+            async: true
+        });
+    }
+
 
 
     /******************************** 1. 댓글 작성 **********************************/
@@ -249,9 +275,9 @@
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
                         "                                                    <span >\n" +
-                        "                                                        <img src='/resources/static/images/icon_comment.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n" +
-                        "                                                        <img src='/resources/static/images/icon_modify.png' name='modifyComment' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
-                        "                                                        <img src='/resources/static/images/icon_bin.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n" +
+                        "                                                        <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
                         "                                                    </span>\n" +
                         "                                                </div>\n";
                 } else {
@@ -260,13 +286,13 @@
                         "                                                    &nbsp\n" +
                         "                                                </div>\n" +
                         "                                                <div class='col-11'>\n" +
-                        "                                                    <img src='/resources/static/images/icon_subComment.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
+                        "                                                    <img src='/../static/images/icons/subComment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
                         "                                                    <span class='mr-3'>" + dataItem.id + "</span>\n" +
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
                         "                                                    <span >\n" +
-                        "                                                        <img src='/resources/static/images/icon_modify.png' name='modifyComment' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
-                        "                                                        <img src='/resources/static/images/icon_bin.png' style='width:15px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
                         "                                                    </span>\n" +
                         "                                                </div>\n";
                 }

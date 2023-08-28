@@ -18,7 +18,7 @@
                                 <!-- 프로필사진 업로드 -->
                                 <div class="form-group" style="text-align: center">
                                     <c:if test = "${ sessionScope.loginUser.photo != null}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${sessionScopeScope.loginUser.photo}"/>
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${sessionScope.loginUser.photo}"/>
                                     </c:if>
                                     <c:if test = "${ sessionScope.loginUser.photo == null}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="../images/icons/default.png"/>
@@ -45,11 +45,11 @@
                                         <div class="col-6">
                                             <label for="gender">성별</label>
                                             <select class="form-control" id="gender" name="gender" readonly>
-                                                <c:if test="${sessionScope.loginUser.gender == 1}">
+                                                <c:if test="${sessionScope.loginUser.gender == '남'}">
                                                     <option selected>남</option>
                                                     <option>여</option>
                                                 </c:if>
-                                                <c:if test="${sessionScope.loginUser.gender == 2}">
+                                                <c:if test="${sessionScope.loginUser.gender == '여'}">
                                                     <option>남</option>
                                                     <option selected>여</option>
                                                 </c:if>

@@ -21,4 +21,6 @@ public interface CommentsService {
     Comments findCommentByCommentsNo(int commentsNo) throws Exception;
     //8. 댓글 내용 수정
     int updateComments(int commentsNo,String commentsContent) throws Exception;
+    //10. 모든 코멘트 찾기
+    List<Comments> findAllComments() throws Exception;
 }

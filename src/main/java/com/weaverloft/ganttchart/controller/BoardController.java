@@ -10,14 +10,21 @@ import com.weaverloft.ganttchart.dto.BoardFile;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board/*")
@@ -61,36 +68,36 @@ public class BoardController {
 //
 //        return resultMap;
 //    }
-//    //1-1. 게시글 전체보기 --> ajax 적용
-//    @ResponseBody   //Http 응답의 body로 사용될 객체를 반환
-//    @PostMapping(value="/boardList-ajax")
-//    public Map<String,Object> boardListAjax(@RequestParam Map<String,Object> map, Model model,HttpSession session){
-//        Map<String,Object> resultMap = new HashMap<>();
-//        int code = 1; // 1:성공 2: 실패
-//        String msg = "성공";
-//        PageMakerDto<Board> data = null;
-//        try{
-//            int pageNo =  Integer.parseInt(map.get("pageNo").toString());
-//            String keyword=null;
-//            if(map.get("keyword") != null){
-//                keyword = map.get("keyword").toString();
-//            } else{
-//                keyword=null;
-//            }
-//            Users loginUser = (Users)session.getAttribute("loginUser");
-//            PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
-//            data = boardListPage;
-//            code = 1;
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            code =2;
-//            msg = "관리자에게 문의하세요";
-//        }
-//        resultMap.put("code",code);
-//        resultMap.put("msg",msg);
-//        resultMap.put("data",data);
-//        return resultMap;
-//    }
+    //1-1. 게시글 전체보기 --> ajax 적용
+    @ResponseBody   //Http 응답의 body로 사용될 객체를 반환
+    @PostMapping(value="/list-ajax")
+    public Map<String,Object> boardListAjax(@RequestParam Map<String,Object> map, Model model, HttpSession session){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 1; // 1:성공 2: 실패
+        String msg = "성공";
+        PageMakerDto<Board> data = null;
+        try{
+            int pageNo =  Integer.parseInt(map.get("pageNo").toString());
+            String keyword=(String)map.get("keyword");
+            if(keyword != null || keyword != ""){
+                keyword = map.get("keyword").toString();
+            } else{
+                keyword=null;
+            }
+            Users loginUser = (Users)session.getAttribute("loginUser");
+            PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
+            data = boardListPage;
+            code = 1;
+        } catch (Exception e){
+            e.printStackTrace();
+            code =2;
+            msg = "관리자에게 문의하세요";
+        }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("data",data);
+        return resultMap;
+    }
 
     //2. 게시글 상세보기
     @GetMapping("/detail/{boardNo}")
@@ -134,7 +141,10 @@ public class BoardController {
                 String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
                     String fileName = fileService.uploadFile(boardFile,filePath);
-                    BoardFile file = new BoardFile(0,fileName,boardNo);
+                    long fileSize = (boardFile.getSize())/1000;
+                    System.out.println("fileSize = " + fileSize);
+                    String fileSizeStr = fileSize+"kb";
+                    BoardFile file = new BoardFile(0,fileName,fileSizeStr,boardNo);
                     boardFileService.createBoardFile(file);
                 }
             }
@@ -188,7 +198,10 @@ public class BoardController {
                 String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
                     String fileName = fileService.uploadFile(boardFile,filePath);
-                    BoardFile file = new BoardFile(0,fileName,boardNo);
+                    long fileSize = boardFile.getSize();
+                    System.out.println("fileSize = " + fileSize);
+                    String fileSizeStr = fileSize+"kb";
+                    BoardFile file = new BoardFile(0,fileName,fileSizeStr,boardNo);
                     boardFileService.createBoardFile(file);
                 }
             }
@@ -197,5 +210,31 @@ public class BoardController {
             e.printStackTrace();
         }
         return forwardPath;
+    }
+
+    //6. 파일 다운로드
+    @ResponseBody
+    @PostMapping("/downloadFile-ajax")
+    public void downloadFileAjax(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
+        try{
+            BoardFile file = boardFileService.findFileByNo(fileNo);
+            String saveFileName = (String)file.getFileName();
+            String filePath = "C:\\Users\\jyn93\\Downloads\\";
+
+            File downloadFile = new File(filePath + saveFileName);
+            byte fileByte[] = FileUtils.readFileToByteArray(downloadFile);
+
+            response.setContentType("application/octet-stream");
+            response.setContentLength(fileByte.length);
+
+            response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(saveFileName,"UTF-8") +"\";");
+            response.setHeader("Content-Transfer-Encoding", "binary");
+
+            response.getOutputStream().write(fileByte);
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

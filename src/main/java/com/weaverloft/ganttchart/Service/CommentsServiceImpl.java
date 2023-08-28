@@ -54,4 +54,9 @@ public class CommentsServiceImpl implements CommentsService{
     public int updateComments(int commentsNo,String commentsContent) throws Exception {
         return commentsDao.updateComments(commentsNo,commentsContent);
     }
+
+    @Override
+    public List<Comments> findAllComments() throws Exception {
+        return commentsDao.findAllComments();
+    }
 }

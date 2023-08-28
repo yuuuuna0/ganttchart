@@ -41,4 +41,8 @@
     <update id="updateComments" parameterType="java.util.Map">
         update COMMENTS set COMMENTS_CONTENT=#{commentsContent} where COMMENTS_NO=#{commentsNo}
     </update>
+<!-- 10. 모든 코멘트 찾기   -->
+    <select id="findAllComments" resultType="com.weaverloft.ganttchart.dto.Comments">
+        select * from COMMENTS
+    </select>
 </mapper>

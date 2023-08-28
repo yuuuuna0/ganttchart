@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class BoardFile {
     private int fileNo;
     private String fileName;
+    private String fileSize;
     private int boardNo;
 }

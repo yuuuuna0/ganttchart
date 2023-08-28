@@ -21,7 +21,7 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" style="cursor: pointer;">
+                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchBoardList();" style="cursor: pointer;">
                                                     <span class="input-group-text">
                                                         <i class="icon-search"></i>
                                                     </span>
@@ -39,7 +39,6 @@
                                             <th>Title</th>
                                             <th>Content</th>
                                             <th>Writer</th>
-                                            <th>Comment</th>
                                             <th>Date</th>
                                             <th>Read</th>
                                         </tr>
@@ -51,8 +50,7 @@
                                                 <td>${board.boardTitle}</td>
                                                 <td>${board.boardContent}</td>
                                                 <td>${board.id}</td>
-                                                <td>${board.boardReadcount}</td>
-                                                <td>${board.boardDate}</td>
+                                                <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>
                                                 <td>${board.boardReadcount}</td>
                                             </tr>
                                         </c:forEach>
@@ -63,11 +61,11 @@
                                 <br>
                                 <!-- pagination -->
                                     <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
+                                        <ul class="pagination" onclick="searchBoardList(event)">
                                             <!-- preview -->
                                             <c:if test="${boardListPage.pageMaker.prevGroupStartPage > 0}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/board/list/${boardListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                    <a class="page-link" data-value="${boardListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
@@ -77,18 +75,18 @@
                                                 <c:forEach begin="${boardListPage.pageMaker.blockBegin}" end="${boardListPage.pageMaker.blockEnd}" var="no">
                                                             <c:if test="${no == boardListPage.pageMaker.curPage}">
                                                                 <li class="page-item active">
-                                                                    <a class="page-link" href="/board/list/${no}">${no}</a>
+                                                                    <a class="page-link" data-value="${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                             <c:if test="${no != boardListPage.pageMaker.curPage}">
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="/board/list/${no}">${no}</a>
+                                                                    <a class="page-link" data-value="${no}">${no}</a>
                                                                 </li>
                                                             </c:if>
                                                 </c:forEach>
                                             <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/board/list/${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                    <a class="page-link" data-value="${boardListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
                                                         <span aria-hidden="true">&raquo;</span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
@@ -112,24 +110,28 @@
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            findBoardList();
+            searchBoardList();
             e.preventDefault();
         }
     });
     // 게시글 검색하기
-    function searchBoardList(){
-        let sendData;
+    function searchBoardList(e){
         let keyword = $('#keyword').val();
-        console.log(keyword);
-        sendData = {
-            'keyword' : keyword
-        };
+        let pageNo =1;
 
-        $.ajax({
-            url : '/boardList-ajax',
+        if (e.target.tagName === 'A') {
+            pageNo = e.target.getAttribute('data-value');
+            console.log('pageNo :', pageNo);
+        }
+
+            $.ajax({
+            url : '/board/list-ajax',
             method : 'POST',
             dataType : 'json',
-            data : sendData,
+            data :  {
+                'keyword' : keyword,
+                'pageNo' : pageNo
+            },
             success : function(resultJson){
                 if(resultJson.code === 1){
                     console.log(resultJson.data);
@@ -144,12 +146,22 @@
                              "                                                <td>" + dataItem.boardTitle + "</td>\n" +
                              "                                                <td>" + dataItem.boardContent+ "</td>\n" +
                              "                                                <td>" + dataItem.id+ "</td>\n" +
-                             "                                                <td>" + dataItem.boardReadcount+ "</td>\n" +
                              "                                                <td>" + dataItem.boardDate+ "</td>\n" +
                              "                                                <td>" + dataItem.boardReadcount+ "</td>\n" +
                              "                                            </tr>";
                      }
                      $('#boardTbody').append(html);
+
+                    <%--// 모든 페이지 아이템에서 active 클래스 제거--%>
+                    <%--let pageItems = document.querySelectorAll('.page-item');--%>
+                    <%--pageItems.forEach(item => {--%>
+                    <%--    item.classList.remove('active');--%>
+                    <%--});--%>
+
+                    <%--// 선택한 페이지 아이템에 active 클래스 추가--%>
+                    <%--let selectedPageItem = document.querySelector(`.page-item[data-value="${pageNumber}"]`);--%>
+                    <%--selectedPageItem.classList.add('active');--%>
+
                 } else {
                     alert(resultJson.msg);
                 }
