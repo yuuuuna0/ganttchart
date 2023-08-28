@@ -3,9 +3,6 @@ package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dao.UsersDao;
 import com.weaverloft.ganttchart.dto.Users;
-import com.weaverloft.ganttchart.exception.PasswordMismatchException;
-import com.weaverloft.ganttchart.exception.UserNotFoundException;
-import com.weaverloft.ganttchart.exception.isInvalidPasswordException;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -34,11 +31,11 @@ public class UsersServiceImpl implements UsersService {
     public Users login(String id, String password) throws Exception {
         Users users = usersDao.findUsersById(id);
         if (users == null) {
-            throw new UserNotFoundException("존재하지 않는 아이디입니다.");
+            throw new Exception("존재하지 않는 아이디입니다.");
         }
         if (!users.getPassword().equals(password)) {
             //저장된 비밀번호와 암호화된 비밀번호를 비교
-            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+            throw new Exception("비밀번호가 일치하지 않습니다.");
         }
         return users;
     }
@@ -55,7 +52,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public boolean isValidPassword(String password) throws Exception {
         /*
-          1) 8~15글자
+          1) 6~15글자
           2) 영어, 숫자, 특수문자 포함
           3) 공백 안됨
         */
@@ -72,34 +69,14 @@ public class UsersServiceImpl implements UsersService {
         if (password.length() < 6 || password.length() > 12) {
             throw new Exception("비밀번호는 6글자 이상 12글자 이하여야 합니다.");
         }
-        if (!password.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,12}$")) {
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$")) {
             throw new Exception("비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.");
         }
+        if (Pattern.compile("(\\s)").matcher(password).find()) {
+            throw new Exception("비밀번호에는 공백이 포함될 수 없습니다.");
+        }
         return true;
-//        final String REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,15}$";     //영어, 숫자, 특수문자 포함한 min~max 글자 정규식
-//        final String BLANKPT = "(\\s)";       //공백 문자 정규식
-//
-//        if (password == null || password.isEmpty()) {
-//            //입력한 내용이 없을 경우
-//            System.out.println("문자를 입력하세요");
-//            return false;
-//        } else if (password.length() < 6 || password.length() > 15) {
-//            //8~15글자의 비밀번호
-//            System.out.println("비밀번호는 6글자 이상 15글자 이하여야합니다.");
-//            return false;
-//        } else if (password.matches(REGEX)) {
-//            //영문, 숫자, 특수문자 포함 확인
-//            System.out.println("비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.");
-//            return false;
-//        } else if (Pattern.compile(BLANKPT).matcher(password).find()) {
-//            //공백 포함된 경우
-//            System.out.println("비밀번호에는 공백이 포함될 수 없습니다.");
-//            return false;
-//        } else {
-//            //성공
-//            System.out.println("사용 가능한 비밀번호입니다.");
-//            return true;
-//        }
+
     }
 
     //4. 아이디 중복 확인
