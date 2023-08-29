@@ -3,6 +3,8 @@ package com.weaverloft.ganttchart.Service;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 
+import java.util.List;
+
 public interface UsersService {
     //1. 로그인
     Users login(String id,String password) throws Exception;
@@ -19,11 +21,11 @@ public interface UsersService {
     //6. 휴면상태로 변경 (isEmailAuth:2)
     int updateAuthStatus2(String id) throws Exception;
     //7. 이름,이메일로 아이디 찾기
-    String findIdByNameEmail(String name, String email) throws Exception;
+    List<String> findIdByNameEmail(String name, String email) throws Exception;
     //8. 아이디, 이름, 이메일로 비밀번호 변경하기
     int findPasswordByIdNameEmail(String id, String name, String email) throws Exception;
     //9. 비밀번호 변경
-    int updatePassword(String id, String encryptTempPassword) throws Exception;
+    int updatePassword(String id, String encryptTempPassword, int authStatus) throws Exception;
     //10. 회원 탈퇴
     int deleteUsers(String id) throws Exception;
     //11. 회원 전체 조회 --> 페이징

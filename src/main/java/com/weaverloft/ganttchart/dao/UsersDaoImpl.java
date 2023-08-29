@@ -57,7 +57,7 @@ public class UsersDaoImpl implements UsersDao {
     }
     //7. 이름, 이메일로 아이디 찾기
     @Override
-    public String findIdByNameEmail(String name, String email) throws Exception{
+    public List<String> findIdByNameEmail(String name, String email) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("name",name);
         map.put("email",email);
@@ -74,10 +74,11 @@ public class UsersDaoImpl implements UsersDao {
     }
     //9. 비밀번호 변경
     @Override
-    public int updatePassword(String id, String password) throws Exception{
+    public int updatePassword(String id, String password, int authStatus) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
         map.put("password",password);
+        map.put("authStatus", authStatus);
         return usersMapper.updatePassword(map);
     }
     @Override

@@ -103,9 +103,8 @@ public class UsersServiceImpl implements UsersService {
 
     //7. 이름,이메일로 아이디 찾기
     @Override
-    public String findIdByNameEmail(String name, String email) throws Exception {
-        String findId = usersDao.findIdByNameEmail(name, email);
-        return findId;
+    public List<String> findIdByNameEmail(String name, String email) throws Exception {
+        return usersDao.findIdByNameEmail(name, email);
     }
 
     //8. 아이디, 이름, 이메일로 비밀번호 변경하기
@@ -117,8 +116,8 @@ public class UsersServiceImpl implements UsersService {
 
     //9. 비밀번호 변경
     @Override
-    public int updatePassword(String id, String encryptTempPassword) throws Exception {
-        int result = usersDao.updatePassword(id, encryptTempPassword);
+    public int updatePassword(String id, String encryptTempPassword, int authStatus) throws Exception {
+        int result = usersDao.updatePassword(id, encryptTempPassword,authStatus);
         return 0;
     }
 

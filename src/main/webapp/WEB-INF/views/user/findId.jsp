@@ -15,7 +15,7 @@
                             <h4 class="card-title">아이디 찾기</h4>
                             <p class="card-description">
                             </p>
-                            <form class="forms-sample">
+                            <form class="forms-sample" id="findIdF">
                                 <div class="form-group">
                                     <label for="name">이름</label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
@@ -38,7 +38,35 @@
     <!-- main-panel ends -->
 <script type="text/javascript">
     function findId(){
+        let email = $('#email').val();
+        let name = $('#name').val();
 
+        $.ajax({
+            url :'/user/findId-ajax',
+            method: 'POST',
+            data : {
+                'email' : email,
+                'name' : name
+            },
+            success: function (resultJson) {
+                if(resultJson.code === 1){
+                    $('#findIdF').empty();
+                    let html = '';
+                    console.log(resultJson);
+                    for(let i=0; i<resultJson.data.length; i++){
+                        let dataItem = resultJson.data[i];
+                        console.log(dataItem);
+                        html+="<label>"+dataItem+"</label><br>";
+                    }
+                    $('#findIdF').append(html);
+                } else {
+                    alert(resultJson.msg);
+                }
+            },
+            error : function(e){
+                alert(e);
+            }
+        });
     }
 </script>
 

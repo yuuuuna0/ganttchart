@@ -18,9 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class UsersController {
@@ -141,6 +139,9 @@ public class UsersController {
                 //인증된 사용자
                 int result=usersLogService.createLog(loginUser.getId(),10);
                 forwardPath = "redirect:/";
+            } else if(loginUser.getAuthStatus()==3){
+                //임시비번으로 로그인 한 사람
+                forwardPath = "redirect:/user/modifyPassword";
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -204,21 +205,29 @@ public class UsersController {
 
     //3-1. 아이디 찾기 페이지 --> 완료
     @GetMapping("/user/findId")
-    public String findId(){
-        return "/user/findId";
+    public String findId(Model model){
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }return "/user/findId";
     }
     //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함 --> ajax
+    @ResponseBody
     @PostMapping("/user/findId-ajax")
     public Map<String,Object> findIdAjax(@RequestParam Map map) {
         Map<String, Object> resultMap = new HashMap<>();
         int code = 1;
         String msg = "성공";
-        String data = "";
+        List<String> data = new ArrayList<>();
         String name=(String)map.get("name");
         String email=(String)map.get("email");
         try{
-            String findId=usersService.findIdByNameEmail(name,email);
-            data = findId;
+            List<String> findIdList=usersService.findIdByNameEmail(name,email);
+            data = findIdList;
         } catch (Exception e){
             e.printStackTrace();
             code = 2;
@@ -231,7 +240,15 @@ public class UsersController {
     }
     //4-1. 비밀번호 찾기 페이지 --> 완료
     @GetMapping("/user/findPassword")
-    public String findPassword(){
+    public String findPassword(Model model){
+    try{
+        //cm_left data
+        Map<String, Object> map = menuService.cmLeftMenuList();
+        model.addAttribute("menuList", map.get("menuList"));
+        model.addAttribute("preMenuList",map.get("preMenuList"));
+    } catch (Exception e){
+        e.printStackTrace();
+    }
         return "/user/findPassword";
     }
     //4-2. 비밀번호 찾기 액션 --> 완료
@@ -251,7 +268,8 @@ public class UsersController {
                 //임시비밀번호 암호화한 뒤 DB변경
                 String encryptTempPassword = sha256Service.encrypt(tempPassword);
                 System.out.println("임시비번 암호화: "+encryptTempPassword);
-                usersService.updatePassword(id,encryptTempPassword);
+                int authStatus = 3; //비번 변경시 계정상태 3으로 변경
+                usersService.updatePassword(id,encryptTempPassword,authStatus);
                 forwardPath = "redirect:/login";
             }
         } catch (Exception e){
@@ -259,6 +277,41 @@ public class UsersController {
         }
         return forwardPath;
     }
+    //4. 비밀번호 변경 페이지
+    @LoginCheck
+    @GetMapping("/user/modifyPassword")
+    public String modifyPassword(Model model){
+        String forwardPath="";
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+    //4-1. 비밀번호 변경 액션
+    @LoginCheck
+    @PostMapping("/user/modifyPassword-action")
+    public String modifyPasswordAction(HttpSession session){
+        String forwardPath="";
+        try{
+
+
+            Users users=(Users)session.getAttribute("loginUser");
+            session.invalidate();
+            usersLogService.createLog(users.getId(),11);
+            forwardPath="redirect:/login";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
 
     //5.마이페이지 --> 완료
     @LoginCheck

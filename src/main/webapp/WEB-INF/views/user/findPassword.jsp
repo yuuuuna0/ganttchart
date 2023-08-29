@@ -15,7 +15,7 @@
                             <h4 class="card-title">비밀번호 찾기</h4>
                             <p class="card-description">
                             </p>
-                            <form class="forms-sample" name="findPasswordF" id="findPasswordF" method="post" action="/findPassword-action">
+                            <form class="forms-sample" name="findPasswordF" id="findPasswordF" method="post" action="/user/findPassword-action">
                                 <div class="form-group">
                                     <label for="id">아이디</label>
                                     <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요">

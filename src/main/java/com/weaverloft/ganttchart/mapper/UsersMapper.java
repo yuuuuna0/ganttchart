@@ -19,7 +19,7 @@ public interface UsersMapper {
     //5. 아이디 중복 체크
     int isExistedId(String id) throws Exception;
     //6. 이름, 이메일로 아이디 찾기
-    String findIdByNameEmail(Map<String,Object> map) throws Exception;
+    List<String> findIdByNameEmail(Map<String,Object> map) throws Exception;
     //7. 이메일인증 업데이트
     int updateAuthStatus1(String id) throws Exception;
     //7. 휴면계정
