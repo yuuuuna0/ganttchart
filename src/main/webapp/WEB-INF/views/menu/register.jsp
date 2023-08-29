@@ -22,6 +22,23 @@
                                 <form class="form-sample" name="menuRegisterF" id="menuRegisterF">
                                     <div class="row">
                                         <div class="form-group col-6">
+                                            <label for="menuLevel">메뉴레벨</label>
+                                            <select class="form-control" id="menuLevel" name="menuLevel">
+                                                <option selected disabled></option>
+                                                <option value="1">+ 상위탭</option>
+                                                <option value="2">+ 하위탭</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="parentId">상위탭</label>
+                                            <select class="form-control" id="parentId" name="parentId" disabled>
+                                                <option selected disabled></option>
+                                                <c:forEach items="${preMenuList}" var="preMenu">
+                                                    <option value="${preMenu.menuNo}">${preMenu.menuTitle}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
                                             <label for="menuTitle">메뉴명</label>
                                             <input type="text" class="form-control" id="menuTitle" name="menuTitle"  />
                                         </div>
@@ -32,16 +49,6 @@
                                         <div class="form-group col-6">
                                             <label for="menuUrl">URL</label>
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"   />
-                                        </div>
-                                        <div class="form-group col-6">
-                                                <label for="parentId">상위탭</label>
-                                                <select class="form-control" id="parentId" name="parentId">
-                                                    <option></option>
-                                                <c:forEach items="${preMenuList}" var="preMenu">
-                                                    <option value="${preMenu.menuNo}">${preMenu.menuTitle}</option>
-                                                </c:forEach>
-                                                    <option value="0">+ 추가하기</option>
-                                                </select>
                                         </div>
                                         <div class="form-group col-6">
                                                 <label for="useYN">사용레벨</label>
@@ -71,43 +78,80 @@
         </div>
         <!-- main-panel ends -->
 <script>
+
+    $('#menuLevel').change(function(){
+        let menuLevelSelect = $('#menuLevel');
+        let parentIdSelect = $('#parentId');
+
+        if (menuLevelSelect.val() === "2") { // 하위탭이 선택된 경우
+            parentIdSelect.prop('disabled', false); // 상위탭 선택창 활성화
+        } else {
+            parentIdSelect.prop('disabled', true); // 상위탭 선택창 비활성화
+        }
+    });
+
+
     //1. 메뉴 작성
     function registerMenu(){
-    let menuTitle = $('#menuTitle').val();
-    let menuDesc = $('#menuDesc').val();
-    let menuUrl = $('#menuUrl').val();
-    //--> 상위탭 하위탭 선택한 걸로 등록하는 기능
-    let parentId = $('#parentId option:selected').val();
-    let useYN = $('#useYN option:selected').val();
+        let menuLevel = $('#menuLevel option:selected').val();
+        let parentId;
+        if(menuLevel === "2") { //문자열로 비교
+        parentId = $('#parentId option:selected').val();
+        }
+        console.log(parentId);
+        let menuTitle = $('#menuTitle').val();
+        let menuDesc = $('#menuDesc').val();
+        let menuUrl = $('#menuUrl').val();
+        let useYN = $('#useYN option:selected').val();
 
-
-    if(menuTitle === ''){
-        alert("메뉴명을 입력하세요");
-        document.getElementById("menuTitle").focus();
-        return false;
-    }
-    if(menuDesc === ''){
-        alert("메뉴설명을 입력하세요");
-        document.getElementById("menuDesc").focus();
-        return false;
-    }
-    if(menuUrl === ''){
-        alert("url을 입력하세요");
-        document.getElementById("menuUrl").focus();
-        return false;
-    }
-    if(parentId === ''){
-        alert("상위탭을 선택하세요");
-        document.getElementById("parentId").focus();
-    }
-    if(useYN === ''){
-        alert("사용레벨을 선택하세요");
-        document.getElementById("useYN").focus();
-    }
-
-    document.menuRegisterF.method = 'POST';
-    document.menuRegisterF.action = '/menu/register-action';
-    document.menuRegisterF.submit();
+        if(menuLevel === ''){
+            alert("메뉴레벨을 선택하세요");
+            return false;
+        }
+        if(menuLevel === 2 && parentId ===''){
+            alert("상위탭을 선택하세요");
+            return false;
+        }
+        if(menuTitle === ''){
+            alert("메뉴명을 입력하세요");
+            document.getElementById("menuTitle").focus();
+            return false;
+        }
+        if(menuDesc === ''){
+            alert("메뉴설명을 입력하세요");
+            document.getElementById("menuDesc").focus();
+            return false;
+        }
+        if(menuUrl === ''){
+            alert("url을 입력하세요");
+            document.getElementById("menuUrl").focus();
+            return false;
+        }
+        if(useYN === ''){
+            alert("사용레벨을 선택하세요");
+        }
+        $.ajax({
+            url : '/menu//register-ajax',
+            method : 'POST',
+            data :{
+                'menuTitle' : menuTitle,
+                'menuDesc' : menuDesc,
+                'menuUrl' : menuUrl,
+                'useYN' : useYN,
+                'parentId' : parentId,
+                'menuLevel' : menuLevel
+            },
+            success: function(resultJson){
+                if(resultJson.code ===1){
+                    window.location.href = '/menu/list?pageNo=1&keyword=';
+                } else {
+                    alert(resultJson.msg);
+                }
+            },
+            error : function(e){
+                    console.log(e);
+            }
+        });
     }
 
 

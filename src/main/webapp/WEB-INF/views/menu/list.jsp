@@ -41,9 +41,6 @@
                                             <th>Url</th>
                                             <th>Description</th>
                                             <th>상위탭</th>
-                                            <th>공개레벨</th>
-                                            <th>사용여부</th>
-                                            <th>삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
@@ -65,20 +62,6 @@
                                                         </c:forEach>
                                                     </c:otherwise>
                                                 </c:choose>
-
-                                                <td>${menu.parentId}</td>
-                                                <c:choose>
-                                                    <c:when test="${menu.useYN == 0}">
-                                                        <td>관리자</td>
-                                                    </c:when>
-                                                    <c:when test="${menu.useYN == 1}">
-                                                        <td>모든사용자</td>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <td>비공개</td>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <td><input type="button" value="삭제" onclick="deleteMenu(${menu.menuNo})"></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -132,13 +115,13 @@
         </div>
         <!-- main-panel ends -->
 <script>
-    function deleteMenu(no){
-
+    function deleteMenu(e,no){
+        e.stopPropagation();
         window.location.href = '/menu/delete-action?menuNo='+no;
     }
 
-    function goToMenu(menuNo){
-        window.location.href='/menu/detail/'+menuNo;
+    function goToMenu(no){
+        window.location.href='/menu/detail?menuNo='+no;
     }
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {

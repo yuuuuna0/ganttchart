@@ -10,6 +10,7 @@ import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -17,7 +18,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -199,26 +202,39 @@ public class BoardController {
     }
 
     //6. 파일 다운로드
-    @ResponseBody
-    @PostMapping("/downloadFile-ajax")
-    public void downloadFileAjax(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
+    @GetMapping("/downloadFile")
+    public void downloadFile(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
         try{
             BoardFile file = boardFileService.findFileByNo(fileNo);
             String saveFileName = (String)file.getFileName();
             String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
 
+            // globals.properties
             File downloadFile = new File(filePath + saveFileName);
-            byte fileByte[] = FileUtils.readFileToByteArray(downloadFile);
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(downloadFile));
+            //byte fileByte[] = FileUtils.readFileToByteArray(downloadFile);
 
+            //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
+            String header = request.getHeader("User-Agent");
+            String fileName;
+
+            if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+                //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
+                fileName = URLEncoder.encode(saveFileName, "UTF-8");
+            } else {
+                //나머지 브라우저에서 인코딩
+                fileName = new String(saveFileName.getBytes("UTF-8"), "iso-8859-1");
+            }
+            //형식을 모르는 파일첨부용 contentType
             response.setContentType("application/octet-stream");
-            response.setContentLength(fileByte.length);
-
-            response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(saveFileName,"UTF-8") +"\";");
-            response.setHeader("Content-Transfer-Encoding", "binary");
-
-            response.getOutputStream().write(fileByte);
+            //다운로드와 다운로드될 파일이름
+            response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+            //파일복사
+            FileCopyUtils.copy(in, response.getOutputStream());
+            in.close();
             response.getOutputStream().flush();
             response.getOutputStream().close();
+
         } catch (Exception e){
             e.printStackTrace();
         }

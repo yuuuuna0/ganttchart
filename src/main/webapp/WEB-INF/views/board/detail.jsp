@@ -149,23 +149,7 @@
 
     /********************************  파일 다운로드 **********************************/
     function fileDownload(no){
-        console.log(no);
-        let fileNo = no;
-        $.ajax({
-            url: '/board/downloadFile-ajax',
-            method: 'POST',
-            data: {
-                'fileNo': fileNo
-            },
-            success: function (resultJson) {
-                console.log(resultJson);
-            },
-            error: function (e) {
-                console.log(e);
-                console.log('에러확인');
-            },
-            async: true
-        });
+        window.location.href='/board/downloadFile?fileNo='+no;
     }
 
 

@@ -84,4 +84,15 @@ public class MenuDaoImpl implements MenuDao{
     public int updateParentId(int menuNo) throws Exception {
         return menuMapper.updateParentId(menuNo);
     }
+
+    @Override
+    public int isExistedMenuTitle(String menuTitle) {
+        System.out.println("result:  "+menuMapper.isExistedMenuTitle(menuTitle));
+        return menuMapper.isExistedMenuTitle(menuTitle);
+    }
+
+    @Override
+    public int isExistedMenuUrl(String menuUrl) {
+        return  menuMapper.isExistedMenuUrl(menuUrl);
+    }
 }

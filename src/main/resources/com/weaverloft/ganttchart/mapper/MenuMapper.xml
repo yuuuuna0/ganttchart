@@ -68,10 +68,19 @@
     </select>
 <!-- 6. 메뉴 수정하기   -->
     <update id="updateMenu" parameterType="java.util.Map">
-        update menu set MENU_ORDER=#{menuOrder},MENU_TITLE=#{menuTitle}, MENU_URL=#{menuUrl}, MENU_DESC=#{menuDesc},  PARENT_ID=#{parentId}, USE_YN=#{useYN} where MENU_NO=#{menuNo}
+        update menu set MENU_ORDER=#{menuOrder},MENU_TITLE=#{menuTitle}, MENU_URL=#{menuUrl}, MENU_DESC=#{menuDesc}, USE_YN=#{useYN} where MENU_NO=#{menuNo}
     </update>
 <!-- 6. 메뉴 사용여부 변경하기   -->
     <update id="updateUse" parameterType="java.util.Map">
         update menu set USE_YN=#{useYN} where MENU_NO=#{menuNo}
     </update>
+<!--   메뉴이름 존재개수 -->
+    <select id="isExistedMenuTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from menu where MENU_TITLE=#{menuTitle}
+    </select>
+<!--   메뉴url 존재여부 확인 -->
+    <select id="isExistedMenuUrl" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from menu where MENU_Url=#{menuUrl}
+    </select>
+
 </mapper>

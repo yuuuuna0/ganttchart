@@ -59,8 +59,8 @@
                                     <div class="form-group col-12">
                                         <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                         <div style="text-align: right">
-                                            <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/menu/modify/${menu.menuNo}'" value="수정">
-                                            <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/menu/delete-action/${menu.menuNo}'" value="삭제">
+                                            <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/menu/modify?menuNo=${menu.menuNo}'" value="수정">
+                                            <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/menu/delete-action?menuNo=${menu.menuNo}'" value="삭제">
                                         </div>
                                         </c:if>
                                     </div>

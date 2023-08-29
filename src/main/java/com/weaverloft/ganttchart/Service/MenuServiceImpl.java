@@ -92,4 +92,20 @@ public class MenuServiceImpl implements MenuService {
         return map;
     }
 
+    @Override
+    public boolean isExistedMenuTitle(String menuTitle) {
+        if(menuDao.isExistedMenuTitle(menuTitle) == 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isExistedMenuUrl(String menuUrl) {
+        if(menuDao.isExistedMenuUrl(menuUrl) == 0){
+            return false;
+        }
+        return true;
+    }
+
 }

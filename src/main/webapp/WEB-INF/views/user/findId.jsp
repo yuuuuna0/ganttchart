@@ -24,7 +24,7 @@
                                     <label for="email">이메일</label>
                                     <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
                                 </div>
-                                <input id="findIdBtn" type="submit" class="btn btn-primary mr-2" value="아이디찾기">
+                                <input id="findIdBtn" type="button" onclick="findId();" class="btn btn-primary mr-2" value="아이디찾기">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
                                 <a href="register" class="auth-link text-black">Need an account? Sign up!</a>
                             </form>
@@ -37,7 +37,9 @@
     </div>
     <!-- main-panel ends -->
 <script type="text/javascript">
+    function findId(){
 
+    }
 </script>
 
 </body>

@@ -33,4 +33,8 @@ public interface MenuService {
     int updateParentId(int menuNo) throws Exception;
     //13. cm_left에 붙일 메뉴리스트
     Map<String,Object> cmLeftMenuList() throws Exception;
+    //14. 메뉴이름 존재여부 확인
+    boolean isExistedMenuTitle(String menuTitle);
+    //15. 메뉴url 존재여부 확인
+    boolean isExistedMenuUrl(String menuUrl);
 }
