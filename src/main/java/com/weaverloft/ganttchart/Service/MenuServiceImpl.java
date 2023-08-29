@@ -39,10 +39,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public PageMakerDto<Menu> findMenuList(int pageNo) throws Exception{
-        int totMenuCount = menuDao.findMenuCount();
+    public PageMakerDto<Menu> findMenuList(int pageNo,String keyword) throws Exception{
+        int totMenuCount = menuDao.findMenuCount(keyword);
         PageMaker pageMaker = new PageMaker(totMenuCount,pageNo);
-        List<Menu> menuList = menuDao.findMenuList(pageMaker.getPageBegin(),pageMaker.getPageEnd());
+        List<Menu> menuList = menuDao.findMenuList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);
         PageMakerDto<Menu> pageMakerMenuList = new PageMakerDto<>(menuList,pageMaker,totMenuCount);
         return pageMakerMenuList;
     }

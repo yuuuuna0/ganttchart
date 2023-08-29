@@ -22,7 +22,7 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" style="cursor: pointer;">
+                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchMenuList(1)" style="cursor: pointer;">
                                                     <span class="input-group-text">
                                                         <i class="icon-search"></i>
                                                     </span>
@@ -37,24 +37,48 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Group No</th>
                                             <th>Title</th>
                                             <th>Url</th>
                                             <th>Description</th>
-                                            <th>Using</th>
-                                            <th>Parent Id</th>
+                                            <th>상위탭</th>
+                                            <th>공개레벨</th>
+                                            <th>사용여부</th>
+                                            <th>삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
                                         <c:forEach items="${menuListPage.itemList}" var="menu">
                                             <tr style="cursor: pointer;" onclick="goToMenu('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
                                                 <td>${menu.menuNo}</td>
-                                                <td>${menu.menuOrder}</td>
                                                 <td>${menu.menuTitle}</td>
                                                 <td>${menu.menuUrl}</td>
                                                 <td>${menu.menuDesc}</td>
-                                                <td>${menu.useYN}</td>
+                                                <c:choose>
+                                                    <c:when test="${menu.menuNo == menu.parentId}">
+                                                        <td>-</td>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:forEach items="${preMenuList}" var = "preMenu">
+                                                            <c:if test="${menu.parentId == preMenu.menuNo}">
+                                                                <td>${preMenu.menuTitle}</td>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:otherwise>
+                                                </c:choose>
+
                                                 <td>${menu.parentId}</td>
+                                                <c:choose>
+                                                    <c:when test="${menu.useYN == 0}">
+                                                        <td>관리자</td>
+                                                    </c:when>
+                                                    <c:when test="${menu.useYN == 1}">
+                                                        <td>모든사용자</td>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <td>비공개</td>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <td><input type="button" value="삭제" onclick="deleteMenu(${menu.menuNo})"></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -68,31 +92,32 @@
                                             <!-- preview -->
                                             <c:if test="${menuListPage.pageMaker.prevGroupStartPage > 0}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/menu/list/${menuListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                <button  class="page-link" value="${menuListPage.pageMaker.prevGroupStartPage}" onclick="searchMenuList(${menuListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
+                                                </button>
                                                 </li>
                                             </c:if>
                                             <!-- n개 고정 -->
                                                 <c:forEach begin="${menuListPage.pageMaker.blockBegin}" end="${menuListPage.pageMaker.blockEnd}" var="no">
                                                             <c:if test="${no == menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item active">
-                                                                    <a class="page-link" href="/menu/list/${no}">${no}</a>
+                                                                <button class="page-link" value="${no}" onclick="searchMenuList(${no})">${no}</button>
                                                                 </li>
                                                             </c:if>
                                                             <c:if test="${no != menuListPage.pageMaker.curPage}">
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="/menu/list/${no}">${no}</a>
+                                                                <button class="page-link" value="${no}" onclick="searchMenuList(${no})">${no}</button>
                                                                 </li>
                                                             </c:if>
                                                 </c:forEach>
                                             <c:if test="${menuListPage.pageMaker.nextGroupStartPage <= menuListPage.pageMaker.totPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/menu/list/${menuListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                    <button class="page-link" value="${menuListPage.pageMaker.nextGroupStartPage}" onclick="searchMenuList(${menuListPage.pageMaker.nextGroupStartPage})" aria-label="Next">
                                                         <span aria-hidden="true">&laquo;</span>
                                                         <span class="sr-only">Next</span>
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             </c:if>
                                         </ul>
@@ -107,64 +132,26 @@
         </div>
         <!-- main-panel ends -->
 <script>
+    function deleteMenu(no){
+
+        window.location.href = '/menu/delete-action?menuNo='+no;
+    }
+
     function goToMenu(menuNo){
         window.location.href='/menu/detail/'+menuNo;
     }
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            findmenuList();
+            searchMenuList(1);
             e.preventDefault();
         }
     });
-    // 게시글 검색하기
-    function searchmenuList(){
-        let sendData;
-        let keyword = $('#keyword').val();
-        console.log(keyword);
-        sendData = {
-            'keyword' : keyword
-        };
-
-        $.ajax({
-            url : '/boardList-ajax',
-            method : 'POST',
-            dataType : 'json',
-            data : sendData,
-            success : function(resultJson){
-                if(resultJson.code === 1){
-                    console.log(resultJson.data);
-                    let data = resultJson.data.itemList;
-                    $('#boardTbody').empty();
-                    let html = '';
-                    for(let i = 0  ; i < data.length ; i++){
-                         let dataItem = data[i];
-                         console.log(dataItem);
-                         html += "<tr style=\"cursor: pointer;\" onclick=\"goToBoardList('" + dataItem.boardNo + "')\" onmouseover=\"this.style.background='gray'\" onmouseout=\"this.style.background='white'\">\n" +
-                             "                                                <td>" + dataItem.boardNo + "</td>\n" +
-                             "                                                <td>" + dataItem.boardTitle + "</td>\n" +
-                             "                                                <td>" + dataItem.boardContent+ "</td>\n" +
-                             "                                                <td>" + dataItem.id+ "</td>\n" +
-                             "                                                <td>" + dataItem.boardReadcount+ "</td>\n" +
-                             "                                                <td>" + dataItem.boardDate+ "</td>\n" +
-                             "                                                <td>" + dataItem.boardReadcount+ "</td>\n" +
-                             "                                            </tr>";
-                     }
-                     $('#boardTbody').append(html);
-
-                    alert(resultJson.msg);
-                    //render('#boardListPage',resultJson,)
-
-                } else {
-                    alert(resultJson.msg);
-                }
-            },
-            error : function(e) {
-                console.log(e);
-                console.log('에러확인');
-            },
-            async : true
-        });
+    // 메뉴 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
+    function searchMenuList(no){
+    let keyword = $('#keyword').val();
+    let pageNo = no;
+    window.location.href='/menu/list?pageNo='+pageNo+'&keyword='+keyword;
     }
 
 </script>

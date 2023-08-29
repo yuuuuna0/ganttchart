@@ -87,8 +87,8 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     @Override
-    public int findUsersCount() throws Exception{
-        return usersMapper.findUsersCount();
+    public int findUsersCount(String keyword) throws Exception{
+        return usersMapper.findUsersCount(keyword);
     }
 
     @Override
@@ -104,6 +104,7 @@ public class UsersDaoImpl implements UsersDao {
     public List<Users> findUserList() throws Exception {
         return usersMapper.findUserList2();
     }
+
 
 
 

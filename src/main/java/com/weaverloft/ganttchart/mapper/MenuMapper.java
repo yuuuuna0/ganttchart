@@ -19,7 +19,7 @@ public interface MenuMapper {
     //4. 메뉴리스트 전체 불러오기
     List<Menu> findMenuList(Map<String,Object> map);
     //5. 전체 메뉴 개수
-    int findMenuCount() throws Exception;
+    int findMenuCount(String keyword) throws Exception;
     //6. 메뉴 수정하기
     int updateMenu(Menu menu) throws Exception;
     //7. 사용여부 변경하기

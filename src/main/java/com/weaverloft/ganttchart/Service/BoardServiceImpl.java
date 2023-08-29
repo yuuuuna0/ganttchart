@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService {
     //2. 게시글 전체 리스트 보기 --> 페이징처리 필요
     @Override
     public PageMakerDto<Board> findBoardList(int pageNo,String keyword) throws Exception {
-        int totBoardCount=boardDao.findBoardCount();    //전체 글 개수
+        int totBoardCount=boardDao.findBoardCount(keyword);    //전체 글 개수 --> 조건에 맞는 개수의 전체 계산해야함
         PageMaker pageMaker=new PageMaker(totBoardCount,pageNo);    //page 계산
         //게시글 데이터 얻기
         List<Board> boardList=boardDao.findBoardList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);

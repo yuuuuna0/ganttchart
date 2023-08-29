@@ -16,6 +16,7 @@
                             <!-- 게시글 -->
                             <div class="card-body">
                                 <h4 class="card-title">메뉴 수정하기</h4>
+                                <form name="menuModifyF" id="menuModifyF">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label for="menuNo">메뉴번호</label>
@@ -37,27 +38,41 @@
                                         <div class="form-group col-6">
                                             <label for="parentId">상위탭</label>
                                             <select class="form-control" id="parentId" name="parentId">
-                                            <c:if test="${menu.parentId == 0 }">
-                                                <option selected></option>
-                                                <option value="0">+ 추가하기</option>
-                                            </c:if>
-                                            <c:if test="${menu.parentId != 0 }">
-                                                <option></option>
-                                                <c:forEach items="${subMenuList}" var="subMenu">
-                                                <option value="${subMenu.menuNo}" selected>${subMenu.menuTitle}</option>
+                                                <option disabled></option>
+                                                <c:forEach items="${preMenuList}" var="preMenu">
+                                                    <c:choose>
+                                                        <c:when test="${preMenu.menuNo == menu.parentId}">
+                                                            <option value="${preMenu.menuNo}" selected>${preMenu.menuTitle}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${preMenu.menuNo}">${preMenu.menuTitle}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:forEach>
                                                 <option value="0">+ 추가하기</option>
-                                            </c:if>
                                             </select>
                                         </div>
-                                            <div class="col-6">
+                                        <div class="col-6">
                                             <label for="subMenu">하위탭</label>
                                             <select class="form-control" id="subMenu" name="subMenu">
-                                            <option></option>
-                                                <option value="${subMenu.menuNo}">${subMenu.menuTitle}</option>
-                                            <option value="0">+ 추가하기</option>
+                                                <c:forEach items="${subMenuList}" var="subMenu">
+                                                    <c:if test="${subMenu.menuNo == subMenu.parentId}">
+                                                        <option selected></option>
+                                                    </c:if>
+                                                    <c:if test="${subMenu.menuNo != subMenu.parentId}">
+                                                        <c:choose>
+                                                        <c:when test="${subMenu.menuNo == menu.menuNo}">
+                                                            <option value="${subMenu.menuNo}" selected>${subMenu.menuTitle}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${subMenu.menuNo}">${subMenu.menuTitle}</option>
+                                                        </c:otherwise>
+                                                        </c:choose>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <option value="0">+ 추가하기</option>
                                             </select>
-                                            </div>
+                                        </div>
                                     <div class="form-group col-12">
                                         <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                         <div style="text-align: right">
@@ -67,7 +82,7 @@
                                         </c:if>
                                     </div>
                                 </div>
-                                </div>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -77,6 +92,34 @@
         </div>
         <!-- main-panel ends -->
 <script>
+    //상위탭 선택시 하위탭 내용 바뀌기
+    $('#parentId').change(function(){
+        let parentId = $('#parentId option:selected').val();
+        console.log(parentId);
+        $.ajax({
+            url : '/menu/modify/submenu-ajax',
+            method : 'POST',
+            data : {
+                'parentId' : parentId
+            },
+            success : function(resultJson){
+                console.log(resultJson.subMenuList);
+                let subMenuSelect = document.getElementById('subMenu');
+                //새로 받은 subMenuList #subMenu에 붙이기
+                let subMenuList = resultJson.subMenuList;
+                for(let i =0 ; i<subMenuList.length ; i++){
+                    let option = document.createElement('option');
+                    option.value = subMenuList[i].menuNo;
+                    option.text = subMenuList[i].menuTitle;
+                    subMenuSelect.appendChild(option);
+                }
+
+            }, error :function(e) {
+                console.log(e);
+            }
+        });
+    });
+
     //1. 메뉴 수정
     function modifyMenu(no){
     let menuNo = no;
@@ -88,23 +131,23 @@
 
     if(menuTitle === ''){
         alert("제목을 입력하세요");
-        document.getElementById("boardTitle").focus();
+        document.getElementById("menuTitle").focus();
         return false;
     }
     if(menuDesc === ''){
-        alert("내용을 입력하세요");
-        document.getElementById("boardContent").focus();
+        alert("메뉴 설명을 입력하세요");
+        document.getElementById("menuDesc").focus();
         return false;
     }
     if(menuUrl === ''){
         alert("url을 입력하세요");
-        document.getElementById("boardContent").focus();
+        document.getElementById("menuUrl").focus();
         return false;
     }
 
-    document.getElementById("boardModifyF").method = 'POST';
-    document.getElementById("boardModifyF").action = '/board/modify-action/'+no;
-    document.getElementById("boardModifyF").submit();
+    document.getElementById("menuModifyF").method = 'POST';
+    document.getElementById("menuModifyF").action = '/menu/modify-action/'+no;
+    document.getElementById("menuModifyF").submit();
     }
 
 

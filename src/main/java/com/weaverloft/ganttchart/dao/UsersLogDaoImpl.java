@@ -36,8 +36,8 @@ public class UsersLogDaoImpl implements UsersLogDao{
 
 
     @Override
-    public int findUsersLogCount() {
-        return usersLogMapper.findUsersLogCount();
+    public int findUsersLogCount(String keyword) {
+        return usersLogMapper.findUsersLogCount(keyword);
     }
 
     @Override

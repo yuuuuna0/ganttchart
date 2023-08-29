@@ -38,4 +38,27 @@
         </div>
     </div>
 </body>
+    <script>
+    //왼쪽 바 하나만 클릭되게 하기
+    // $('.nav-link').click(function(e){
+    //     $('.nav-link').removeClass('show');  //모든 collapse 닫기
+    //
+    //     let collapseE = $(this).find('.collapse');  //이벤트 발생한 하위의 collapse 찾기
+    //     collapseE.addClass('show');
+    // });
+
+
+    // $('input[type="checkbox"][name="city-checkbox"]').click(function(){
+    // if($(this).prop('checked')){
+    // $('input[type="checkbox"][name="city-checkbox"]').prop('checked',false);
+    // $(this).prop('checked',true);
+    // }
+    // });
+    // $('input[type="checkbox"][name="toType-checkbox"]').click(function(){
+    // if($(this).prop('checked')){
+    // $('input[type="checkbox"][name="toType-checkbox"]').prop('checked',false);
+    // $(this).prop('checked',true);
+    // }
+    // });
+    </script>
 </html>

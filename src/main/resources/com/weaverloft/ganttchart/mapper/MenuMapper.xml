@@ -37,8 +37,14 @@
     <select id="findMenuList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Menu">
         select *
         from (select rownum idx, m.*
-              from menu m
-              order by  MENU_NO asc )
+              from (select *
+                    from menu
+                    order by  MENU_NO asc ) m
+                    where 1=1
+                        <if test="keyword !=null">
+                            and MENU_TITLE like '%'||#{keyword}||'%' or MENU_URL like '%'||#{keyword}||'%' or MENU_DESC like '%'||#{keyword}||'%'
+                        </if>
+            )
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
     </select>
 <!-- 4-1. 하위메뉴 전체 불러오기   -->
@@ -55,7 +61,10 @@
     </select>
 <!-- 5. 전체 메뉴 개수    -->
     <select id="findMenuCount" resultType="java.lang.Integer">
-        select count(*) from menu
+        select count(*) from menu where 1=1
+        <if test="keyword !=null">
+            and MENU_TITLE like '%'||#{keyword}||'%' or MENU_URL like '%'||#{keyword}||'%' or MENU_DESC like '%'||#{keyword}||'%'
+        </if>
     </select>
 <!-- 6. 메뉴 수정하기   -->
     <update id="updateMenu" parameterType="java.util.Map">

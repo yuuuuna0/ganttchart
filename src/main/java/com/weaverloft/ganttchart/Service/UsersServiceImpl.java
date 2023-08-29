@@ -60,12 +60,6 @@ public class UsersServiceImpl implements UsersService {
         if (password == null || password.isEmpty()) {
             throw new Exception("비밀번호를 입력해주세요.");
         }
-        if (password.matches("(.)\\1{2,}")
-                || password.matches(".*(\\d)\\1{2,}.*")
-                || password.matches(".*([a-zA-Z])\\1{2,}.*")
-                || password.matches(".*(!|@|#|\\$|%|\\^|&|\\*|\\(|\\)).*\\1{2,}.*")) {
-            throw new Exception("같은 문자를 연속으로 3개 이상 사용할 수 없습니다.");
-        }
         if (password.length() < 6 || password.length() > 12) {
             throw new Exception("비밀번호는 6글자 이상 12글자 이하여야 합니다.");
         }
@@ -79,7 +73,7 @@ public class UsersServiceImpl implements UsersService {
 
     }
 
-    //4. 아이디 중복 확인
+    //4. 아이디로 회원 찾기
     @Override
     public Users findUsersById(String id) throws Exception {
         Users users = usersDao.findUsersById(id);    //0:중복X, 1: 중복O
@@ -139,7 +133,7 @@ public class UsersServiceImpl implements UsersService {
     //11. 회원 전체 조회
     @Override
     public PageMakerDto findUserList(int pageNo, String keyword) throws Exception {
-        int totUserCount = usersDao.findUsersCount();
+        int totUserCount = usersDao.findUsersCount(keyword);
         PageMaker pageMaker = new PageMaker(totUserCount, pageNo);
         List<Users> userList = usersDao.findUserList(pageMaker.getPageBegin(), pageMaker.getPageEnd(), keyword);
         PageMakerDto<Users> pageMakerUserList = new PageMakerDto<Users>(userList, pageMaker, totUserCount);
@@ -148,7 +142,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void userListExcelDown(Users users, int pageNo, String keyword) throws Exception {
-        int totUserCount = usersDao.findUsersCount();
+        int totUserCount = usersDao.findUsersCount(keyword);
         PageMaker pageMaker = new PageMaker(totUserCount, pageNo);
 //        if(){
 //          //전체 출력하는 경우 keyword == null && pagNo는?
@@ -198,6 +192,19 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users getLoginUser() throws Exception {
         return (Users)session.getAttribute("loginUser");
+    }
+
+    //아이디 검사 및 중복 확인
+    @Override
+    public int isExistedId(String id) throws Exception {
+        Matcher matcher;    //정규식 검사 객체
+        if (id.length() < 5 || id.length() > 10) {
+            throw new Exception("아이디는 5글자 이상 10글자 이하여야 합니다.");
+        }
+        if (Pattern.compile("(\\s)").matcher(id).find()) {
+            throw new Exception("아이디에는 공백이 포함될 수 없습니다.");
+        }
+        return usersDao.isExistedId(id);
     }
 }
 

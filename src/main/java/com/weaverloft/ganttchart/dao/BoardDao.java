@@ -17,7 +17,7 @@ public interface BoardDao {
     //5. 게시글 수정
     int updateBoard(Board board) throws Exception;
     //6. 게시글 전체 개수
-    int findBoardCount() throws Exception;
+    int findBoardCount(String keyword) throws Exception;
     //7. 게시글 조회수 1 올리기
     int updateBoardReadcount(int boardNo) throws Exception;
     //8. 최근값 불러오기

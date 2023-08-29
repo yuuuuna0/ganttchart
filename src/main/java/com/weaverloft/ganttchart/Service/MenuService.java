@@ -16,7 +16,7 @@ public interface MenuService {
     //3. 메뉴 삭제하기
     int deleteMenu(int menuNo) throws Exception;
     //4. 메뉴리스트 전체 불러오기(페이징)
-    PageMakerDto<Menu> findMenuList(int pageNo) throws Exception;
+    PageMakerDto<Menu> findMenuList(int pageNo,String keyword) throws Exception;
     //5. 메뉴 수정하기
     int updateMenu(Menu menu) throws Exception;
     //7. 사용여부 변경하기

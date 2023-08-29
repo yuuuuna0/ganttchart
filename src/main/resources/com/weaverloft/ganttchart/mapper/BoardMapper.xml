@@ -23,7 +23,7 @@
                     ) b
                 where 1=1
                       <if test="keyword !=null">
-                          and b.BOARD_TITLE like '%'||#{keyword}||'%'
+                          and b.BOARD_TITLE like '%'||#{keyword}||'%' or BOARD_CONTENT like '%'||#{keyword}||'%'
                       </if>
              )
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>
@@ -43,7 +43,10 @@
     </update>
     <!-- 6. 게시글 전체 개수 -->
     <select id="findBoardCount" resultType="java.lang.Integer">
-        select count(*) from board
+        select count(*) from board where 1=1
+        <if test="keyword !=null">
+            and BOARD_TITLE like '%'||#{keyword}||'%' or BOARD_CONTENT like '%'||#{keyword}||'%'
+        </if>
     </select>
     <!-- 7. 게시글 조회수 올리기 -->
     <update id="updateBoardReadcount" parameterType="java.lang.Integer">

@@ -60,8 +60,20 @@ public class UsersController {
         }
         return "/user/register";
     }
-    //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
+    //1-2. 아이디 중복확인
     @ResponseBody
+    @PostMapping("/user/idCheck-ajax")
+    public int idCheckAjax(@RequestParam String id){
+        int idCount = 0;
+        try{
+            idCount = usersService.isExistedId(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return idCount;
+    }
+
+    //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @PostMapping(value = "/user/register-action")
     public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
         String forwardPath = "";
@@ -73,9 +85,8 @@ public class UsersController {
                 forwardPath = "redirect:/login";
                 return forwardPath;
             }
-            if(usersService.isValidPassword(users.getPassword())){
+            if(!usersService.isValidPassword(users.getPassword())){
                 //2) 비밀번호 정규식 체크 --> 적용 안됨,, 왜죠?
-                System.out.println("비밀번호는 영문,숫자,특수문자를 포함한 6글자 이상 15글자 이하여야합니다.");
                 forwardPath ="redirect:/register";
                 return forwardPath;
             }
@@ -93,8 +104,7 @@ public class UsersController {
                 users.setPhoto(photo);
                 System.out.println("사진 있다");
             } else{
-                String photo = "default.jpg";
-                users.setPhoto(photo);
+                users.setPhoto(null);
             }
             //6) 회원가입 완료
             int result = usersService.createUsers(users);
@@ -336,9 +346,9 @@ public class UsersController {
 
     //1. 회원리스트 출력
     @AdminCheck
-    @GetMapping("/user/list/{pageNo}")
-    public String userList(@PathVariable int pageNo,
-                                 @RequestParam(required = false) String keyword,
+    @GetMapping("/user/list")
+    public String userList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                 @RequestParam(required = false, defaultValue = "") String keyword,
                                  HttpSession session,
                                  Model model){
         String forwardPath = "";
@@ -347,7 +357,8 @@ public class UsersController {
             Map<String, Object> map = menuService.cmLeftMenuList();
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
-
+            //데이터 처리부분
+            if(keyword.equals("")) keyword=null;
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
             model.addAttribute("userListPage",userListPage);
             forwardPath = "/user/list";
@@ -356,11 +367,13 @@ public class UsersController {
         }
         return forwardPath;
     }
+
+
     //2. 회원 로그 출력
     @AdminCheck
-    @GetMapping("/user/log/{pageNo}")
-    public String userLog(@PathVariable int pageNo,
-                                @RequestParam(required = false) String keyword,
+    @GetMapping("/user/log")
+    public String userLog(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                @RequestParam(required = false, defaultValue = "") String keyword,
                                 HttpSession session,
                                 Model model){
         String forwardPath = "";
@@ -369,7 +382,8 @@ public class UsersController {
             Map<String, Object> map = menuService.cmLeftMenuList();
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
-
+            //데이터처리부분
+            if(keyword.equals("")) keyword=null;
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
             model.addAttribute("usersLogPage",usersLogPage);
             forwardPath = "/user/log";
@@ -389,43 +403,3 @@ public class UsersController {
 
 
 }
-
-
-
-
-
-
-
-    /*
-    //3. 파일 업로드
-
-
-    //3. 비밀번호 찾기 페이지
-    @GetMapping("/findPassword")
-    public String findPassword(HttpServletRequest request)  throws Exception{
-        return "/findPassword";
-    }
-    //3. 아이디 찾기 페이지
-    @GetMapping("/findId")
-    public String findId(HttpServletRequest request)  throws Exception{
-        return "/findId";
-    }
-
-    //3. 내정보 확인 페이지
-    @GetMapping("/mypage")
-    public String mypage(HttpServletRequest request) throws Exception{
-        String forwardPath="";
-        HttpSession session = request.getSession();
-        Users loginUser=(Users)session.getAttribute("loginUser");
-        System.out.println("loginUser >> "+loginUser);
-        if(loginUser ==null){
-            forwardPath="/login";
-        }
-        loginUser=usersService.findUsersById(loginUser.getId());
-        request.setAttribute("loginUser",loginUser);
-        System.out.println(loginUser);
-        forwardPath="/mypage";
-        return forwardPath;
-    }
-*/
-

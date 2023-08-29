@@ -15,7 +15,7 @@
                             <!-- 게시글 -->
                             <div class="card-body">
                                 <h4 class="card-title">게시글 수정하기</h4>
-                                <form name="boardWriteF" id="boardModifyF" enctype="multipart/form-data">
+                                <form name="boardModifyF" id="boardModifyF" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label for="boardTitle">제목</label>
                                         <input type="text" class="form-control" id="boardTitle" name="boardTitle" value="${board.boardTitle}" >

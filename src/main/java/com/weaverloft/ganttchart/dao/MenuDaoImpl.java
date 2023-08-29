@@ -37,16 +37,17 @@ public class MenuDaoImpl implements MenuDao{
     }
 
     @Override
-    public List<Menu> findMenuList(int pageBegin, int pageEnd) throws Exception{
+    public List<Menu> findMenuList(int pageBegin, int pageEnd, String keyword) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("pageBegin",pageBegin);
         map.put("pageEnd",pageEnd);
+        map.put("keyword",keyword);
         return menuMapper.findMenuList(map);
     }
 
     @Override
-    public int findMenuCount() throws Exception{
-        return menuMapper.findMenuCount();
+    public int findMenuCount(String keyword) throws Exception{
+        return menuMapper.findMenuCount(keyword);
     }
 
     @Override

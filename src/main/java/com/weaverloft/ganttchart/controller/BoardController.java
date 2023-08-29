@@ -43,57 +43,29 @@ public class BoardController {
     }
 
     //1. 게시글 전체보기 페이지
-    @GetMapping("/list/{pageNo}")
-    public String boardList(@PathVariable int pageNo,
-                            @RequestParam(required = false) String keyword,
+    @GetMapping("/list")
+    public String boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                            @RequestParam(required = false, defaultValue = "") String keyword,
                             Model model,HttpSession session) {
-        String forwardPath;
+        String forwardPath="";
         try{
             //cm_left data
             Map<String, Object> map = menuService.cmLeftMenuList();
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
+            if(keyword.equals("")) keyword=null;
+
             Users loginUser = (Users)session.getAttribute("loginUser");
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
             model.addAttribute("boardListPage",boardListPage);
+            model.addAttribute("keyword",keyword);
             forwardPath="/board/list";
         } catch (Exception e){
             e.printStackTrace();
-            forwardPath="error";
+            forwardPath="/error";
         }
         return forwardPath;
-    }
-
-    //1-1. 게시글 전체보기 --> ajax 적용
-    @ResponseBody   //Http 응답의 body로 사용될 객체를 반환
-    @PostMapping(value="/list-ajax")
-    public Map<String,Object> boardListAjax(@RequestParam Map<String,Object> map, HttpSession session){
-        Map<String,Object> resultMap = new HashMap<>();
-        int code = 1; // 1:성공 2: 실패
-        String msg = "성공";
-        PageMakerDto<Board> data = null;
-        try{
-            int pageNo =  Integer.parseInt(map.get("pageNo").toString());
-            String keyword=(String)map.get("keyword");
-            if(keyword != null || keyword != ""){
-                keyword = map.get("keyword").toString();
-            } else{
-                keyword=null;
-            }
-            Users loginUser = (Users)session.getAttribute("loginUser");
-            PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
-            data = boardListPage;
-            code = 1;
-        } catch (Exception e){
-            e.printStackTrace();
-            code =2;
-            msg = "관리자에게 문의하세요";
-        }
-        resultMap.put("code",code);
-        resultMap.put("msg",msg);
-        resultMap.put("data",data);
-        return resultMap;
     }
 
     //2. 게시글 상세보기 페이지

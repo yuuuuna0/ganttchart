@@ -22,12 +22,12 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                                                    <span class="input-group-text" id="search">
+                                                <button class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchLogList(1);" style="cursor: pointer;">
+                                                    <span class="input-group-text">
                                                         <i class="icon-search"></i>
                                                     </span>
-                                                </div>
-                                                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                                                </button>
+                                                <input type="text" class="form-control" id="keyword" name="keyword" value="${keyword}" placeholder="검색" aria-label="search" aria-describedby="search">
                                             </div>
                                         </li>
                                     </ul>
@@ -77,34 +77,34 @@
                                         <!-- preview -->
                                         <c:if test="${usersLogPage.pageMaker.prevGroupStartPage > 0}">
                                             <li class="page-item">
-                                                <a class="page-link" href="/user/log/${usersLogPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                <button  class="page-link" value="${usersLogPage.pageMaker.prevGroupStartPage}" onclick="searchLogList(${usersLogPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                     <span class="sr-only">Previous</span>
-                                                </a>
+                                                </button>
                                             </li>
                                         </c:if>
                                         <!-- n개 고정 -->
                                         <c:forEach begin="${usersLogPage.pageMaker.blockBegin}" end="${usersLogPage.pageMaker.blockEnd}" var="no">
                                             <c:if test="${no == usersLogPage.pageMaker.curPage}">
                                                 <li class="page-item active">
-                                                    <a class="page-link" href="/user/log/${no}">${no}</a>
+                                                    <button class="page-link" value="${no}" onclick="searchLogList(${no})">${no}</button>
                                                 </li>
                                             </c:if>
                                             <c:if test="${no != usersLogPage.pageMaker.curPage}">
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/user/log/${no}">${no}</a>
+                                                    <button class="page-link" value="${no}" onclick="searchLogList(${no})">${no}</button>
                                                 </li>
                                             </c:if>
                                         </c:forEach>
-                                        <!-- next -->
                                         <c:if test="${usersLogPage.pageMaker.nextGroupStartPage <= usersLogPage.pageMaker.totPage}">
                                             <li class="page-item">
-                                                <a class="page-link" href="/user/log/${usersLogPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                <button class="page-link" value="${usersLogPage.pageMaker.nextGroupStartPage}" onclick="searchLogList(${usersLogPage.pageMaker.nextGroupStartPage})" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                     <span class="sr-only">Next</span>
-                                                </a>
+                                                </button>
                                             </li>
                                         </c:if>
+
                                     </ul>
                                 </nav>
 
@@ -117,3 +117,18 @@
             <!-- content-wrapper ends -->
         </div>
         <!-- main-panel ends -->
+<script>
+    // 검색창 입력 후 엔터키 => 검색
+    $("#searchBtn").keyup(e => {
+        if (e.keyCode === 13) {
+            searchLogList(1);
+            e.preventDefault();
+        }
+    });
+    // 게시글 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
+    function searchLogList(no){
+        let keyword = $('#keyword').val();
+        let pageNo = no;
+        window.location.href='/user/log?pageNo='+pageNo+'&keyword='+keyword;
+    }
+</script>

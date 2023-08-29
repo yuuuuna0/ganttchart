@@ -73,6 +73,7 @@
                                                         <img src="/../static/images/icons/comment.png"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="subComments('${comment.id}')"/>
+                                    <c:if test="${sessionScope.loginUser.id == comment.id}">
                                                         <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
@@ -80,7 +81,8 @@
                                                         <img src="/../static/images/icons/bin.png"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="deleteComments(${comment.commentsNo});"/>
-                                                    </span>
+                                    </c:if>
+                                        </span>
                                         </div>
                                     </c:if>
                                     <c:if test="${comment.classNo == 2}">
@@ -94,6 +96,7 @@
                                             <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                             <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
                                                                                pattern="yyyy. MM. dd."/></span>
+                                            <c:if test="${sessionScope.loginUser.id == comment.id}">
                                             <span>
                                                         <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
@@ -102,7 +105,8 @@
                                                         <img src="/../static/images/icons/bin.png"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="deleteComments(${comment.commentsNo});"/>
-                                                    </span>
+                                            </span>
+                                            </c:if>
                                         </div>
                                     </c:if>
                                 </c:forEach>
@@ -110,7 +114,7 @@
                         </div>
 
                         <hr>
-                        <c:if test="${sessionScope.loginUser != null}">
+
                             <!-- 작성폼 -->
                             <label id="msgLabel"></label>
                             <form class="mb-4" id="createCommentsF" name="createCommentsF">
@@ -120,12 +124,18 @@
                                                   row="3" placeholder="댓글을 남겨주세요"></textarea>
                                     </div>
                                     <div class="col-3">
+                                        <c:if test="${sessionScope.loginUser != null}">
                                         <input type="button" id="createCommentsBtn" onclick="createComments(1)"
                                                value="남기기">
+                                        </c:if>
+                                        <c:if test="${sessionScope.loginUser == null}">
+                                        <input type="button" id="createCommentsBtn" onclick="location.href='/login'"
+                                               value="남기기">
+                                        </c:if>
                                     </div>
                                 </div>
                             </form>
-                        </c:if>
+
                     </div>
                 </div>
             </div>

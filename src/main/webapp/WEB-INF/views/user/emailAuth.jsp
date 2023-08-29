@@ -22,7 +22,7 @@
                                     <label for="authKey"></label>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <a class="small" href="login">Return to login</a>
+                                    <a class="small" href="/login">Return to login</a>
                                     <button class="btn btn-primary" type="submit">Verify</button>
                                 </div>
                             </form>

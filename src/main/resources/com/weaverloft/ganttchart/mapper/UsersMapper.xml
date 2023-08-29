@@ -59,6 +59,10 @@
     <!-- 12. 전체회원 수 -->
     <select id="findUsersCount" resultType="java.lang.Integer">
         select count(*) from USERS
+        where 1=1
+        <if test="keyword !=null">
+        and id like '%'||#{keyword}||'%' or name like '%'||#{keyword}||'%' or email like '%'||#{keyword}||'%'
+        </if>
     </select>
     <!-- 13. 회원리스트 출력 -> 페이징, 검색 -->
     <select id="findUserList" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Users">
@@ -69,7 +73,7 @@
                      ) u
                 where 1=1
                 <if test="keyword !=null">
-                    and u.id like '%'||#{keyword}||'%'
+                    and u.id like '%'||#{keyword}||'%' or u.name like '%'||#{keyword}||'%' or u.email like '%'||#{keyword}||'%'
                 </if>
              )
         <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>

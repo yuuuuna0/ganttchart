@@ -65,5 +65,10 @@ public class HomeController {
         return "/form/form";
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "/test";
+    }
+
 
 }

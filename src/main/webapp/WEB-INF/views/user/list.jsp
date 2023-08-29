@@ -76,39 +76,38 @@
                                                 <!-- preview -->
                                                 <c:if test="${userListPage.pageMaker.prevGroupStartPage > 0}">
                                                     <li class="page-item">
-                                                        <a class="page-link" href="/user/list/${userListPage.pageMaker.prevGroupStartPage}" aria-label="Previous">
+                                                        <button  class="page-link" value="${userListPage.pageMaker.prevGroupStartPage}" onclick="searchUserList(${userListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
-                                                        </a>
+                                                        </button>
                                                     </li>
                                                 </c:if>
                                                 <!-- n개 고정 -->
                                                 <c:forEach begin="${userListPage.pageMaker.blockBegin}" end="${userListPage.pageMaker.blockEnd}" var="no">
                                                     <c:if test="${no == userListPage.pageMaker.curPage}">
                                                         <li class="page-item active">
-                                                            <a class="page-link" href="/user/list/${no}">${no}</a>
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                     <c:if test="${no != userListPage.pageMaker.curPage}">
                                                         <li class="page-item">
-                                                            <a class="page-link" href="/user/list/${no}">${no}</a>
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
-                                                <!-- next -->
                                                 <c:if test="${userListPage.pageMaker.nextGroupStartPage <= userListPage.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <a class="page-link" href="/user/list/${userListPage.pageMaker.nextGroupStartPage}" aria-label="Next">
+                                                        <button class="page-link" value="${userListPage.pageMaker.nextGroupStartPage}" onclick="searchUserList(${userListPage.pageMaker.nextGroupStartPage})" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
-                                                        </a>
+                                                        </button>
                                                     </li>
                                                 </c:if>
                                             </ul>
                                         </nav>
                                     </div>
-                                    <div class="col-6">
-                                        <input type="button" value="회원리스트 엑셀 다운로드" onclick="location.href='/download';">
+                                    <div class="col-6 ">
+                                        <input class="float-right" type="button" value="엑셀 다운로드" onclick="location.href='/download';">
                                     </div>
                                 </div>
 
@@ -122,7 +121,17 @@
         </div>
         <!-- main-panel ends -->
 <script>
-    function listdownload(){
-
+    // 검색창 입력 후 엔터키 => 검색
+    $("#searchBtn").keyup(e => {
+        if (e.keyCode === 13) {
+            searchUserList(1);
+            e.preventDefault();
+        }
+    });
+    // 게시글 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
+    function searchUserList(no){
+        let keyword = $('#keyword').val();
+        let pageNo = no;
+        window.location.href='/user/list?pageNo='+pageNo+'&keyword='+keyword;
     }
 </script>

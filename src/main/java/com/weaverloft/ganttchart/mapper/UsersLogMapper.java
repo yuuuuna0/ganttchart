@@ -12,7 +12,7 @@ public interface UsersLogMapper{
     int createLog(Map<String,Object> map) throws Exception;
     //2. 로그 조회하기 (페이징)
     List<UsersLog> findUserLog(Map<String, Object> map);
-    int findUsersLogCount();
+    int findUsersLogCount(String keyword);
 //    //3. 1주일동안 인증완료로 안 바뀐 아이디 찾기 (logStatus가 1주일동안 0->1 안변한)
 //    List<String> findUnAuthUsers() throws Exception;
     //4. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,11 +114,10 @@ public class MenuController {
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
             Menu menu = menuService.findMenuByNo(menuNo);
-            if(menu.getParentId() == 0){
-                //상위탭이면 하위탭리스트 보여주기
-                subMenuList = menuService.findSubMenuList(menu.getMenuNo());
-                model.addAttribute("subMenuList",subMenuList);
-            }
+            //상위탭이면 하위탭리스트 보여주기
+//            if(menu.getMenuNo() == menu.getParentId()) --> 적용할지말지
+            subMenuList = menuService.findSubMenuList(menu.getMenuNo());
+            model.addAttribute("subMenuList",subMenuList);
             model.addAttribute("menu",menu);
             forwardPath = "/menu/modify";
         } catch (Exception e){
@@ -125,6 +125,29 @@ public class MenuController {
         }
         return forwardPath;
     }
+
+    @AdminCheck
+    @ResponseBody
+    @PostMapping("/modify/submenu-ajax")
+    public Map<String,Object> changeSubMenuAjax(@RequestParam int parentId){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code =1;
+        String msg = "성공";
+        List<Menu> subMenuList= null;
+        try{
+            Menu menu = menuService.findMenuByNo(parentId);
+            subMenuList = menuService.findSubMenuList(menu.getMenuNo());
+        } catch (Exception e){
+            e.printStackTrace();
+            code = 2;
+            msg = "실패";
+        }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("subMenuList",subMenuList);
+        return resultMap;
+    }
+
     //3-1. 메뉴 수정하기 액션
     @AdminCheck
     @PostMapping("/modify-action/{menuNo}")
@@ -141,8 +164,9 @@ public class MenuController {
 
     //3. 메뉴 전체리스트 불러오기
     @AdminCheck
-    @GetMapping("/list/{pageNo}")
-    public String menuList(@PathVariable int pageNo, Model model){
+    @GetMapping("/list")
+    public String menuList(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                           @RequestParam(required = false, defaultValue = "") String keyword,  Model model){
         String forwardPath = "";
         try{
             //cm_left data
@@ -150,7 +174,7 @@ public class MenuController {
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
-            PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo);
+            PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo,keyword);
             model.addAttribute("menuListPage",menuListPage);
             forwardPath = "/menu/list";
         } catch (Exception e){
@@ -161,8 +185,8 @@ public class MenuController {
 
     //4. 메뉴 삭제 액션
     @AdminCheck
-    @GetMapping("delete-action/{menuNo}")
-    public String menuDeleteAction(@PathVariable int menuNo){
+    @GetMapping("delete-action")
+    public String menuDeleteAction(@RequestParam int menuNo){
         String forwardPath = "";
         try{
             int result = menuService.deleteMenu(menuNo);

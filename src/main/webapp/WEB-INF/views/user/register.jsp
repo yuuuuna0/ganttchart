@@ -16,7 +16,7 @@
                                 <form class="forms-sample" name="registerF" id="registerF" enctype="multipart/form-data">
                                     <!-- 프로필사진 업로드 -->
                                     <div class="form-group" style="text-align: center">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../images/icons/default.png"/>
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
                                         <br>
                                         <br>
                                         <label for="photoFile" class="file-upload-browse btn btn-primary">사진 추가</label>
@@ -24,9 +24,10 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="id">아이디</label>
+                                            <label for="id">아이디</label><span style="color: red;">*</span>
                                             <input type="text" class="form-control" id="id" name="id"
-                                                   placeholder="아이디를 입력하세요">
+                                                   placeholder="아이디를 입력하세요.">
+                                            <label for="id" style="font-size: 8pt">&nbsp;&nbsp;5글자 이상 10글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-3 mt-4">
                                             <label></label>
@@ -34,7 +35,7 @@
                                                    class="btn btn-primary mr-2">
                                         </div>
                                         <div class="col-3">
-                                            <label for="grade">회원 등급</label>
+                                            <label for="grade">회원 등급</label><span style="color: red;">*</span>
                                             <select class="form-control" id="grade" name="grade">
                                                 <option disabled selected></option>
                                                 <option value="0">관리자</option>
@@ -44,24 +45,25 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="password">비밀번호</label>
+                                            <label for="password">비밀번호</label><span style="color: red;">*</span>
                                             <input type="password" class="form-control" id="password" name="password"
                                                    placeholder="비밀번호를 입력하세요">
+                                            <label style="font-size: 8pt" for="password">&nbsp;&nbsp;영문,특수문자,숫자를 포함하는 6글자 이상 12글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-6">
-                                            <label for="confirmPassword">비밀번호 확인</label>
+                                            <label for="confirmPassword">비밀번호 확인</label><span style="color: red;">*</span>
                                             <input type="password" class="form-control" id="confirmPassword"
                                                    name="confirmPassword" placeholder="비밀번호 확인을 입력하세요">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="name">이름</label>
+                                            <label for="name">이름</label><span style="color: red;">*</span>
                                             <input type="text" class="form-control" id="name" name="name"
                                                    placeholder="이름을 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="gender">성별</label>
+                                            <label for="gender">성별</label><span style="color: red;">*</span>
                                             <select class="form-control" id="gender" name="gender">
                                                 <option disabled selected></option>
                                                 <option value="남">남</option>
@@ -70,7 +72,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">이메일</label>
+                                        <label for="email">이메일</label><span style="color: red;">*</span>
                                         <input type="email" class="form-control" id="email" name="email"
                                                placeholder="이메일을 입력하세요">
                                     </div>
@@ -144,9 +146,55 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+    //4. 아이디 정규식 체크 및 중복검사
+    let vId= 0;
+    function validateId(){
+        let id = $('#id').val();
+        //정규식 체크
+        if (id === '') {
+            alert('아이디를 입력하세요');
+            $('#id').focus();
+            return false;
+        }
+        if(id.match(/\s/g)){
+            alert("아이디는 공백을 사용할 수 없습니다.");
+            $('#id').val('');
+            $('#id').focus();
+            return false;
+        }
+        if(id.length <5 || id.length >10){
+            alert("아이디는 5글자 이상 10글자 이하입니다.");
+            $('#id').focus();
+            return false;
+        }
+        console.log("아이디 정규식체크 확인완료");
+
+        $.ajax({
+            url : '/user/idCheck-ajax',
+            method : 'POST',
+            data : {
+                'id' : id
+            },
+            success : function(idCount){
+                console.log(idCount);
+                if(idCount === 1){
+                    alert("중복된 아이디입니다.");
+                    $('#id').val('');
+                    return false;
+                } else{
+                    alert("사용할 수 있는 아이디입니다");
+                    $('#id').value = id;
+                    vId=1;
+                }
+            },
+            error :function (e) {
+                console.log(e);
+            },
+            async : true
+        });
+    }
 
     function createUser() {
-        console.log("확인1");
         var id = document.getElementById("id").value;
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
@@ -156,49 +204,51 @@
         var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
         $('#address').val(address);
         let gender = $('#gender option:selected').val();
-        console.log("확인2");
         let grade = $('#grade option:selected').val();
-        alert(grade);
         var birth = document.getElementById("birth").value;
 
         /**************************** 유효성 검사 ****************************************/
-        if (id === '') {
-            document.getElementById("id").innerText = '아이디를 입력하세요';
-            document.getElementById("id").focus();
+        if (vId === 0){
+            alert("아이디 중복확인을 하세요");
             return false;
         }
+        //1) 비밀번호 정규식 검사
         if (password === '') {
-            document.getElementById("passwordVal").innerText = "비밀번호를 입력하세요";
+            alert("비밀번호를 입력하세요");
+            document.getElementById("password").focus();
+            return false;
+        }
+        if(password.match(/\s/g) || !password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$/)){
+            alert("비밀번호 형식에 맞게 작성해주세요");
+            $('#password').val('');
             document.getElementById("password").focus();
             return false;
         }
         if (confirmPassword === '') {
-            document.getElementById("confirmPasswordVal").innerText = "비밀번호 확인을 입력하세요";
+            alert("비밀번호 확인을 입력하세요");
             document.getElementById("confirmPassword").focus();
             return false;
         }
         if (name === '') {
-            document.getElementById("nameVal").innerText = "이름을 입력하세요";
+            alert("이름을 입력하세요");
             document.getElementById("name").focus();
             return false;
         }
-
         if (email === '') {
-            document.getElementById("emailVal").innerText = "이메일을 입력하세요";
+            alert("이메일을 입력하세요");
             document.getElementById("email").focus();
             return false;
         }
-        if (phone === '') {
-            document.getElementById("phoneVal").innerText = "전화번호를 입력하세요";
-            document.getElementById("phone").focus();
+        if (grade === '') {
+            alert("회원등급을 선택하세요");
             return false;
         }
-        if (grade === '') {
-            document.getElementById("grade").innerText = "회원등급을 선택하세요";
+        if (gender === '') {
+            alert("성별을 선택하세요");
             return false;
         }
         if (password !== confirmPassword) {
-            document.getElementById("confirmPasswordVal").innerText = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             document.getElementById("confirmPassword").focus();
             return false;
         }
