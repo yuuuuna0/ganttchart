@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="row">
@@ -18,10 +19,10 @@
                             <!-- 프로필사진 업로드 -->
                             <div class="form-group" style="text-align: center">
                                 <c:if test = "${ sessionScope.loginUser.photo != null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../upload/users/${sessionScope.loginUser.photo}"/>
+                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.photo}"/>
                                 </c:if>
                                 <c:if test = "${ sessionScope.loginUser.photo == null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../images/icons/default.png"/>
+                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
                                 </c:if>
                                 <br>
                                 <br>
@@ -48,8 +49,14 @@
                                     <div class="col-6">
                                         <label for="gender">성별</label>
                                         <select class="form-control" id="gender" name="gender">
-                                            <option value="1">남</option>
-                                            <option value="2">여</option>
+                                            <c:if test="${sessionScope.loginUser.gender == '남'}">
+                                                <option value="1" selected>남</option>
+                                                <option value="2">여</option>
+                                            </c:if>
+                                            <c:if test="${sessionScope.loginUser.gender == '여'}">
+                                                <option value="1" >남</option>
+                                                <option value="2" selected>여</option>
+                                            </c:if>
                                         </select>
                                     </div>
                                 </div>
@@ -64,7 +71,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth" placeholder="${sessionScope.loginUser.birth}">
+                                        <input type="date" class="form-control" id="birth" name="birth" value="<fmt:formatDate value='${sessionScope.loginUser.birth}' pattern='yyyy. MM. dd.'/>"/>
                                     </div>
                                 </div>
                                 <div class="row form-group">

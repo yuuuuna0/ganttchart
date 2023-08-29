@@ -17,6 +17,7 @@
         <pattern>/login</pattern>
         <pattern>*/include/*</pattern>
         <pattern>*.html*</pattern>
+        <pattern>/find*</pattern>
     </excludes>
     <decorator name="webLayout" page="/WEB-INF/views/layout/cm_layout.jsp">
         <pattern>/*</pattern>

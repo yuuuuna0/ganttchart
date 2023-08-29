@@ -45,10 +45,9 @@ public class HomeController {
         String keyword =null;
         try{
             //cm_left data
-            List<Menu> menuList = menuService.findAllMenu();
-            model.addAttribute("menuList",menuList);
-            List<Menu> preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList",map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             //조회수 탑5 게시글 붙이기
             int no = 5;

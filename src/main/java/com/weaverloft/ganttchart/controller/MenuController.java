@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/menu/*")
@@ -29,11 +30,10 @@ public class MenuController {
 
         try{
             //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
 
-            List<Menu> menuList = menuService.findAllMenu();
-            model.addAttribute("menuList",menuList);
-            List<Menu> preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
             forwardPath = "/menu/register";
         } catch (Exception e){
             e.printStackTrace();
@@ -78,10 +78,9 @@ public class MenuController {
         List<Menu> subMenuList = new ArrayList<>();
         try{
             //cm_left data
-            List<Menu> menuList = menuService.findAllMenu();
-            model.addAttribute("menuList",menuList);
-            List<Menu> preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             Menu menu = menuService.findMenuByNo(menuNo);
             if(menu.getParentId() == 0){
@@ -109,10 +108,9 @@ public class MenuController {
         List<Menu> subMenuList = new ArrayList<>();
         try{
             //cm_left data
-            List<Menu> menuList = menuService.findAllMenu();
-            model.addAttribute("menuList",menuList);
-            List<Menu> preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             Menu menu = menuService.findMenuByNo(menuNo);
             if(menu.getParentId() == 0){
@@ -120,8 +118,6 @@ public class MenuController {
                 subMenuList = menuService.findSubMenuList(menu.getMenuNo());
                 model.addAttribute("subMenuList",subMenuList);
             }
-            preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
             model.addAttribute("menu",menu);
             forwardPath = "/menu/modify";
         } catch (Exception e){
@@ -150,10 +146,9 @@ public class MenuController {
         String forwardPath = "";
         try{
             //cm_left data
-            List<Menu> menuList = menuService.findAllMenu();
-            model.addAttribute("menuList",menuList);
-            List<Menu> preMenuList = menuService.findPreMenuList();
-            model.addAttribute("preMenuList",preMenuList);
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             PageMakerDto<Menu> menuListPage = menuService.findMenuList(pageNo);
             model.addAttribute("menuListPage",menuListPage);

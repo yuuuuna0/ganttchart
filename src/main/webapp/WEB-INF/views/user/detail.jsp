@@ -18,23 +18,23 @@
                                 <!-- 프로필사진 업로드 -->
                                 <div class="form-group" style="text-align: center">
                                     <c:if test = "${ sessionScope.loginUser.photo != null}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${sessionScope.loginUser.photo}"/>
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.photo}"/>
                                     </c:if>
                                     <c:if test = "${ sessionScope.loginUser.photo == null}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="../images/icons/default.png"/>
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="/static/images/icons/default.png"/>
                                     </c:if>
                                 </div>
                                 <form class="forms-sample" name="registerF" id="registerF" accept-charset="utf-8">
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="id">아이디</label>
-                                            <input readonly type="text" class="form-control" id="id" name="id" value="${sessionScope.loginUser.getId()}">
+                                            <input readonly type="text" class="form-control" id="id" name="id" value="${sessionScope.loginUser.id}">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="password">비밀번호</label>
-                                            <input readonly type="password" class="form-control" id="password" name="password" value="xxxxx" >
+                                            <input readonly type="password" class="form-control" id="password" name="password" value="${sessionScope.loginUser.password}" maxlength="5">
                                         </div>
                                     </div>
                                     <div class="row form-group">

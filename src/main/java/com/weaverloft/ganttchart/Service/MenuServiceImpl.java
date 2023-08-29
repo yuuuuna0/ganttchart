@@ -6,7 +6,9 @@ import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -78,6 +80,16 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public int updateParentId(int menuNo) throws Exception {
         return menuDao.updateParentId(menuNo);
+    }
+
+    @Override
+    public Map<String, Object> cmLeftMenuList() throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        List<Menu> menuList = menuDao.findAllMenu();
+        List<Menu> preMenuList = menuDao.findPreMenuList();
+        map.put("menuList",menuList);
+        map.put("preMenuList",preMenuList);
+        return map;
     }
 
 }

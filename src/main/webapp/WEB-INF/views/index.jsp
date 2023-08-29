@@ -24,7 +24,7 @@
                     <div class="col-md-6 grid-margin stretch-card">
                         <div class="card tale-bg">
                             <div class="card-people mt-auto">
-                                <img src="images/dashboard/people.svg" alt="people">
+                                <img src="/static/images/dashboard/people.svg" alt="people">
                                 <div class="weather-info">
                                     <div class="d-flex">
                                         <div>
@@ -165,3 +165,8 @@
             <!-- content-wrapper ends -->
         </div>
         <!-- main-panel ends -->
+<script>
+    function goToBoardList(boardNo){
+        window.location.href='/board/detail/'+boardNo;
+    }
+</script>

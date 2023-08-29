@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MenuService {
     //1-1. 메뉴 작성하기
@@ -30,4 +31,6 @@ public interface MenuService {
     int findCurMenuNo() throws Exception;
     //12. 상위메뉴 parentId 부여하기
     int updateParentId(int menuNo) throws Exception;
+    //13. cm_left에 붙일 메뉴리스트
+    Map<String,Object> cmLeftMenuList() throws Exception;
 }

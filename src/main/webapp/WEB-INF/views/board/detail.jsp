@@ -142,7 +142,7 @@
         console.log(no);
         let fileNo = no;
         $.ajax({
-            url: '/downloadFile-ajax',
+            url: '/board/downloadFile-ajax',
             method: 'POST',
             data: {
                 'fileNo': fileNo

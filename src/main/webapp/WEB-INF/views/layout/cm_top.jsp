@@ -10,8 +10,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="/"><img src="../../images/logo.svg" class="mr-2" alt="logo"/></a>
-                <a class="navbar-brand brand-logo-mini" href="/"><img src="../../images/logo-mini.svg" alt="logo"/></a>
+                <a class="navbar-brand brand-logo mr-5" href="/"><img src="/static/images/logo.svg" class="mr-2" alt="logo"/></a>
+                <a class="navbar-brand brand-logo-mini" href="/"><img src="/static/images/logo-mini.svg" alt="logo"/></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -25,10 +25,10 @@
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
                             <c:choose>
                                 <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.photo != null}">
-                                    <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../upload/users/${sessionScope.loginUser.photo}"/>
+                                    <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.photo}"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../images/icons/default.png" />
+                                    <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png" />
                                 </c:otherwise>
                             </c:choose>
                         </a>

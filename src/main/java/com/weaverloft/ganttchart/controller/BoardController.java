@@ -1,9 +1,6 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.weaverloft.ganttchart.Service.BoardService;
-import com.weaverloft.ganttchart.Service.CommentsService;
-import com.weaverloft.ganttchart.Service.FileService;
-import com.weaverloft.ganttchart.Service.BoardFileService;
+import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.BoardFile;
@@ -33,26 +30,33 @@ public class BoardController {
     private BoardFileService boardFileService;
     private FileService fileService;
     private CommentsService commentsService;
+    private MenuService menuService;
 
-    public BoardController(BoardService boardService, BoardFileService boardFileService, FileService fileService, CommentsService commentsService) {
+    public BoardController(BoardService boardService, BoardFileService boardFileService,
+                           FileService fileService, CommentsService commentsService,
+                           MenuService menuService) {
         this.boardService = boardService;
         this.boardFileService = boardFileService;
         this.fileService = fileService;
         this.commentsService = commentsService;
+        this.menuService = menuService;
     }
 
-    //1. 게시글 전체보기
+    //1. 게시글 전체보기 페이지
     @GetMapping("/list/{pageNo}")
     public String boardList(@PathVariable int pageNo,
                             @RequestParam(required = false) String keyword,
                             Model model,HttpSession session) {
         String forwardPath;
         try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             Users loginUser = (Users)session.getAttribute("loginUser");
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
-//            model.addAttribute("boardCommentCount",boardCommentCount);
             model.addAttribute("boardListPage",boardListPage);
-//            model.addAttribute("loginUser",loginUser);
             forwardPath="/board/list";
         } catch (Exception e){
             e.printStackTrace();
@@ -60,18 +64,11 @@ public class BoardController {
         }
         return forwardPath;
     }
-//    //2. 게시글 검색하기, 조회수, 작성일 오름차순 내림차순 적용
-//    @ResponseBody
-//    @PostMapping("/list/{pageNo}")
-//    public Map<String,Object> searchBoardList(){
-//        Map<String,Object> resultMap = new HashMap<>();
-//
-//        return resultMap;
-//    }
+
     //1-1. 게시글 전체보기 --> ajax 적용
     @ResponseBody   //Http 응답의 body로 사용될 객체를 반환
     @PostMapping(value="/list-ajax")
-    public Map<String,Object> boardListAjax(@RequestParam Map<String,Object> map, Model model, HttpSession session){
+    public Map<String,Object> boardListAjax(@RequestParam Map<String,Object> map, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 1; // 1:성공 2: 실패
         String msg = "성공";
@@ -99,11 +96,16 @@ public class BoardController {
         return resultMap;
     }
 
-    //2. 게시글 상세보기
+    //2. 게시글 상세보기 페이지
     @GetMapping("/detail/{boardNo}")
     public String boardDetail(@PathVariable int boardNo,Model model) {
         String forwardPath = "";
         try {
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
@@ -123,7 +125,15 @@ public class BoardController {
     //3. 게시글 작성하기 페이지
     @LoginCheck
     @GetMapping("/register")
-    public String boardCreate(){
+    public String boardCreate(Model model){
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "board/register";
     }
     //3-1 게시글 작성하기 액션
@@ -169,13 +179,17 @@ public class BoardController {
         return forwardPath;
     }
 
-    //5. 게시글 수정하기
-        //1) 수정폼
+    //5. 게시글 수정하기 페이지
     @LoginCheck
     @GetMapping("/modify/{boardNo}")
     public String modifyBoard(@PathVariable int boardNo, Model model){
         String fowardPath = "";
         try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
             model.addAttribute("board",board);
@@ -186,7 +200,7 @@ public class BoardController {
         }
         return fowardPath;
     }
-        //2) 수정액션
+        //5-2. 게시글 수정하기 액션
     @LoginCheck
     @PostMapping("/modify-action/{boardNo}")
     public String modifyBoardAction(@PathVariable int boardNo,@ModelAttribute Board board, MultipartHttpServletRequest mf){
@@ -219,7 +233,7 @@ public class BoardController {
         try{
             BoardFile file = boardFileService.findFileByNo(fileNo);
             String saveFileName = (String)file.getFileName();
-            String filePath = "C:\\Users\\jyn93\\Downloads\\";
+            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
 
             File downloadFile = new File(filePath + saveFileName);
             byte fileByte[] = FileUtils.readFileToByteArray(downloadFile);

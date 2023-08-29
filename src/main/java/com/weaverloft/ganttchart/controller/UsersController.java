@@ -30,23 +30,34 @@ public class UsersController {
     private FileService fileService;
     private UsersLogService usersLogService;
     private ExcelService excelService;
+    private MenuService menuService;
 
     public UsersController(UsersService usersService,
                            SHA256Service sha256Service,
                            EmailService emailService,
                            FileService fileService,
                            UsersLogService usersLogService,
-                           ExcelService excelService) {
+                           ExcelService excelService,
+                           MenuService menuService) {
         this.usersService = usersService;
         this.sha256Service = sha256Service;
         this.emailService = emailService;
         this.fileService = fileService;
         this.usersLogService = usersLogService;
         this.excelService = excelService;
+        this.menuService = menuService;
     }
     //1-1. 회원가입 페이지
     @GetMapping("/user/register")
-    public String register(){
+    public String register(Model model){
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "/user/register";
     }
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
@@ -146,7 +157,15 @@ public class UsersController {
     //2-4. 이메일 인증 페이지 --> 완료
     @LoginCheck
     @GetMapping("/user/emailAuth")
-    public String emailAuth(){
+    public String emailAuth(Model model){
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "/user/emailAuth";
     }
     //2-5. 이메일 인증 액션 --> 완료
@@ -237,6 +256,11 @@ public class UsersController {
     public String mypage( HttpSession session,Model model){
         String forwardPath = "";
         try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             Users loginUser=(Users)session.getAttribute("loginUser");
             model.addAttribute("loginUser",loginUser);
             forwardPath = "/user/detail";
@@ -251,8 +275,18 @@ public class UsersController {
     @GetMapping("/user/modify")
     public String modifyUser( HttpSession session, Model model){
         String forwardPath = "";
-        Users loginUser = (Users)session.getAttribute("loginUser");
-        model.addAttribute("loginUser",loginUser);
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
+            Users loginUser = (Users)session.getAttribute("loginUser");
+            model.addAttribute("loginUser",loginUser);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         forwardPath = "/user/modify";
         return forwardPath;
     }
@@ -309,6 +343,11 @@ public class UsersController {
                                  Model model){
         String forwardPath = "";
         try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
             model.addAttribute("userListPage",userListPage);
             forwardPath = "/user/list";
@@ -326,6 +365,11 @@ public class UsersController {
                                 Model model){
         String forwardPath = "";
         try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList", map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
             model.addAttribute("usersLogPage",usersLogPage);
             forwardPath = "/user/log";
