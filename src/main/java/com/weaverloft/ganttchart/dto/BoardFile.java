@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class BoardFile {
     private int fileNo;
     private String saveFileName;
-    private String originFileName;
+    private String originalFileName;
     private String filePath;
-    private String fileSize;
+    private Long fileSize;
     private int boardNo;
 }

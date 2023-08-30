@@ -17,7 +17,7 @@ public class Users {
     private String password;
     private String name;
     private String saveFileName;
-    private String originFileName;
+    private String originalFileName;
     private String filePath;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;

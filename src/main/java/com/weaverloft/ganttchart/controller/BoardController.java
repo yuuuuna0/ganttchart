@@ -143,13 +143,12 @@ public class BoardController {
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
             if(boardFileList.get(0).getSize() != 0){
-                String filePath = "C:\\gantt\\upload\\board\\";
+                String filePath = "C:\\gantt\\upload\\board\\"; //하드코딩 안하면 어디에
                 for(MultipartFile boardFile : boardFileList){
-                    String fileName = fileService.uploadFile(boardFile,filePath);
-                    long fileSize = (boardFile.getSize())/1000;
-                    System.out.println("fileSize = " + fileSize);
-                    String fileSizeStr = fileSize+"kb";
-                    BoardFile file = new BoardFile(0,fileName,fileSizeStr,boardNo);
+                    String originalFileName = boardFile.getName();
+                    String saveFileName = fileService.uploadFile(boardFile,filePath);
+                    long fileSize = boardFile.getSize();
+                    BoardFile file = new BoardFile(0,saveFileName,originalFileName,filePath,fileSize,boardNo);
                     boardFileService.createBoardFile(file);
                 }
             }
@@ -208,11 +207,10 @@ public class BoardController {
             if(boardFileList.get(0).getSize() != 0){
                 String filePath = "C:\\gantt\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
-                    String fileName = fileService.uploadFile(boardFile,filePath);
+                    String originalFileName = boardFile.getName();
+                    String saveFileName = fileService.uploadFile(boardFile,filePath);
                     long fileSize = boardFile.getSize();
-                    System.out.println("fileSize = " + fileSize);
-                    String fileSizeStr = fileSize+"kb";
-                    BoardFile file = new BoardFile(0,fileName,fileSizeStr,boardNo);
+                    BoardFile file = new BoardFile(0,saveFileName,originalFileName,filePath,fileSize,boardNo);
                     boardFileService.createBoardFile(file);
                 }
             }
@@ -230,8 +228,8 @@ public class BoardController {
     public void downloadFile(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
         try{
             BoardFile file = boardFileService.findFileByNo(fileNo);
-            String saveFileName = (String)file.getFileName();
-            String filePath = "C:\\gantt\\upload\\board\\";
+            String saveFileName = (String)file.getSaveFileName();
+            String filePath = file.getFilePath();
 
             // globals.properties
             File downloadFile = new File(filePath + saveFileName);

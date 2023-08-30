@@ -75,7 +75,6 @@ public class UsersController {
     @PostMapping(value = "/user/register-action")
     public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
         String forwardPath = "";
-        MultipartFile photoFile = multipartFile.getFile("photoFile");
         try {
             if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
@@ -96,13 +95,19 @@ public class UsersController {
             String authKeyStr = Integer.toString(authKey);
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
-            if(photoFile !=null){
+            if(multipartFile !=null){
+                MultipartFile originalFile = multipartFile.getFile("photoFile");
                 String filePath = "C:\\gantt\\upload\\users\\";
-                String photo = fileService.uploadFile(photoFile,filePath);
-                users.setPhoto(photo);
+                String saveFileName = fileService.uploadFile(originalFile,filePath);
+                users.setFilePath(filePath);
+                users.setSaveFileName(saveFileName);
+                users.setOriginalFileName(originalFile.getName());
                 System.out.println("사진 있다");
             } else{
-                users.setPhoto(null);
+                //이거 안해줘도 되는지?
+                users.setFilePath(null);
+                users.setSaveFileName(null);
+                users.setOriginalFileName(null);
             }
             //6) 회원가입 완료
             users.setGrade(1);
@@ -434,15 +439,19 @@ public class UsersController {
     public String modifyUserAction(@ModelAttribute Users users, HttpSession session, MultipartHttpServletRequest multipartFile){
         String forwardPath ="";
         Users loginUser = (Users)session.getAttribute("loginUser");
-        MultipartFile photoFile = multipartFile.getFile("photoFile");
-        String photo="";
+
         try{
-            if(photoFile !=null){
+            if(multipartFile !=null){
+                MultipartFile originalFile = multipartFile.getFile("photoFile");
                 String filePath = "C:\\gantt\\upload\\users\\";
-                photo = fileService.uploadFile(photoFile,filePath);
-                users.setPhoto(photo);
+                String saveFileName = fileService.uploadFile(originalFile,filePath);
+                users.setFilePath(filePath);
+                users.setSaveFileName(saveFileName);
+                users.setOriginalFileName(originalFile.getName());
             } else{
-                photo = loginUser.getPhoto();
+                users.setFilePath(loginUser.getFilePath());
+                users.setSaveFileName(loginUser.getSaveFileName());
+                users.setOriginalFileName(loginUser.getOriginalFileName());
             }
             int result = usersService.updateUsers(users);
             Users updateUser = usersService.findUsersById(loginUser.getId());
