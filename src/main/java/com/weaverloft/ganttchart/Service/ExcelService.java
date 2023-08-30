@@ -80,9 +80,12 @@ public class ExcelService {
             cell.setCellStyle(bodyStyle);
             cell.setCellValue(users.getName());
 
-            cell = row.createCell(3);
-            cell.setCellStyle(bodyStyle);
-            cell.setCellValue(format.format(users.getBirth()));
+
+                cell = row.createCell(3);
+                cell.setCellStyle(bodyStyle);
+            if(users.getBirth() != null) {
+                cell.setCellValue(format.format(users.getBirth()));
+            }
 
             cell = row.createCell(4);
             cell.setCellStyle(bodyStyle);

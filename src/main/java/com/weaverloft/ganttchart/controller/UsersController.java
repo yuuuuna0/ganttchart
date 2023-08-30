@@ -527,8 +527,12 @@ public class UsersController {
 
     //엑셀 다운로드
     @RequestMapping("/download")
-    public void excelDown( HttpServletRequest request, HttpServletResponse response) throws Exception{
-        excelService.excelDown(response,"회원리스트");
+    public void excelDown( HttpServletRequest request, HttpServletResponse response) {
+        try{
+            excelService.excelDown(response,"회원리스트");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
