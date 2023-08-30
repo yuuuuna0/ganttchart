@@ -16,12 +16,12 @@ import java.util.*;
 
 @Controller
 public class CommentsController {
-    @Autowired
-    CommentsService commentsService;
 
-//    public CommentsController(CommentsService commentsService) {
-//        this.commentsService = commentsService;
-//    }
+    private CommentsService commentsService;
+
+    public CommentsController(CommentsService commentsService) {
+        this.commentsService = commentsService;
+    }
 
     //1. 해당 게시글 댓글 조회
     @ResponseBody
