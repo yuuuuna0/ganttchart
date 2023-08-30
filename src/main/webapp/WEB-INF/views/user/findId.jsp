@@ -26,7 +26,7 @@
                                 </div>
                                 <input id="findIdBtn" type="button" onclick="findId();" class="btn btn-primary mr-2" value="아이디찾기">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
-                                <a href="register" class="auth-link text-black">Need an account? Sign up!</a>
+                                <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>

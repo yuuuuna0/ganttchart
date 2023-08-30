@@ -84,7 +84,7 @@ public class UsersController {
                 return forwardPath;
             }
             if(!usersService.isValidPassword(users.getPassword())){
-                //2) 비밀번호 정규식 체크 --> 적용 안됨,, 왜죠?
+                //2) 비밀번호 정규식 체크
                 forwardPath ="redirect:/register";
                 return forwardPath;
             }
@@ -97,7 +97,7 @@ public class UsersController {
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
             if(photoFile !=null){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
+                String filePath = "C:\\gantt\\upload\\users\\";
                 String photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
                 System.out.println("사진 있다");
@@ -105,6 +105,7 @@ public class UsersController {
                 users.setPhoto(null);
             }
             //6) 회원가입 완료
+            users.setGrade(1);
             int result = usersService.createUsers(users);
             //7) 회원가입 로그 추가
             String id= users.getId();
@@ -139,8 +140,9 @@ public class UsersController {
                 //인증된 사용자
                 int result=usersLogService.createLog(loginUser.getId(),10);
                 forwardPath = "redirect:/";
-            } else if(loginUser.getAuthStatus()==3){
+            } else if(loginUser.getAuthStatus()==2){
                 //임시비번으로 로그인 한 사람
+                int result=usersLogService.createLog(loginUser.getId(),10);
                 forwardPath = "redirect:/user/modifyPassword";
             }
         } catch (Exception e){
@@ -268,7 +270,7 @@ public class UsersController {
                 //임시비밀번호 암호화한 뒤 DB변경
                 String encryptTempPassword = sha256Service.encrypt(tempPassword);
                 System.out.println("임시비번 암호화: "+encryptTempPassword);
-                int authStatus = 3; //비번 변경시 계정상태 3으로 변경
+                int authStatus = 2; //비번 변경시 계정상태 2으로 변경 남기기
                 usersService.updatePassword(id,encryptTempPassword,authStatus);
                 forwardPath = "redirect:/login";
             }
@@ -287,7 +289,7 @@ public class UsersController {
             Map<String, Object> map = menuService.cmLeftMenuList();
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
-
+            forwardPath="/user/modifyPassword";
 
         } catch (Exception e){
             e.printStackTrace();
@@ -297,14 +299,21 @@ public class UsersController {
     //4-1. 비밀번호 변경 액션
     @LoginCheck
     @PostMapping("/user/modifyPassword-action")
-    public String modifyPasswordAction(HttpSession session){
+    public String modifyPasswordAction(HttpSession session, @RequestParam String password){
         String forwardPath="";
         try{
-
-
             Users users=(Users)session.getAttribute("loginUser");
+            //1. 비밀번호 정규식 체크
+            if(!usersService.isValidPassword(password)){
+                forwardPath ="/user/modifyPassword";
+                return forwardPath;
+            }
+            //2. 비밀번호 암호화
+            String encryptPassword = sha256Service.encrypt(password);
+            //3. 비밀번호 업데이트 및 인증상태 1로 변경
+            int authStatus = 1;
+            usersService.updatePassword(users.getId(),encryptPassword,authStatus);
             session.invalidate();
-            usersLogService.createLog(users.getId(),11);
             forwardPath="redirect:/login";
         } catch (Exception e){
             e.printStackTrace();
@@ -363,7 +372,7 @@ public class UsersController {
         String photo="";
         try{
             if(photoFile !=null){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\users\\";
+                String filePath = "C:\\gantt\\upload\\users\\";
                 photo = fileService.uploadFile(photoFile,filePath);
                 users.setPhoto(photo);
             } else{

@@ -34,14 +34,16 @@
                                             <input type="button" value="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
                                         </div>
-                                        <div class="col-3">
-                                            <label for="grade">회원 등급</label><span style="color: red;">*</span>
-                                            <select class="form-control" id="grade" name="grade">
-                                                <option disabled selected></option>
-                                                <option value="0">관리자</option>
-                                                <option value="1">일반회원</option>
-                                            </select>
-                                        </div>
+<%--                                        <c:if test="${sessionScope.loginUser.grade == 0}">--%>
+<%--                                        <div class="col-3">--%>
+<%--                                            <label for="grade">회원 등급</label><span style="color: red;">*</span>--%>
+<%--                                            <select class="form-control" id="grade" name="grade">--%>
+<%--                                                <option disabled selected></option>--%>
+<%--                                                <option value="0">관리자</option>--%>
+<%--                                                <option value="1">일반회원</option>--%>
+<%--                                            </select>--%>
+<%--                                        </div>--%>
+<%--                                        </c:if>--%>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
@@ -204,7 +206,7 @@
         var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
         $('#address').val(address);
         let gender = $('#gender option:selected').val();
-        let grade = $('#grade option:selected').val();
+        // let grade = $('#grade option:selected').val();
         var birth = document.getElementById("birth").value;
 
         /**************************** 유효성 검사 ****************************************/
@@ -239,10 +241,10 @@
             document.getElementById("email").focus();
             return false;
         }
-        if (grade === '') {
-            alert("회원등급을 선택하세요");
-            return false;
-        }
+        // if (grade === '') {
+        //     alert("회원등급을 선택하세요");
+        //     return false;
+        // }
         if (gender === '') {
             alert("성별을 선택하세요");
             return false;

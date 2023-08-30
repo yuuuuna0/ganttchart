@@ -13,6 +13,6 @@ import java.util.Date;
 public class UsersLog {
     private int logNo;
     private Date logDate;
-    private int logStatus;      //0:가입완료 1:인증완료  / 10:로그인 11:로그아웃 //999:회원탈퇴
+    private int logStatus;      //0:가입완료 1:인증완료 2:비번변경  / 10:로그인 11:로그아웃 //999:회원탈퇴
     private String id;
 }

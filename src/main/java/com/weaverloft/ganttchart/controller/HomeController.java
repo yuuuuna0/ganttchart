@@ -60,15 +60,20 @@ public class HomeController {
         return forward;
     }
 
-    @GetMapping("/form")
-    public String form(){
-        return "/form/form";
+    @GetMapping("/error")
+    public String error(Model model){
+        try{
+            //cm_left data
+            Map<String, Object> map = menuService.cmLeftMenuList();
+            model.addAttribute("menuList",map.get("menuList"));
+            model.addAttribute("preMenuList",map.get("preMenuList"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return "/error";
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "/test";
-    }
 
 
 }

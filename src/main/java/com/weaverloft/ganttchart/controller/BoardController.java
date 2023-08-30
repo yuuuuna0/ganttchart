@@ -123,7 +123,7 @@ public class BoardController {
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
             if(boardFileList.get(0).getSize() != 0){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\static\\upload\\board\\";
+                String filePath = "C:\\gantt\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
                     String fileName = fileService.uploadFile(boardFile,filePath);
                     long fileSize = (boardFile.getSize())/1000;
@@ -184,7 +184,7 @@ public class BoardController {
         try{
             int result = boardService.updateBoard(board);
             if(boardFileList.get(0).getSize() != 0){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
+                String filePath = "C:\\gantt\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
                     String fileName = fileService.uploadFile(boardFile,filePath);
                     long fileSize = boardFile.getSize();
@@ -207,7 +207,7 @@ public class BoardController {
         try{
             BoardFile file = boardFileService.findFileByNo(fileNo);
             String saveFileName = (String)file.getFileName();
-            String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
+            String filePath = "C:\\gantt\\upload\\board\\";
 
             // globals.properties
             File downloadFile = new File(filePath + saveFileName);

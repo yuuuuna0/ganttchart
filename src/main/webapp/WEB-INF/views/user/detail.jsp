@@ -32,9 +32,12 @@
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <label for="password">비밀번호</label>
-                                            <input readonly type="password" class="form-control" id="password" name="password" value="${sessionScope.loginUser.password}" maxlength="5">
+                                            <input readonly type="password" class="form-control" id="password" name="password" value="xxxxx" >
+                                        </div>
+                                        <div class="col-2 mt-auto">
+                                            <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/user/modifyPassword'" >
                                         </div>
                                     </div>
                                     <div class="row form-group">

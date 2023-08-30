@@ -12,12 +12,9 @@
     <div class="mt-lg-3">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <c:if test="${sessionScope.loginUser.grade == 0}">
-    <div class="row mt-lg-1">
-    <div class="col-4">
-    <input type="button" class="btn btn-light ml-4" style="width: 120%; height: 100%; font-size: 5pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/menu/register'">
-    </div>
-    <div class="col-4 ml-5">
-    <input type="button" class="btn btn-light mr-4" style="width: 120%; height: 100%; font-size: 5pt; padding: 2pt;" value="메뉴 삭제">
+    <div class="row mt-lg-1 ">
+    <div class="col-4 ">
+    <input type="button" class="btn btn-light ml-5" style="width: 230%; height: 100%; font-size: 10pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/menu/register'">
     </div>
     </div>
     </c:if>

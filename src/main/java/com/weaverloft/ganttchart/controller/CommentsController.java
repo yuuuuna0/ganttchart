@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +16,12 @@ import java.util.*;
 
 @Controller
 public class CommentsController {
-    private CommentsService commentsService;
+    @Autowired
+    CommentsService commentsService;
 
-    public CommentsController(CommentsService commentsService) {
-        this.commentsService = commentsService;
-    }
+//    public CommentsController(CommentsService commentsService) {
+//        this.commentsService = commentsService;
+//    }
 
     //1. 해당 게시글 댓글 조회
     @ResponseBody
@@ -39,8 +41,8 @@ public class CommentsController {
     //2. 댓글 남기기
     @LoginCheck
     @ResponseBody
-    @PostMapping("createComments-ajax")
-    private Map<String,Object> createCommentsAjax(@RequestParam Map<String,Object> map, Model model, HttpSession session){
+    @PostMapping("/createComments-ajax")
+    public Map<String,Object> createCommentsAjax(@RequestParam Map<String,Object> map, Model model, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 1 ; //1:성공 2: 실패
         String msg = "성공";
@@ -49,7 +51,7 @@ public class CommentsController {
         try{
             String commentsContent = (String)map.get("commentsContent");
             int classNo = Integer.parseInt(map.get("classNo").toString());
-            Integer groupNo=0;
+            int groupNo=0;
             int orders;
             int boardNo = Integer.parseInt(map.get("boardNo").toString());
             Users loginUser = (Users)session.getAttribute("loginUser");
