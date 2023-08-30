@@ -22,12 +22,12 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                                                <div class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchUserList(1)"  style="cursor: pointer;">
                                                     <span class="input-group-text" id="search">
                                                         <i class="icon-search"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                                                <input type="text" class="form-control" id="keyword" placeholder="검색" value="${keyword}" aria-label="search" aria-describedby="search">
                                             </div>
                                         </li>
                                     </ul>

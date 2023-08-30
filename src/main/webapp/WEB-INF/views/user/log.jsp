@@ -61,7 +61,7 @@
                                                         <td>로그인</td>
                                                     </c:when>
                                                     <c:when test="${usersLog.logStatus == 11}">
-                                                        <td>아웃</td>
+                                                        <td>로그아웃</td>
                                                     </c:when>
                                                 </c:choose>
                                                 <td><fmt:formatDate value="${usersLog.logDate}" pattern="yyyy. MM. dd."/></td>

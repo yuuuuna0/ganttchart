@@ -40,6 +40,18 @@ public class HomeController {
 
     @GetMapping("/")
     //시작 페이지
+    public String login() {
+        String forward = "";
+        String keyword =null;
+        try{
+            forward = "redirect:/login";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forward;
+    }
+    @GetMapping("/index")
+    //시작 페이지
     public String index(Model model) {
         String forward = "";
         String keyword =null;
@@ -53,7 +65,7 @@ public class HomeController {
             int no = 5;
             List<Board> boardTopList = boardService.findBoardTopList(no);
             model.addAttribute("boardTopList", boardTopList);
-            forward = "index";
+            forward = "/index";
         } catch (Exception e){
             e.printStackTrace();
         }

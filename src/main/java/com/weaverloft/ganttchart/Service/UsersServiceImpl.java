@@ -31,11 +31,13 @@ public class UsersServiceImpl implements UsersService {
     public Users login(String id, String password) throws Exception {
         Users users = usersDao.findUsersById(id);
         if (users == null) {
-            throw new Exception("존재하지 않는 아이디입니다.");
+//            throw new Exception("존재하지 않는 아이디입니다.");
+            return null;
         }
-        if (!users.getPassword().equals(password)) {
+        if(!users.getPassword().equals(password)) {
             //저장된 비밀번호와 암호화된 비밀번호를 비교
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+//            throw new Exception("비밀번호가 일치하지 않습니다.");
+            return null;
         }
         return users;
     }
@@ -204,6 +206,11 @@ public class UsersServiceImpl implements UsersService {
             throw new Exception("아이디에는 공백이 포함될 수 없습니다.");
         }
         return usersDao.isExistedId(id);
+    }
+
+    @Override
+    public List<Users> findAllUsers() {
+        return usersDao.findAllUsers();
     }
 }
 

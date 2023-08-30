@@ -24,7 +24,7 @@ public class UsersLogServiceImpl implements UsersLogService{
     }
 
     @Override
-    public PageMakerDto findUserLog(int pageNo, String keyword) {
+    public PageMakerDto findUserLog(int pageNo, String keyword) throws Exception{
         int totUsersLogCount = usersLogDao.findUsersLogCount(keyword);
         PageMaker pageMaker = new PageMaker(totUsersLogCount,pageNo);
         List<UsersLog> usersLogList = usersLogDao.findUsersLogList(pageMaker.getPageBegin(),pageMaker.getPageEnd(),keyword);

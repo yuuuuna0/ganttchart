@@ -15,7 +15,6 @@
                             <h4 class="card-title">비밀번호 찾기</h4>
                             <p class="card-description">
                             </p>
-                            <form class="forms-sample" name="findPasswordF" id="findPasswordF" method="post" action="/user/findPassword-action">
                                 <div class="form-group">
                                     <label for="id">아이디</label>
                                     <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요">
@@ -28,10 +27,9 @@
                                     <label for="email">이메일</label>
                                     <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
                                 </div>
-                                <input type="submit" id="findPasswordBtn" class="btn btn-primary mr-2" value="비밀번호찾기">
+                                <input type="button" onclick="findPasswordAction()" id="findPasswordBtn" class="btn btn-primary mr-2" value="비밀번호찾기">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
                                 <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -41,7 +39,51 @@
     </div>
     <!-- main-panel ends -->
 <script type="text/javascript">
-
+    function findPasswordAction(){
+        let id = $('#id').val();
+        let name = $('name').val();
+        let email = $('email').val();
+        if (id === '') {
+            alert("아이디를 입력하세요");
+            $('#id').focus();
+            return false;
+        }
+        if (name === '') {
+            alert("이름를 입력하세요");
+            $('#name').focus();
+            return false;
+        }
+        if (email === '') {
+            alert("이메일을 입력하세요");
+            $('#email').focus();
+            return false;
+        }
+            $.ajax({
+                url : '/user/findPassword-ajax',
+                method : "POST",
+                data : {
+                    'id': id,
+                    'name': name,
+                    'email': email
+                },
+                success : function(resultMap){
+                    if(resultMap.code === 1){
+                        alert(resultMap.msg);
+                        window.location.href=resultMap.forwardPath;
+                    } else if(resultMap.code === 2){
+                        alert(resultMap.msg);
+                    } else if(resultMap.code === 3){
+                        alert(resultMap.msg);
+                    } else {
+                        alert(resultMap.msg);
+                        window.location.href=resultMap.forwardPath;
+                    }
+                },
+                error : function(e){
+                    console.log(e);
+                }
+            });
+    }
 </script>
 
 </body>

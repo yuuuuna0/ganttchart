@@ -38,7 +38,6 @@
                         </div>
                         <h4>Hello! let's get started</h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
-                        <form class="pt-3" name="loginF">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-lg" id="id" name="id" placeholder="ID">
                             </div>
@@ -46,7 +45,7 @@
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
                             </div>
                             <div class="mt-3">
-                                <input type="button" id="loginBtn" name="loginBtn" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
+                                <input type="button" id="loginBtn" name="loginBtn" onclick="loginAction();" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
                             </div>
                             <div class="my-2 d-flex justify-content-between align-items-center">
                                 <div class="form-check">
@@ -66,7 +65,6 @@
                             <div class="text-center mt-4 font-weight-light">
                                 Don't have an account? <a href="/user/register" class="text-primary">Create</a>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -89,10 +87,50 @@
 <script src="/static/js/todolist.js"></script>
 <!-- endinject -->
 <script>
-    document.getElementById("loginBtn").onclick=function(){
-        document.loginF.method = 'POST';
-        document.loginF.action = 'login-action';
-        document.loginF.submit();
+    function loginAction(){
+        let id = $('#id').val();
+        let password = $('#password').val();
+        //1. 공백일 경우 값을 입력해달라는 메세지 띄우기
+        if (id === '') {
+            alert("아이디를 입력하세요");
+            $('#id').focus();
+            return false;
+        }
+        if (password === '') {
+            alert("비밀번호를 입력하세요");
+            $('#password').focus();
+            return false;
+        }
+        //2. 값이 있을 경우 ajax
+        $.ajax({
+            url : '/login-ajax',
+            method : 'post',
+            data : {
+                'id' : id,
+                'password' : password
+            },
+            success : function(resultMap){
+                if(resultMap.code === 1){
+                    //1. 성공
+                    window.location.href=resultMap.forwardPath;
+                } else if(resultMap.code === 2){
+                    //2. ID&PW 조합 틀림
+                    alert(resultMap.msg);
+                    window.location.href=resultMap.forwardPath;
+                } else if(resultMap.code === 3){
+                    //2. 미인증 사용자
+                    window.location.href=resultMap.forwardPath;
+                } else if(resultMap.code === 4){
+                    //3. 임시비번으로 로그인 한 사람
+                    window.location.href=resultMap.forwardPath;
+                } else {
+                    alert(resultMap.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
 </script>
 </body>

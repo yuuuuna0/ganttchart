@@ -34,8 +34,10 @@ public interface UsersService {
     void userListExcelDown(Users users,int pageNo, String keyword) throws Exception;
     //13. 로그인 한 유저 반환
     Users getLoginUser() throws Exception;
-    //4. 아이디 중복 체크
+    //14. 아이디 중복 체크
     int isExistedId(String id) throws Exception;
+    //15. 모든 유저 찾기
+    List<Users> findAllUsers();
 
     /*
     //2. 내 정보 조회

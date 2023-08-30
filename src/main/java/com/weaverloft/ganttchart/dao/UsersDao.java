@@ -32,8 +32,8 @@ public interface UsersDao {
     int findUsersCount(String keyword) throws Exception;
     //12. 회원리스트 -> 페이징,검색
     List<Users> findUserList(int pageBegin, int pageEnd, String keyword) throws Exception;
-    //13.회원리스트
-    List<Users> findUserList() throws Exception;
+    //14. 모든 유저 찾기
+    List<Users> findAllUsers();
 
     /*
     //3. 정보 수정

@@ -124,44 +124,62 @@ public class UsersController {
         return "/login";
     }
     //2-2. 로그인 액션 --> 완료
-    @PostMapping("/login-action")
-    public String loginAction(HttpSession session, @RequestParam Map map) {
+    @ResponseBody
+    @PostMapping("/login-ajax")
+    public Map<String,Object> loginAjax(HttpSession session,@RequestParam String id, @RequestParam String password) {
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "성공";
         String forwardPath = "";
-        String id=(String)map.get("id");
-        String password=(String)map.get("password");
         try{
-            Users loginUser=usersService.login(id,sha256Service.encrypt(password));
-            session.setAttribute("loginUser", loginUser);
-            session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
-            if(loginUser.getAuthStatus() == 0){
-                //미인증 사용자(첫번째 로그인)
-                forwardPath = "redirect:/user/emailAuth";
-            } else if(loginUser.getAuthStatus()==1) {
-                //인증된 사용자
-                int result=usersLogService.createLog(loginUser.getId(),10);
-                forwardPath = "redirect:/";
-            } else if(loginUser.getAuthStatus()==2){
-                //임시비번으로 로그인 한 사람
-                int result=usersLogService.createLog(loginUser.getId(),10);
-                forwardPath = "redirect:/user/modifyPassword";
+//            String encryptPassword = sha256Service.encrypt(password);
+            Users loginUser= usersService.login(id,sha256Service.encrypt(password));
+            if(loginUser == null){
+                //ID&PW 조합 틀림
+                code =2;
+                msg = "존재하지 않는 아이디거나 비밀번호가 틀립니다.";
+                forwardPath = "/login";
+            } else {
+                if(loginUser.getAuthStatus()==1) {
+                    //인증된 사용자
+                    code = 1;
+                    usersLogService.createLog(loginUser.getId(),10);
+                    forwardPath = "/index";
+                }
+                if(loginUser.getAuthStatus() == 0){
+                    //미인증 사용자(첫번째 로그인)
+                    code = 3;
+                    forwardPath = "/user/emailAuth";
+                }
+                if(loginUser.getAuthStatus()==2){
+                    //임시비번으로 로그인 한 사람
+                    code = 4;
+                    usersLogService.createLog(loginUser.getId(),10);
+                    forwardPath = "/user/modifyPassword";
+                }
+                session.setAttribute("loginUser", loginUser);
+                session.setMaxInactiveInterval(60 * 30);    //세션 유지시간 설정 :30분
             }
         } catch (Exception e){
             e.printStackTrace();
-            System.out.println("로그인 실패");
-            forwardPath = "redirect:/login";
+            code=5;
+            msg = "로그인 실패. 관리자에게 문의하세요";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
     //2-3. 로그아웃 액션 --> 완료
     @LoginCheck
     @RequestMapping("/logout-action")
-    public String logoutAction(HttpSession session) {
+    public String logoutAjax(HttpSession session) {
         String forwardPath = "";
         try{
             Users users=(Users)session.getAttribute("loginUser");
             session.invalidate();
             usersLogService.createLog(users.getId(),11);
-            forwardPath = "redirect:/";
+            forwardPath = "redirect:/index";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -183,26 +201,38 @@ public class UsersController {
     }
     //2-5. 이메일 인증 액션 --> 완료
     @LoginCheck
-    @PostMapping("/user/emailAuth-action")
-    public String emailAuthAction(HttpSession session,@RequestParam Map map){
+    @ResponseBody
+    @PostMapping("/user/emailAuth-ajax")
+    public Map<String,Object> emailAuthAjax(HttpSession session,@RequestParam Map map){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "성공";
         String forwardPath = "";
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
             if(authKey.equals(loginUser.getAuthKey())){
+                code = 1;
                 usersService.updateAuthStatus1(loginUser.getId());   //회원 인증 완료
                 usersLogService.createLog(loginUser.getId(),1);        //인증완료 로그:1 남기기
                 usersLogService.createLog(loginUser.getId(),10);        //로그인 로그:10 남기기
                 session.setAttribute("loginUser",loginUser);
-                forwardPath = "redirect:/";
+                forwardPath = "/index";
             } else{
-                System.out.println("인증번호가 다릅니다");
-                forwardPath = "redirect:/user/emailAuth";
+                code = 2;
+                msg="인증번호가 다릅니다";
+                forwardPath = "/user/emailAuth";
             }
         }catch (Exception e){
             e.printStackTrace();
+            code = 3;
+            msg = "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요";
+            forwardPath="/error";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
 
     //3-1. 아이디 찾기 페이지 --> 완료
@@ -217,12 +247,12 @@ public class UsersController {
             e.printStackTrace();
         }return "/user/findId";
     }
-    //3-2. 아이디 찾기 액션 --> 완료, ID 출력 페이지 만들어야함 --> ajax
+    //3-2. 아이디 찾기 액션
     @ResponseBody
     @PostMapping("/user/findId-ajax")
     public Map<String,Object> findIdAjax(@RequestParam Map map) {
         Map<String, Object> resultMap = new HashMap<>();
-        int code = 1;
+        int code = 0;
         String msg = "성공";
         List<String> data = new ArrayList<>();
         String name=(String)map.get("name");
@@ -254,30 +284,50 @@ public class UsersController {
         return "/user/findPassword";
     }
     //4-2. 비밀번호 찾기 액션 --> 완료
-    @PostMapping("/user/findPassword-action")
-    public String findPasswordAction(@RequestParam Map map) {
+    @ResponseBody
+    @PostMapping("/user/findPassword-ajax")
+    public Map<String,Object> findPasswordAjax(@RequestParam Map map) {
+        Map<String, Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "성공";
         String forwardPath = "";
         String id=(String)map.get("id");
         String name = (String)map.get("name");
         String email=(String)map.get("email");
         try{
-            int result=usersService.findPasswordByIdNameEmail(id,name,email);   //String으로 binding 에러?
+            int result = usersService.findPasswordByIdNameEmail(id,name,email);   //String으로 binding 에러?
             if(result == 1){
                 Users users=usersService.findUsersById(id);
                 //아이디 이메일 조합 존재 -> 메일로 임시 비번 발송
                 String tempPassword = emailService.sendTempPasswordEmail(users.getEmail());
-                System.out.println("임시비번 전송 성공");
                 //임시비밀번호 암호화한 뒤 DB변경
                 String encryptTempPassword = sha256Service.encrypt(tempPassword);
-                System.out.println("임시비번 암호화: "+encryptTempPassword);
                 int authStatus = 2; //비번 변경시 계정상태 2으로 변경 남기기
                 usersService.updatePassword(id,encryptTempPassword,authStatus);
-                forwardPath = "redirect:/login";
+                code = 1;
+                msg = "가입시 입력한 메일로 임시비밀번호 전송하였습니다.";
+                forwardPath = "/login";
+            } else {
+                Users users = usersService.findUsersById(id);
+                result = usersService.findIdByNameEmail(name,email).size();
+                if(users == null){
+                    code = 2;
+                    msg = "가입된 아이디가 존재하지 않습니다.";
+                } else if(result == 0){
+                   code = 3;
+                   msg = "해당 이름과 이메일을 가진 아이디가 존재하지 않습니다.";
+                }
             }
         } catch (Exception e){
             e.printStackTrace();
+            code = 4;
+            msg = "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요";
+            forwardPath="/error";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
     //4. 비밀번호 변경 페이지
     @LoginCheck
@@ -298,27 +348,43 @@ public class UsersController {
     }
     //4-1. 비밀번호 변경 액션
     @LoginCheck
-    @PostMapping("/user/modifyPassword-action")
-    public String modifyPasswordAction(HttpSession session, @RequestParam String password){
-        String forwardPath="";
+    @PostMapping("/user/modifyPassword-ajax")
+    public Map<String,Object> modifyPasswordAction(HttpSession session, @RequestParam Map map){
+        Map<String, Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "성공";
+        String forwardPath = "";
+        String password = (String)map.get("password");
+        String confirmPassword = (String)map.get("confirmPassword");
         try{
             Users users=(Users)session.getAttribute("loginUser");
-            //1. 비밀번호 정규식 체크
-            if(!usersService.isValidPassword(password)){
-                forwardPath ="/user/modifyPassword";
-                return forwardPath;
+            if(password.equals(confirmPassword)){
+                code = 2;
+                msg = "비밀번호와 비밀번호확인은 일치하여야합니다.";
+            } else if(!usersService.isValidPassword(password)){
+                //1. 비밀번호 정규식 체크
+                code = 3;
+                msg = "비밀번호 형식에 맞게 작성해주세요";
+            } else {
+                //2. 비밀번호 암호화
+                String encryptPassword = sha256Service.encrypt(password);
+                //3. 비밀번호 업데이트 및 인증상태 1로 변경
+                int authStatus = 1;
+                usersService.updatePassword(users.getId(),encryptPassword,authStatus);
+                session.invalidate();
+                code = 1;
+                forwardPath="/login";
             }
-            //2. 비밀번호 암호화
-            String encryptPassword = sha256Service.encrypt(password);
-            //3. 비밀번호 업데이트 및 인증상태 1로 변경
-            int authStatus = 1;
-            usersService.updatePassword(users.getId(),encryptPassword,authStatus);
-            session.invalidate();
-            forwardPath="redirect:/login";
         } catch (Exception e){
             e.printStackTrace();
+            code = 4;
+            msg = "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요";
+            forwardPath = "/error";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
 
 
@@ -398,12 +464,14 @@ public class UsersController {
             usersLogService.createLog(loginUser.getId(),999);   //탈퇴 로그:999 남기기
             int result=usersService.deleteUsers(loginUser.getId());
             session.invalidate();
-            forwardPath="redirect:/";
+            forwardPath="redirect:/index";
         } catch (Exception e){
             e.printStackTrace();
         }
         return forwardPath;
     }
+
+/******************************************************************************************************************************************************/
 
 
     //1. 회원리스트 출력
@@ -423,6 +491,7 @@ public class UsersController {
             if(keyword.equals("")) keyword=null;
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
             model.addAttribute("userListPage",userListPage);
+            model.addAttribute("keyword",keyword);
             forwardPath = "/user/list";
         } catch (Exception e){
             e.printStackTrace();
@@ -448,6 +517,7 @@ public class UsersController {
             if(keyword.equals("")) keyword=null;
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);
             model.addAttribute("usersLogPage",usersLogPage);
+            model.addAttribute("keyword",keyword);
             forwardPath = "/user/log";
         } catch (Exception e){
             e.printStackTrace();

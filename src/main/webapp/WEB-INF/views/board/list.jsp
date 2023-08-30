@@ -38,7 +38,7 @@
                                             <th>No</th>
                                             <th>Title</th>
                                             <th>Content</th>
-                                            <th>Writer</th>
+                                            <th>작성자</th>
                                             <th>Date</th>
                                             <th>Read</th>
                                         </tr>
@@ -49,7 +49,12 @@
                                                 <td>${board.boardNo}</td>
                                                 <td>${board.boardTitle}</td>
                                                 <td>${board.boardContent}</td>
-                                                <td>${board.id}</td>
+                                                <c:forEach items="${userList}" var="user">
+                                                    <c:if test="${board.id == user.id}">
+                                                        <td>${user.name}</td>
+                                                    </c:if>
+                                                </c:forEach>
+
                                                 <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>
                                                 <td>${board.boardReadcount}</td>
                                             </tr>
@@ -109,7 +114,7 @@
     }
 
     // 검색창 입력 후 엔터키 => 검색
-    $("#searchBtn").keyup(e => {
+    $("#keyword").keyup(e => {
         if (e.keyCode === 13) {
             searchBoardList(1);
             e.preventDefault();

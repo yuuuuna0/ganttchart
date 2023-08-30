@@ -48,13 +48,13 @@ public class CommentsController {
         String msg = "성공";
         String forwardPath ="";
         List<Comments> data = new ArrayList<>();
+        Users loginUser = (Users)session.getAttribute("loginUser");
         try{
             String commentsContent = (String)map.get("commentsContent");
             int classNo = Integer.parseInt(map.get("classNo").toString());
             int groupNo=0;
             int orders;
             int boardNo = Integer.parseInt(map.get("boardNo").toString());
-            Users loginUser = (Users)session.getAttribute("loginUser");
             if(classNo == 1){
                 //1) 상위댓글일 때 -> classNo = 1, groupNo = commentsNo
                 //groupNo 어떻게?
@@ -65,7 +65,7 @@ public class CommentsController {
                 int updateResult = commentsService.updateGroupNo(curKey);
             } else{
                 //2) 하위댓글일 때 -> classNo = 2, groupNo = 상위댓글의 commentsNo
-                groupNo = Integer.parseInt(map.get("groupNo").toString());
+                groupNo = Integer.parseInt(map.get("commentsNo").toString());
                 orders = commentsService.findCommentsCountByGroupNo(groupNo);
                 Comments comments = new Comments(0,commentsContent,new Date(),classNo,orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
@@ -81,19 +81,22 @@ public class CommentsController {
         resultMap.put("code",code);
         resultMap.put("msg",msg);
         resultMap.put("data",data);
+        resultMap.put("loginUser",loginUser);
         return resultMap;
     }
 
     //3. 댓글 삭제
+    @LoginCheck
     @ResponseBody
     @PostMapping("/deleteComment-ajax")
-    public Map<String,Object> deleteCommentAjax(@RequestParam Map<String,Object> map){
+    public Map<String,Object> deleteCommentAjax(@RequestParam Map<String,Object> map,HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int commentsNo = Integer.parseInt(map.get("commentsNo").toString());
         int boardNo = Integer.parseInt(map.get("boardNo").toString());
         int code = 1;
         String msg = "성공";
         List<Comments> data = new ArrayList<>();
+        Users loginUser = (Users)session.getAttribute("loginUser");
         try{
             int result = commentsService.deleteComments(commentsNo);
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
@@ -106,13 +109,15 @@ public class CommentsController {
         resultMap.put("code",code);
         resultMap.put("msg",msg);
         resultMap.put("data",data);
+        resultMap.put("loginUser",loginUser);
         return resultMap;
     }
 
     //4. 댓글 수정하기
+    @LoginCheck
     @ResponseBody
     @PostMapping("/modifyComment-ajax")
-    public Map<String,Object> modifyCommentAjax(@RequestParam Map<String,Object> map){
+    public Map<String,Object> modifyCommentAjax(@RequestParam Map<String,Object> map,HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 1;
         String msg = "";
@@ -120,7 +125,7 @@ public class CommentsController {
         int commentsNo = Integer.parseInt(map.get("commentsNo").toString());
         int boardNo = Integer.parseInt(map.get("boardNo").toString());
         String commentsContent = (String)map.get("commentsContent");
-        System.out.println("commentsContent = " + commentsContent);
+        Users loginUser = (Users)session.getAttribute("loginUser");
         try{
             int result = commentsService.updateComments(commentsNo,commentsContent);
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
@@ -133,6 +138,7 @@ public class CommentsController {
         resultMap.put("code",code);
         resultMap.put("msg",msg);
         resultMap.put("data",data);
+        resultMap.put("loginUser",loginUser);
         return resultMap;
     }
 }

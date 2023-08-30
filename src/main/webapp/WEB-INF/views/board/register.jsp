@@ -51,7 +51,7 @@
     var fileNo = 0;         //파일 고유번호
     var fileList = new Array(); //첨부파일리스트 (파일타입)
     var fileListArray; //첨부파일 어레이타입
-    const dataTransfer = new DataTransfer();
+    let dataTransfer = new DataTransfer();
     //1. 다중 파일 처리
     //1) 버튼클릭시 submit 안하기
     document.addEventListener('DOMContentLoaded', function() {
@@ -79,11 +79,12 @@
                document.getElementById("fileList").innerHTML +=
                    '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
                    + f.name
-                   + '<img src="file:///C:/home/01.Project/01.InteliJ/ganttchart/src/main/webapp/resources/static/images/icon_X.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                   + '<img src="/static/images/icons/X.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>'
                    + '</div>';
                fileNo++;
             };
            reader.readAsDataURL(f);
+           dataTransfer.items.add(f);
         });
         for(let i=0;fileList.length;i++){
             dataTransfer.items.add(fileList.indexOf(i));
@@ -91,24 +92,54 @@
         console.log(fileList);
         //초기화
         document.getElementById("boardFileList").value='';
+        $('#boardFileList')[0].files=dataTransfer.files;
+        console.log($('#boardFileList')[0].files);
+        console.log(dataTransfer.files);
     }
     //2. 파일 부분 삭제 함수
     function fileDelete(fileNo){
+        dataTransfer = new DataTransfer();
         //html 처리
         var no = fileNo.replace(/[^0-9]/g, "");     //fileNo(ex.file1,file2)의 index
-        if(no <= maxCount){
+        /*if(no <= maxCount){
             fileList[no].is_delete = true;
             document.getElementById(fileNo).remove();
             fileCount--;
-        }
+        }*/
         // input 태그 처리
         fileListArray = Array.from(fileList);	////변수에 할당된 배열을 파일로 변환(Array -> fileList)
+        console.log('fileList : ' + fileList);
+        console.log('fileListArray : ' + fileListArray);
+        console.log('dataTransfer : ' + dataTransfer.items);
         fileListArray.splice(no, 1);	            //해당하는 index의 파일을 배열에서 제거
+
         for(let i=0;i<fileListArray.length;i++){
             let file = fileListArray[i];
             dataTransfer.items.add(file);
         }
-        $('#boardFileList')[0].files=dataTransfer.files;    //제거처리된 FileList를 input태그에 담아줌
+       /* console.log("2");
+        console.log(fileListArray);
+        console.log(dataTransfer.items);*/
+
+        $('#fileList').empty();
+        let html = ""
+        for(let i = 0 ; i < dataTransfer.files.length ; i++){
+            let f = dataTransfer.files[i];
+            html +=  '<div id="file'+ i + '" style="font-size:12px;" onclick="fileDelete(\'file' + i + '\')">'
+                + f.name
+                + '<img src="/static/images/icons/X.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                + '</div>';
+        }
+        $('#fileList').append(html);
+
+        console.log('fileList : ' + fileList);
+        console.log('fileListArray : ' + fileListArray);
+        console.log('dataTransfer : ' + dataTransfer.items);
+
+        $('#boardFileList')[0].files=dataTransfer.files;
+        fileList = new Array();
+        fileList = dataTransfer.files;
+        //제거처리된 FileList를 input태그에 담아줌
     }
     //3. 게시글 작성
     function boardWrite() {
@@ -124,10 +155,12 @@
             document.getElementById("boardContent").focus();
             return false;
         }
-        fileDelete("file"+(maxCount+1));    //이거 왜한거더라
+        //fileDelete("file"+(maxCount+1));    //이거 왜한거더라
 
         document.getElementById("boardWriteF").method = 'POST';
         document.getElementById("boardWriteF").action = '/board/register-action';
+        console.log($('#boardFileList')[0].files);
+        console.log($('#boardFileList'));
         document.getElementById("boardWriteF").submit();
     }
 

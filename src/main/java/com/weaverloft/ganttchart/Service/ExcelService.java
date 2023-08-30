@@ -26,7 +26,7 @@ public class ExcelService {
 
     public void excelDown(HttpServletResponse response,String fileName) throws Exception {
 
-        List<Users> userList = usersDao.findUserList();
+        List<Users> userList = usersDao.findAllUsers();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");   //date 타입 String으로 전환하기 위함
 
         //excel 다운 시작

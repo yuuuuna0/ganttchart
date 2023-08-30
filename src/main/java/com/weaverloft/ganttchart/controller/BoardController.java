@@ -34,18 +34,21 @@ public class BoardController {
     private FileService fileService;
     private CommentsService commentsService;
     private MenuService menuService;
+    private UsersService usersService;
 
     public BoardController(BoardService boardService, BoardFileService boardFileService,
                            FileService fileService, CommentsService commentsService,
-                           MenuService menuService) {
+                           MenuService menuService, UsersService usersService) {
         this.boardService = boardService;
         this.boardFileService = boardFileService;
         this.fileService = fileService;
         this.commentsService = commentsService;
         this.menuService = menuService;
+        this.usersService = usersService;
     }
 
     //1. 게시글 전체보기 페이지
+    @LoginCheck
     @GetMapping("/list")
     public String boardList(@RequestParam(required = false, defaultValue = "1") int pageNo,
                             @RequestParam(required = false, defaultValue = "") String keyword,
@@ -58,10 +61,10 @@ public class BoardController {
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
             if(keyword.equals("")) keyword=null;
-
-            Users loginUser = (Users)session.getAttribute("loginUser");
+            List<Users> userList = usersService.findAllUsers();
             PageMakerDto<Board> boardListPage = boardService.findBoardList(pageNo,keyword);
             model.addAttribute("boardListPage",boardListPage);
+            model.addAttribute("userList",userList);
             model.addAttribute("keyword",keyword);
             forwardPath="/board/list";
         } catch (Exception e){
@@ -72,6 +75,7 @@ public class BoardController {
     }
 
     //2. 게시글 상세보기 페이지
+    @LoginCheck
     @GetMapping("/detail/{boardNo}")
     public String boardDetail(@PathVariable int boardNo,Model model) {
         String forwardPath = "";
@@ -136,6 +140,7 @@ public class BoardController {
             forwardPath = "redirect:/board/detail/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
+            forwardPath="/error";
         }
         return forwardPath;
     }
@@ -147,9 +152,10 @@ public class BoardController {
         String forwardPath ="";
         try{
             boardService.deleteBoard(boardNo);
-            forwardPath = "redirect:/board/list/1";
+            forwardPath = "redirect:/board/list?pageNo=1&keyword=";
         } catch (Exception e){
             e.printStackTrace();
+            forwardPath="/error";
         }
         return forwardPath;
     }
@@ -197,11 +203,13 @@ public class BoardController {
             forwardPath = "redirect:/board/modify/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
+            forwardPath="/error";
         }
         return forwardPath;
     }
 
     //6. 파일 다운로드
+    @LoginCheck
     @GetMapping("/downloadFile")
     public void downloadFile(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
         try{

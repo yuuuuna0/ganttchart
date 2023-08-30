@@ -62,9 +62,8 @@
                         <div class="comment-group">
                             <div class="row" id="commentListDiv">
                                 <c:forEach items="${commentsList}" var="comment">
-                                    <input type="hidden" value="${comment.commentsNo}" id="commentsNo">
                                     <c:if test="${comment.classNo == 1}">
-                                        <div class="col-12 mt-3">
+                                        <div class="col-12 mt-3" id="commentDiv${comment.commentsNo}">
                                             <span class="mr-3">${comment.id}</span>
                                             <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                             <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
@@ -72,8 +71,8 @@
                                             <span>
                                                         <img src="/../static/images/icons/comment.png"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
-                                                             onclick="subComments('${comment.id}')"/>
-                                    <c:if test="${sessionScope.loginUser.id == comment.id}">
+                                                             onclick="subComments(${comment.commentsNo},${comment.classNo})"/>
+                                                <c:if test="${sessionScope.loginUser.id == comment.id}">
                                                         <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
@@ -81,23 +80,23 @@
                                                         <img src="/../static/images/icons/bin.png"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
                                                              onclick="deleteComments(${comment.commentsNo});"/>
-                                    </c:if>
+                                                </c:if>
                                         </span>
                                         </div>
                                     </c:if>
                                     <c:if test="${comment.classNo == 2}">
-                                        <div class="col-1">
-                                            &nbsp
-                                        </div>
-                                        <div class="col-11">
+                                        <div class="col-11" style="margin-left: ${comment.classNo*30}px" id="commentDiv${comment.commentsNo}">
                                             <img src="/../static/images/icons/subComment.png"
                                                  style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>
                                             <span class="mr-3">${comment.id}</span>
                                             <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
                                             <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
                                                                                pattern="yyyy. MM. dd."/></span>
-                                            <c:if test="${sessionScope.loginUser.id == comment.id}">
                                             <span>
+                                            <img src="/../static/images/icons/comment.png"
+                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                 onclick="subComments(${comment.commentsNo},${comment.classNo})"/>
+                                            <c:if test="${sessionScope.loginUser.id == comment.id}">
                                                         <img src="/../static/images/icons/modify.png"
                                                              name="modifyComment"
                                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
@@ -156,12 +155,38 @@
 
     /******************************** 1. 댓글 작성 **********************************/
     //하위타입 댓글 작성
-    function subComments(e, id) {
-        console.log(e.target.parentElement);
-        $('#commentsContent').focus();
-        $('#msgLabel').text(id + '님에게 댓글 다는 중,,,,');
-        $('#createCommentsBtn').prop('onclick', 'createComments(2)');    //-> classNo 2 넘기는 방법?
+        //1) 작성 폼 나오기(상위댓글 아래에)
+    function subComments(commentsNo,classNo) {
+        let commentDiv = $('#commentDiv'+commentsNo);
+        let html = "<br><input style='margin-left: "+classNo*30+"px' id=subCommentText"+commentsNo+" type='text' class='mr-3' value=''/>" +
+            "<button onclick='subCommentsAction(" + commentsNo + ")'>답글달기</button>";
+        commentDiv.append(html);
     }
+    function subCommentsAction(commentsNo){
+        let commentsContent = $('#subCommentText'+commentsNo).val();
+        let boardNo = $('#boardNo').val();
+        console.log(commentsNo);
+        $.ajax({
+            url: '/createComments-ajax',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                'commentsContent': commentsContent,
+                'commentsNo': commentsNo,
+                'boardNo': boardNo
+            },
+            success: function (resultJson) {
+                console.log(resultJson);
+                reload(resultJson);
+            },
+            error: function (e) {
+                console.log(e);
+                console.log('에러확인');
+            },
+            async: true
+        });
+    }
+
 
     //상위타입 댓글 작성
     function createComments(classNo) {
@@ -262,6 +287,8 @@
                     month: '2-digit',
                     day: '2-digit'
                 }).replace(/\./g, '.');
+                console.log(dataItem);
+                console.log(resultData.loginUser);
                 if (dataItem.classNo === 1) {
                     //부모댓글일 때 ==> classNo=1
                     html += " <div class='col-12 mt-3' >\n" +
@@ -269,25 +296,26 @@
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
                         "                                                    <span >\n" +
-                        "                                                        <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n" +
-                        "                                                        <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
-                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
-                        "                                                    </span>\n" +
+                        "                                                        <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n";
+                    if(dataItem.id == resultData.loginUser.id) {
+                        html +=  "                                               <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
+                    }
+                    html +="                                                    </span>\n" +
                         "                                                </div>\n";
                 } else {
                     //답글일 때 ==> classNo=2
-                    html += " <div class='col-1'>\n" +
-                        "                                                    &nbsp\n" +
-                        "                                                </div>\n" +
-                        "                                                <div class='col-11'>\n" +
+                    html += "                                                <div class='col-11'>\n" +
                         "                                                    <img src='/../static/images/icons/subComment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
                         "                                                    <span class='mr-3'>" + dataItem.id + "</span>\n" +
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
-                        "                                                    <span >\n" +
-                        "                                                        <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
-                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n" +
-                        "                                                    </span>\n" +
+                        "                                                    <span >\n";
+                    if(dataItem.id == resultData.loginUser.id) {
+                        html +="                                                 <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
+                    }
+                    html +="                                                    </span>\n" +
                         "                                                </div>\n";
                 }
             }

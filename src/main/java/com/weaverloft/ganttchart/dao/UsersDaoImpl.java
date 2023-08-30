@@ -101,9 +101,10 @@ public class UsersDaoImpl implements UsersDao {
         return usersMapper.findUserList(map);
     }
 
+
     @Override
-    public List<Users> findUserList() throws Exception {
-        return usersMapper.findUserList2();
+    public List<Users> findAllUsers() {
+        return usersMapper.findAllUsers();
     }
 
 

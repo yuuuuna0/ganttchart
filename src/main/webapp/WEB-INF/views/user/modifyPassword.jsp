@@ -49,20 +49,36 @@
             document.getElementById("password").focus();
             return false;
         }
-        if(password.match(/\s/g) || !password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$/)){
-            alert("비밀번호 형식에 맞게 작성해주세요");
-            $('#password').val('');
+        if (password === '') {
+            alert("비밀번호확인을 입력하세요");
             document.getElementById("password").focus();
             return false;
         }
-        if (password !== confirmPassword) {
-            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            document.getElementById("confirmPassword").focus();
-            return false;
-        }
-        document.modifyPasswordF.method = 'POST';
-        document.modifyPasswordF.action = '/user/modifyPassword-action';
-        document.modifyPasswordF.submit();
+        $.ajax({
+            url : '/user/modifyPassword-ajax',
+            method : 'post',
+            data : {
+                'password' : password,
+                'confirmPassword' : confirmPassword
+            },
+            success : function(resultMap){
+                if(resultMap.code === 1){
+                    //1. 성공
+                    window.location.href=resultMap.forwardPath;
+                } else if(resultMap.code === 2){
+                    alert(resultMap.msg);
+                    window.location.href=resultMap.forwardPath;
+                } else if(resultMap.code === 3){
+                    window.location.href=resultMap.forwardPath;
+                } else {
+                    alert(resultMap.msg);
+                    window.location.href=resultMap.forwardPath;
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
 
     }
 </script>

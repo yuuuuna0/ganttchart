@@ -233,6 +233,7 @@ public class MenuController {
         resultMap.put("msg",msg);
         return resultMap;
     }
+
     @AdminCheck
     @PostMapping("/modify-action")
     public String menuModifyAction( @ModelAttribute Menu menu) {
@@ -242,6 +243,7 @@ public class MenuController {
             forwardPath = "redirect:/menu/detail?menuNo="+menu.getMenuNo();
         } catch (Exception e){
             e.printStackTrace();
+            forwardPath="/error";
         }
         return forwardPath;
     }
@@ -284,21 +286,22 @@ public class MenuController {
             forwardPath = "redirect:/menu/list?pageNo=1&keyword=";
         } catch (Exception e){
             e.printStackTrace();
+            forwardPath="/error";
         }
         return forwardPath;
     }
 
-    //5. 메뉴 사용여부 변경 --> 리스트에서 쉽게 변경 가능하게 하기
-    @AdminCheck
-    @PostMapping("modifyUsing-action/{menuNo}")
-    public String mofidyUsingAction(@PathVariable int menuNo, int useYN, int pageNo){
-        String forwardPath ="";
-        try {
-            int resut = menuService.updateUse(menuNo,useYN);    //0:사용안함, 1: 사용함
-            forwardPath = "redirect:/menu/list?pageNo="+pageNo+"keyword=";
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return forwardPath;
-    }
+//    //5. 메뉴 사용여부 변경 --> 리스트에서 쉽게 변경 가능하게 하기
+//    @AdminCheck
+//    @PostMapping("modifyUsing-action/{menuNo}")
+//    public String mofidyUsingAction(@PathVariable int menuNo, int useYN, int pageNo){
+//        String forwardPath ="";
+//        try {
+//            int resut = menuService.updateUse(menuNo,useYN);    //0:사용안함, 1: 사용함
+//            forwardPath = "redirect:/menu/list?pageNo="+pageNo+"keyword=";
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return forwardPath;
+//    }
 }

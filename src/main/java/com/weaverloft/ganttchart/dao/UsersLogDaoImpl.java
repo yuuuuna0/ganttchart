@@ -26,7 +26,7 @@ public class UsersLogDaoImpl implements UsersLogDao{
     }
 
     @Override
-    public List<UsersLog> findUsersLogList(int pageBegin, int pageEnd, String keyword) {
+    public List<UsersLog> findUsersLogList(int pageBegin, int pageEnd, String keyword) throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("pageBegin",pageBegin);
         map.put("pageEnd",pageEnd);
@@ -36,7 +36,7 @@ public class UsersLogDaoImpl implements UsersLogDao{
 
 
     @Override
-    public int findUsersLogCount(String keyword) {
+    public int findUsersLogCount(String keyword) throws Exception {
         return usersLogMapper.findUsersLogCount(keyword);
     }
 

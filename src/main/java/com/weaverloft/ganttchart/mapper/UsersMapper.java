@@ -37,5 +37,5 @@ public interface UsersMapper {
     //13. 회원리스트 출력 -> 페이징, 검색
     List<Users> findUserList(Map<String, Object> map) throws Exception;
     //14. 회원리스트 출력
-    List<Users> findUserList2()  throws Exception;
+    List<Users> findAllUsers();
 }
