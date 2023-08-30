@@ -7,6 +7,7 @@ import com.weaverloft.ganttchart.dto.BoardFile;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
+import oracle.jdbc.proxy.annotation.Pre;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,7 +78,7 @@ public class BoardController {
     //2. 게시글 상세보기 페이지
     @LoginCheck
     @GetMapping("/detail/{boardNo}")
-    public String boardDetail(@PathVariable int boardNo,Model model) {
+    public String boardDetail(@PathVariable int boardNo,Model model,HttpSession session) {
         String forwardPath = "";
         try {
             //cm_left data
@@ -85,6 +86,7 @@ public class BoardController {
             model.addAttribute("menuList", map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
+            Users loginUsers =(Users)session.getAttribute("loginUser");
             int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
@@ -94,6 +96,20 @@ public class BoardController {
                 model.addAttribute("boardFileList",boardFileList);
                 model.addAttribute("commentsList", commentsList);
                 forwardPath ="/board/detail";
+            }
+            //수정 삭제 권한 붙이기
+            boolean privilege;
+            if(board.getId().equals(loginUsers.getId()) || loginUsers.getGrade()==0){
+                privilege = true;
+                model.addAttribute("privilegeB", privilege);
+            } else if(loginUsers.getGrade()==0){
+                // 코멘트 권한 붙이는 방법?
+                privilege = true;
+
+            }
+            else {
+                privilege = false;
+                model.addAttribute("privilege", privilege);
             }
         } catch (Exception e){
             e.printStackTrace();

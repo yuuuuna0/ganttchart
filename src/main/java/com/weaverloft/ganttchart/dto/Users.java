@@ -16,7 +16,9 @@ public class Users {
     private int grade;
     private String password;
     private String name;
-    private String photo;
+    private String saveFileName;
+    private String originFileName;
+    private String filePath;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     private String gender;

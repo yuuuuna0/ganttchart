@@ -51,23 +51,21 @@ public class CommentsController {
         Users loginUser = (Users)session.getAttribute("loginUser");
         try{
             String commentsContent = (String)map.get("commentsContent");
-            int classNo = Integer.parseInt(map.get("classNo").toString());
             int groupNo=0;
-            int orders;
+            int orders=Integer.parseInt(map.get("orders").toString());
             int boardNo = Integer.parseInt(map.get("boardNo").toString());
-            if(classNo == 1){
-                //1) 상위댓글일 때 -> classNo = 1, groupNo = commentsNo
+            if(orders == 0){
+                //1) 상위댓글일 때 ->  groupNo = commentsNo
                 //groupNo 어떻게?
-                orders = 0;
-                Comments comments = new Comments(0,commentsContent,new Date(),classNo,orders,groupNo,boardNo,loginUser.getId());
+                Comments comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
                 int curKey = commentsService.findCurCommentsNo();
                 int updateResult = commentsService.updateGroupNo(curKey);
             } else{
-                //2) 하위댓글일 때 -> classNo = 2, groupNo = 상위댓글의 commentsNo
+                //2) 하위댓글일 때 ->  groupNo = 상위댓글의 commentsNo
                 groupNo = Integer.parseInt(map.get("commentsNo").toString());
                 orders = commentsService.findCommentsCountByGroupNo(groupNo);
-                Comments comments = new Comments(0,commentsContent,new Date(),classNo,orders,groupNo,boardNo,loginUser.getId());
+                Comments comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
                 int updateResult = commentsService.updateGroupNo(groupNo);
             }

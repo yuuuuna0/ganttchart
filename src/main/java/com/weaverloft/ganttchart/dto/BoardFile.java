@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardFile {
     private int fileNo;
-    private String fileName;
+    private String saveFileName;
+    private String originFileName;
+    private String filePath;
     private String fileSize;
     private int boardNo;
 }

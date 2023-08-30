@@ -14,8 +14,8 @@
         <selectKey resultType="java.lang.Integer" keyProperty="commentsNo" order="BEFORE">
             select COMMENTS_COMMENTS_NO_SEQ.nextval from dual
         </selectKey>
-        insert into COMMENTS(comments_no,comments_content,comments_date,class_no,orders,group_no,board_no,id)
-        values (#{commentsNo},#{commentsContent},sysdate,#{classNo},#{orders},null,#{boardNo},#{id})
+        insert into COMMENTS(comments_no,comments_content,comments_date,orders,group_no,board_no,id)
+        values (#{commentsNo},#{commentsContent},sysdate,#{orders},null,#{boardNo},#{id})
     </insert>
 <!-- 4. 같은 그룹의 댓글 개수   -->
     <select id="findCommentsCountByGroupNo" parameterType="java.lang.Integer">
