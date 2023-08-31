@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
-                                    <input type="file" id="boardFileList" name="boardFileList" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                                    <input type="file" id="boardFileList" name="boardFileList" onchange="fileAdd(this)" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
                                     <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                     <div class="input-group col-xs-12">
                                         <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
@@ -48,55 +48,155 @@
 /******************************** 1. 게시글 작성 **********************************/
     var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
     var maxCount = 5;     // 최대 첨부 갯수
-    var fileNo = 0;         //파일 고유번호
-    var fileList = new Array(); //첨부파일리스트 (파일타입)
-    var fileListArray; //첨부파일 어레이타입
     let dataTransfer = new DataTransfer();
+        let files ;   //파일첨부시 files 변수에 fileList 담아주기
+        let fileArray ;   //변수에 할당된 파일을 배열로 변환(FileList -> Array)
     //1. 다중 파일 처리
-    //1) 버튼클릭시 submit 안하기
-    document.addEventListener('DOMContentLoaded', function() {
-        // input file 파일 첨부시 fileCheck 함수 실행
-        document.getElementById('boardFileList').addEventListener('change', fileCheck);
-    });
-    //2) 첨부파일 로직
-    function fileCheck(e){
-        var files = e.target.files;
-        var filesArray = Array.prototype.slice.call(files); //파일 배열 담기
-        //파일 갯수 확인
-        if(fileCount + filesArray.length > maxCount){
+    function fileAdd(e){
+        files = $('#boardFileList')[0].files;   //파일첨부시 files 변수에 fileList 담아주기
+        fileArray = Array.from(files);   //변수에 할당된 파일을 배열로 변환(FileList -> Array)
+        //1.파일 갯수 확인
+        if(fileCount + fileArray.length > maxCount){
             alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
         } else {
-            fileCount = fileCount + filesArray.length;
+            fileCount = fileCount + fileArray.length;
         }
-        //각각의 파일 배열담기 및 기타
-        filesArray.forEach(function(f){
-           var reader = new FileReader();
-           reader.onload = function(e){
-               fileList.push(f);
-               console.log('왜 출력이 안되니');
-               var divHtml = document.getElementById('fileList');
-               document.getElementById("fileList").innerHTML +=
-                   '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
-                   + f.name
-                   + '<img src="/static/images/icons/X.png" style="width:20px; height:auto; vertical-align: middle; cursor: pointer;"/>'
-                   + '</div>';
-               fileNo++;
+        //2.파일 처리
+        // let html = '';
+        for(let i=0;i<fileArray.length;i++){
+            let eachFile = fileArray[i];
+            addFile(eachFile,i);
+            dataTransfer.items.add(eachFile);
+        }
+        function addFile(file,fileNo){
+            let reader = new FileReader();
+            let html='';
+            reader.onload = function(e) {
+                document.getElementById("fileList").innerHTML +=
+                 '<div id="file' + fileNo + '" style="font-size:12px;" onclick="fileDelete( ' + fileNo + ')">'
+                    + file.name
+                    + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                    + '</div>';
             };
-           reader.readAsDataURL(f);
-           dataTransfer.items.add(f);
-        });
-        for(let i=0;fileList.length;i++){
-            dataTransfer.items.add(fileList.indexOf(i));
+            reader.readAsDataURL(file);
+            dataTransfer.items.add(file);
         }
-        console.log(fileList);
-        //초기화
-        document.getElementById("boardFileList").value='';
-        $('#boardFileList')[0].files=dataTransfer.files;
-        console.log($('#boardFileList')[0].files);
-        console.log(dataTransfer.files);
     }
+
     //2. 파일 부분 삭제 함수
+    // --> multiple 속성은 사용자에게 입력받은 값들을 FileList로 처리한다. FileList는 Array와 다르지만 Array.from을 사용하여 Array처럼 처리할 수 있다.
+    function fileDelete(no){
+        $('#boardFileList').val('');    //다시 담아주기 때문에 한 번 비워주기 --> 어떻게 비우지?
+        //html 내 div 삭제 처리
+        $('#file'+no).removeClass();
+
+        //input 태그 내 실제 파일값 처리
+        // let files = $('#boardFileList')[0].files;    //사용자 입력한 파일을 변수에 할당
+        // let fileArray = Array.from(files);   //변수에 할당된 파일을 배열로 변환(FileList -> Array)
+        fileArray.splice(no,1);             //해당하는 index의 파일을 배열에서 제거
+
+        //제거한 이후 남은 배열을 dataTransfer로 처리하여 Array->FileList로 전환
+        for(let i=0; i<fileArray.length;i++){
+            let eachFile = fileArray[i];
+            dataTransfer.items.add(eachFile);
+        }
+        $('#boardFileList')[0].files = dataTransfer.files;   //제거처리된 FileList를 돌려준다.
+
+    }
+    //3. 게시글 작성
+    function boardWrite() {
+        var boardTitle = document.getElementById("boardTitle").value;
+        var boardContent = document.getElementById("boardContent").value;
+        if(boardTitle === ''){
+            alert("제목을 입력하세요");
+            document.getElementById("boardTitle").focus();
+            return false;
+        }
+        if(boardContent === ''){
+            alert("내용을 입력하세요");
+            document.getElementById("boardContent").focus();
+            return false;
+        }
+
+        document.getElementById("boardWriteF").method = 'POST';
+        document.getElementById("boardWriteF").action = '/board/register-action';
+        document.getElementById("boardWriteF").submit();
+    }
+
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%--
+
+
+
+
+    // function fileCheck(e){
+    //
+    //     //각각의 파일 배열담기 및 기타
+    //     filesArray.forEach(function(f){
+    //        var reader = new FileReader();
+    //        reader.onload = function(e){
+    //            fileList.push(f);
+    //            var divHtml = document.getElementById('fileList');
+    //            document.getElementById("fileList").innerHTML +=
+    //                '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete( '+ fileNo + ')">'
+    //                + f.name
+    //                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+    //                + '</div>';
+    //            fileNo++;
+    //         };
+    //        reader.readAsDataURL(f);
+    //        dataTransfer.items.add(f);
+    //     });
+    //     for(let i=0;fileList.length;i++){
+    //         dataTransfer.items.add(fileList.indexOf(i));
+    //     }
+    //     console.log(fileList);
+    //     //초기화
+    //     document.getElementById("boardFileList").value='';
+    //     // $('#boardFileList')[0].files=dataTransfer.files;
+    //     // console.log($('#boardFileList')[0].files);
+    //     // console.log(dataTransfer.files);
+    //
+    //
+    //     // var files = e.target.files;
+    //     // var filesArray = Array.prototype.slice.call(files); //파일 배열 담기
+    //     // //파일 갯수 확인
+    //     // if(fileCount + filesArray.length > maxCount){
+    //     //     alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
+    //     //     return;
+    //     // } else {
+    //     //     fileCount = fileCount + filesArray.length;
+    //     // }
+    // }
+
+
+
+//fileDelete("file"+(maxCount+1));    //이거 왜한거더라
+
+
+   //2. 파일 부분 삭제 함수
     function fileDelete(fileNo){
         dataTransfer = new DataTransfer();
         //html 처리
@@ -141,30 +241,6 @@
         fileList = dataTransfer.files;
         //제거처리된 FileList를 input태그에 담아줌
     }
-    //3. 게시글 작성
-    function boardWrite() {
-        var boardTitle = document.getElementById("boardTitle").value;
-        var boardContent = document.getElementById("boardContent").value;
-        if(boardTitle === ''){
-            alert("제목을 입력하세요");
-            document.getElementById("boardTitle").focus();
-            return false;
-        }
-        if(boardContent === ''){
-            alert("내용을 입력하세요");
-            document.getElementById("boardContent").focus();
-            return false;
-        }
-        //fileDelete("file"+(maxCount+1));    //이거 왜한거더라
-
-        document.getElementById("boardWriteF").method = 'POST';
-        document.getElementById("boardWriteF").action = '/board/register-action';
-        console.log($('#boardFileList')[0].files);
-        console.log($('#boardFileList'));
-        document.getElementById("boardWriteF").submit();
-    }
 
 
-</script>
-
-</html>
+--%>

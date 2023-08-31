@@ -138,6 +138,7 @@ public class BoardController {
         String forwardPath = "";
         Users loginUser=(Users)session.getAttribute("loginUser");
         List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
+        System.out.println("boardFileList = " + boardFileList);
         board.setId(loginUser.getId());
         try{
             int result = boardService.createBoard(board);
@@ -145,7 +146,7 @@ public class BoardController {
             if(boardFileList.get(0).getSize() != 0){
                 String filePath = "C:\\gantt\\upload\\board\\"; //하드코딩 안하면 어디에
                 for(MultipartFile boardFile : boardFileList){
-                    String originalFileName = boardFile.getName();
+                    String originalFileName = boardFile.getOriginalFilename();
                     String saveFileName = fileService.uploadFile(boardFile,filePath);
                     long fileSize = boardFile.getSize();
                     BoardFile file = new BoardFile(0,saveFileName,originalFileName,filePath,fileSize,boardNo);
