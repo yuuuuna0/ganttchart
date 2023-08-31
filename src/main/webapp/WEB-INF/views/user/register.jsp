@@ -223,6 +223,7 @@
         if(password.match(/\s/g) || !password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$/)){
             alert("비밀번호 형식에 맞게 작성해주세요");
             $('#password').val('');
+            $('#confirmPassword').val('');
             document.getElementById("password").focus();
             return false;
         }
@@ -251,6 +252,8 @@
         }
         if (password !== confirmPassword) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            $('#password').val('');
+            $('#confirmPassword').val('');
             document.getElementById("confirmPassword").focus();
             return false;
         }

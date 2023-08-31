@@ -4,7 +4,6 @@ import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,30 +47,35 @@ public class CommentsController {
         int code = 1 ; //1:성공 2: 실패
         String msg = "성공";
         String forwardPath ="";
+        String commentsContent="";
         List<Comments> data = new ArrayList<>();
         Users loginUser = (Users)session.getAttribute("loginUser");
+        System.out.println("commentsContent = " + commentsContent);
+        Comments comments = new Comments();
         try{
-            String commentsContent = (String)map.get("commentsContent");
             int orders=Integer.parseInt(map.get("orders").toString());
             int boardNo = Integer.parseInt(map.get("boardNo").toString());
             int groupNo = 1;
             if(orders == 0){
                 //1) 상위댓글일 때 ->  groupNo = commentsNo
-                //groupNo 어떻게?
-                Comments comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
+                commentsContent = (String)map.get("topCommentsContent");
+                comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
                 int curKey = commentsService.findCurCommentsNo();
                 int updateResult = commentsService.updateGroupNo(curKey);
             } else{
                 //2) 하위댓글일 때 ->  groupNo = 상위댓글의 commentsNo
+                commentsContent = (String)map.get("subCommentsContent");
                 groupNo = Integer.parseInt(map.get("commentsNo").toString());
                 Comments preComments = commentsService.findCommentByCommentsNo(groupNo);
-                Comments topComments = null;
+                Comments topComments = new Comments();
                 if(preComments.getOrders() != 0){
-                    topComments = commentsService.findTopCommentByGroupNo(groupNo);
+                    topComments = commentsService.findTopCommentByGroupNo(preComments.getGroupNo());
                 }
-                orders = commentsService.findCommentsCountByGroupNo(topComments.getGroupNo());   //해당 댓글의 최상위가 있는지 확인해야함
-                Comments comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
+                if(topComments != null && topComments.getGroupNo()!=0) {
+                    orders = commentsService.findCommentsCountByGroupNo(topComments.getGroupNo());   //해당 댓글의 최상위가 있는지 확인해야함
+                }
+                comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
             }
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);

@@ -3,7 +3,7 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.CommentsMapper">
 <!-- 1. 게시글 번호로 댓글리스트 찾기   -->
     <select id="findCommentsByBoardNo" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Comments">
-        select * from COMMENTS where BOARD_NO=#{boardNo} order by GROUP_NO,ORDERS
+        select * from COMMENTS where BOARD_NO=#{boardNo} order by GROUP_NO,ORDERS,COMMENTS_NO
     </select>
 <!-- 2. 댓글 번호로 댓글 찾기    -->
     <select id="findCommentsByCommentsNo" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Comments">

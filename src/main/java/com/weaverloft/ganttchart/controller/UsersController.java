@@ -265,6 +265,7 @@ public class UsersController {
         try{
             List<String> findIdList=usersService.findIdByNameEmail(name,email);
             data = findIdList;
+            code = 1;
         } catch (Exception e){
             e.printStackTrace();
             code = 2;

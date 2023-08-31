@@ -24,7 +24,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.saveFileName != null}">
                         <li class="nav-item nav-profile dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown1">
+                            <a class="nav-link dropdown-toggle" href="1" data-toggle="dropdown" id="profileDropdown1">
                                 <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="${sessionScope.loginUser.filePath}+${sessionScope.loginUser.saveFileName}"/>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown1" alt="profile">
@@ -39,10 +39,10 @@
                             </div>
                         </li>
                     </c:when>
-                    <c:when test="${sessionScope.loginUser != null || sessionScope.loginUser.saveFileName == null}">
+                    <c:when test="${sessionScope.loginUser == null || sessionScope.loginUser.saveFileName == null}">
                         <li class="nav-item nav-profile dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown2">
-                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png" alt="profile" />
+                            <a class="nav-link dropdown-toggle" href="/login" data-toggle="dropdown" id="profileDropdown2">
+                                <img class="img-fluid styled profile_pic rounded-circle" onclick="window.location.href='/login'" width = "200px" src="/static/images/icons/default.png" alt="profile" />
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown2">
                                 <a class="dropdown-item">
@@ -58,7 +58,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item nav-profile dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="/login" data-toggle="dropdown">
                                 <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png" onclick="location.href='/login'" alt="profile"/>
                             </a>
                         </li>
