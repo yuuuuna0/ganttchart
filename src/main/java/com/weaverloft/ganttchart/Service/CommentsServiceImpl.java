@@ -59,4 +59,9 @@ public class CommentsServiceImpl implements CommentsService{
     public List<Comments> findAllComments() throws Exception {
         return commentsDao.findAllComments();
     }
+
+    @Override
+    public Comments findTopCommentByGroupNo(int groupNo) {
+        return commentsDao.findTopCommentByGroupNo(groupNo);
+    }
 }

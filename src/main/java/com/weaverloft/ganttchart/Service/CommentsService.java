@@ -23,4 +23,6 @@ public interface CommentsService {
     int updateComments(int commentsNo,String commentsContent) throws Exception;
     //10. 모든 코멘트 찾기
     List<Comments> findAllComments() throws Exception;
+    //그룹넘버로 탑코멘트 찾기
+    Comments findTopCommentByGroupNo(int groupNo);
 }

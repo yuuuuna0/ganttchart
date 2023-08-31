@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.stream.events.Comment;
 import java.util.*;
 
 @Controller
@@ -51,9 +52,9 @@ public class CommentsController {
         Users loginUser = (Users)session.getAttribute("loginUser");
         try{
             String commentsContent = (String)map.get("commentsContent");
-            int groupNo=0;
             int orders=Integer.parseInt(map.get("orders").toString());
             int boardNo = Integer.parseInt(map.get("boardNo").toString());
+            int groupNo = 1;
             if(orders == 0){
                 //1) 상위댓글일 때 ->  groupNo = commentsNo
                 //groupNo 어떻게?
@@ -64,10 +65,14 @@ public class CommentsController {
             } else{
                 //2) 하위댓글일 때 ->  groupNo = 상위댓글의 commentsNo
                 groupNo = Integer.parseInt(map.get("commentsNo").toString());
-                orders = commentsService.findCommentsCountByGroupNo(groupNo);
+                Comments preComments = commentsService.findCommentByCommentsNo(groupNo);
+                Comments topComments = null;
+                if(preComments.getOrders() != 0){
+                    topComments = commentsService.findTopCommentByGroupNo(groupNo);
+                }
+                orders = commentsService.findCommentsCountByGroupNo(topComments.getGroupNo());   //해당 댓글의 최상위가 있는지 확인해야함
                 Comments comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
-                int updateResult = commentsService.updateGroupNo(groupNo);
             }
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
             data = commentsList;

@@ -26,4 +26,6 @@ public interface CommentsDao {
     int updateComments(int commentsNo,String commentsContent) throws Exception;
     //10. 모든 코멘트 찾기
     List<Comments> findAllComments() throws Exception;
+
+    Comments findTopCommentByGroupNo(int groupNo);
 }

@@ -35,16 +35,17 @@
                                     <c:forEach items="${boardFileList}" var="boardFile">
                                         <div id="file'+ fileNo + '" style="font-size:12px;">
                                                 ${boardFile.originalFileName}
-                                                    <span>${boardFile.fileSize}</span>
+                                                    <span style="margin-left: 3px"><fmt:parseNumber value="${boardFile.fileSize/1000}" integerOnly="true" /> kb</span>
                                                     <span>
-                                            <img src="/../static/images/icons/download.png"
-                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="fileDownload(${boardFile.fileNo});"/></span>
+                                            <img  src="/../static/images/icons/download.png"
+                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer; margin-left: 3px" onclick="fileDownload(${boardFile.fileNo});"/></span>
 
                                         </div>
                                     </c:forEach>
                                 </div>
                             </div>
-                            <c:if test="${privilege}">
+<%--                            <c:if test="${privilege}">--%>
+                            <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.id == board.id}">
                                 <div style="text-align: right">
                                     <input type="button" id="boardCreateBtn" name="boardCreateBtn"
                                            class="btn btn-primary mr-2"
@@ -59,90 +60,90 @@
                     <!-- 댓글 시작 -->
                     <div class="card-body">
                         <!-- 1. 댓글 목록-->
-                        <div class="comment-group">
-                            <div class="row" id="commentListDiv">
-                                <c:set var = "currentGroup" value="1"/>
-                                <c:forEach items="${commentsList}" var="comment">
-                                    <c:if test="${comment.groupNo} eq currentGroup">
-                                        <div class="col-12" id="sameGroupDiv">
-                                            <div style="margin-left: ${(comment.orders+1)*20}px" id="commentDiv${comment.commentsNo}">
-                                                <span class="mr-3">${comment.id}</span>
-                                                <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
-                                                <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>
-                                                <span>
-                                                    <img src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
-                                                         onclick="subComments(${comment.commentsNo},${comment.orders})"/>
-                                                    <c:if test="${sessionScope.loginUser.id == comment.id}">
-                                                        <img src="/static/images/icons/modify.png" name="modifyComment"
-                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
-                                                             onclick="modifyComments('${comment.commentsNo}','${comment.commentsContent}');"/>
-                                                        <img src="/static/images/icons/bin.png"
-                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
-                                                             onclick="deleteComments(${comment.commentsNo});"/>
-                                                    </c:if>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-                        </div>
-
-
-
-
 <%--                        <div class="comment-group">--%>
 <%--                            <div class="row" id="commentListDiv">--%>
+<%--                                <c:set var = "currentGroup" value="1"/>--%>
 <%--                                <c:forEach items="${commentsList}" var="comment">--%>
-<%--                                    <c:if test="${comment.orders == 0}">--%>
-<%--                                        <div class="col-12 mt-3" id="commentDiv${comment.commentsNo}">--%>
-<%--                                            <span class="mr-3">${comment.id}</span>--%>
-<%--                                            <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                            <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"--%>
-<%--                                                                               pattern="yyyy. MM. dd."/></span>--%>
-<%--                                            <span>--%>
-<%--                                                        <img src="/../static/images/icons/comment.png"--%>
-<%--                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                             onclick="subComments(${comment.commentsNo},${comment.orders})"/>--%>
-<%--                                                <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                        <img src="/../static/images/icons/modify.png"--%>
-<%--                                                             name="modifyComment"--%>
+<%--                                    <c:if test="${comment.groupNo} eq currentGroup">--%>
+<%--                                        <div class="col-12" id="sameGroupDiv">--%>
+<%--                                            <div style="margin-left: ${(comment.orders+1)*20}px" id="commentDiv${comment.commentsNo}">--%>
+<%--                                                <span class="mr-3">${comment.id}</span>--%>
+<%--                                                <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
+<%--                                                <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>--%>
+<%--                                                <span>--%>
+<%--                                                    <img src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
+<%--                                                         onclick="subComments(${comment.commentsNo},${comment.orders})"/>--%>
+<%--                                                    <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
+<%--                                                        <img src="/static/images/icons/modify.png" name="modifyComment"--%>
 <%--                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
 <%--                                                             onclick="modifyComments('${comment.commentsNo}','${comment.commentsContent}');"/>--%>
-<%--                                                        <img src="/../static/images/icons/bin.png"--%>
+<%--                                                        <img src="/static/images/icons/bin.png"--%>
 <%--                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
 <%--                                                             onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                                </c:if>--%>
-<%--                                        </span>--%>
-<%--                                        </div>--%>
-<%--                                    </c:if>--%>
-<%--                                    <c:if test="${comment.orders != 0}">--%>
-<%--                                        <div class="col-11" style="margin-left: ${(comment.orders+1)*30}px" id="commentDiv${comment.commentsNo}">--%>
-<%--                                            <img src="/../static/images/icons/subComment.png"--%>
-<%--                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>--%>
-<%--                                            <span class="mr-3">${comment.id}</span>--%>
-<%--                                            <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                            <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"--%>
-<%--                                                                               pattern="yyyy. MM. dd."/></span>--%>
-<%--                                            <span>--%>
-<%--                                            <img src="/../static/images/icons/comment.png"--%>
-<%--                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                 onclick="subComments(${comment.commentsNo},${comment.orders})"/>--%>
-<%--                                            <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                        <img src="/../static/images/icons/modify.png"--%>
-<%--                                                             name="modifyComment"--%>
-<%--                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                             onclick="modifyComments('${comment.commentsNo}',${comment.commentsContent});"/>--%>
-<%--                                                        <img src="/../static/images/icons/bin.png"--%>
-<%--                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                             onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                            </span>--%>
-<%--                                            </c:if>--%>
+<%--                                                    </c:if>--%>
+<%--                                                </span>--%>
+<%--                                            </div>--%>
 <%--                                        </div>--%>
 <%--                                    </c:if>--%>
 <%--                                </c:forEach>--%>
 <%--                            </div>--%>
 <%--                        </div>--%>
+
+
+
+
+                        <div class="comment-group">
+                            <div class="row" id="commentListDiv">
+                                <c:forEach items="${commentsList}" var="comment">
+                                    <c:if test="${comment.orders == 0}">
+                                        <div class="col-12 mt-3" id="commentDiv${comment.commentsNo}">
+                                            <span class="mr-3">${comment.id}</span>
+                                            <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
+                                            <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
+                                                                               pattern="yyyy. MM. dd."/></span>
+                                            <span>
+                                                        <img src="/../static/images/icons/comment.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             onclick="subComments(${comment.commentsNo},${comment.orders})"/>
+                                                <c:if test="${sessionScope.loginUser.id == comment.id}">
+                                                        <img src="/../static/images/icons/modify.png"
+                                                             name="modifyComment"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             onclick="modifyComments('${comment.commentsNo}','${comment.commentsContent}');"/>
+                                                        <img src="/../static/images/icons/bin.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             onclick="deleteComments(${comment.commentsNo});"/>
+                                                </c:if>
+                                        </span>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${comment.orders != 0}">
+                                        <div class="col-11" style="margin-left: ${(comment.orders+1)*30}px" id="commentDiv${comment.commentsNo}">
+                                            <img src="/../static/images/icons/subComment.png"
+                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>
+                                            <span class="mr-3">${comment.id}</span>
+                                            <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
+                                            <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}"
+                                                                               pattern="yyyy. MM. dd."/></span>
+                                            <span>
+                                            <img src="/../static/images/icons/comment.png"
+                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                 onclick="subComments(${comment.commentsNo},${comment.orders})"/>
+                                            <c:if test="${sessionScope.loginUser.id == comment.id}">
+                                                        <img src="/../static/images/icons/modify.png"
+                                                             name="modifyComment"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             onclick="modifyComments('${comment.commentsNo}',${comment.commentsContent});"/>
+                                                        <img src="/../static/images/icons/bin.png"
+                                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                             onclick="deleteComments(${comment.commentsNo});"/>
+                                            </span>
+                                            </c:if>
+                                        </div>
+                                    </c:if>
+                                </c:forEach>
+                            </div>
+                        </div>
 
                         <hr>
 
@@ -156,7 +157,7 @@
                                     </div>
                                     <div class="col-3">
                                         <c:if test="${sessionScope.loginUser != null}">
-                                        <input type="button" id="createCommentsBtn" onclick="createComments(1)"
+                                        <input type="button" id="createCommentsBtn" onclick="createComments(0)"
                                                value="남기기">
                                         </c:if>
                                         <c:if test="${sessionScope.loginUser == null}">
@@ -197,6 +198,7 @@
     function subCommentsAction(commentsNo){
         let commentsContent = $('#subCommentText'+commentsNo).val();
         let boardNo = $('#boardNo').val();
+        let orders = 1;
         console.log(commentsNo);
         $.ajax({
             url: '/createComments-ajax',
@@ -205,11 +207,13 @@
             data: {
                 'commentsContent': commentsContent,
                 'commentsNo': commentsNo,
-                'boardNo': boardNo
+                'boardNo': boardNo,
+                'orders' : orders
             },
             success: function (resultJson) {
                 console.log(resultJson);
                 reload(resultJson);
+                $('#commentsContent').val('');
             },
             error: function (e) {
                 console.log(e);
@@ -236,6 +240,7 @@
             success: function (resultJson) {
                 console.log(resultJson);
                 reload(resultJson);
+                $('#commentsContent').val('');
             },
             error: function (e) {
                 console.log(e);
@@ -266,7 +271,8 @@
     }
 
     /******************************** 3. 댓글 수정 **********************************/
-    function modifyComments(commentsNo, commentsContent) {
+    function modifyComments(commentsNo) {
+        let commentsContent = $('.mr-3 commentsNo'+commentsNo).text();
         $('.commentsNo' + commentsNo).empty();  //span 이름이 겹쳤음
         let html = "<input type='text' class='mr-3' id='commentsNo" + commentsNo + "' value='" + commentsContent + "'/>" +
             "<button onclick='modifyCommentsAction(" + commentsNo + ")'>수정하기</button>";
@@ -292,6 +298,9 @@
         $.ajax({
             url: '/modifyComment-ajax',
             method: 'POST',
+            enctype: 'multipart/form-data',
+            contentType : false,
+            processData : false,
             data: {
                 'commentsNo': commentsNo,
                 'commentsContent': commentsContent,
@@ -299,6 +308,7 @@
             },
             success: function (resultJson) {
                 reload(resultJson);
+                $('#commentsContent').val('');
             },
             error: function (e) {
                 alert(e);
@@ -328,23 +338,24 @@
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
                         "                                                    <span >\n" +
-                        "                                                        <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='createComments(2)'/>\n";
+                        "                                                        <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='subComments(2)'/>\n";
                     if(dataItem.id == resultData.loginUser.id) {
-                        html +=  "                                               <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        html +=  "                                               <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + ")'/>\n" +
                         "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
                     }
                     html +="                                                    </span>\n" +
                         "                                                </div>\n";
                 } else {
                     //답글일 때 ==> orders!=0
-                    html += "                                                <div class='col-11'>\n" +
+                    html += "                                                <div class='col-11' style='margin-left: "+(dataItem.orders+1)*30+"px'>\n" +
                         "                                                    <img src='/../static/images/icons/subComment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
                         "                                                    <span class='mr-3'>" + dataItem.id + "</span>\n" +
                         "                                                    <span class='mr-3' id='commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
                         "                                                    <span class='mr-2'>" + date + "</span>\n" +
-                        "                                                    <span >\n";
+                        "                                                    <span >\n" +
+                        "                                                     <img src='/../static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='subComments(3)'/>\n";
                     if(dataItem.id == resultData.loginUser.id) {
-                        html +="                                                 <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + "," + dataItem.commentsContent + ")'/>\n" +
+                        html +="                                                 <img src='/../static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + ")'/>\n" +
                         "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
                     }
                     html +="                                                    </span>\n" +
@@ -357,4 +368,3 @@
         }
     }
 </script>
-</html>

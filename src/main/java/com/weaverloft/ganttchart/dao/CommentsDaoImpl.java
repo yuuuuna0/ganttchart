@@ -72,4 +72,9 @@ public class CommentsDaoImpl implements CommentsDao {
     public List<Comments> findAllComments() throws Exception {
         return commentsMapper.findAllComments();
     }
+
+    @Override
+    public Comments findTopCommentByGroupNo(int groupNo) {
+        return commentsMapper.findTopCommentByGroupNo(groupNo);
+    }
 }

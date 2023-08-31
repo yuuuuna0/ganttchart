@@ -15,11 +15,11 @@
             select COMMENTS_COMMENTS_NO_SEQ.nextval from dual
         </selectKey>
         insert into COMMENTS(comments_no,comments_content,comments_date,orders,group_no,board_no,id)
-        values (#{commentsNo},#{commentsContent},sysdate,#{orders},null,#{boardNo},#{id})
+        values (#{commentsNo},#{commentsContent},sysdate,#{orders},#{groupNo},#{boardNo},#{id})
     </insert>
 <!-- 4. 같은 그룹의 댓글 개수   -->
-    <select id="findCommentsCountByGroupNo" parameterType="java.lang.Integer">
-        select * from COMMENTS where GROUP_NO=#{groupNo}
+    <select id="findCommentsCountByGroupNo" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from COMMENTS where GROUP_NO=#{groupNo}
     </select>
 <!-- 5. 최근 값 불러오기 -->
     <select id="findCurCommentsNo" resultType="java.lang.Integer">
@@ -45,4 +45,9 @@
     <select id="findAllComments" resultType="com.weaverloft.ganttchart.dto.Comments">
         select * from COMMENTS
     </select>
+<!--    -->
+    <select id="findTopCommentByGroupNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Comments">
+        select * from comments where GROUP_NO=#{groupNo} and orders=0
+    </select>
+
 </mapper>

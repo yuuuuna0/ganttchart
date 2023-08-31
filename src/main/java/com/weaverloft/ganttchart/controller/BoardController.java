@@ -23,6 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,14 +134,18 @@ public class BoardController {
     }
     //3-1 게시글 작성하기 액션
     @LoginCheck
-    @PostMapping("/register-action")
-    public String boardCreateAction(@ModelAttribute Board board, MultipartHttpServletRequest mf, HttpSession session){
+    @ResponseBody
+    @PostMapping("/register-ajax")
+    public Map<String,Object> boardCreateAjax(@RequestParam Map<String ,Object> map, @RequestParam("fileArray") List<MultipartFile> boardFileList, HttpSession session){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "";
         String forwardPath = "";
         Users loginUser=(Users)session.getAttribute("loginUser");
-        List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
-        System.out.println("boardFileList = " + boardFileList);
-        board.setId(loginUser.getId());
+        Board board = new Board(0,(String)map.get("boardTitle"),(String)map.get("boardContent"),new Date(),loginUser.getId(),0);
         try{
+            //MultipartHttpServletRequest fileArray = (MultipartHttpServletRequest)map.get("fileArray");
+//            List<MultipartFile> boardFileList = fileArray.getFiles("boardFileList");    // 왜 안되는가;;
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
             if(boardFileList.get(0).getSize() != 0){
@@ -153,12 +158,18 @@ public class BoardController {
                     boardFileService.createBoardFile(file);
                 }
             }
-            forwardPath = "redirect:/board/detail/"+boardNo;
+            code = 1;
+            forwardPath = "/board/detail/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
-            forwardPath="/error";
+            code = 2;
+            msg = "알 수 없는 에러가 발생하였습니다. 관리자에게 문의하세요";
+            forwardPath="/board/register";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
 
     //4. 게시글 삭제하기
