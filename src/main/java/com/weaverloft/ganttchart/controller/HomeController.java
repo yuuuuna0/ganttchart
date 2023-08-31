@@ -1,9 +1,6 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.weaverloft.ganttchart.Service.BoardService;
-import com.weaverloft.ganttchart.Service.CommentsService;
-import com.weaverloft.ganttchart.Service.FileService;
-import com.weaverloft.ganttchart.Service.MenuService;
+import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Menu;
@@ -19,10 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.xml.stream.events.Comment;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -30,12 +25,15 @@ public class HomeController {
     BoardService boardService;
     MenuService menuService;
     CommentsService commentsService;
+    UsersLogService usersLogService;
 
-    public HomeController(FileService fileService,BoardService boardService,MenuService menuService,CommentsService commentsService) {
+    public HomeController(FileService fileService,BoardService boardService,MenuService menuService,CommentsService commentsService,
+                          UsersLogService usersLogService) {
         this.fileService = fileService;
         this.boardService=boardService;
         this.menuService = menuService;
         this.commentsService = commentsService;
+        this.usersLogService = usersLogService;
     }
 
     @GetMapping("/")
@@ -61,7 +59,21 @@ public class HomeController {
             model.addAttribute("menuList",map.get("menuList"));
             model.addAttribute("preMenuList",map.get("preMenuList"));
 
-            //조회수 탑5 게시글 붙이기
+            //차트 붙이기
+                //1) 날짜리스트 붙이기
+            List<String> dateList = new ArrayList<>();
+            List<Integer> visitorCountList = new ArrayList<>();
+            for(int i=0;i<7;i++){
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH,-(6-i));
+                visitorCountList.add(usersLogService.countVisitorsPerDay(calendar.getTime()));
+                SimpleDateFormat format = new SimpleDateFormat("YYYY.MM.dd.");
+                dateList.add("'"+format.format(calendar.getTime())+"'");
+            }
+            model.addAttribute("dateList",dateList);
+            model.addAttribute("visitorCountList",visitorCountList);
+
+           //조회수 탑5 게시글 붙이기
             int no = 5;
             List<Board> boardTopList = boardService.findBoardTopList(no);
             model.addAttribute("boardTopList", boardTopList);

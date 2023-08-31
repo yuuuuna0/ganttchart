@@ -5,6 +5,7 @@ import com.weaverloft.ganttchart.mapper.UsersLogMapper;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,11 @@ public class UsersLogDaoImpl implements UsersLogDao{
     @Override
     public List<String> findDormacyUsers() throws Exception {
         return usersLogMapper.findDormacyUsers();
+    }
+
+    @Override
+    public int countVisitorsPerDay(Date logDate) throws Exception {
+        return usersLogMapper.countVisitorsPerDay(logDate);
     }
 
 

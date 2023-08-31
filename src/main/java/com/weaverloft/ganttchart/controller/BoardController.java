@@ -228,7 +228,8 @@ public class BoardController {
     public void downloadFile(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response){
         try{
             BoardFile file = boardFileService.findFileByNo(fileNo);
-            String saveFileName = (String)file.getSaveFileName();
+            String saveFileName = file.getSaveFileName();
+            String originalFileName = file.getOriginalFileName();
             String filePath = file.getFilePath();
 
             // globals.properties
@@ -242,15 +243,15 @@ public class BoardController {
 
             if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
                 //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
-                fileName = URLEncoder.encode(saveFileName, "UTF-8");
+                fileName = URLEncoder.encode(originalFileName, "UTF-8");
             } else {
                 //나머지 브라우저에서 인코딩
-                fileName = new String(saveFileName.getBytes("UTF-8"), "iso-8859-1");
+                fileName = new String(originalFileName.getBytes("UTF-8"), "iso-8859-1");
             }
             //형식을 모르는 파일첨부용 contentType
             response.setContentType("application/octet-stream");
             //다운로드와 다운로드될 파일이름
-            response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+            response.setHeader("Content-Disposition", "attachment; filename=\""+ originalFileName + "\"");
             //파일복사
             FileCopyUtils.copy(in, response.getOutputStream());
             in.close();

@@ -34,7 +34,7 @@
                                      id="fileList">
                                     <c:forEach items="${boardFileList}" var="boardFile">
                                         <div id="file'+ fileNo + '" style="font-size:12px;">
-                                                ${boardFile.fileName}
+                                                ${boardFile.originalFileName}
                                                     <span>${boardFile.fileSize}</span>
                                                     <span>
                                             <img src="/../static/images/icons/download.png"

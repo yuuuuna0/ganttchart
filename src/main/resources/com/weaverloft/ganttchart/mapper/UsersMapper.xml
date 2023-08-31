@@ -3,18 +3,18 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
     <!-- 1. 회원가입 -->
     <insert id="createUsers" parameterType="java.util.Map">
-        insert into users(id,grade,password,name,photo,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY,CREATE_DATE)
-        values(#{id},#{grade},#{password},#{name},#{photo},#{birth},#{gender},#{phone},#{address},#{email},0,#{authKey},sysdate)
+        insert into users(id,grade,password,name,SAVE_FILE_NAME,ORIGINAL_FILE_NAME,FILE_PATH,birth,gender,phone,address,email,AUTH_STATUS,AUTH_KEY,CREATE_DATE)
+        values(#{id},#{grade},#{password},#{name},#{saveFileName},#{originalFileName},#{filePath},#{birth},#{gender},#{phone},#{address},#{email},0,#{authKey},sysdate)
     </insert>
     <!--2. 회원 조회 -->
     <select id="findUsersById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
-        select id, grade, password, name, photo, birth , gender, phone, address, email, auth_status, auth_key, CREATE_DATE
+        select id, grade, password, name, SAVE_FILE_NAME,ORIGINAL_FILE_NAME,FILE_PATH, birth , gender, phone, address, email, auth_status, auth_key, CREATE_DATE
         from USERS where id = #{id}
     </select>
     <!--3. 정보 수정 -->
     <update id="updateUsers" parameterType="java.util.Map">
         update USERS
-        set name=#{name}, PHOTO=#{photo}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
+        set name=#{name}, SAVE_FILE_NAME=#{saveFileName},ORIGINAL_FILE_NAME=#{originalFileName} ,FILE_PATH=#{filePath}, BIRTH=#{birth}, GENDER=#{gender}, phone=#{phone}, ADDRESS=#{address}, EMAIL=#{email}
         where id=#{id}
     </update>
     <!-- 4. 인증 완료 -->
@@ -33,10 +33,10 @@
     <select id="isMatchPassword" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(*) from USERS where id=#{id} and password=#{password}
     </select>
-    <!-- 이미지 업로드  -->
-    <update id="updatePhoto" parameterType="java.util.Map">
-        update users set PHOTO=#{photo} where id=#{id}
-    </update>
+<!--    &lt;!&ndash; 이미지 업로드  &ndash;&gt;-->
+<!--    <update id="updatePhoto" parameterType="java.util.Map">-->
+<!--        update users set PHOTO=#{photo} where id=#{id}-->
+<!--    </update>-->
     <!-- 이름, 이메일로 아이디 찾기 ==> 3자리+*표 -->
     <select id="findIdByNameEmail" parameterType="java.util.Map" resultType="java.lang.String">
         select substr(id,1,3) || RPAD('*',length(id)-3,'*')

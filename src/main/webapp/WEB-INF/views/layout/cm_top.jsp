@@ -22,10 +22,10 @@
                         <li class="mt-lg-auto ">${sessionScope.loginUser.name}님 안녕하세요 &nbsp;&nbsp;</li>
                     </c:if>
                 <c:choose>
-                    <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.photo != null}">
+                    <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.saveFileName != null}">
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown1">
-                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.photo}"/>
+                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="${sessionScope.loginUser.filePath}+${sessionScope.loginUser.saveFileName}"/>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown1" alt="profile">
                                 <a class="dropdown-item">
@@ -39,7 +39,7 @@
                             </div>
                         </li>
                     </c:when>
-                    <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.photo == null}">
+                    <c:when test="${sessionScope.loginUser != null || sessionScope.loginUser.saveFileName == null}">
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown2">
                                 <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png" alt="profile" />

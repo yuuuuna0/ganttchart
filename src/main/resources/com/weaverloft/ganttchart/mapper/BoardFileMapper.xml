@@ -6,8 +6,8 @@
         <selectKey resultType="java.lang.Integer" keyProperty="fileNo" order="BEFORE">
             select BOARD_FILE_FILE_NO_SEQ.nextval from dual
         </selectKey>
-    insert into board_file(file_no, file_name, file_size, board_no)
-    values(#{fileNo},#{fileName},#{fileSize},#{boardNo})
+    insert into board_file(file_no, SAVE_FILE_NAME,ORIGINAL_FILE_NAME,FILE_PATH, file_size, board_no)
+    values(#{fileNo},#{saveFileName},#{originalFileName},#{filePath},#{fileSize},#{boardNo})
     </insert>
     <!-- 2. 게시글 번호로 파일 리스트 찾기 -->
     <select id="findByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.BoardFile">

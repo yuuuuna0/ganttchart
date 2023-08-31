@@ -216,7 +216,7 @@ public class UsersController {
         String authKey=(String)map.get("authKey");
         Users loginUser=(Users)session.getAttribute("loginUser");
         try{
-            if(authKey.equals(loginUser.getAuthKey())){
+            if(loginUser.getAuthKey().equals(authKey)){
                 code = 1;
                 usersService.updateAuthStatus1(loginUser.getId());   //회원 인증 완료
                 usersLogService.createLog(loginUser.getId(),1);        //인증완료 로그:1 남기기

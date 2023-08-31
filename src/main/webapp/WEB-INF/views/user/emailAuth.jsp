@@ -35,12 +35,13 @@
 <script type="text/javascript">
 
     function emailAuthAction(){
-        let authKey = $('authKey').val();
+        let authKey = $('#authKey').val();
         if(authKey ===""){
             alert("인증번호를 입력하세요");
             $('#authKey').focus();
             return false;
         }
+        console.log(authKey);
         $.ajax({
             url : '/user/emailAuth-ajax',
             method : 'POST',

@@ -61,3 +61,7 @@
     <script src="/static/js/select2.js"></script>
     <!-- 다음 주소 API 사용 -->
     <script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <%-- 하이차트   --%>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+

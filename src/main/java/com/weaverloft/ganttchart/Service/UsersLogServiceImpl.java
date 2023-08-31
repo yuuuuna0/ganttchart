@@ -6,6 +6,7 @@ import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,5 +36,10 @@ public class UsersLogServiceImpl implements UsersLogService{
     @Override
     public List<String> findDormacyUsers() throws Exception {
         return usersLogDao.findDormacyUsers();
+    }
+
+    @Override
+    public int countVisitorsPerDay(Date logDate) throws Exception {
+        return usersLogDao.countVisitorsPerDay(logDate);
     }
 }

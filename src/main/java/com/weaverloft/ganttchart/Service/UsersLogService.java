@@ -2,6 +2,7 @@ package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.util.PageMakerDto;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UsersLogService {
@@ -11,4 +12,6 @@ public interface UsersLogService {
     PageMakerDto findUserLog(int pageNo, String keyword) throws Exception;
     //4. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)
     List<String> findDormacyUsers() throws Exception;
+    //5. 오늘의 방문자 수
+    int countVisitorsPerDay(Date logDate) throws Exception;
 }
