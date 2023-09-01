@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BoardService {
@@ -24,4 +25,6 @@ public interface BoardService {
     int findCurKey() throws Exception;
     //9. 조회수 상위 5개 불러오기
     List<Board> findBoardTopList(int no) throws Exception;
+    //10. 오늘의 게시글 수
+    int countNewBoardPerDay(Date boardDate) throws Exception;
 }

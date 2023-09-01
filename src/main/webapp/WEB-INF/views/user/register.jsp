@@ -242,6 +242,12 @@
             document.getElementById("email").focus();
             return false;
         }
+        if (!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
+            alert("이메일형식에 맞게 작성해주세요");
+            $('#email').val('');
+            document.getElementById("email").focus();
+            return false;
+        }
         // if (grade === '') {
         //     alert("회원등급을 선택하세요");
         //     return false;

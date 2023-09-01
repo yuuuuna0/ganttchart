@@ -45,8 +45,7 @@
                                 <div class="card card-tale">
                                     <div class="card-body">
                                         <p class="mb-4">오늘의 방문자 수</p>
-                                        <p class="fs-30 mb-2">4006</p>
-                                        <p>10.00% (30 days)</p>
+                                        <p class="fs-30 mb-2">${visitorCountList[6]}</p>
                                     </div>
                                 </div>
                             </div>
@@ -54,8 +53,7 @@
                                 <div class="card card-dark-blue">
                                     <div class="card-body">
                                         <p class="mb-4">오늘 생긴 게시물 수</p>
-                                        <p class="fs-30 mb-2">61344</p>
-                                        <p>22.00% (30 days)</p>
+                                        <p class="fs-30 mb-2">${newBoardCountList[6]}</p>
                                     </div>
                                 </div>
                             </div>
@@ -65,17 +63,7 @@
                                 <div class="card card-light-blue">
                                     <div class="card-body">
                                         <p class="mb-4">오늘 가입자 수</p>
-                                        <p class="fs-30 mb-2">34040</p>
-                                        <p>2.00% (30 days)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 stretch-card transparent">
-                                <div class="card card-light-danger">
-                                    <div class="card-body">
-                                        <p class="mb-4">Number of Clients</p>
-                                        <p class="fs-30 mb-2">47033</p>
-                                        <p>0.22% (30 days)</p>
+                                        <p class="fs-30 mb-2">${newUserCountList[6]}</p>
                                     </div>
                                 </div>
                             </div>
@@ -130,6 +118,8 @@
 //    방문자 차트
     let dateList = ${dateList};
     let visitorCountList =${visitorCountList};
+    let newBoardCountList = ${newBoardCountList};
+    let newUserCountList = ${newUserCountList};
     console.log(visitorCountList);
 
     //3. 차트에 넣기
@@ -138,7 +128,7 @@
             type: 'line'
         },
         title: {
-            text: 'A week of Gantt\'s visitor'
+            text: 'A week of Gantt'
         },
         // subtitle: {
         //     text: 'Source: ' +
@@ -165,10 +155,14 @@
                 name: '방문자 수',
                 data: visitorCountList
             }
-            // ,{
-            //     name: '게시글 수',
-            //     data: [26.0, 28.2, 33.1, 37.9, 42.2, 26.4, 49.8]
-            // }
+            ,{
+                name: '게시글 수',
+                data: newBoardCountList
+            }
+            ,{
+                name: '가입자 수',
+                data: newUserCountList
+            }
         ]
     });
 

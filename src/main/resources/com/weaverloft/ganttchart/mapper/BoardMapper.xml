@@ -63,6 +63,10 @@
             )
         <![CDATA[ where idx <= #{no} ]]>
     </select>
+    <!-- 9. 하루 새로운 게시글 수    -->
+    <select id="countNewBoardPerDay" parameterType="java.util.Date" resultType="java.lang.Integer">
+        select count(*) from BOARD where TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') = TO_CHAR(#{boardDate}, 'YYYY-MM-DD')
+    </select>
 
 
 

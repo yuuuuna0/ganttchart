@@ -75,7 +75,7 @@ public class CommentsController {
                 if(topComments != null && topComments.getGroupNo()!=0) {
                     orders = commentsService.findCommentsCountByGroupNo(topComments.getGroupNo());   //해당 댓글의 최상위가 있는지 확인해야함
                 }
-                comments = new Comments(0,commentsContent,new Date(),orders,groupNo,boardNo,loginUser.getId());
+                comments = new Comments(0,commentsContent,new Date(),orders,topComments.getGroupNo(),boardNo,loginUser.getId());
                 int result = commentsService.createComments(comments);
             }
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);

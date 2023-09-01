@@ -57,9 +57,9 @@
                  join users_log ul on a.log_no =ul.log_no
         <![CDATA[ where ul.log_date <= sysdate-60]]>
     </select>
-<!-- 6. 하루 방문자 수    -->
-    <select id="countVisitorsPerDay" parameterType="java.util.Date" resultType="java.lang.Integer">
-        select count(*) from USERS_LOG where LOG_NO = 10
+<!-- 6. 하루 XXX 수    -->
+    <select id="countPersonPerDay" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from USERS_LOG where LOG_STATUS = ${logStatus}
                                          and TO_CHAR(log_date, 'YYYY-MM-DD') = TO_CHAR(#{logDate}, 'YYYY-MM-DD')
     </select>
 </mapper>

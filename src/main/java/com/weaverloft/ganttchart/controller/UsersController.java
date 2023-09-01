@@ -76,6 +76,7 @@ public class UsersController {
     public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
         String forwardPath = "";
         String msg = "";
+        MultipartFile originalFile = multipartFile.getFile("photoFile");
         try {
             if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
@@ -97,13 +98,12 @@ public class UsersController {
             String authKeyStr = Integer.toString(authKey);
             users.setAuthKey(authKeyStr);
             //5) 파일 업로드
-            if(multipartFile !=null){
-                MultipartFile originalFile = multipartFile.getFile("photoFile");
-                String filePath = "C:\\gantt\\upload\\users\\";
+            if(!originalFile.getOriginalFilename().equals("")){
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
                 String saveFileName = fileService.uploadFile(originalFile,filePath);
                 users.setFilePath(filePath);
                 users.setSaveFileName(saveFileName);
-                users.setOriginalFileName(originalFile.getName());
+                users.setOriginalFileName(originalFile.getOriginalFilename());
                 System.out.println("사진 있다");
             } else{
                 //이거 안해줘도 되는지?
@@ -442,15 +442,14 @@ public class UsersController {
     public String modifyUserAction(@ModelAttribute Users users, HttpSession session, MultipartHttpServletRequest multipartFile){
         String forwardPath ="";
         Users loginUser = (Users)session.getAttribute("loginUser");
-
+        MultipartFile originalFile = multipartFile.getFile("photoFile");
         try{
-            if(multipartFile !=null){
-                MultipartFile originalFile = multipartFile.getFile("photoFile");
-                String filePath = "C:\\gantt\\upload\\users\\";
+            if(!originalFile.getOriginalFilename().equals("")){
+                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
                 String saveFileName = fileService.uploadFile(originalFile,filePath);
                 users.setFilePath(filePath);
                 users.setSaveFileName(saveFileName);
-                users.setOriginalFileName(originalFile.getName());
+                users.setOriginalFileName(originalFile.getOriginalFilename());
             } else{
                 users.setFilePath(loginUser.getFilePath());
                 users.setSaveFileName(loginUser.getSaveFileName());

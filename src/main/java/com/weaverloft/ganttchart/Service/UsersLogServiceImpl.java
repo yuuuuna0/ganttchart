@@ -39,7 +39,7 @@ public class UsersLogServiceImpl implements UsersLogService{
     }
 
     @Override
-    public int countVisitorsPerDay(Date logDate) throws Exception {
-        return usersLogDao.countVisitorsPerDay(logDate);
+    public int countPersonPerDay(int logStatus,Date logDate) throws Exception {
+        return usersLogDao.countPersonPerDay(logStatus,logDate);
     }
 }

@@ -46,9 +46,13 @@ public class UsersLogDaoImpl implements UsersLogDao{
         return usersLogMapper.findDormacyUsers();
     }
 
+
     @Override
-    public int countVisitorsPerDay(Date logDate) throws Exception {
-        return usersLogMapper.countVisitorsPerDay(logDate);
+    public int countPersonPerDay(int logStatus,Date logDate) throws Exception {
+        Map<String,Object> map =new HashMap<>();
+        map.put("logStatus",logStatus);
+        map.put("logDate",logDate);
+        return usersLogMapper.countPersonPerDay(map);
     }
 
 

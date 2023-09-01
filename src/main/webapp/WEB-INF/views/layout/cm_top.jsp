@@ -25,7 +25,8 @@
                     <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.saveFileName != null}">
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="1" data-toggle="dropdown" id="profileDropdown1">
-                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="${sessionScope.loginUser.filePath}${sessionScope.loginUser.saveFileName}"/>
+<%--                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../${sessionScope.loginUser.saveFileName}"/>--%>
+                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/user/${sessionScope.loginUser.saveFileName}"/>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown1" alt="profile">
                                 <a class="dropdown-item">

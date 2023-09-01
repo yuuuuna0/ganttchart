@@ -20,4 +20,7 @@ public interface UsersLogMapper{
     List<String> findDormacyUsers() throws Exception;
     //5. 오늘의 방문자 수
     int countVisitorsPerDay(Date logDate) throws Exception;
+    //5. 오늘의 가입자 수
+    int countPersonPerDay(Map<String,Object> map) throws Exception;
+
 }

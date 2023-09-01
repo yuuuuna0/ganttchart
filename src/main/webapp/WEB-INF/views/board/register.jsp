@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <div style="text-align: center">
+                            <div style="display: flex; float:right; margin-right: 20px;">
                                 <input type="button" id="boardWriteBtn" name="boardWriteBtn" class="btn btn-primary mr-2" onclick="boardWrite()" value="작성">
                                 <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" value="취소" onclick="location.href='/board/list?page=1&keyword='">
                             </div>

@@ -8,6 +8,7 @@ import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -65,6 +66,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Board> findBoardTopList(int no) throws Exception{
         return boardDao.findBoardTopList(no);
+    }
+
+    @Override
+    public int countNewBoardPerDay(Date boardDate) throws Exception {
+        return boardDao.countNewBoardPerDay(boardDate);
     }
 
 }

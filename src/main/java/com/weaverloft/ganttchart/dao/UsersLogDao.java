@@ -16,5 +16,5 @@ public interface UsersLogDao {
     //4. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)
     List<String> findDormacyUsers() throws Exception;
     //5. 오늘의 방문자 수
-    int countVisitorsPerDay(Date logDate) throws Exception;
+    int countPersonPerDay(int logStatus,Date logDate) throws Exception;
 }

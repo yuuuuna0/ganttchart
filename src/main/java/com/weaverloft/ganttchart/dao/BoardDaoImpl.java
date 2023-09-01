@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.mapper.BoardMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,5 +64,10 @@ public class BoardDaoImpl implements BoardDao {
     @Override
     public List<Board> findBoardTopList(int no) throws Exception{
         return boardMapper.findBoardTopList(no);
+    }
+
+    @Override
+    public int countNewBoardPerDay(Date boardDate) throws Exception {
+        return boardMapper.countNewBoardPerDay(boardDate);
     }
 }

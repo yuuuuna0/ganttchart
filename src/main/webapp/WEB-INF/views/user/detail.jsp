@@ -19,7 +19,7 @@
                                 <div class="form-group" style="text-align: center">
                                     <c:if test = "${ sessionScope.loginUser.saveFileName != null}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px"
-                                             src="${sessionScope.loginUser.filePath}${sessionScope.loginUser.saveFileName}"/>
+                                             src="/upload/user/${sessionScope.loginUser.saveFileName}"/>
                                     </c:if>
                                     <c:if test = "${ sessionScope.loginUser.saveFileName == null}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="/static/images/icons/default.png"/>
