@@ -31,10 +31,10 @@
                                         <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                         <div class="input-group col-xs-12">
                                             <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
-                                                <c:forEach items="${boardFileList}" var="boardFile">
-                                                    <div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(file${boardFile.fileNo})">
-                                                            ${boardFile.fileName}
-                                                        <img src="../../images/icon_X.jpg" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
+                                                <c:forEach items="${boardFileList}" var="boardFile" varStatus="i">
+                                                    <div id="file${boardFile.fileNo}" style="font-size:12px;" onclick="deleteFile(${i.index})">
+                                                            ${boardFile.originalFileName}
+                                                        <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
                                                     </div>
                                                 </c:forEach>
                                             </div>
@@ -56,75 +56,85 @@
         </div>
         <!-- main-panel ends -->
 <script>
+
+
     /******************************** 1. 게시글 수정 **********************************/
-    var fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
-    var maxCount = 5;     // 최대 첨부 갯수
-    var fileNo = 0;         //파일 고유번호
-    var fileList = new Array(); //첨부파일리스트 (파일타입)
-    var fileListArray; //첨부파일 어레이타입
-    const dataTransfer = new DataTransfer();
-    //1. 다중 파일 처리
-    //1) 버튼클릭시 submit 안하기
-    document.addEventListener('DOMContentLoaded', function() {
-        // input file 파일 첨부시 fileCheck 함수 실행
-        document.getElementById('boardFileList').addEventListener('change', fileCheck);
-    });
-    //2) 첨부파일 로직
-    function fileCheck(e){
-        var files = e.target.files;
-        var filesArray = Array.prototype.slice.call(files); //파일 배열 담기
-        //파일 갯수 확인
-        if(fileCount + filesArray.length > maxCount){
+    let fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
+    let maxCount = 5;     // 최대 첨부 갯수
+    let fileArray = [];
+    let fileArray2 = [];
+    let dataTransfer = new DataTransfer();  //array를 file로 변경하여 서버로 보내게 해줌
+    function changeView(){
+        $('#fileList').empty();
+        let html = '';
+        for(let i=0;i<fileArray.length;i++){
+            html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
+                + fileArray[i].name
+                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                + '</div>';
+        }
+        $('#fileList').append(html);
+    }
+
+    //1. 파일추가
+    function addFile(){
+        //1.파일 갯수 확인
+        fileArray2 = $('#boardFileList')[0].files;
+        console.log('fileArray2 : ' + fileArray2);
+        if(fileCount + fileArray2.length > maxCount){
             alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
         } else {
-            fileCount = fileCount + filesArray.length;
+            fileCount = fileCount + fileArray2.length;
         }
-        //각각의 파일 배열담기 및 기타
-        filesArray.forEach(function(f){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                fileList.push(f);
-                console.log('왜 출력이 안되니');
-                var divHtml = document.getElementById('fileList');
-                document.getElementById("fileList").innerHTML +=
-                    '<div id="file'+ fileNo + '" style="font-size:12px;" onclick="fileDelete(\'file' + fileNo + '\')">'
-                    + f.name
-                    + '<img src="/static/images/icons/X.png" style="width:10px; height:auto; vertical-align: middle; cursor: pointer;" alt="default.jpg"/>'
-                    + '</div>';
-                fileNo++;
-            };
-            reader.readAsDataURL(f);
-        });
-        for(let i=0;fileList.length;i++){
-            dataTransfer.items.add(fileList.indexOf(i));
+        //fileArray = $('#boardFileList')[0].files;
+        for(let i = 0 ; i < fileArray2.length ; i++){
+            fileArray.push(fileArray2[i]);
         }
-        console.log(fileList);
-        //초기화
-        document.getElementById("boardFileList").value='';
+        console.log(fileArray);
+        fileArray2 = [];
+        changeView();
     }
-    //2. 파일 부분 삭제 함수
-    function fileDelete(fileNo){
-        //html 처리
-        var no = fileNo.replace(/[^0-9]/g, "");     //fileNo(ex.file1,file2)의 index
-        if(no <= maxCount){
-            fileList[no].is_delete = true;
-            document.getElementById(fileNo).remove();
-            fileCount--;
+    //3. input file에 원래 파일들 담아주기
+
+
+
+    //2. 파일 삭제 --> 실제 파일 관리가 아니라 view쪽 다뤄보기
+    function deleteFile(no){
+        $('#fileList').empty();
+        let html = '';
+        for(let i=0;i<fileArray.length;i++){
+            html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
+                + fileArray[i].name
+                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                + '</div>';
         }
-        // input 태그 처리
-        fileListArray = Array.from(fileList);	////변수에 할당된 배열을 파일로 변환(Array -> fileList)
-        fileListArray.splice(no, 1);	            //해당하는 index의 파일을 배열에서 제거
-        for(let i=0;i<fileListArray.length;i++){
-            let file = fileListArray[i];
-            dataTransfer.items.add(file);
+        $('#fileList').append(html);
+
+
+
+        fileArray = $('#boardFileList')[0].files;
+
+        console.log(fileArray);
+        for(let i=0 ; i<fileArray.length ; i++){
+            fileArray2.push(fileArray[i]);
         }
-        $('#boardFileList')[0].files=dataTransfer.files;    //제거처리된 FileList를 input태그에 담아줌
+        fileArray2.splice(no,1);
+        fileArray =[];
+        for(let i=0 ; i<fileArray2.length ; i++){
+            fileArray.push(fileArray2[i]);
+        }
+        console.log(fileArray);
+        fileArray2=[];
+        changeView();
     }
-    function modifyBoard(no){
+
+    //3. 게시글 작성
+    function modifyBoard(no) {
+        let boardTitle = document.getElementById("boardTitle").value;
+        let boardContent = document.getElementById("boardContent").value;
         let boardNo = no;
-        let boardTitle = $('#boardTitle').val();
-        let boardContent = $('#boardContent').val();
+        let formData = new FormData;
         if(boardTitle === ''){
             alert("제목을 입력하세요");
             document.getElementById("boardTitle").focus();
@@ -135,12 +145,33 @@
             document.getElementById("boardContent").focus();
             return false;
         }
-        //fileDelete function이 시행되어야 fileList가 input태그에 담기기때문에 삭제가 이루어지지 않더라도 function 시행위해 코드 적어줌 -> 파라미터가 존재하지 않는 값이므로 그냥 임의의 action임
-        fileDelete("file"+(maxCount+1));
 
-        document.getElementById("boardModifyF").method = 'POST';
-        document.getElementById("boardModifyF").action = '/board/modify-action/'+no;
-        document.getElementById("boardModifyF").submit();
+        formData.append("boardTitle",boardTitle);
+        formData.append("boardContent",boardContent);
+        formData.append("boardNo",boardNo);
+        //파일리스트 폼에 하나씩 붙여줘야 함
+        for (let i = 0; i < fileArray.length; i++) {
+            console.log("file : " + fileArray[i]);
+            formData.append("fileArray", fileArray[i]);
+        }
+        $.ajax({
+            url : '/board//modify-ajax',
+            method : 'POST',
+            enctype: 'multipart/form-data',
+            contentType : false,
+            processData : false,
+            data : formData,
+            success : function (resultMap) {
+                console.log('TEST');
+                if(resultMap.code === 1){
+                    window.location.href=resultMap.forwardPath;
+                } else {
+                    alert(resultMap.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
 </script>
-</html>

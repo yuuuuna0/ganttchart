@@ -196,6 +196,13 @@
 </div>
 <!-- main-panel ends -->
 <script>
+    // 검색창 입력 후 엔터키 => 검색
+    $("#commentsContent").keyup(e => {
+        if (e.keyCode === 13) {
+            createComments(0,0);
+            e.preventDefault();
+        }
+    });
 
 
     /********************************  파일 다운로드 **********************************/

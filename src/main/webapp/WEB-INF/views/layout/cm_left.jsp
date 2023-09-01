@@ -11,17 +11,30 @@
 
     <div class="mt-lg-3">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-    <c:if test="${sessionScope.loginUser.grade == 0}">
+
     <div class="row mt-lg-1 ">
-    <div class="col-4 ">
-    <input type="button" class="btn btn-light ml-5" style="width: 230%; height: 100%; font-size: 10pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/menu/register'">
-    </div>
-    </div>
+    <div class="col-4" style="display: flex; ">
+    <c:if test="${sessionScope.loginUser != null}">
+    <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="로그아웃" onclick="location.href='/logout-action'">
+    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="마이페이지" onclick="location.href='/user/detail'">
     </c:if>
+    <c:if test="${sessionScope.loginUser == null}">
+    <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; align-content: center" value="로그인" onclick="location.href='/'">
+    </c:if>
+    </div>
+    </div>
     <hr>
+    <c:if test="${sessionScope.loginUser.grade == 0}">
+        <div class="row mt-lg-1 ">
+        <div class="col-4 ">
+        <input type="button" class="btn btn-light ml-5" style="width: 230%; height: 100%; font-size: 10pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/menu/register'">
+        </div>
+        </div>
+    </c:if>
+<br>
     <ul class="nav" style="margin-top:0;">
     <li class="nav-item">
-    <a class="nav-link" href="/">
+    <a class="nav-link" href="/index">
     <i class="icon-grid menu-icon"></i>
     <span class="menu-title">메인페이지</span>
     </a>

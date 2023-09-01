@@ -75,6 +75,7 @@ public class UsersController {
     @PostMapping(value = "/user/register-action")
     public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
         String forwardPath = "";
+        String msg = "";
         try {
             if (usersService.findUsersById(users.getId())!=null) {
                 //1) 아이디 중복 확인
@@ -82,8 +83,9 @@ public class UsersController {
                 forwardPath = "redirect:/login";
                 return forwardPath;
             }
-            if(!usersService.isValidPassword(users.getPassword())){
+            if(!(boolean)usersService.isValidPassword(users.getPassword()).get("result")){
                 //2) 비밀번호 정규식 체크
+                msg = (String)usersService.isValidPassword(users.getPassword()).get("msg");
                 forwardPath ="redirect:/register";
                 return forwardPath;
             }
@@ -354,6 +356,7 @@ public class UsersController {
     }
     //4-1. 비밀번호 변경 액션
     @LoginCheck
+    @ResponseBody
     @PostMapping("/user/modifyPassword-ajax")
     public Map<String,Object> modifyPasswordAction(HttpSession session, @RequestParam Map map){
         Map<String, Object> resultMap = new HashMap<>();
@@ -364,11 +367,10 @@ public class UsersController {
         String confirmPassword = (String)map.get("confirmPassword");
         try{
             Users users=(Users)session.getAttribute("loginUser");
-            if(password.equals(confirmPassword)){
+            if(!password.equals(confirmPassword)){
                 code = 2;
                 msg = "비밀번호와 비밀번호확인은 일치하여야합니다.";
-            } else if(!usersService.isValidPassword(password)){
-                //1. 비밀번호 정규식 체크
+            }else if(!(boolean)usersService.isValidPassword(password).get("result")){
                 code = 3;
                 msg = "비밀번호 형식에 맞게 작성해주세요";
             } else {
@@ -376,10 +378,10 @@ public class UsersController {
                 String encryptPassword = sha256Service.encrypt(password);
                 //3. 비밀번호 업데이트 및 인증상태 1로 변경
                 int authStatus = 1;
-                usersService.updatePassword(users.getId(),encryptPassword,authStatus);
+                usersService.updatePassword(users.getId(), encryptPassword, authStatus);
                 session.invalidate();
                 code = 1;
-                forwardPath="/login";
+                forwardPath = "/login";
             }
         } catch (Exception e){
             e.printStackTrace();

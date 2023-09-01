@@ -17,10 +17,11 @@
                                 <h4 class="card-title">마이페이지</h4>
                                 <!-- 프로필사진 업로드 -->
                                 <div class="form-group" style="text-align: center">
-                                    <c:if test = "${ sessionScope.loginUser.photo != null}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.photo}"/>
+                                    <c:if test = "${ sessionScope.loginUser.saveFileName != null}">
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px"
+                                             src="${sessionScope.loginUser.filePath}${sessionScope.loginUser.saveFileName}"/>
                                     </c:if>
-                                    <c:if test = "${ sessionScope.loginUser.photo == null}">
+                                    <c:if test = "${ sessionScope.loginUser.saveFileName == null}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="/static/images/icons/default.png"/>
                                     </c:if>
                                 </div>

@@ -39,7 +39,7 @@
     </delete>
     <!-- 5. 게시글 수정 -->
     <update id="updateBoard" parameterType="java.util.Map">
-        update BOARD set BOARD_TITLE=#{boardTitle}, BOARD_CONTENT=#{boardContent} where id=#{id}
+        update BOARD set BOARD_TITLE=#{boardTitle}, BOARD_CONTENT=#{boardContent} where BOARD_NO=#{boardNo}
     </update>
     <!-- 6. 게시글 전체 개수 -->
     <select id="findBoardCount" resultType="java.lang.Integer">

@@ -11,7 +11,9 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,26 +54,35 @@ public class UsersServiceImpl implements UsersService {
 
     //3. 비밀번호 정규식 체크
     @Override
-    public boolean isValidPassword(String password) throws Exception {
+    public Map<String,Object> isValidPassword(String password) throws Exception {
         /*
           1) 6~15글자
           2) 영어, 숫자, 특수문자 포함
           3) 공백 안됨
         */
+        Map<String,Object> resultMap = new HashMap<>();
+        String msg = "";
+        boolean result = true;
         Matcher matcher;    //정규식 검사 객체
         if (password == null || password.isEmpty()) {
-            throw new Exception("비밀번호를 입력해주세요.");
+            msg = "비밀번호를 입력해주세요.";
+            result = false;
         }
         if (password.length() < 6 || password.length() > 12) {
-            throw new Exception("비밀번호는 6글자 이상 12글자 이하여야 합니다.");
+            msg = "비밀번호는 6글자 이상 12글자 이하여야 합니다.";
+            result = false;
         }
         if (!password.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$")) {
-            throw new Exception("비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.");
+            msg = "비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.";
+            result = false;
         }
         if (Pattern.compile("(\\s)").matcher(password).find()) {
-            throw new Exception("비밀번호에는 공백이 포함될 수 없습니다.");
+            msg = "비밀번호에는 공백이 포함될 수 없습니다.";
+            result = false;
         }
-        return true;
+        resultMap.put("msg",msg);
+        resultMap.put("result",result);
+        return resultMap;
 
     }
 

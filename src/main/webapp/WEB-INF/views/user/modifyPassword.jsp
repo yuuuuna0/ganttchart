@@ -66,10 +66,13 @@
                     //1. 성공
                     window.location.href=resultMap.forwardPath;
                 } else if(resultMap.code === 2){
+                    $('#password').val('');
+                    $('#confirmPassword').val('');
                     alert(resultMap.msg);
-                    window.location.href=resultMap.forwardPath;
                 } else if(resultMap.code === 3){
-                    window.location.href=resultMap.forwardPath;
+                    $('#password').val('');
+                    $('#confirmPassword').val('');
+                    alert(resultMap.msg);
                 } else {
                     alert(resultMap.msg);
                     window.location.href=resultMap.forwardPath;

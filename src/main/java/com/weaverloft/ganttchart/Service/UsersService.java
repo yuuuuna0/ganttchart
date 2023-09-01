@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMakerDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UsersService {
     //1. 로그인
@@ -11,7 +12,7 @@ public interface UsersService {
     //2. 회원가입
     int createUsers(Users users) throws Exception;
     //3. 비밀번호 정규식 체크
-    boolean isValidPassword(String password) throws Exception;
+    Map<String,Object> isValidPassword(String password) throws Exception;
     //4. 회원조회
     Users findUsersById(String id) throws Exception;
     //5. 정보 업데이트

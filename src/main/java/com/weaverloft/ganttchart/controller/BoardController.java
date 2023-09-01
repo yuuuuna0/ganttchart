@@ -144,8 +144,6 @@ public class BoardController {
         Users loginUser=(Users)session.getAttribute("loginUser");
         Board board = new Board(0,(String)map.get("boardTitle"),(String)map.get("boardContent"),new Date(),loginUser.getId(),0);
         try{
-            //MultipartHttpServletRequest fileArray = (MultipartHttpServletRequest)map.get("fileArray");
-//            List<MultipartFile> boardFileList = fileArray.getFiles("boardFileList");    // 왜 안되는가;;
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
             if(boardFileList.get(0).getSize() != 0){
@@ -210,13 +208,18 @@ public class BoardController {
     }
         //5-2. 게시글 수정하기 액션
     @LoginCheck
-    @PostMapping("/modify-action/{boardNo}")
-    public String modifyBoardAction(@PathVariable int boardNo,@ModelAttribute Board board, MultipartHttpServletRequest mf){
+    @ResponseBody
+    @PostMapping("/modify-ajax")
+    public Map<String,Object> modifyBoardAjax(@RequestParam Map<String ,Object> map, @RequestParam(value="fileArray",required = false) List<MultipartFile> boardFileList){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "";
         String forwardPath = "";
-        List<MultipartFile> boardFileList = mf.getFiles("boardFileList");
+        int boardNo = Integer.parseInt(map.get("boardNo").toString());
+        Board board = new Board(boardNo,(String)map.get("boardTitle"),(String)map.get("boardContent"),new Date(),"",0);
         try{
             int result = boardService.updateBoard(board);
-            if(boardFileList.get(0).getSize() != 0){
+            if(boardFileList != null){
                 String filePath = "C:\\gantt\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
                     String originalFileName = boardFile.getName();
@@ -226,12 +229,17 @@ public class BoardController {
                     boardFileService.createBoardFile(file);
                 }
             }
-            forwardPath = "redirect:/board/modify/"+boardNo;
+            code = 1;
+            forwardPath = "/board/detail/"+boardNo;
         } catch (Exception e){
             e.printStackTrace();
-            forwardPath="/error";
+            code = 2;
+            msg = "알 수 없는 에러가 발생하였습니다. 관리자에게 문의하세요";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
 
     //6. 파일 다운로드

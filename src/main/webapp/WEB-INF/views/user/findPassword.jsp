@@ -41,8 +41,8 @@
 <script type="text/javascript">
     function findPasswordAction(){
         let id = $('#id').val();
-        let name = $('name').val();
-        let email = $('email').val();
+        let name = $('#name').val();
+        let email = $('#email').val();
         if (id === '') {
             alert("아이디를 입력하세요");
             $('#id').focus();
