@@ -68,15 +68,11 @@ public class CommentsController {
                 commentsContent = (String)map.get("subCommentsContent");
                 groupNo = Integer.parseInt(map.get("commentsNo").toString());
                 Comments preComments = commentsService.findCommentByCommentsNo(groupNo);
-                Comments topComments = new Comments();
-                if(preComments.getOrders() != 0){
-                    topComments = commentsService.findTopCommentByGroupNo(preComments.getGroupNo());
-                }
+                Comments topComments = commentsService.findTopCommentByGroupNo(preComments.getGroupNo());
                 if(topComments != null && topComments.getGroupNo()!=0) {
                     orders = commentsService.findCommentsCountByGroupNo(topComments.getGroupNo());   //해당 댓글의 최상위가 있는지 확인해야함
                 }
-                comments = new Comments(0,commentsContent,new Date(),orders,topComments.getGroupNo(),boardNo,loginUser.getId());
-                int result = commentsService.createComments(comments);
+                int result = commentsService.createComments(new Comments(0,commentsContent,new Date(),orders,topComments.getGroupNo(),boardNo,loginUser.getId()));
             }
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
             data = commentsList;

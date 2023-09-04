@@ -59,6 +59,10 @@
     <select id="findAllMenu" resultType="com.weaverloft.ganttchart.dto.Menu">
         select * from menu order by MENU_NO desc
     </select>
+<!--  4-3. 공개 된 리스트 전체 불러오기  -->
+    <select id="findUseMenu" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select * from menu where USE_YN=0 order by MENU_NO desc
+    </select>
 <!-- 5. 전체 메뉴 개수    -->
     <select id="findMenuCount" resultType="java.lang.Integer">
         select count(*) from menu where 1=1
@@ -82,5 +86,4 @@
     <select id="isExistedMenuUrl" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from menu where MENU_Url=#{menuUrl}
     </select>
-
 </mapper>

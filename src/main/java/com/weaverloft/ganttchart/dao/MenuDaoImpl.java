@@ -57,7 +57,10 @@ public class MenuDaoImpl implements MenuDao{
 
     @Override
     public int updateUse(int menuNo, int useYN)throws Exception {
-        return menuMapper.updateUse(menuNo, useYN);
+        Map<String,Object> map =new HashMap<>();
+        map.put("menuNo",menuNo);
+        map.put("useYN",useYN);
+        return menuMapper.updateUse(map);
     }
 
     @Override
@@ -76,6 +79,11 @@ public class MenuDaoImpl implements MenuDao{
     }
 
     @Override
+    public List<Menu> findUseMenu() throws Exception {
+        return menuMapper.findUseMenu();
+    }
+
+    @Override
     public int findCurMenuNo() throws Exception {
         return menuMapper.findCurMenuNo();
     }
@@ -86,13 +94,14 @@ public class MenuDaoImpl implements MenuDao{
     }
 
     @Override
-    public int isExistedMenuTitle(String menuTitle) {
+    public int isExistedMenuTitle(String menuTitle) throws Exception{
         System.out.println("result:  "+menuMapper.isExistedMenuTitle(menuTitle));
         return menuMapper.isExistedMenuTitle(menuTitle);
     }
 
     @Override
-    public int isExistedMenuUrl(String menuUrl) {
+    public int isExistedMenuUrl(String menuUrl)throws Exception {
         return  menuMapper.isExistedMenuUrl(menuUrl);
     }
+
 }

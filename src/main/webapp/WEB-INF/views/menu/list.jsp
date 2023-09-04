@@ -37,10 +37,11 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Title</th>
+                                            <th>메뉴</th>
                                             <th>Url</th>
-                                            <th>Description</th>
+                                            <th>메뉴 설명</th>
                                             <th>상위탭</th>
+                                            <th>사용여부</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
@@ -62,6 +63,14 @@
                                                         </c:forEach>
                                                     </c:otherwise>
                                                 </c:choose>
+                                            <td onclick="event.cancelBubble=true">
+                                            <c:if test="${menu.useYN == 1}">
+                                            <input class="usage" type="checkbox" value="${menu.menuNo}" />
+                                            </c:if>
+                                            <c:if test="${menu.useYN == 0}">
+                                            <input class="usage" type="checkbox" value="${menu.menuNo}" checked/>
+                                             </c:if>
+                                            </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -136,6 +145,35 @@
     let pageNo = no;
     window.location.href='/menu/list?pageNo='+pageNo+'&keyword='+keyword;
     }
+    //메뉴 사용여부 확인하기
+    $('.usage').change(function(e){
+        let useYN;
+        let menuNo = e.target.value;
+        if (e.target.checked){
+            useYN = 0;   //메뉴 사용함
+        } else {
+            useYN = 1;  //메뉴 사용안함
+        }
+        $.ajax({
+            url : '/menu/usage-ajax',
+            method : 'POST',
+            data : {
+                'menuNo' : menuNo,
+                'useYN' : useYN
+            },
+            success : function(resultMap){
+                if(resultMap.code ===1){
+                    console.log("성공");
+                } else {
+                    alert(resultMap.msg);
+                }
+            },
+            error:function(e){
+                console.log(e);
+            }
+        });
+
+    });
 
 </script>
 

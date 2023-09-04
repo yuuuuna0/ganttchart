@@ -27,12 +27,14 @@ public interface MenuDao {
     List<Menu> findPreMenuList() throws Exception;
     //10. 메뉴전체 불러오기
     List<Menu> findAllMenu() throws  Exception;
+    //10. 사용중인 메뉴 전체 불러오기
+    List<Menu> findUseMenu() throws  Exception;
     //11. 최근 값 불러오기
     int findCurMenuNo() throws Exception;
     //12. 상위메뉴 parentId 부여하기
     int updateParentId(int menuNo) throws Exception;
     //14. 메뉴이름 존재개수
-    int isExistedMenuTitle(String menuTitle);
+    int isExistedMenuTitle(String menuTitle) throws Exception;
     //15. 메뉴url 존재여부 확인
-    int isExistedMenuUrl(String menuUrl);
+    int isExistedMenuUrl(String menuUrl) throws Exception;
 }

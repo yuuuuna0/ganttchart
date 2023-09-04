@@ -71,6 +71,10 @@ public class MenuServiceImpl implements MenuService {
     public List<Menu> findAllMenu() throws Exception {
         return menuDao.findAllMenu();
     }
+    @Override
+    public List<Menu> findUseMenu() throws Exception {
+        return menuDao.findUseMenu();
+    }
 
     @Override
     public int findCurMenuNo() throws Exception {
@@ -93,7 +97,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public boolean isExistedMenuTitle(String menuTitle) {
+    public boolean isExistedMenuTitle(String menuTitle) throws Exception{
         if(menuDao.isExistedMenuTitle(menuTitle) == 0){
             return false;
         }
@@ -101,11 +105,12 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public boolean isExistedMenuUrl(String menuUrl) {
+    public boolean isExistedMenuUrl(String menuUrl) throws Exception{
         if(menuDao.isExistedMenuUrl(menuUrl) == 0){
             return false;
         }
         return true;
     }
+
 
 }

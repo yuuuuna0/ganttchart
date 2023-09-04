@@ -58,6 +58,9 @@
                         console.log(dataItem);
                         html+="<label>"+dataItem+"</label><br>";
                     }
+                    html += "<input id='findIdBtn' type='button' onclick='location.href=\"/user/findPassword\"' class='btn btn-primary mr-2' value='비밀번호찾기'>\n" +
+                        "                                <input type='button' id='cancelBtn' onclick='location.href=\"/login\"' class='btn btn-light' value='로그인'>\n" +
+                        "                                <a href='/user/register' class='auth-link text-black float-right' style='font-size: 10pt'>Need an account? Sign up!</a>";
                     $('#findIdF').append(html);
                 } else {
                     alert(resultJson.msg);

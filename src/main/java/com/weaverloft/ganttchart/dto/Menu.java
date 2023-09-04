@@ -14,5 +14,5 @@ public class Menu {
     private String menuUrl;
     private String menuDesc;
     private int parentId;
-    private int useYN;   // 0:일반사용자 1:어드민
+    private int useYN;   // 0:공개 1: 비공개
 }

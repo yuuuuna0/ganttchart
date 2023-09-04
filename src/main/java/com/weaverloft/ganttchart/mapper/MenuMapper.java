@@ -23,19 +23,21 @@ public interface MenuMapper {
     //6. 메뉴 수정하기
     int updateMenu(Menu menu) throws Exception;
     //7. 사용여부 변경하기
-    int updateUse(int menuNo, int useYN) throws Exception;
+    int updateUse(Map<String,Object> map) throws Exception;
     //8. 하위메뉴리스트 불러오기
     List<Menu> findSubMenuList(int menuNo) throws Exception;
     //9. 상위메뉴리스트 불러오기
     List<Menu> findPreMenuList() throws Exception;
     //10. 메뉴전체 불러오기
     List<Menu> findAllMenu() throws  Exception;
+    //10. 사용중인 메뉴 전체 불러오기
+    List<Menu> findUseMenu() throws  Exception;
     //11. 최근 값 불러오기
     int findCurMenuNo() throws Exception;
     //12. 상위메뉴 parentId 부여하기
     int updateParentId(int menuNo) throws Exception;
     //14. 메뉴이름 존재개수
-    int isExistedMenuTitle(String menuTitle);
+    int isExistedMenuTitle(String menuTitle) throws Exception;
     //15. 메뉴url 존재여부 확인
-    int isExistedMenuUrl(String menuUrl);
+    int isExistedMenuUrl(String menuUrl) throws Exception;
 }

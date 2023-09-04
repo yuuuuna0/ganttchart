@@ -66,18 +66,18 @@
                                         <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" />
                                     </div>
                                     <div class="form-group col-6">
-                                    <label for="useYN">사용레벨</label>
+                                    <label for="useYN">공개여부</label>
                                     <select class="form-control" id="useYN" name="useYN">
                                     <c:choose>
                                         <c:when test="${menu.useYN == 0}">
                                             <option disabled ></option>
-                                            <option value="0" selected>관리자</option>
-                                            <option value="1">일반회원</option>
+                                            <option value="0" selected>공개</option>
+                                            <option value="1">비공개</option>
                                         </c:when>
                                         <c:otherwise>
                                             <option disabled ></option>
-                                            <option value="0">관리자</option>
-                                            <option value="1" selected>일반회원</option>
+                                            <option value="0">공개</option>
+                                            <option value="1" selected>비공개</option>
                                         </c:otherwise>
                                     </c:choose>
 
@@ -87,7 +87,7 @@
                                         <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                         <div style="text-align: right">
                                             <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="modifyMenu(${menu.menuNo})" value="수정완료">
-                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/menu/detail/${menu.menuNo}'" value="취소">
+                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/menu/list'" value="취소">
                                         </div>
                                         </c:if>
                                     </div>
@@ -124,6 +124,7 @@
     if(menuLevel === "2") { //문자열로 비교
     parentId = $('#parentId option:selected').val();
     }
+    console.log(parentId);
     let menuTitle = $('#menuTitle').val();
     let menuDesc = $('#menuDesc').val();
     let menuUrl = $('#menuUrl').val();

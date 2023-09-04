@@ -27,6 +27,8 @@ public interface MenuService {
     List<Menu> findPreMenuList() throws Exception;
     //10. 메뉴전체 불러오기
     List<Menu> findAllMenu() throws  Exception;
+    //10. 사용중인 메뉴 전체 불러오기
+    List<Menu> findUseMenu() throws  Exception;
     //11. 최근 값 불러오기
     int findCurMenuNo() throws Exception;
     //12. 상위메뉴 parentId 부여하기
@@ -34,7 +36,7 @@ public interface MenuService {
     //13. cm_left에 붙일 메뉴리스트
     Map<String,Object> cmLeftMenuList() throws Exception;
     //14. 메뉴이름 존재여부 확인
-    boolean isExistedMenuTitle(String menuTitle);
+    boolean isExistedMenuTitle(String menuTitle) throws Exception;
     //15. 메뉴url 존재여부 확인
-    boolean isExistedMenuUrl(String menuUrl);
+    boolean isExistedMenuUrl(String menuUrl) throws Exception;
 }

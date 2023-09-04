@@ -227,7 +227,7 @@ public class MenuController {
         }catch (Exception e){
             e.printStackTrace();
             code = 2;
-            msg ="실패";
+            msg ="알 수 없는 에러가 발생하였습니다. 관리자에게 문의하세요";
         }
         resultMap.put("code",code);
         resultMap.put("msg",msg);
@@ -268,6 +268,34 @@ public class MenuController {
         }
         return forwardPath;
     }
+    //3-1. 메뉴 사용여부 변경하기
+    @AdminCheck
+    @ResponseBody
+    @PostMapping("/usage-ajax")
+    public Map<String,Object> menuListAjax(@RequestParam Map<String,Object> map){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code=0;
+        String msg = "";
+        String forwardPath ="";
+        int menuNo = Integer.parseInt(map.get("menuNo").toString());
+        int useYN = Integer.parseInt(map.get("useYN").toString());
+        try{
+            menuService.updateUse(menuNo,useYN);
+            code=1;
+            msg ="성공";
+        } catch (Exception e){
+            e.printStackTrace();
+            code=2;
+            msg="알 수 없는 에러가 발생하였습니다. 관리자에게 문의하세요";
+            forwardPath="/error";
+        }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
+    }
+
+
 
     //4. 메뉴 삭제 액션
     @AdminCheck

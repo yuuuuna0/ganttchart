@@ -62,7 +62,7 @@
         </c:when>
         <c:otherwise>
         <c:forEach items="${preMenuList}" var="preMenu">
-            <c:if test="${preMenu.useYN == 1}">
+            <c:if test="${preMenu.useYN == 0}">
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#${preMenu.menuTitle}" aria-expanded="false" aria-controls="#${preMenu.menuTitle}">
                         <i class="icon-grid-2 menu-icon"></i>

@@ -51,11 +51,11 @@
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"   />
                                         </div>
                                         <div class="form-group col-6">
-                                                <label for="useYN">사용레벨</label>
+                                                <label for="useYN">공개여부</label>
                                                 <select class="form-control" id="useYN" name="useYN">
                                                     <option disabled selected></option>
-                                                    <option value="0">관리자</option>
-                                                    <option value="1">일반회원</option>
+                                                    <option value="0">공개</option>
+                                                    <option value="1">비공개</option>
                                                 </select>
                                         </div>
                                         <div class="form-group col-12">
