@@ -84,8 +84,6 @@
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
 <script src="/static/js/settings.js"></script>
-<script src="/static/js/todolist.js"></script>
-<!-- endinject -->
 <script>
     function loginAction(){
         let id = $('#id').val();
@@ -133,9 +131,69 @@
         });
     }
 
-    //2. 쿠키로 아이디 기억하기
+    //2. 쿠키로 아이디 기억하기: document.cookie 는 name=value 쌍이며 각 쌍은 ;로 구분된다. =====> cookie1=value1; cookie2=value2;...
+    //1) 저장된 쿠키값을 가져와서 ID칸에 넣어주고 없으면 공백 넣어준다.
+    $(document).ready(function(){
+        let key = getCookie("key");
+        let id = $('#id').val(key);
+        //(이전에 ID 저장상태) 페이지 로딩시 입력칸에 저장된 ID가 표시상태라면
+        if($('#id').val() !== ""){
+            $('#checkId').attr("checked",true);
+        }
+    });
+    //2) 체크박스 변화가 있다면
+    $('#checkId').change(function(){
+        if($('#checkId').is(':checked')){
+            //ID 저장 체크할 때
+            setCookie("key",$('#id').val(),3)       //3일간 쿠키 보관하기
+        } else{
+            deleteCookie("key");
+        }
+    });
+    //3) ID 저장하기 체크되어있는 상태에서 ID를 새로 입력하는 경우 --> 이때도 쿠키 저장
+    $('#id').keyup(function(){  //id칸에 id 입력할 때
+        if($('#checkId').is(':checked')){   //id 체크박스가 체크상태라면
+            setCookie("key",$('#id').val(),3);  //3일간 쿠키 보관
+        }
+    });
+
+    //4) 쿠키 가져오기
+    function getCookie(cookieName){
+        cookieName = cookieName + '=';
+        let cookieData = document.cookie;   //브라우저에서 쿠키 접근
+        let start = cookieData.indexOf(cookieName); // 'key='의 시작 위치 반환
+        let cookieValue = '';
+        if(start !== -1){
+            //쿠키가 존재하면    (cf.-1:쿠키 존재안함)
+            start += cookieName.length;
+            let end = cookieData.indexOf(';',start);
+            if(end === -1) {    //쿠키값의 마지막 위치 인덱스번호 설정
+                end = cookieData.length;
+            }
+            cookieValue = cookieData.substring(start,end);
+        }
+        return unescape(cookieValue);   //unescape함수: 특수문자가 포함되어 escape로 변환했던 문자열을 original로 변경해주기 위해 사용하는 함수
+    }
+    //5) 쿠키 저장하기
+    function setCookie(cookieName, value, fordays){
+        //setCookie ==> daveid 함수에서 넘겨준 시간을 현재시간과 비교해서 쿠키를 생성하고 지워주는 역할을 하는 함수
+        let exdate = new Date();
+        exdate.setDate(exdate.getDate() + fordays);
+        let cookieValue = escape(value) + "; expires =" +exdate.toUTCString();  //id에 특수문자가 포함되어있을 수도 있으므로 escape 함수 사용
+        document.cookie = cookieName + '=' + cookieValue;
+    }
+    //6) 쿠키 삭제
+    function deleteCookie(cookieName){
+        let expireDate = new Date();
+        expireDate.setDate(expireDate.getDate()-1);
+        document.cookie = cookieName + '=; expires = ' + expireDate.toUTCString();
+    }
+
+
 
 </script>
+<script src="/static/js/todolist.js"></script>
+<!-- endinject -->
 </body>
 
 </html>
