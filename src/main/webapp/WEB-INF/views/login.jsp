@@ -144,9 +144,10 @@
     //2) 체크박스 변화가 있다면
     $('#checkId').change(function(){
         if($('#checkId').is(':checked')){
-            //ID 저장 체크할 때
+            //저장 체크할 때
             setCookie("key",$('#id').val(),3)       //3일간 쿠키 보관하기
         } else{
+            //체크 해제시 cookie 지워줘야함 -> 쿠키는 특정 키워드에 덮어씌워지는게 아니라 중복으로 서술됨 ex. user=A; user=B; user=C ......
             deleteCookie("key");
         }
     });
