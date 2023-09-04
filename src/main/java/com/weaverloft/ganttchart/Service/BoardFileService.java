@@ -10,4 +10,6 @@ public interface BoardFileService {
     List<BoardFile> findByBoardNo(int boardNo) throws Exception;
     //3. 파일번호로 파일 찾기
     BoardFile findFileByNo(int fileNo) throws Exception;
+    //4. 파일번호로 파일 삭제
+    int deleteFile(int fileNo) throws Exception;
 }

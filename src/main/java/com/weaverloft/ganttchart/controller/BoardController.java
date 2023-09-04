@@ -23,10 +23,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/board/*")
@@ -90,12 +88,14 @@ public class BoardController {
             Users loginUsers =(Users)session.getAttribute("loginUser");
             int result = boardService.updateBoardReadcount(boardNo);
             Board board = boardService.findByBoardNo(boardNo);
+            Users boardWriter = usersService.findUsersById(board.getId());
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
             List<Comments> commentsList = commentsService.findCommentsByBoardNo(boardNo);
             if(board!=null){
                 model.addAttribute("board", board);
                 model.addAttribute("boardFileList",boardFileList);
                 model.addAttribute("commentsList", commentsList);
+                model.addAttribute("boardWriter",boardWriter);
                 forwardPath ="/board/detail";
             }
             //수정 삭제 권한 붙이기
@@ -136,7 +136,7 @@ public class BoardController {
     @LoginCheck
     @ResponseBody
     @PostMapping("/register-ajax")
-    public Map<String,Object> boardCreateAjax(@RequestParam Map<String ,Object> map, @RequestParam("fileArray") List<MultipartFile> boardFileList, HttpSession session){
+    public Map<String,Object> boardCreateAjax(@RequestParam Map<String ,Object> map, @RequestParam(value = "fileArray",required = false) List<MultipartFile> boardFileList, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
@@ -146,7 +146,7 @@ public class BoardController {
         try{
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurKey();
-            if(boardFileList.get(0).getSize() != 0){
+            if(boardFileList != null){
                 String filePath = "C:\\gantt\\upload\\board\\"; //하드코딩 안하면 어디에
                 for(MultipartFile boardFile : boardFileList){
                     String originalFileName = boardFile.getOriginalFilename();
@@ -219,10 +219,22 @@ public class BoardController {
         Board board = new Board(boardNo,(String)map.get("boardTitle"),(String)map.get("boardContent"),new Date(),"",0);
         try{
             int result = boardService.updateBoard(board);
+            //기존 파일번호리스트 불러와서 대조하여 삭제
+            List<BoardFile> fileList = boardFileService.findByBoardNo(boardNo);
+            System.out.println("fileList = " + fileList);
+            String fileNoArrStr = (String)map.get("fileNoList");
+            String[] fileNoStrArr = fileNoArrStr.split(",");
+            int[] fileNoArr = Arrays.stream(fileNoStrArr).mapToInt(Integer::parseInt).toArray();
+            for(int i =0 ; i<fileList.size();i++){
+                int no = fileList.get(i).getFileNo();
+                if(!IntStream.of(fileNoArr).anyMatch(x -> x == no)){ //fileList에 들은 fileNo가 array에 없으면 삭제
+                    boardFileService.deleteFile(no);
+                }
+            }
             if(boardFileList != null){
                 String filePath = "C:\\gantt\\upload\\board\\";
                 for(MultipartFile boardFile : boardFileList){
-                    String originalFileName = boardFile.getName();
+                    String originalFileName = boardFile.getOriginalFilename();
                     String saveFileName = fileService.uploadFile(boardFile,filePath);
                     long fileSize = boardFile.getSize();
                     BoardFile file = new BoardFile(0,saveFileName,originalFileName,filePath,fileSize,boardNo);

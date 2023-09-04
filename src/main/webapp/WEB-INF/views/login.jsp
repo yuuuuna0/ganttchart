@@ -50,7 +50,7 @@
                             <div class="my-2 d-flex justify-content-between align-items-center">
                                 <div class="form-check">
                                     <label class="form-check-label text-muted">
-                                        <input type="checkbox" class="form-check-input">
+                                        <input type="checkbox" class="form-check-input" id= "checkId" name="checkId">
                                         Keep me signed in
                                     </label>
                                 </div>
@@ -132,6 +132,9 @@
             }
         });
     }
+
+    //2. 쿠키로 아이디 기억하기
+
 </script>
 </body>
 

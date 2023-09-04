@@ -28,4 +28,9 @@ public class BoardFileServiceImpl implements BoardFileService {
     public BoardFile findFileByNo(int fileNo) throws Exception {
         return boardFileDao.findFileByNo(fileNo);
     }
+
+    @Override
+    public int deleteFile(int fileNo)  throws Exception{
+        return boardFileDao.deleteFile(fileNo);
+    }
 }

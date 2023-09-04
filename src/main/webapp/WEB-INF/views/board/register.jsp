@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="row">
@@ -57,7 +59,7 @@
         for(let i=0;i<fileArray.length;i++){
             html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
                 + fileArray[i].name
-                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
+                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/></span>'
                 + '</div>';
         }
         $('#fileList').append(html);
@@ -133,12 +135,9 @@
             processData : false,
             data : formData,
             success : function (resultMap) {
-                console.log('TEST');
                 if(resultMap.code === 1){
-                    console.log("코드1번");
                     window.location.href=resultMap.forwardPath;
                 } else {
-                    console.log("토드2");
                     alert(resultMap.msg);
                 }
             },

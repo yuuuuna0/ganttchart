@@ -28,4 +28,9 @@ public class BoardFileDaoImpl implements BoardFileDao {
     public BoardFile findFileByNo(int fileNo) throws Exception {
         return boardFileMapper.findFileByNo(fileNo);
     }
+
+    @Override
+    public int deleteFile(int fileNo) throws Exception{
+        return boardFileMapper.deleteFile(fileNo);
+    }
 }

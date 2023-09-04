@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
@@ -27,16 +28,20 @@
                                     <div class="form-group">
                                         <label for="fileList">첨부파일</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                         <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
-                                        <input type="file" id="boardFileList" name="boardFileList" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                                        <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
                                         <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                         <div class="input-group col-xs-12">
-                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
+                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >
                                                 <c:forEach items="${boardFileList}" var="boardFile" varStatus="i">
-                                                    <div id="file${boardFile.fileNo}" style="font-size:12px;" onclick="deleteFile(${i.index})">
+                                                    <div class="file" id="file${boardFile.fileNo}" style="font-size:12px;">
                                                             ${boardFile.originalFileName}
-                                                        <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" />
+                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${boardFile.fileSize/1000}" integerOnly="true" /> kb</span>
+                                                                <span>
+                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${boardFile.fileNo})" /></span>
                                                     </div>
                                                 </c:forEach>
+                                                <div id="fileList" >
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -79,6 +84,7 @@
     //1. 파일추가
     function addFile(){
         //1.파일 갯수 확인
+        fileCount = $('.file').length;
         fileArray2 = $('#boardFileList')[0].files;
         console.log('fileArray2 : ' + fileArray2);
         if(fileCount + fileArray2.length > maxCount){
@@ -95,27 +101,13 @@
         fileArray2 = [];
         changeView();
     }
-    //3. input file에 원래 파일들 담아주기
+    //3. 뷰단에서 x 클릭한 파일 div 없애주기
+    function deleteFileDiv(no){
+        $('#file'+no).remove();
+    }
 
-
-
-    //2. 파일 삭제 --> 실제 파일 관리가 아니라 view쪽 다뤄보기
+    //2. 파일 삭제
     function deleteFile(no){
-        $('#fileList').empty();
-        let html = '';
-        for(let i=0;i<fileArray.length;i++){
-            html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
-                + fileArray[i].name
-                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/>'
-                + '</div>';
-        }
-        $('#fileList').append(html);
-
-
-
-        fileArray = $('#boardFileList')[0].files;
-
-        console.log(fileArray);
         for(let i=0 ; i<fileArray.length ; i++){
             fileArray2.push(fileArray[i]);
         }
@@ -129,12 +121,23 @@
         changeView();
     }
 
-    //3. 게시글 작성
+    //3. 게시글 수정
+    // --> 기존파일: 남아있는 파일 이름보내서 원래 파일에 있는지 없는지 보고 매칭해서 없으면 삭제
+    // 새롭게 추가된 파일들은 input태그에 담겨있으니까 formdata에 담겨서 전달되는것!!
     function modifyBoard(no) {
         let boardTitle = document.getElementById("boardTitle").value;
         let boardContent = document.getElementById("boardContent").value;
         let boardNo = no;
         let formData = new FormData;
+
+        //껍데기만 가진 파일번호 리스트
+        let fileNoList = [];
+        let fileNameList = $('.file');
+        for(let i=0;i<fileNameList.length;i++){
+            let fileNo = fileNameList[i].id.replace(/[^0-9]/g, ""); //기존에 있던 파일 번호
+            fileNoList.push(fileNo);
+        }
+
         if(boardTitle === ''){
             alert("제목을 입력하세요");
             document.getElementById("boardTitle").focus();
@@ -149,6 +152,8 @@
         formData.append("boardTitle",boardTitle);
         formData.append("boardContent",boardContent);
         formData.append("boardNo",boardNo);
+        formData.append("fileNoList",fileNoList);
+
         //파일리스트 폼에 하나씩 붙여줘야 함
         for (let i = 0; i < fileArray.length; i++) {
             console.log("file : " + fileArray[i]);
@@ -160,6 +165,7 @@
             enctype: 'multipart/form-data',
             contentType : false,
             processData : false,
+            traditional: true,  //원래 배열 보낼  때 쓰는데 배열  안넘어감
             data : formData,
             success : function (resultMap) {
                 console.log('TEST');

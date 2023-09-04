@@ -17,20 +17,40 @@
                     <input type="hidden" value="${board.boardNo}" id="boardNo">
                     <div class="card-body">
                         <h4 class="card-title">게시글 상세보기</h4>
-                        <div class="form-group">
+                        <div class="form-group row">
+                            <div class="col-6">
                             <label for="boardTitle">제목</label>
-                            <input type="text" class="form-control" id="boardTitle" name="boardTitle"
+                            <input type="text" style="width: 50%" class="form-control" id="boardTitle" name="boardTitle"
                                    value="${board.boardTitle}" disabled>
+                            </div>
+                            <div class="col-6">
+                                <label for="readCount">조회수</label>
+                                <input style="width: 50%; " type="text" class="form-control" id="readCount" name="readCount"
+                                       value="${board.boardReadcount}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row" >
+                            <div class="col-6">
+                            <label for="name">작성자</label>
+                            <input style="width: 50%" type="text" class="form-control" id="name" name="name"
+                                   value="${boardWriter.name}" disabled>
+                            </div>
+                            <div class="col-6">
+                            <label for="date">작성일</label>
+                            <input style="width: 50% ;" type="text" class="form-control" id="date" name="date"
+                                   value="<fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/>" disabled>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="boardContent">내용</label>
-                            <textarea class="form-control" id="boardContent" name="boardContent" rows="4"
+                            <textarea style="width: 76%;" class="form-control" id="boardContent" name="boardContent" rows="4"
                                       disabled>${board.boardContent}</textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group row">
+                            <div class="col-5">
                             <label for="fileList">첨부파일</label>
                             <div class="input-group col-xs-12">
-                                <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;"
+                                <div style="width: 100%; height: auto; padding: 10px; overflow: auto; border: 1px solid #989898;"
                                      id="fileList">
                                     <c:forEach items="${boardFileList}" var="boardFile">
                                         <div id="file'+ fileNo + '" style="font-size:12px;">
@@ -44,21 +64,23 @@
                                     </c:forEach>
                                 </div>
                             </div>
-<%--                            <c:if test="${privilege}">--%>
-                            <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.id == board.id}">
-                                <div style="text-align: right">
-                                    <input type="button" id="boardCreateBtn" name="boardCreateBtn"
-                                           class="btn btn-primary mr-2"
-                                           onclick="location.href='/board/modify/${board.boardNo}'" value="수정">
-                                    <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
-                                           onclick="location.href='/board/delete-action/${board.boardNo}'" value="삭제">
-                                </div>
-                            </c:if>
+                            </div>
+                            <div class="col-4" style="text-align: right; text-align: end">
+                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.id == board.id}">
+                                        <input type="button" id="boardCreateBtn" name="boardCreateBtn"
+                                               class="btn btn-primary mr-2"
+                                               onclick="location.href='/board/modify/${board.boardNo}'" value="수정">
+                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
+                                               onclick="location.href='/board/delete-action/${board.boardNo}'" value="삭제">
+                                    </c:if>
+                                    <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
+                                           onclick="location.href='/board/list'" value="목록으로">
+                            </div>
                         </div>
                     </div>
                     <hr>
                     <!-- 댓글 시작 -->
-                    <div class="card-body">
+                    <div class="card-body" style="padding-top: 0;">
                         <!-- 1. 댓글 목록-->
                         <div class="comment-group">
                             <div  id="commentListDiv">
@@ -108,8 +130,6 @@
                             </div>
                         </div>
 
-
-                        <hr>
 
                             <!-- 작성폼 -->
                             <label id="msgLabel"></label>

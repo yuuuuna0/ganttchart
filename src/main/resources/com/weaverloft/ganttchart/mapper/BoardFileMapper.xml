@@ -11,11 +11,15 @@
     </insert>
     <!-- 2. 게시글 번호로 파일 리스트 찾기 -->
     <select id="findByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.BoardFile">
-        select * from BOARD_FILE where BOARD_NO=#{boardNo}
+        select * from BOARD_FILE where BOARD_NO=#{boardNo} order by FILE_NO asc
     </select>
 <!--    3. 파일번호로 파일 찾기-->
     <select id="findFileByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.BoardFile">
         select * from BOARD_FILE where FILE_NO = #{fileNo}
     </select>
+<!--    4. 파일번호로 파일 삭제-->
+    <delete id="deleteFile" parameterType="java.lang.Integer">
+        delete BOARD_FILE where FILE_NO = #{fileNo}
+    </delete>
 
 </mapper>
