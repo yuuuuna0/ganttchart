@@ -73,6 +73,7 @@ public class UsersServiceImpl implements UsersService {
             result = false;
         }
         if (!password.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$")) {
+            //정규표현식에 대해서 이해하기
             msg = "비밀번호는 영문자, 숫자, 특수문자를 모두 포함해야 합니다.";
             result = false;
         }
