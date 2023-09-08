@@ -124,13 +124,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- JSON -->
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <!-- @Inject -->
+        <!-- @Inject : 객체 주입 annotation 사용하기 위한-->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
