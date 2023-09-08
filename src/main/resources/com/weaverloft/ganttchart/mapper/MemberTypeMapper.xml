@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.MemberTypeMapper">
+<!--    1. 회원 등급 생성-->
+<!--    <insert id="createMemberType" parameterType="com.weaverloft.ganttchart.dto.MemberType">-->
+<!--        <selectKey resultType="java.lang.Integer" keyProperty="mTypeNo" order="BEFORE">-->
+<!--            select MEMBERTYPE_M_TYPE_NO_SEQ.nextval from dual-->
+<!--        </selectKey>-->
+<!--        insert into MEMBERTYPE(m_type_no, m_type)-->
+<!--        VALUES(#{mTypeNo},#{mType})-->
+<!--    </insert>-->
+<!--    2. 회원 등급 조회-->
+    <select id="findMemberTypeByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.MemberType">
+        select M_TYPE
+        from MEMBERTYPE
+        where M_TYPE_NO = #{mTypeNo}
+    </select>
+<!--    3. 회원 등급이름 수정-->
+    <update id="updateMemberType" parameterType="com.weaverloft.ganttchart.dto.MemberType">
+        update MEMBERTYPE
+        set M_TYPE=#{mType}
+        where M_TYPE_NO=#{mTypeNo}
+    </update>
+<!--    4. 회원 등급 삭제-->
+    <delete id="deleteMemberType" parameterType="java.lang.Integer">
+        delete MEMBERTYPE
+        where M_TYPE_NO=#{mTypeNo}
+    </delete>
+</mapper>

@@ -1,19 +1,20 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.controller.Interceptor.AdminCheck;
 import com.weaverloft.ganttchart.controller.Interceptor.LoginCheck;
+import com.weaverloft.ganttchart.dto.Member;
+import com.weaverloft.ganttchart.dto.Ufile;
 import com.weaverloft.ganttchart.dto.Users;
-import com.weaverloft.ganttchart.util.PageMaker;
+import com.weaverloft.ganttchart.util.MailService;
 import com.weaverloft.ganttchart.util.PageMakerDto;
-import org.springframework.security.core.parameters.P;
+import com.weaverloft.ganttchart.util.Sha256Service;
+import com.weaverloft.ganttchart.util.UploadFileService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,9 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
-public class UsersController {
+@RequestMapping("/member/*")
+public class MemberController {
+    /****************기존*******************/
     private UsersService usersService;
     private SHA256Service sha256Service;
     private EmailService emailService;
@@ -29,14 +32,24 @@ public class UsersController {
     private UsersLogService usersLogService;
     private ExcelService excelService;
     private MenuService menuService;
+    /******************************************/
+    private MemberService memberService;
+    private UfileService ufileService;
+    private MailService mailService;
+    private UploadFileService uploadFileService;
 
-    public UsersController(UsersService usersService,
-                           SHA256Service sha256Service,
-                           EmailService emailService,
-                           FileService fileService,
-                           UsersLogService usersLogService,
-                           ExcelService excelService,
-                           MenuService menuService) {
+
+    public MemberController(UsersService usersService,
+                            SHA256Service sha256Service,
+                            EmailService emailService,
+                            FileService fileService,
+                            UsersLogService usersLogService,
+                            ExcelService excelService,
+                            MenuService menuService,
+                            MemberService memberService,
+                            UfileService ufileService,
+                            MailService mailService,
+                            UploadFileService uploadFileService) {
         this.usersService = usersService;
         this.sha256Service = sha256Service;
         this.emailService = emailService;
@@ -44,86 +57,146 @@ public class UsersController {
         this.usersLogService = usersLogService;
         this.excelService = excelService;
         this.menuService = menuService;
+        this.memberService = memberService;
+        this.ufileService = ufileService;
+        this.mailService = mailService;
+        this.uploadFileService = uploadFileService;
     }
     //1-1. 회원가입 페이지
-    @GetMapping("/user/register")
+    @GetMapping("/register")
     public String register(Model model){
-        try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
         return "/user/register";
     }
     //1-2. 아이디 중복확인
     @ResponseBody
-    @PostMapping("/user/idCheck-ajax")
-    public int idCheckAjax(@RequestParam String id){
-        int idCount = 0;
+    @RequestMapping("/idCheck-ajax")
+    public Map<String,Object> idCheckAjax(@RequestParam String id){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code =0;
+        String msg = "";
         try{
-            idCount = usersService.isExistedId(id);
+            if(memberService.findMemberById(id) == null){
+                //존재하지 않으면
+                code = 1;
+                msg = "사용 가능한 아이디입니다.";
+            } else{
+                code = 2;
+                msg = "이미 존재하는 아이디입니다.";
+            }
         } catch (Exception e){
             e.printStackTrace();
+            code = 99;
+            msg = "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.";
         }
-        return idCount;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        System.out.println("resultMap = " + resultMap);
+        return resultMap;
     }
 
+
     //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
-    @PostMapping(value = "/user/register-action")
-    public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
-        String forwardPath = "";
+    @PostMapping("/register-ajax")
+    @ResponseBody
+    public Map<String,Object> registerMemberAjax(Member member, MultipartFile mf){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
         String msg = "";
-        MultipartFile originalFile = multipartFile.getFile("photoFile");
-        try {
-            if (usersService.findUsersById(users.getId())!=null) {
-                //1) 아이디 중복 확인
+        String forwardPath = "";
+        try{
+            System.out.println("member = " + member);
+            //1) 아이디 중복확인
+            if(memberService.findMemberById(member.getMId())!= null){
                 System.out.println("이미 존재하는 아이디입니다.");
-                forwardPath = "redirect:/login";
-                return forwardPath;
+                code = 2;
+                msg = "이미 존재하는 아이디입니다."; //--> 만일 중복검사 후에 아이디 변경하게 되면 다시 검사하는 방법은?
             }
-            if(!(boolean)usersService.isValidPassword(users.getPassword()).get("result")){
-                //2) 비밀번호 정규식 체크
-                msg = (String)usersService.isValidPassword(users.getPassword()).get("msg");
-                forwardPath ="redirect:/register";
-                return forwardPath;
+            //2) 비밀번호 정규식 체크
+            Map<String,Object> passwordMap = memberService.isValidPassword(member.getMPassword());
+            if(!(boolean)passwordMap.get("result")){
+                msg = (String)passwordMap.get("msg");
+                code=2;
+                System.out.println(msg);
             }
             //3) 비밀번호 암호화
-            String encryptPassword = sha256Service.encrypt(users.getPassword());
-            users.setPassword(encryptPassword);
-            //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
-            int authKey = emailService.sendAuthEmail(users.getEmail());
-            String authKeyStr = Integer.toString(authKey);
-            users.setAuthKey(authKeyStr);
-            //5) 파일 업로드
-            if(!originalFile.getOriginalFilename().equals("")){
-                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
-                String saveFileName = fileService.uploadFile(originalFile,filePath);
-                users.setFilePath(filePath);
-                users.setSaveFileName(saveFileName);
-                users.setOriginalFileName(originalFile.getOriginalFilename());
-                System.out.println("사진 있다");
-            } else{
-                //이거 안해줘도 되는지?
-                users.setFilePath(null);
-                users.setSaveFileName(null);
-                users.setOriginalFileName(null);
+            String encPassword = sha256Service.encrypt(member.getMPassword());
+            member.setMPassword(encPassword);
+            //4) 인증메일 보내기
+            String mAuthCode = mailService.sendMail(member.getMEmail(),1);
+            //5) 파일 업로드 --> 확장자 검사 필요
+            if(mf !=null && !mf.getOriginalFilename().equals("")){
+                Ufile profileFile = uploadFileService.uploadFile(mf,1);
+                profileFile.setMId(member.getMId());
+                ufileService.createUfile(profileFile);
             }
-            //6) 회원가입 완료
-            users.setGrade(1);
-            int result = usersService.createUsers(users);
-            //7) 회원가입 로그 추가
-            String id= users.getId();
-            System.out.println(id);
-            usersLogService.createLog(id,0);    //가입완료 로그:0 남기기
-            forwardPath = "redirect:/login";
+            //6) 회원가입완료
+            member.setMStatusNo(0);
+            memberService.createMember(member);
+            //7) 로그 추가 ---> 아직 안함
+
         } catch (Exception e){
             e.printStackTrace();
+            code = 99;
+            msg = "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.";
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
+
+//    @PostMapping(value = "/register-action")
+//    public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
+//        String forwardPath = "";
+//        String msg = "";
+//        MultipartFile originalFile = multipartFile.getFile("photoFile");
+//        try {
+//            if (usersService.findUsersById(users.getId())!=null) {
+//                //1) 아이디 중복 확인
+//                System.out.println("이미 존재하는 아이디입니다.");
+//                forwardPath = "redirect:/login";
+//                return forwardPath;
+//            }
+//            if(!(boolean)usersService.isValidPassword(users.getPassword()).get("result")){
+//                //2) 비밀번호 정규식 체크
+//                msg = (String)usersService.isValidPassword(users.getPassword()).get("msg");
+//                forwardPath ="redirect:/register";
+//                return forwardPath;
+//            }
+//            //3) 비밀번호 암호화
+//            String encryptPassword = sha256Service.encrypt(users.getPassword());
+//            users.setPassword(encryptPassword);
+//            //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
+//            int authKey = emailService.sendAuthEmail(users.getEmail());
+//            String authKeyStr = Integer.toString(authKey);
+//            users.setAuthKey(authKeyStr);
+//            //5) 파일 업로드
+//            if(!originalFile.getOriginalFilename().equals("")){
+//                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
+//                String saveFileName = fileService.uploadFile(originalFile,filePath);
+//                users.setFilePath(filePath);
+//                users.setSaveFileName(saveFileName);
+//                users.setOriginalFileName(originalFile.getOriginalFilename());
+//                System.out.println("사진 있다");
+//            } else{
+//                //이거 안해줘도 되는지?
+//                users.setFilePath(null);
+//                users.setSaveFileName(null);
+//                users.setOriginalFileName(null);
+//            }
+//            //6) 회원가입 완료
+//            users.setGrade(1);
+//            int result = usersService.createUsers(users);
+//            //7) 회원가입 로그 추가
+//            String id= users.getId();
+//            System.out.println(id);
+//            usersLogService.createLog(id,0);    //가입완료 로그:0 남기기
+//            forwardPath = "redirect:/login";
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return forwardPath;
+//    }
 
     //2-1. 로그인 페이지 --> 완료
     @GetMapping("/login")

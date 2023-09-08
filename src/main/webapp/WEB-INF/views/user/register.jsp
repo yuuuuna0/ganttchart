@@ -31,19 +31,17 @@
                                         </div>
                                         <div class="col-3 mt-4">
                                             <label></label>
-                                            <input type="button" value="중복확인" onclick="validateId()"
+                                            <input type="button" val()="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
                                         </div>
-<%--                                        <c:if test="${sessionScope.loginUser.grade == 0}">--%>
-<%--                                        <div class="col-3">--%>
-<%--                                            <label for="grade">회원 등급</label><span style="color: red;">*</span>--%>
-<%--                                            <select class="form-control" id="grade" name="grade">--%>
-<%--                                                <option disabled selected></option>--%>
-<%--                                                <option value="0">관리자</option>--%>
-<%--                                                <option value="1">일반회원</option>--%>
-<%--                                            </select>--%>
-<%--                                        </div>--%>
-<%--                                        </c:if>--%>
+                                        <div class="col-3">
+                                            <label for="grade">권한</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="grade" name="grade">
+                                                <option disabled selected></option>
+                                                <option value="1">일반회원</option>
+                                                <option value="2">판매자</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
@@ -133,11 +131,6 @@
             }).open();
         })
     };
-    // //2. birth -> datepicker 이용
-    // window.onload = function () {
-    //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
-    // };
-
     //3. 파일 업로드시 이미지 보여주기
     function uploadPhoto(input){
         if(input.files && input.files[0]){
@@ -169,24 +162,22 @@
             $('#id').focus();
             return false;
         }
-        console.log("아이디 정규식체크 확인완료");
-
         $.ajax({
-            url : '/user/idCheck-ajax',
+            url : '/member/idCheck-ajax',
             method : 'POST',
             data : {
                 'id' : id
             },
-            success : function(idCount){
-                console.log(idCount);
-                if(idCount === 1){
-                    alert("중복된 아이디입니다.");
-                    $('#id').val('');
-                    return false;
-                } else{
+            success : function(resultJson){
+                console.log(resultJson);
+                if(resultJson.code === 1){
                     alert("사용할 수 있는 아이디입니다");
                     $('#id').value = id;
                     vId=1;
+                } else{
+                    alert("중복된 아이디입니다.");
+                    $('#id').val('');
+                    return false;
                 }
             },
             error :function (e) {
@@ -196,18 +187,19 @@
         });
     }
 
+
     function createUser() {
-        var id = document.getElementById("id").value;
-        var name = document.getElementById("name").value;
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
-        var phone = document.getElementById("phone").value;
-        var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
-        $('#address').val(address);
-        let gender = $('#gender option:selected').val();
-        // let grade = $('#grade option:selected').val();
-        var birth = document.getElementById("birth").value;
+        var mIdd = $('#id').val();
+        var mName = $('#name').val();
+        var mEmail = $('#email').val();
+        var mPassword = $('#password').val();
+        var mConfirmPassword = $('#confirmPassword').val();
+        var mPhone = $('#phone').val();
+        let mAddr = $('#address').val();
+        let mAddr2 = $('#detailedAddress').val();
+        let mGender = $('#gender option:selected').val();
+        let mTypeNo = $('#grade option:selected').val();
+        let mBirth = $('#birth').val();
 
         /**************************** 유효성 검사 ****************************************/
         if (vId === 0){
@@ -215,57 +207,50 @@
             return false;
         }
         //1) 비밀번호 정규식 검사
-        if (password === '') {
+        if (mPassword === '') {
             alert("비밀번호를 입력하세요");
-            document.getElementById("password").focus();
+            $('#password').focus();
             return false;
         }
-        if(password.match(/\s/g) || !password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$/)){
-            alert("비밀번호 형식에 맞게 작성해주세요");
-            $('#password').val('');
-            $('#confirmPassword').val('');
-            document.getElementById("password").focus();
-            return false;
-        }
-        if (confirmPassword === '') {
+        if (mConfirmPassword === '') {
             alert("비밀번호 확인을 입력하세요");
-            document.getElementById("confirmPassword").focus();
+            $('#confirmPassword').focus();
             return false;
         }
-        if (name === '') {
+        if (mName === '') {
             alert("이름을 입력하세요");
-            document.getElementById("name").focus();
+            $('#name').focus();
             return false;
         }
-        if (email === '') {
+        if (mEmail === '') {
             alert("이메일을 입력하세요");
-            document.getElementById("email").focus();
+            $('#email').focus();
             return false;
         }
-        if (!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
+        if (!mEmail.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
             alert("이메일형식에 맞게 작성해주세요");
             $('#email').val('');
-            document.getElementById("email").focus();
+            $('#email').focus();
             return false;
         }
-        // if (grade === '') {
-        //     alert("회원등급을 선택하세요");
-        //     return false;
-        // }
-        if (gender === '') {
+        if (mTypeNo === '') {
+            alert("권한을 선택하세요");
+            return false;
+        }
+        if (mGender === '') {
             alert("성별을 선택하세요");
             return false;
         }
-        if (password !== confirmPassword) {
+        if (mPassword !== mConfirmPassword) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             $('#password').val('');
             $('#confirmPassword').val('');
-            document.getElementById("confirmPassword").focus();
+            $('#confirmPassword').focus();
             return false;
         }
 
         document.registerF.method = 'POST';
-        document.registerF.action = '/user/register-action';
+        document.registerF.action = '/member/register-action';
         document.registerF.submit();
 
     }

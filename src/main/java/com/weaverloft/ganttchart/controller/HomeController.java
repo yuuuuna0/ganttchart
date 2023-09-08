@@ -42,7 +42,7 @@ public class HomeController {
         String forward = "";
         String keyword =null;
         try{
-            forward = "redirect:/login";
+            forward = "/user/register";
         } catch (Exception e){
             e.printStackTrace();
         }

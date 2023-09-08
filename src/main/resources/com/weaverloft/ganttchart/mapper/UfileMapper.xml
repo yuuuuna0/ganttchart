@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.UfileMapper">
+<!--파일 DB에 넣기 -->
+<!--1-1. 프로필 넣기    -->
+    <insert id="createMIdUfile" parameterType="com.weaverloft.ganttchart.dto.Ufile">
+        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">
+            select UFILE_UFILE_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, ufile_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)
+        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{ufilePath},#{ufileExt},#{ufileTypeNo},0,#{mId},#{gathNo},#{reviewNo})
+    </insert>
+<!--&lt;!&ndash;1-2. 모임사진 넣기    &ndash;&gt;-->
+<!--    <insert id="createGathUFile" parameterType="com.weaverloft.ganttchart.dto.Ufile">-->
+<!--        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">-->
+<!--            select UFILE_UFILE_NO_SEQ.nextval from dual-->
+<!--        </selectKey>-->
+<!--        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, save_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)-->
+<!--        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{savePath},#{ufileExt},2,0,#{mId},#{gathNo},0)-->
+<!--    </insert>-->
+<!--&lt;!&ndash;1-3. 후기사진 넣기    &ndash;&gt;-->
+<!--    <insert id="createReviewUFile" parameterType="com.weaverloft.ganttchart.dto.Ufile">-->
+<!--        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">-->
+<!--            select UFILE_UFILE_NO_SEQ.nextval from dual-->
+<!--        </selectKey>-->
+<!--        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, save_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)-->
+<!--        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{savePath},#{ufileExt},3,0,#{mId},0,#{reviewNo})-->
+<!--    </insert>-->
+
+<!--2. 파일 사용 비활성하기    -->
+    <update id="updateUfileToNotUse" parameterType="java.util.Map">
+        update UFILE set IS_USE=1 where UFILE_NO=#{ufileNo}
+    </update>
+<!--3. 파일 완전 삭제하기    -->
+    <delete id="deleteUfile" parameterType="java.lang.Integer">
+        delete UFILE where UFILE_NO=#{ufileNo}
+    </delete>
+
+<!--4. 사진 가져오기    -->
+<!--4-1. 회원 프사 가져오기    -->
+    <select id="findUfileById" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Ufile">
+        select * from UFILE where 1=1
+        <if test="ufileTypeNo == 1">
+            and M_ID=#{mId}
+        </if>
+        <if test="ufileTypeNo == 2">
+            and GATH_NO=#{no}
+        </if>
+        <if test="ufileTypeNo == 3">
+            and REVIEW_NO=#{no}
+        </if>
+            and IS_USE=0
+    </select>
+<!--&lt;!&ndash;4-2. 모임사진리스트 가져오기    &ndash;&gt;-->
+<!--    <select id="findUfileListByGathNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Ufile">-->
+<!--        select * from UFILE where GATH_NO=#{gathNo} and UFILE_TYPE_NO=2 and IS_USE=0-->
+<!--    </select>-->
+<!--&lt;!&ndash;4-3. 후기사진리스트 가져오기    &ndash;&gt;-->
+<!--    <select id="findUfileListByReviewNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Ufile">-->
+<!--        select * from UFILE where REVIEW_NO=#{reviewNo} and UFILE_TYPE_NO=3 and IS_USE=0-->
+<!--    </select>-->
+
+<!-- 5. 파일저장경로 가져오기-->
+    <select id="findUfilePath" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select UFILE_PATH from UFILETYPE where UFILE_TYPE_NO=#{ufileTypeNo}
+    </select>
+</mapper>
