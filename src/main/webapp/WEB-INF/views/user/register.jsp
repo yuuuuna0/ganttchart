@@ -31,12 +31,12 @@
                                         </div>
                                         <div class="col-3 mt-4">
                                             <label></label>
-                                            <input type="button" val()="중복확인" onclick="validateId()"
+                                            <input type="button" value="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
                                         </div>
                                         <div class="col-3">
-                                            <label for="grade">권한</label><span style="color: red;">*</span>
-                                            <select class="form-control" id="grade" name="grade">
+                                            <label for="mTypeNo">권한</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="mTypeNo" name="mTypeNo">
                                                 <option disabled selected></option>
                                                 <option value="1">일반회원</option>
                                                 <option value="2">판매자</option>
@@ -189,17 +189,16 @@
 
 
     function createUser() {
-        var mIdd = $('#id').val();
-        var mName = $('#name').val();
-        var mEmail = $('#email').val();
-        var mPassword = $('#password').val();
-        var mConfirmPassword = $('#confirmPassword').val();
-        var mPhone = $('#phone').val();
-        let mAddr = $('#address').val();
-        let mAddr2 = $('#detailedAddress').val();
+        let mId = $('#id').val();
+        let mName = $('#name').val();
+        let mEmail = $('#email').val();
+        let mPassword = $('#password').val();
+        let mConfirmPassword = $('#confirmPassword').val();
         let mGender = $('#gender option:selected').val();
         let mTypeNo = $('#grade option:selected').val();
-        let mBirth = $('#birth').val();
+
+        let form = $('#registerF')[0];
+        let formData = new FormData(form);
 
         /**************************** 유효성 검사 ****************************************/
         if (vId === 0){
@@ -243,16 +242,30 @@
         }
         if (mPassword !== mConfirmPassword) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            $('#password').val('');
+            $('#password').val('');zfval
             $('#confirmPassword').val('');
             $('#confirmPassword').focus();
             return false;
         }
 
-        document.registerF.method = 'POST';
-        document.registerF.action = '/member/register-action';
-        document.registerF.submit();
-
+        $.ajax({
+            url : '/member/register-ajax',
+            method : 'POST',
+            contentType : false,
+            processData : false,
+            data : formData,
+            success : function(resultJson){
+                console.log(resultJson);
+                if(resultJson.code === 1){
+                    window.location.href=resultJson.forwardPath;
+                } else {
+                    alert(resultJson.msg);
+                }
+            },
+            error : function(e){
+                console.log(e)
+            }
+        });
     }
 </script>
 

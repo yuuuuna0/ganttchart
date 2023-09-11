@@ -3,29 +3,29 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.UfileMapper">
 <!--파일 DB에 넣기 -->
 <!--1-1. 프로필 넣기    -->
-    <insert id="createMIdUfile" parameterType="com.weaverloft.ganttchart.dto.Ufile">
+    <insert id="createMUfile" parameterType="com.weaverloft.ganttchart.dto.Ufile">
         <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">
             select UFILE_UFILE_NO_SEQ.nextval from dual
         </selectKey>
-        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, ufile_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)
-        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{ufilePath},#{ufileExt},#{ufileTypeNo},0,#{mId},#{gathNo},#{reviewNo})
+        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)
+        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{ufileExt},#{ufileTypeNo},0,#{mId},0,0)
     </insert>
-<!--&lt;!&ndash;1-2. 모임사진 넣기    &ndash;&gt;-->
-<!--    <insert id="createGathUFile" parameterType="com.weaverloft.ganttchart.dto.Ufile">-->
-<!--        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">-->
-<!--            select UFILE_UFILE_NO_SEQ.nextval from dual-->
-<!--        </selectKey>-->
-<!--        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, save_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)-->
-<!--        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{savePath},#{ufileExt},2,0,#{mId},#{gathNo},0)-->
-<!--    </insert>-->
-<!--&lt;!&ndash;1-3. 후기사진 넣기    &ndash;&gt;-->
-<!--    <insert id="createReviewUFile" parameterType="com.weaverloft.ganttchart.dto.Ufile">-->
-<!--        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">-->
-<!--            select UFILE_UFILE_NO_SEQ.nextval from dual-->
-<!--        </selectKey>-->
-<!--        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, save_path, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)-->
-<!--        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{savePath},#{ufileExt},3,0,#{mId},0,#{reviewNo})-->
-<!--    </insert>-->
+<!--1-2. 모임사진 넣기    -->
+    <insert id="createGathUfile" parameterType="com.weaverloft.ganttchart.dto.Ufile">
+        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">
+            select UFILE_UFILE_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)
+        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{savePath},#{ufileExt},2,0,#{mId},#{gathNo},0)
+    </insert>
+<!--1-3. 후기사진 넣기    -->
+    <insert id="createReviewUfile" parameterType="com.weaverloft.ganttchart.dto.Ufile">
+        <selectKey resultType="java.lang.Integer" keyProperty="ufileNo" order="BEFORE">
+            select UFILE_UFILE_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into UFILE(ufile_no, save_ufile_name, original_ufile_name, ufile_ext, ufile_type_no, is_use, m_id, gath_no, review_no)
+        values (#{ufileNo},#{saveUfileName},#{originalUfileName},#{ufileExt},3,0,#{mId},0,#{reviewNo})
+    </insert>
 
 <!--2. 파일 사용 비활성하기    -->
     <update id="updateUfileToNotUse" parameterType="java.util.Map">
@@ -63,5 +63,9 @@
 <!-- 5. 파일저장경로 가져오기-->
     <select id="findUfilePath" parameterType="java.lang.Integer" resultType="java.lang.String">
         select UFILE_PATH from UFILETYPE where UFILE_TYPE_NO=#{ufileTypeNo}
+    </select>
+<!-- 6. 최근 파일 번호 가져오기   -->
+    <select id="findCurNo" resultType="java.lang.Integer">
+        select UFILE_UFILE_NO_SEQ.currval from UFILE
     </select>
 </mapper>

@@ -19,11 +19,12 @@ public class Member {
     private String mGender;
     private String mPhone;
     private Date mRegiDate;
-    private String mAdddr;
-    private String mAdddr2;
+    private Date mExDate;
+    private String mAddr;
+    private String mAddr2;
     private int mTypeNo;
     private int mStatusNo;
-    private int mUfileNo;
+    private int ufileNo;
     private String mAuthCode;
     private Date mBirth;
 }

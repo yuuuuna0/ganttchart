@@ -42,7 +42,7 @@ public class HomeController {
         String forward = "";
         String keyword =null;
         try{
-            forward = "/user/register";
+            forward = "/index";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -54,31 +54,31 @@ public class HomeController {
         String forward = "";
         String keyword =null;
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList",map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
-
-            //차트 붙이기
-                //1) 날짜리스트 붙이기
-            List<String> dateList = new ArrayList<>();
-            List<Integer> visitorCountList = new ArrayList<>();
-            List<Integer> newUserCountList = new ArrayList<>();
-            List<Integer> newBoardCountList = new ArrayList<>();
-            for(int i=0;i<7;i++){
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DAY_OF_MONTH,-(6-i));
-                visitorCountList.add(usersLogService.countPersonPerDay(10,calendar.getTime()));
-                newUserCountList.add(usersLogService.countPersonPerDay(0,calendar.getTime()));
-                newBoardCountList.add(boardService.countNewBoardPerDay(calendar.getTime())); //보드서비스
-                SimpleDateFormat format = new SimpleDateFormat("YYYY.MM.dd.");
-                dateList.add("'"+format.format(calendar.getTime())+"'");
-            }
-            System.out.println("newUserCountList = " + newUserCountList);
-            model.addAttribute("dateList",dateList);
-            model.addAttribute("visitorCountList",visitorCountList);
-            model.addAttribute("newUserCountList",newUserCountList);
-            model.addAttribute("newBoardCountList",newBoardCountList);
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList",map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
+//
+//            //차트 붙이기
+//                //1) 날짜리스트 붙이기
+//            List<String> dateList = new ArrayList<>();
+//            List<Integer> visitorCountList = new ArrayList<>();
+//            List<Integer> newUserCountList = new ArrayList<>();
+//            List<Integer> newBoardCountList = new ArrayList<>();
+//            for(int i=0;i<7;i++){
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.add(Calendar.DAY_OF_MONTH,-(6-i));
+//                visitorCountList.add(usersLogService.countPersonPerDay(10,calendar.getTime()));
+//                newUserCountList.add(usersLogService.countPersonPerDay(0,calendar.getTime()));
+//                newBoardCountList.add(boardService.countNewBoardPerDay(calendar.getTime())); //보드서비스
+//                SimpleDateFormat format = new SimpleDateFormat("YYYY.MM.dd.");
+//                dateList.add("'"+format.format(calendar.getTime())+"'");
+//            }
+//            System.out.println("newUserCountList = " + newUserCountList);
+//            model.addAttribute("dateList",dateList);
+//            model.addAttribute("visitorCountList",visitorCountList);
+//            model.addAttribute("newUserCountList",newUserCountList);
+//            model.addAttribute("newBoardCountList",newBoardCountList);
 
            //조회수 탑5 게시글 붙이기
             int no = 5;

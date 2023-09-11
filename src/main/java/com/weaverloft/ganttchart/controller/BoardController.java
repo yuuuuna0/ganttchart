@@ -55,10 +55,10 @@ public class BoardController {
                             Model model,HttpSession session) {
         String forwardPath="";
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             if(keyword.equals("")) keyword=null;
             List<Users> userList = usersService.findAllUsers();
@@ -80,10 +80,10 @@ public class BoardController {
     public String boardDetail(@PathVariable int boardNo,Model model,HttpSession session) {
         String forwardPath = "";
         try {
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             Users loginUsers =(Users)session.getAttribute("loginUser");
             int result = boardService.updateBoardReadcount(boardNo);
@@ -123,10 +123,10 @@ public class BoardController {
     @GetMapping("/register")
     public String boardCreate(Model model){
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -191,10 +191,10 @@ public class BoardController {
     public String modifyBoard(@PathVariable int boardNo, Model model){
         String fowardPath = "";
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
 
             List<BoardFile> boardFileList = boardFileService.findByBoardNo(boardNo);
             Board board = boardService.findByBoardNo(boardNo);

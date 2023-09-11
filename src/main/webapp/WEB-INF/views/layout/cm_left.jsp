@@ -34,9 +34,15 @@
 <br>
     <ul class="nav" style="margin-top:0;">
     <li class="nav-item">
-    <a class="nav-link" href="/index">
+    <a class="nav-link" href="/">
     <i class="icon-grid menu-icon"></i>
     <span class="menu-title">메인페이지</span>
+    </a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="/member/register">
+    <i class="icon-grid menu-icon"></i>
+    <span class="menu-title">회원가입</span>
     </a>
     </li>
     <c:choose>

@@ -17,8 +17,16 @@ public class UfileDaoImpl implements UfileDao{
     }
 
     @Override
-    public int createUfile(Ufile ufile) throws Exception {
-        return ufileMapper.createUfile(ufile);
+    public int createMUfile(Ufile ufile) throws Exception {
+        return ufileMapper.createMUfile(ufile);
+    }
+    @Override
+    public int createGathUfile(Ufile ufile) throws Exception {
+        return ufileMapper.createGathUfile(ufile);
+    }
+    @Override
+    public int createReviewUfile(Ufile ufile) throws Exception {
+        return ufileMapper.createReviewUfile(ufile);
     }
 
     @Override
@@ -49,6 +57,11 @@ public class UfileDaoImpl implements UfileDao{
     @Override
     public String findUfilePath(int ufileTypeNo) throws Exception {
         return ufileMapper.findUfilePath(ufileTypeNo);
+    }
+
+    @Override
+    public int fineCurNo() throws Exception {
+        return ufileMapper.findCurNo();
     }
 
 //    @Override

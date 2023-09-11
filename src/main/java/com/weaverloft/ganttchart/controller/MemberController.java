@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -90,21 +91,32 @@ public class MemberController {
         }
         resultMap.put("code",code);
         resultMap.put("msg",msg);
-        System.out.println("resultMap = " + resultMap);
         return resultMap;
     }
 
 
-    //1-2. 회원가입 액션 --> 파일업로드, 비밀번호 정규식 체크, 한글 입력 꺠지는 것 해결해야 함
     @PostMapping("/register-ajax")
-    @ResponseBody
-    public Map<String,Object> registerMemberAjax(Member member, MultipartFile mf){
+    public Map<String,Object> registerMemberAjax(@RequestParam Map<String,Object> map, MultipartHttpServletRequest mf){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
         String forwardPath = "";
         try{
-            System.out.println("member = " + member);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String birthStr = (String)map.get("birth");
+                Date birth = formatter.parse(birthStr);
+                Member member = new Member((String)map.get("id"),
+                (String)map.get("password"),
+                (String)map.get("name"),
+                (String)map.get("email"),
+                (String)map.get("gender"),
+                (String)map.get("phone"),
+                new Date(),
+                null,
+                (String)map.get("address"),
+                (String)map.get("detailedAddress"),
+                Integer.parseInt(map.get("mTypeNo").toString()),
+                0, 0,null,birth);
             //1) 아이디 중복확인
             if(memberService.findMemberById(member.getMId())!= null){
                 System.out.println("이미 존재하는 아이디입니다.");
@@ -112,6 +124,7 @@ public class MemberController {
                 msg = "이미 존재하는 아이디입니다."; //--> 만일 중복검사 후에 아이디 변경하게 되면 다시 검사하는 방법은?
             }
             //2) 비밀번호 정규식 체크
+            System.out.println("member.getMPassword() = " + member.getMPassword());
             Map<String,Object> passwordMap = memberService.isValidPassword(member.getMPassword());
             if(!(boolean)passwordMap.get("result")){
                 msg = (String)passwordMap.get("msg");
@@ -121,17 +134,25 @@ public class MemberController {
             //3) 비밀번호 암호화
             String encPassword = sha256Service.encrypt(member.getMPassword());
             member.setMPassword(encPassword);
-            //4) 인증메일 보내기
+            //4) 인증메일 보내기msr
             String mAuthCode = mailService.sendMail(member.getMEmail(),1);
+            member.setMAuthCode(mAuthCode);
             //5) 파일 업로드 --> 확장자 검사 필요
-            if(mf !=null && !mf.getOriginalFilename().equals("")){
-                Ufile profileFile = uploadFileService.uploadFile(mf,1);
+            if(mf.getFile("photoFile") !=null && !mf.getFile("photoFile").getOriginalFilename().equals("")){
+                Ufile profileFile = uploadFileService.uploadFile(mf.getFile("photoFile"),1);
                 profileFile.setMId(member.getMId());
-                ufileService.createUfile(profileFile);
+                profileFile.setGathNo(0);
+                profileFile.setReviewNo(0);
+                ufileService.createMUfile(profileFile);
+                System.out.println("profileFile = " + profileFile);
+                int ufileNo = ufileService.findCurNo();
+                member.setUfileNo(ufileNo);
             }
             //6) 회원가입완료
             member.setMStatusNo(0);
             memberService.createMember(member);
+            code = 1;
+            forwardPath = "/";
             //7) 로그 추가 ---> 아직 안함
 
         } catch (Exception e){
@@ -145,58 +166,6 @@ public class MemberController {
         return resultMap;
     }
 
-//    @PostMapping(value = "/register-action")
-//    public String registerAction(@ModelAttribute Users users, MultipartHttpServletRequest multipartFile) throws Exception{
-//        String forwardPath = "";
-//        String msg = "";
-//        MultipartFile originalFile = multipartFile.getFile("photoFile");
-//        try {
-//            if (usersService.findUsersById(users.getId())!=null) {
-//                //1) 아이디 중복 확인
-//                System.out.println("이미 존재하는 아이디입니다.");
-//                forwardPath = "redirect:/login";
-//                return forwardPath;
-//            }
-//            if(!(boolean)usersService.isValidPassword(users.getPassword()).get("result")){
-//                //2) 비밀번호 정규식 체크
-//                msg = (String)usersService.isValidPassword(users.getPassword()).get("msg");
-//                forwardPath ="redirect:/register";
-//                return forwardPath;
-//            }
-//            //3) 비밀번호 암호화
-//            String encryptPassword = sha256Service.encrypt(users.getPassword());
-//            users.setPassword(encryptPassword);
-//            //4) 인증메일 보내기 -> 임의의 authKey 생성 & 이메일 발송
-//            int authKey = emailService.sendAuthEmail(users.getEmail());
-//            String authKeyStr = Integer.toString(authKey);
-//            users.setAuthKey(authKeyStr);
-//            //5) 파일 업로드
-//            if(!originalFile.getOriginalFilename().equals("")){
-//                String filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
-//                String saveFileName = fileService.uploadFile(originalFile,filePath);
-//                users.setFilePath(filePath);
-//                users.setSaveFileName(saveFileName);
-//                users.setOriginalFileName(originalFile.getOriginalFilename());
-//                System.out.println("사진 있다");
-//            } else{
-//                //이거 안해줘도 되는지?
-//                users.setFilePath(null);
-//                users.setSaveFileName(null);
-//                users.setOriginalFileName(null);
-//            }
-//            //6) 회원가입 완료
-//            users.setGrade(1);
-//            int result = usersService.createUsers(users);
-//            //7) 회원가입 로그 추가
-//            String id= users.getId();
-//            System.out.println(id);
-//            usersLogService.createLog(id,0);    //가입완료 로그:0 남기기
-//            forwardPath = "redirect:/login";
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return forwardPath;
-//    }
 
     //2-1. 로그인 페이지 --> 완료
     @GetMapping("/login")
@@ -567,10 +536,10 @@ public class MemberController {
                                  Model model){
         String forwardPath = "";
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
             //데이터 처리부분
             if(keyword.equals("")) keyword=null;
             PageMakerDto userListPage = usersService.findUserList(pageNo,keyword);
@@ -593,10 +562,10 @@ public class MemberController {
                                 Model model){
         String forwardPath = "";
         try{
-            //cm_left data
-            Map<String, Object> map = menuService.cmLeftMenuList();
-            model.addAttribute("menuList", map.get("menuList"));
-            model.addAttribute("preMenuList",map.get("preMenuList"));
+//            //cm_left data
+//            Map<String, Object> map = menuService.cmLeftMenuList();
+//            model.addAttribute("menuList", map.get("menuList"));
+//            model.addAttribute("preMenuList",map.get("preMenuList"));
             //데이터처리부분
             if(keyword.equals("")) keyword=null;
             PageMakerDto usersLogPage = usersLogService.findUserLog(pageNo,keyword);

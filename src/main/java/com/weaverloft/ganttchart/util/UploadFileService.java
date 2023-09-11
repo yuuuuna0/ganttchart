@@ -11,9 +11,12 @@ import java.util.UUID;
 
 
 @Service
-@RequiredArgsConstructor
 public class UploadFileService {
     private UfileService ufileService;
+
+    public UploadFileService(UfileService ufileService) {
+        this.ufileService = ufileService;
+    }
 
     //1. 파일 저장 이름 만들기
     private String createSaveFileName(String originalFileName) {

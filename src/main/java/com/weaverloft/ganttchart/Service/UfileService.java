@@ -8,11 +8,11 @@ import java.util.List;
 public interface UfileService {
     // 파일 DB에 넣기
     //1-1. 프로필 넣기
-    int createUfile(Ufile ufile) throws Exception;
+    int createMUfile(Ufile ufile) throws Exception;
 //    //1-2. 모임사진 넣기
-//    int createGathUFile(Ufile ufile) throws Exception;
+    int createGathUfile(Ufile ufile) throws Exception;
 //    //1-3. 후기사진 넣기
-//    int createReviewUFile(Ufile ufile) throws Exception;
+    int createReviewUfile(Ufile ufile) throws Exception;
 
     //2. 파일 비활성하기
     int updateUfileToNotUse(int ufileNo) throws Exception;
@@ -25,4 +25,6 @@ public interface UfileService {
 
     //5. 파일저장경로 가져오기
     String findUfilePath(int ufileTypeNo) throws Exception;
+    //6. 최근 파일넘버 가져오기
+    int findCurNo() throws Exception;
 }

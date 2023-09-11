@@ -16,8 +16,17 @@ public class UfileServiceImpl implements UfileService{
     }
 
     @Override
-    public int createUfile(Ufile ufile) throws Exception {
-        return ufileDao.createUfile(ufile);
+    public int createMUfile(Ufile ufile) throws Exception {
+        return ufileDao.createMUfile(ufile);
+    }
+    @Override
+    public int createGathUfile(Ufile ufile) throws Exception {
+        return ufileDao.createGathUfile(ufile);
+    }
+
+    @Override
+    public int createReviewUfile(Ufile ufile) throws Exception {
+        return ufileDao.createReviewUfile(ufile);
     }
 
     @Override
@@ -50,6 +59,11 @@ public class UfileServiceImpl implements UfileService{
     @Override
     public String findUfilePath(int ufileTypeNo) throws Exception {
         return ufileDao.findUfilePath(ufileTypeNo);
+    }
+
+    @Override
+    public int findCurNo() throws Exception {
+        return ufileDao.fineCurNo();
     }
 
 
