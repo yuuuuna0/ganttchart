@@ -27,7 +27,7 @@
                                 </div>
                                 <input id="findIdBtn" type="button" onclick="modifyPassword();" class="btn btn-primary mr-2" value="비밀번호 변경">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
-                                <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
+                                <a href="/member/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
             return false;
         }
         $.ajax({
-            url : '/user/modifyPassword-ajax',
+            url : '/member/modifyPassword-ajax',
             method : 'post',
             data : {
                 'password' : password,

@@ -25,13 +25,15 @@ public interface MemberDao {
     //6. 회원 삭제
     int deleteMember(String mId) throws Exception;
     //7. 이름, 이메일로 아이디 일부 찾기
-    String findIdPart(String mName, String mEmail) throws Exception;
+    List<String> findIdPart(String mName, String mEmail) throws Exception;
     //8. 이름, 이메일로 아이디 전체 찾기?
     String findId(String mName, String mEmail) throws Exception;
     //9. 아이디, 이름, 이메일로 임시비번 받기
-    int findPassword(String mId, String mName, String mEmail, String mPassword) throws Exception;
+    int findByIdNameEmail(String mId, String mName, String mEmail) throws Exception;
     //10. 회원 정보 수정
     int updateMemberDetail(Member member) throws Exception;
     //11. 비밀번호 일치확인
     int ismatchPassword(String mId, String mPassword) throws Exception;
+    //12. 비밀번호 변경
+    int updatePassword(String id, String encryptTempPassword) throws Exception;
 }

@@ -54,8 +54,8 @@
                                         Keep me signed in
                                     </label>
                                 </div>
-                                <a href="/user/findId" class="auth-link text-black">Forgot Id?</a>
-                                <a href="/user/findPassword" class="auth-link text-black">Forgot password?</a>
+                                <a href="/member/findId" class="auth-link text-black">Forgot Id?</a>
+                                <a href="/member/findPassword" class="auth-link text-black">Forgot password?</a>
                             </div>
                             <div class="mb-2">
                                 <button type="button" class="btn btn-block btn-facebook auth-form-btn">
@@ -63,7 +63,7 @@
                                 </button>
                             </div>
                             <div class="text-center mt-4 font-weight-light">
-                                Don't have an account? <a href="/user/register" class="text-primary">Create</a>
+                                Don't have an account? <a href="/member/register" class="text-primary">Create</a>
                             </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
         }
         //2. 값이 있을 경우 ajax
         $.ajax({
-            url : '/login-ajax',
+            url : '/member/login-ajax',
             method : 'post',
             data : {
                 'id' : id,
@@ -117,6 +117,7 @@
                     window.location.href=resultMap.forwardPath;
                 } else if(resultMap.code === 3){
                     //2. 미인증 사용자
+                    console.log(resultMap.forwardPath);
                     window.location.href=resultMap.forwardPath;
                 } else if(resultMap.code === 4){
                     //3. 임시비번으로 로그인 한 사람

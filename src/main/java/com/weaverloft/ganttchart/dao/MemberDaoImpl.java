@@ -50,7 +50,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public String findIdPart(String mName, String mEmail) throws Exception {
+    public List<String> findIdPart(String mName, String mEmail) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("mName",mName);
         map.put("mEmail",mEmail);
@@ -66,13 +66,12 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int findPassword(String mId, String mName, String mEmail, String mPassword) throws Exception {
+    public int findByIdNameEmail(String mId, String mName, String mEmail) throws Exception {
         Map<String, Object> map =new HashMap<>();
         map.put("mId",mId);
         map.put("mName",mName);
         map.put("mEmail",mEmail);
-        map.put("mPassword",mPassword);
-        return memberMapper.findPassword(map);
+        return memberMapper.findByIdNameEmail(map);
     }
 
     @Override
@@ -86,5 +85,13 @@ public class MemberDaoImpl implements MemberDao {
         map.put("mId",mId);
         map.put("mPassword",mPassword);
         return memberMapper.ismatchPassword(map);
+    }
+
+    @Override
+    public int updatePassword(String mId, String mPassword) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("mid",mId);
+        map.put("mPassword",mPassword);
+        return memberMapper.updatePassword(map);
     }
 }

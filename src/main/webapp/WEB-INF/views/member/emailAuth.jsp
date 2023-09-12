@@ -43,7 +43,7 @@
         }
         console.log(authKey);
         $.ajax({
-            url : '/user/emailAuth-ajax',
+            url : '/member/emailAuth-ajax',
             method : 'POST',
             data : {
                 'authKey' : authKey

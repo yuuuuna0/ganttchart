@@ -3,18 +3,18 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.MemberMapper">
 <!--    1. 회원생성-->
     <insert id="createMember" parameterType="com.weaverloft.ganttchart.dto.Member">
-        insert into MEMBER(m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no, ufile_no,M_AUTH_CODE,M_BIRTH)
-        VALUES(#{mId},#{mPassword},#{mName},#{mEmail},#{mGender},#{mPhone},sysdate,#{mExDate},#{mAddr},#{mAddr2},#{mTypeNo},#{mStatusNo},#{ufileNo},#{mAuthCode},#{mBirth})
+        insert into MEMBER(m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no,M_AUTH_CODE,M_BIRTH)
+        VALUES(#{mId},#{mPassword},#{mName},#{mEmail},#{mGender},#{mPhone},sysdate,#{mExDate},#{mAddr},#{mAddr2},#{mTypeNo},#{mStatusNo},#{mAuthCode},#{mBirth})
     </insert>
 <!--    2. 아이디로 회원 1명 조회-->
     <select id="findMemberById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Member">
-        select m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no, ufile_no
+        select m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no, m_auth_code, m_birth
         from MEMBER
         where m_id = #{mId}
     </select>
 <!--    3. 회원 전체 조회-->
     <select id="findAllMember" resultType="com.weaverloft.ganttchart.dto.Member">
-        select m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no, ufile_no
+        select m_id, m_password, m_name, m_email, m_gender, m_phone, m_regi_date, m_ex_date, m_addr, m_addr2, m_type_no, m_status_no, m_auth_code, m_birth
         from MEMBER
     </select>
 <!--    4. 전체 회원 수 조회-->
@@ -25,7 +25,8 @@
 <!--    5. 회원 상태 변경-->
     <update id="updateMemberStatus" parameterType="java.util.Map">
         update MEMBER
-        set M_ID=#{mID}, M_STATUS_NO=#{mStatusNo}
+        set M_STATUS_NO=#{mStatusNo}
+        where M_ID=#{mId}
     </update>
 <!--    6. 회원 완전삭제-->
     <delete id="deleteMember" parameterType="java.lang.String">
@@ -44,16 +45,16 @@
         from MEMBER
         where M_NAME=#{mName} and M_EMAIL=#{mEmail}
     </select>
-<!--    9. 아이디, 이름, 이메일 일치하는 아이디 임시비번으로 DB 업데이트-->
-    <update id="findPassword" parameterType="java.util.Map">
+<!--    9. 비밀번호 업데이트-->
+    <update id="updatePassword" parameterType="java.util.Map">
         update MEMBER
         set M_PASSWORD = #{mPassword}
-        where M_ID=#{mID} and M_NAME=#{mName} and M_EMAIL=#{mEmail}
+        where M_ID=#{mId}
     </update>
 <!--    10. 회원정보 수정-->
     <update id="updateMemberDetail" parameterType="com.weaverloft.ganttchart.dto.Member">
         update MEMBER
-        set m_name=#{mName}, m_email=#{mEmail}, m_gender=#{mGender}, m_phone=#{mPhone}, m_addr=#{mAddr}, m_addr2=#{mAddr2}, ufile_no=#{ufileNo}
+        set m_name=#{mName}, m_email=#{mEmail}, m_gender=#{mGender}, m_phone=#{mPhone}, m_addr=#{mAddr}, m_addr2=#{mAddr2},m_birth=#{mBirth}
         where m_id=#{mId}
     </update>
 <!--    11. 비밀번호 일치 확인-->
@@ -63,7 +64,10 @@
         where M_ID=#{mId} and M_PASSWORD=#{mPassword}
     </select>
 <!--    12. authcode 인증 후 '0'으로 변경하기-->
-    <update id="resetAuthCode" parameterType="java.lang.String">
-        update MEMBER set M_AUTH_CODE='0' where M_ID=#{mId}
-    </update>
+
+
+<!--    13. 아이디,이름, 이메일로 사람찾기-->
+    <select id="findByIdNameEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from member where m_id=#{mId} and m_name=#{mName} and m_email=#{mEmail}
+    </select>
 </mapper>

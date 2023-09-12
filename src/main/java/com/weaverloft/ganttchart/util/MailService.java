@@ -22,12 +22,12 @@ public class MailService {
             authCode = authCode * 10 + random.nextInt(10);  //0~9
         }
     }
-    //10자리 임시 비밀번호 생성
+    //6자리 임시 비밀번호 생성
     public void createTempPassword(){
         StringBuffer key = new StringBuffer();
         Random random = new Random();
         tempPassword = "";
-        for(int i=0;i<10;i++){
+        for(int i=0;i<6;i++){
             int index = random.nextInt(3);
             switch (index){
                 case 0:

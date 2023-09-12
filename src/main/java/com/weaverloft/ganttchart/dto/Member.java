@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -24,7 +25,8 @@ public class Member {
     private String mAddr2;
     private int mTypeNo;
     private int mStatusNo;
-    private int ufileNo;
     private String mAuthCode;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date mBirth;
+
 }

@@ -5,6 +5,7 @@ import com.weaverloft.ganttchart.dto.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,5 +50,34 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public int createMember(Member member) throws Exception {
         return memberDao.createMember(member);
+    }
+
+    @Override
+    public Member login(String id, String password) throws Exception {
+        Member member = memberDao.findMemberById(id);
+        if(member == null || !member.getMPassword().equals(password)){
+            return null;
+        }
+        return member;
+    }
+
+    @Override
+    public int updateMemberStatus(String mId,int mStatusNo) throws Exception {
+        return memberDao.updateMemberStatus(mId,mStatusNo);
+    }
+
+    @Override
+    public List<String> findIdByNameEmail(String name, String email) throws Exception{
+        return memberDao.findIdPart(name,email);
+    }
+
+    @Override
+    public int findByIdNameEmail(String id, String name, String email) throws Exception{
+        return memberDao.findByIdNameEmail(id,name,email);
+    }
+
+    @Override
+    public int updatePassword(String id, String mPassword) throws Exception{
+        return memberDao.updatePassword(id,mPassword);
     }
 }

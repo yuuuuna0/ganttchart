@@ -15,7 +15,6 @@ public interface MemberMapper {
     //3-1. 회원 전체 조회
     List<Member> findAllMember() throws Exception;
     //3-2. 회원 전체 조회(페이징)
-
     //4. 전체회원 수 조회
     int findAllMemberCount() throws Exception;
     //5. 회원 상태 변경
@@ -28,13 +27,15 @@ public interface MemberMapper {
     //6. 회원 삭제
     int deleteMember(String mId) throws Exception;
     //7. 이름, 이메일로 아이디 일부 찾기
-    String findIdPart(Map<String, Object> map) throws Exception;
+    List<String> findIdPart(Map<String, Object> map) throws Exception;
     //8. 이름, 이메일로 아이디 전체 찾기?
     String findId(Map<String, Object> map) throws Exception;
     //9. 아이디, 이름, 이메일로 임시비번 받기
-    int findPassword(Map<String, Object> map) throws Exception;
+    int updatePassword(Map<String, Object> map) throws Exception;
     //10. 회원 정보 수정
     int updateMemberDetail(Member member) throws Exception;
     //11. 비밀번호 일치확인
     int ismatchPassword(Map<String, Object> map) throws Exception;
+    //12. 아이디,이름,이메일로 사람 찾기
+    int findByIdNameEmail(Map<String, Object> map) throws Exception;
 }

@@ -25,8 +25,8 @@
                                     <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
                                 </div>
                                 <input id="findIdBtn" type="button" onclick="findId();" class="btn btn-primary mr-2" value="아이디찾기">
-                                <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
-                                <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
+                                <input type="button" id="cancelBtn" onclick="location.href='/member/login'" class="btn btn-light" value="취소">
+                                <a href="/member/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
         let name = $('#name').val();
 
         $.ajax({
-            url :'/user/findId-ajax',
+            url :'/member/findId-ajax',
             method: 'POST',
             data : {
                 'email' : email,
@@ -58,9 +58,9 @@
                         console.log(dataItem);
                         html+="<label>"+dataItem+"</label><br>";
                     }
-                    html += "<input id='findIdBtn' type='button' onclick='location.href=\"/user/findPassword\"' class='btn btn-primary mr-2' value='비밀번호찾기'>\n" +
-                        "                                <input type='button' id='cancelBtn' onclick='location.href=\"/login\"' class='btn btn-light' value='로그인'>\n" +
-                        "                                <a href='/user/register' class='auth-link text-black float-right' style='font-size: 10pt'>Need an account? Sign up!</a>";
+                    html += "<input id='findIdBtn' type='button' onclick='location.href=\"/member/findPassword\"' class='btn btn-primary mr-2' value='비밀번호찾기'>\n" +
+                        "                                <input type='button' id='cancelBtn' onclick='location.href=\"/member/login\"' class='btn btn-light' value='로그인'>\n" +
+                        "                                <a href='/member/register' class='auth-link text-black float-right' style='font-size: 10pt'>Need an account? Sign up!</a>";
                     $('#findIdF').append(html);
                 } else {
                     alert(resultJson.msg);

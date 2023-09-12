@@ -13,7 +13,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">회원가입</h4>
-                                <form class="forms-sample" name="registerF" id="registerF" enctype="multipart/form-data">
+                                <form class="forms-sample" name="registerF" id="registerF">
                                     <!-- 프로필사진 업로드 -->
                                     <div class="form-group" style="text-align: center">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
@@ -24,10 +24,10 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="id">아이디</label><span style="color: red;">*</span>
-                                            <input type="text" class="form-control" id="id" name="id"
+                                            <label for="mId">아이디</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="mId" name="mId"
                                                    placeholder="아이디를 입력하세요.">
-                                            <label for="id" style="font-size: 8pt">&nbsp;&nbsp;5글자 이상 10글자 이하로 공백을 사용할 수 없습니다.</label>
+                                            <label for="mId" style="font-size: 8pt">&nbsp;&nbsp;5글자 이상 10글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-3 mt-4">
                                             <label></label>
@@ -45,10 +45,10 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="password">비밀번호</label><span style="color: red;">*</span>
-                                            <input type="password" class="form-control" id="password" name="password"
+                                            <label for="mPassword">비밀번호</label><span style="color: red;">*</span>
+                                            <input type="password" class="form-control" id="mPassword" name="mPassword"
                                                    placeholder="비밀번호를 입력하세요">
-                                            <label style="font-size: 8pt" for="password">&nbsp;&nbsp;영문,특수문자,숫자를 포함하는 6글자 이상 12글자 이하로 공백을 사용할 수 없습니다.</label>
+                                            <label style="font-size: 8pt" for="mPassword">&nbsp;&nbsp;영문,특수문자,숫자를 포함하는 6글자 이상 12글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-6">
                                             <label for="confirmPassword">비밀번호 확인</label><span style="color: red;">*</span>
@@ -58,13 +58,13 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="name">이름</label><span style="color: red;">*</span>
-                                            <input type="text" class="form-control" id="name" name="name"
+                                            <label for="mName">이름</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="mName" name="mName"
                                                    placeholder="이름을 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="gender">성별</label><span style="color: red;">*</span>
-                                            <select class="form-control" id="gender" name="gender">
+                                            <label for="mGender">성별</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="mGender" name="mGender">
                                                 <option disabled selected></option>
                                                 <option value="남">남</option>
                                                 <option value="여">여</option>
@@ -72,31 +72,30 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">이메일</label><span style="color: red;">*</span>
-                                        <input type="email" class="form-control" id="email" name="email"
+                                        <label for="mEmail">이메일</label><span style="color: red;">*</span>
+                                        <input type="email" class="form-control" id="mEmail" name="mEmail"
                                                placeholder="이메일을 입력하세요">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="phone">전화번호</label>
-                                            <input type="text" class="form-control" id="phone" name="phone"
+                                            <label for="mPhone">전화번호</label>
+                                            <input type="text" class="form-control" id="mPhone" name="mPhone"
                                                    placeholder="전화번호를 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="birth">생일</label>
-                                            <input type="date" class="form-control" id="birth" name="birth">
+                                            <label for="mBirth">생일</label>
+                                            <input type="date" class="form-control" id="mBirth" name="mBirth">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="address">주소</label>
-                                            <input type="text" class="form-control" id="address" name="address"
+                                            <label for="mAddr">주소</label>
+                                            <input type="text" class="form-control" id="mAddr" name="mAddr"
                                                    placeholder="주소를 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="detailedAddress">&nbsp;</label>
-                                            <input type="text" class="form-control" id="detailedAddress"
-                                                   name="detailedAddress" placeholder="상세주소를 입력하세요">
+                                            <label for="mAddr2">&nbsp;</label>
+                                            <input type="text" class="form-control" id="mAddr2" name="mAddr2" placeholder="상세주소를 입력하세요">
                                         </div>
                                     </div>
                                     <div style="text-align:center;">
@@ -122,11 +121,11 @@
 <script type="text/javascript">
     //1. 주소 api
     window.onload = function () {
-        document.getElementById('address').addEventListener('click', function () {
+        document.getElementById('mAddr').addEventListener('click', function () {
             new daum.Postcode({
                 oncomplete: function (data) { //선택시 입력값 세팅
-                    document.getElementById("address").value = data.address; // 주소 넣기
-                    document.querySelector("input[name=address]").focus(); //상세입력 포커싱
+                    document.getElementById("mAddr").value = data.address; // 주소 넣기
+                    document.querySelector("input[name=mAddr]").focus(); //상세입력 포커싱
                 }
             }).open();
         })
@@ -144,39 +143,39 @@
     //4. 아이디 정규식 체크 및 중복검사
     let vId= 0;
     function validateId(){
-        let id = $('#id').val();
+        let mId = $('#mId').val();
         //정규식 체크
-        if (id === '') {
+        if (mId === '') {
             alert('아이디를 입력하세요');
-            $('#id').focus();
+            $('#mId').focus();
             return false;
         }
-        if(id.match(/\s/g)){
+        if(mId.match(/\s/g)){
             alert("아이디는 공백을 사용할 수 없습니다.");
-            $('#id').val('');
-            $('#id').focus();
+            $('#mId').val('');
+            $('#mId').focus();
             return false;
         }
-        if(id.length <5 || id.length >10){
+        if(mId.length <5 || mId.length >10){
             alert("아이디는 5글자 이상 10글자 이하입니다.");
-            $('#id').focus();
+            $('#mId').focus();
             return false;
         }
         $.ajax({
             url : '/member/idCheck-ajax',
             method : 'POST',
             data : {
-                'id' : id
+                'mId' : mId
             },
             success : function(resultJson){
                 console.log(resultJson);
                 if(resultJson.code === 1){
                     alert("사용할 수 있는 아이디입니다");
-                    $('#id').value = id;
+                    $('#mId').value = mId;
                     vId=1;
                 } else{
                     alert("중복된 아이디입니다.");
-                    $('#id').val('');
+                    $('#mId').val('');
                     return false;
                 }
             },
@@ -189,16 +188,13 @@
 
 
     function createUser() {
-        let mId = $('#id').val();
-        let mName = $('#name').val();
-        let mEmail = $('#email').val();
-        let mPassword = $('#password').val();
+        let mId = $('#mId').val();
+        let mName = $('#mName').val();
+        let mEmail = $('#mEmail').val();
+        let mPassword = $('#mPassword').val();
         let mConfirmPassword = $('#confirmPassword').val();
-        let mGender = $('#gender option:selected').val();
-        let mTypeNo = $('#grade option:selected').val();
-
-        let form = $('#registerF')[0];
-        let formData = new FormData(form);
+        let mGender = $('#mGender option:selected').val();
+        let mTypeNo = $('#mTypeNo option:selected').val();
 
         /**************************** 유효성 검사 ****************************************/
         if (vId === 0){
@@ -208,7 +204,7 @@
         //1) 비밀번호 정규식 검사
         if (mPassword === '') {
             alert("비밀번호를 입력하세요");
-            $('#password').focus();
+            $('#mPassword').focus();
             return false;
         }
         if (mConfirmPassword === '') {
@@ -218,18 +214,18 @@
         }
         if (mName === '') {
             alert("이름을 입력하세요");
-            $('#name').focus();
+            $('#mName').focus();
             return false;
         }
         if (mEmail === '') {
             alert("이메일을 입력하세요");
-            $('#email').focus();
+            $('#mEmail').focus();
             return false;
         }
         if (!mEmail.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
             alert("이메일형식에 맞게 작성해주세요");
-            $('#email').val('');
-            $('#email').focus();
+            $('#mEmail').val('');
+            $('#mEmail').focus();
             return false;
         }
         if (mTypeNo === '') {
@@ -242,11 +238,15 @@
         }
         if (mPassword !== mConfirmPassword) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            $('#password').val('');zfval
+            $('#mPassword').val('');
             $('#confirmPassword').val('');
             $('#confirmPassword').focus();
             return false;
         }
+
+        let form = $('#registerF')[0];
+        let formData = new FormData(form);
+        //formData.append($('#photoFile')[0].files);
 
         $.ajax({
             url : '/member/register-ajax',

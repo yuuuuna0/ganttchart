@@ -18,12 +18,12 @@
                             <form class="forms-sample" name="modifyF" id="modifyF" enctype="multipart/form-data">
                             <!-- 프로필사진 업로드 -->
                             <div class="form-group" style="text-align: center">
-                                <c:if test = "${ sessionScope.loginUser.saveFileName != null}">
-                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${sessionScope.loginUser.saveFileName}"/>
-                                </c:if>
-                                <c:if test = "${ sessionScope.loginUser.saveFileName == null}">
+<%--                                <c:if test = "${ loginMember.saveFileName != null}">--%>
+<%--                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${loginMember.saveFileName}"/>--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test = "${ loginMember.saveFileName == null}">--%>
                                     <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
-                                </c:if>
+<%--                                </c:if>--%>
                                 <br>
                                 <br>
                                 <label for="photoFile" class="file-upload-browse btn btn-primary">사진 변경</label>
@@ -32,7 +32,7 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                     <label for="id">아이디</label>
-                                    <input readonly  type="text" class="form-control" id="id" name="id" value="${sessionScope.loginUser.id}">
+                                    <input readonly  type="text" class="form-control" id="id" name="id" value="${loginMember.getMId()}">
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -44,16 +44,16 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="name">이름</label>
-                                        <input  type="text" class="form-control" id="name" name="name" value="${sessionScope.loginUser.name}">
+                                        <input  type="text" class="form-control" id="name" name="name" value="${loginMember.getMName()}">
                                     </div>
                                     <div class="col-6">
                                         <label for="gender">성별</label>
                                         <select class="form-control" id="gender" name="gender">
-                                            <c:if test="${sessionScope.loginUser.gender == '남'}">
+                                            <c:if test="${loginMember.getMGender() == '남'}">
                                                 <option value="1" selected>남</option>
                                                 <option value="2">여</option>
                                             </c:if>
-                                            <c:if test="${sessionScope.loginUser.gender == '여'}">
+                                            <c:if test="${loginMember.getMGender() == '여'}">
                                                 <option value="1" >남</option>
                                                 <option value="2" selected>여</option>
                                             </c:if>
@@ -62,22 +62,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">이메일</label>
-                                    <input  type="email" class="form-control" id="email" name="email" value="${sessionScope.loginUser.email}">
+                                    <input  type="email" class="form-control" id="email" name="email" value="${loginMember.getMEmail()}">
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="phone">전화번호</label>
-                                        <input  type="text" class="form-control" id="phone" name="phone" value="${sessionScope.loginUser.phone}">
+                                        <input  type="text" class="form-control" id="phone" name="phone" value="${loginMember.getMPhone()}">
                                     </div>
                                     <div class="col-6">
                                         <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth" value="<fmt:formatDate value='${sessionScope.loginUser.birth}' pattern='yyyy. MM. dd.'/>"/>
+                                        <input type="date" class="form-control" id="birth" name="birth"
+                                               value="${loginMember.getMBirth()}" pattern='yyyy. MM. dd.'/>
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="address">주소</label>
-                                        <input type="text" class="form-control" id="address" name="address" value="${sessionScope.loginUser.address}">
+                                        <input type="text" class="form-control" id="address" name="address" value="${loginMember.getMAddr()}">
                                     </div>
                                     <div class="col-6">
                                         <label for="detailedAddress">&nbsp;</label>
@@ -87,7 +88,7 @@
                                 </div>
                                 <div style="text-align:center;">
                                     <input type="button" id="modifyUserBtn" class="btn btn-primary mr-2" value="수정완료" onclick="modifyUser();">
-                                    <input type="button" id="cancelBtn" class="btn btn-light" value="취소"  onclick="location.href='/user/detail'">
+                                    <input type="button" id="cancelBtn" class="btn btn-light" value="취소"  onclick="location.href='/member/detail'">
                                 </div>
                             </form>
                         </div>
@@ -102,6 +103,14 @@
 
 
 <script type="text/javascript">
+    // 생일 양식에 맞게 넣기
+    let rawBitrh = $('#birth').val();
+    console.log(rawBitrh);
+    console.log(typeof $('#birth').val());
+    let birth = new Date(rawBitrh).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\./g, '.');
+    console.log(birth);
+    $('#birth').val(birth);
+
     //1. 주소 api
     window.onload = function () {
         document.getElementById('address').addEventListener('click', function () {

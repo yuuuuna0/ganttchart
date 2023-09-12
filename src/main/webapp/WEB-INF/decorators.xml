@@ -14,7 +14,7 @@
         <pattern>*ajax.do</pattern>
         <pattern>*json.do</pattern>
         <pattern>*save.do</pattern>
-        <pattern>/login</pattern>
+        <pattern>/member/login</pattern>
         <pattern>*/include/*</pattern>
         <pattern>*.html*</pattern>
         <pattern>/find*</pattern>
