@@ -1,31 +1,33 @@
 package com.weaverloft.ganttchart.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Data
+@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class Users {
-    private String id;
-    private int grade;
-    private String password;
-    private String name;
-    private String saveFileName;
-    private String originalFileName;
-    private String filePath;
+    private String uId;
+    private String uPassword;
+    private String uName;
+    private String uEmail;
+    private String uGender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birth;
-    private String gender;
-    private String phone;
-    private String address;
-    private String email;
-    private int authStatus;     //인증 전:0 인증 후:1
-    private String authKey;
-    private Date createDate;
+    private Date uBirth;
+    private String uPhone;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date uCreateDate;
+    private String uAddress;
+    private String uAddress2;
+    private int uTypeNo;
+    private int uStatusNo;
+    private int fileNo;
+    private String uAuthCode;
 }

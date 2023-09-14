@@ -47,44 +47,33 @@
     </bean>
 
 
-    <!-- Interceptors -->
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-<!--            <mvc:exclude-mapping path="/webapp/resources/**"/>-->
-            <mvc:exclude-mapping path="/resources/**" />
-            <mvc:exclude-mapping path="/webapp/resources/*/**"/>
-<!--            <mvc:exclude-mapping path="/css/**" />-->
-<!--            <mvc:exclude-mapping path="/img/**" />-->
-<!--            <mvc:exclude-mapping path="/js/**" />-->
-<!--            <mvc:exclude-mapping path="/resources/upload/**"/>-->
-            <bean id="adminCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.AdminCheckInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <mvc:exclude-mapping path="/webapp/resources/*/**"/>
-
+<!--    &lt;!&ndash; Interceptors &ndash;&gt;-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/webapp/resources/**"/>&ndash;&gt;-->
 <!--            <mvc:exclude-mapping path="/resources/**" />-->
-<!--            <mvc:exclude-mapping path="/css/**" />-->
-<!--            <mvc:exclude-mapping path="/img/**" />-->
-<!--            <mvc:exclude-mapping path="/js/**" />-->
-            <bean id="loginCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor" />
-        </mvc:interceptor>
-    </mvc:interceptors>
+<!--            <mvc:exclude-mapping path="/webapp/resources/*/**"/>-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/css/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/img/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/js/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/resources/upload/**"/>&ndash;&gt;-->
+<!--            <bean id="adminCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.AdminCheckInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**" />-->
+<!--            <mvc:exclude-mapping path="/webapp/resources/*/**"/>-->
+
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/resources/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/css/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/img/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/js/**" />&ndash;&gt;-->
+<!--            <bean id="loginCheckInterceptor" class="com.weaverloft.ganttchart.controller.Interceptor.LoginCheckInterceptor" />-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
     <!-- 프로젝트 패키지이름 확인 -->
     <context:component-scan base-package="com.weaverloft.ganttchart"/>
 
     <!-- AOP auto proxy : annotation으로 할 수 있게 해줌-->
     <aop:aspectj-autoproxy/>
 </beans>
-
-
-
-        <!--            <mvc:exclude-mapping path="*.css"/>-->
-        <!--            <mvc:exclude-mapping path="*.js"/>-->
-        <!--            <mvc:exclude-mapping path="*.png"/>-->
-        <!--            <mvc:exclude-mapping path="*.json"/>-->
-        <!--            <mvc:exclude-mapping path="*.svg"/>-->
-        <!--            <mvc:exclude-mapping path="*.jpg"/>-->
-        <!--            <mvc:exclude-mapping path="/images/**/*.*"/>-->
-        <!--            <mvc:exclude-mapping path="/images/*.*"/>-->

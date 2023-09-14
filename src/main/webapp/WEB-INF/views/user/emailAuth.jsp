@@ -17,11 +17,10 @@
                             </p>
                             <div class="small mb-3 text-muted">Enter your secret code to verify your ID!!</div>
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="authKey" name="authKey" type="text"/>
-                                    <label for="authKey"></label>
+                                    <input class="form-control" id="uAuthCode" name="uAuthCode" type="text"/>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <a class="small" href="/login">Return to login</a>
+                                    <a class="small" href="/user/login">Return to login</a>
                                     <button class="btn btn-primary" onclick="emailAuthAction()">Verify</button>
                                 </div>
                         </div>
@@ -35,27 +34,24 @@
 <script type="text/javascript">
 
     function emailAuthAction(){
-        let authKey = $('#authKey').val();
-        if(authKey ===""){
+        let uAuthCode = $('#uAuthCode').val();
+        if(uAuthCode ===""){
             alert("인증번호를 입력하세요");
-            $('#authKey').focus();
+            $('#uAuthCode').focus();
             return false;
         }
-        console.log(authKey);
         $.ajax({
-            url : '/user/emailAuth-ajax',
+            url : '/user/emailAuth.ajx',
             method : 'POST',
             data : {
-                'authKey' : authKey
+                'uAuthCode' : uAuthCode
             },
             success : function (resultMap) {
                 if(resultMap.code === 1){
                     window.location.href = resultMap.forwardPath;
-                } else if(resultMap.code ===2){
-                    alert(resultMap.msg);
                 } else{
                     alert(msg);
-                    window.location.href = resultMap.forwardPath;
+                    window.location.reload();
                 }
             },
             error: function (e) {

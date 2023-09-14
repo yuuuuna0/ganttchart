@@ -17,25 +17,25 @@
                                 <h4 class="card-title">마이페이지</h4>
                                 <!-- 프로필사진 업로드 -->
                                 <div class="form-group" style="text-align: center">
-                                    <c:if test = "${ sessionScope.loginUser.saveFileName != null}">
+                                    <c:if test = "${sessionScope.loginUser.fileNo != 0}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px"
-                                             src="/upload/user/${sessionScope.loginUser.saveFileName}"/>
+                                             src="/upload/user/${file.saveName}"/>
                                     </c:if>
-                                    <c:if test = "${ sessionScope.loginUser.saveFileName == null}">
+                                    <c:if test = "${ sessionScope.loginUser.fileNo == 0}">
                                         <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="/static/images/icons/default.png"/>
                                     </c:if>
                                 </div>
                                 <form class="forms-sample" name="registerF" id="registerF" accept-charset="utf-8">
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="id">아이디</label>
-                                            <input readonly type="text" class="form-control" id="id" name="id" value="${sessionScope.loginUser.id}">
+                                            <label for="uId">아이디</label>
+                                            <input readonly type="text" class="form-control" id="uId" name="uId" value="${sessionScope.loginUser.getUId()}">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-4">
-                                            <label for="password">비밀번호</label>
-                                            <input readonly type="password" class="form-control" id="password" name="password" value="xxxxx" >
+                                            <label for="uPassword">비밀번호</label>
+                                            <input readonly type="password" class="form-control" id="uPassword" name="uPassword" value="xxxxx" >
                                         </div>
                                         <div class="col-2 mt-auto">
                                             <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/user/modifyPassword'" >
@@ -43,17 +43,17 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="name">이름</label>
-                                            <input readonly type="text" class="form-control" id="name" name="name" value="${sessionScope.loginUser.name}">
+                                            <label for="uName">이름</label>
+                                            <input readonly type="text" class="form-control" id="uName" name="uName" value="${sessionScope.loginUser.getUName()}">
                                         </div>
                                         <div class="col-6">
-                                            <label for="gender">성별</label>
-                                            <select class="form-control" id="gender" name="gender" readonly>
-                                                <c:if test="${sessionScope.loginUser.gender == '남'}">
+                                            <label for="uGender">성별</label>
+                                            <select class="form-control" id="uGender" name="uGender" readonly>
+                                                <c:if test="${sessionScope.loginUser.getUGender() == '남'}">
                                                     <option selected>남</option>
                                                     <option>여</option>
                                                 </c:if>
-                                                <c:if test="${sessionScope.loginUser.gender == '여'}">
+                                                <c:if test="${sessionScope.loginUser.getUGender() == '여'}">
                                                     <option>남</option>
                                                     <option selected>여</option>
                                                 </c:if>
@@ -61,30 +61,33 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">이메일</label>
-                                        <input readonly type="email" class="form-control" id="email" name="email" value="${sessionScope.loginUser.email}">
+                                        <label for="uEmail">이메일</label>
+                                        <input readonly type="email" class="form-control" id="uEmail" name="uEmail" value="${sessionScope.loginUser.getUEmail()}">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="phone">전화번호</label>
-                                            <input readonly type="text" class="form-control" id="phone" name="phone" value="${sessionScope.loginUser.phone}">
+                                            <label for="uPhone">전화번호</label>
+                                            <input readonly type="text" class="form-control" id="uPhone" name="uPhone" value="${sessionScope.loginUser.getUPhone()}">
                                         </div>
                                         <div class="col-6">
                                             <label >생일</label>
-                                            <text readonly class="form-control" id="birth" name="birth" >
-                                            <fmt:formatDate value="${sessionScope.loginUser.birth}" pattern="yyyy. MM. dd."/>
+                                            <text readonly class="form-control" id="uBirth" name="uBirth" >
+                                            <fmt:formatDate value="${sessionScope.loginUser.getUBirth()}" pattern="yyyy. MM. dd."/>
                                             </text>
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="address">주소</label>
-                                            <input readonly type="text" class="form-control" id="address" name="address" value="${sessionScope.loginUser.address}">
+                                            <label for="uAddress">주소</label>
+                                            <input readonly type="text" class="form-control" id="uAddress" name="uAddress" value="${sessionScope.loginUser.getUAddress()}">
+                                        </div><div class="col-6">
+                                            <label for="uAddress2">상세주소</label>
+                                            <input readonly type="text" class="form-control" id="uAddress2" name="uAddress2" value="${sessionScope.loginUser.getUAddress2()}">
                                         </div>
                                     </div>
                                     <div style="text-align:center;">
-                                        <input type="button" class="btn btn-primary mr-2" value="회원수정" onclick="location.href='/user/modify'">
-                                        <input type="button" class="btn btn-light" value="회원탈퇴" onclick="location.href='/user/delete-action';" >
+                                        <input type="button" class="btn btn-primary mr-2" value="회원수정" onclick="location.href='/user/modify?uId=${sessionScope.loginUser.getUId()}'">
+                                        <input type="button" class="btn btn-light" value="회원탈퇴" onclick="location.href='/user/withdrawal.action';" >
                                     </div>
                                 </form>
                             </div>

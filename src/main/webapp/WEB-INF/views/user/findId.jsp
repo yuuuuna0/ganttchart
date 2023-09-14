@@ -17,15 +17,15 @@
                             </p>
                             <form class="forms-sample" id="findIdF">
                                 <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+                                    <label for="uName">이름</label>
+                                    <input type="text" class="form-control" id="uName" name="uName" placeholder="이름을 입력하세요">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
+                                    <label for="uEmail">이메일</label>
+                                    <input type="email" class="form-control" id="uEmail" name="uEmail" placeholder="이메일을 입력하세요">
                                 </div>
                                 <input id="findIdBtn" type="button" onclick="findId();" class="btn btn-primary mr-2" value="아이디찾기">
-                                <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
+                                <input type="button" id="cancelBtn" onclick="location.href='/user/login'" class="btn btn-light" value="취소">
                                 <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                             </form>
                         </div>
@@ -38,28 +38,26 @@
     <!-- main-panel ends -->
 <script type="text/javascript">
     function findId(){
-        let email = $('#email').val();
-        let name = $('#name').val();
+        let uEmail = $('#uEmail').val();
+        let uName = $('#uName').val();
 
         $.ajax({
-            url :'/user/findId-ajax',
+            url :'/user/findId.ajx',
             method: 'POST',
             data : {
-                'email' : email,
-                'name' : name
+                'uEmail' : uEmail,
+                'uName' : uName
             },
             success: function (resultJson) {
                 if(resultJson.code === 1){
                     $('#findIdF').empty();
                     let html = '';
-                    console.log(resultJson);
                     for(let i=0; i<resultJson.data.length; i++){
                         let dataItem = resultJson.data[i];
-                        console.log(dataItem);
                         html+="<label>"+dataItem+"</label><br>";
                     }
                     html += "<input id='findIdBtn' type='button' onclick='location.href=\"/user/findPassword\"' class='btn btn-primary mr-2' value='비밀번호찾기'>\n" +
-                        "                                <input type='button' id='cancelBtn' onclick='location.href=\"/login\"' class='btn btn-light' value='로그인'>\n" +
+                        "                                <input type='button' id='cancelBtn' onclick='location.href=\"/user/login\"' class='btn btn-light' value='로그인'>\n" +
                         "                                <a href='/user/register' class='auth-link text-black float-right' style='font-size: 10pt'>Need an account? Sign up!</a>";
                     $('#findIdF').append(html);
                 } else {

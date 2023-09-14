@@ -16,16 +16,16 @@
                             <p class="card-description">
                             </p>
                                 <div class="form-group">
-                                    <label for="id">아이디</label>
-                                    <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력하세요">
+                                    <label for="uId">아이디</label>
+                                    <input type="text" class="form-control" id="uId" name="uId" placeholder="아이디를 입력하세요">
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+                                    <label for="uName">이름</label>
+                                    <input type="text" class="form-control" id="uName" name="uName" placeholder="이름을 입력하세요">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요">
+                                    <label for="uEmail">이메일</label>
+                                    <input type="email" class="form-control" id="uEmail" name="uEmail" placeholder="이메일을 입력하세요">
                                 </div>
                                 <input type="button" onclick="findPasswordAction()" id="findPasswordBtn" class="btn btn-primary mr-2" value="비밀번호찾기">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
@@ -40,31 +40,31 @@
     <!-- main-panel ends -->
 <script type="text/javascript">
     function findPasswordAction(){
-        let id = $('#id').val();
-        let name = $('#name').val();
-        let email = $('#email').val();
-        if (id === '') {
+        let uId = $('#uId').val();
+        let uName = $('#uName').val();
+        let uEmail = $('#uEmail').val();
+        if (uId === '') {
             alert("아이디를 입력하세요");
-            $('#id').focus();
+            $('#uId').focus();
             return false;
         }
-        if (name === '') {
+        if (uName === '') {
             alert("이름를 입력하세요");
-            $('#name').focus();
+            $('#uName').focus();
             return false;
         }
-        if (email === '') {
+        if (uEmail === '') {
             alert("이메일을 입력하세요");
-            $('#email').focus();
+            $('#uEmail').focus();
             return false;
         }
             $.ajax({
-                url : '/user/findPassword-ajax',
+                url : '/user/findPassword.ajx',
                 method : "POST",
                 data : {
-                    'id': id,
-                    'name': name,
-                    'email': email
+                    'uId': uId,
+                    'uName': uName,
+                    'uEmail': uEmail
                 },
                 success : function(resultMap){
                     if(resultMap.code === 1){

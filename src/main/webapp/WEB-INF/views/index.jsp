@@ -45,7 +45,7 @@
                                 <div class="card card-tale">
                                     <div class="card-body">
                                         <p class="mb-4">오늘의 방문자 수</p>
-                                        <p class="fs-30 mb-2">${visitorCountList[6]}</p>
+<%--                                        <p class="fs-30 mb-2">${visitorCountList[6]}</p>--%>
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
                                 <div class="card card-dark-blue">
                                     <div class="card-body">
                                         <p class="mb-4">오늘 생긴 게시물 수</p>
-                                        <p class="fs-30 mb-2">${newBoardCountList[6]}</p>
+<%--                                        <p class="fs-30 mb-2">${newBoardCountList[6]}</p>--%>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                 <div class="card card-light-blue">
                                     <div class="card-body">
                                         <p class="mb-4">오늘 가입자 수</p>
-                                        <p class="fs-30 mb-2">${newUserCountList[6]}</p>
+<%--                                        <p class="fs-30 mb-2">${newUserCountList[6]}</p>--%>
                                     </div>
                                 </div>
                             </div>
@@ -89,16 +89,16 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${boardTopList}" var="board">
-                                            <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${board.boardNo}</td>
-                                                <td>${board.boardTitle}</td>
-                                                <td>${board.boardContent}</td>
-                                                <td>${board.id}</td>
-                                                <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>
-                                                <td>${board.boardReadcount}</td>
-                                            </tr>
-                                        </c:forEach>
+<%--                                        <c:forEach items="${boardTopList}" var="board">--%>
+<%--                                            <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">--%>
+<%--                                                <td>${board.boardNo}</td>--%>
+<%--                                                <td>${board.boardTitle}</td>--%>
+<%--                                                <td>${board.boardContent}</td>--%>
+<%--                                                <td>${board.id}</td>--%>
+<%--                                                <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>--%>
+<%--                                                <td>${board.boardReadcount}</td>--%>
+<%--                                            </tr>--%>
+<%--                                        </c:forEach>--%>
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,11 +116,10 @@
         window.location.href='/board/detail/'+boardNo;
     }
 //    방문자 차트
-    let dateList = ${dateList};
-    let visitorCountList =${visitorCountList};
-    let newBoardCountList = ${newBoardCountList};
-    let newUserCountList = ${newUserCountList};
-    console.log(visitorCountList);
+<%--    let dateList = ${dateList};--%>
+<%--    let visitorCountList =${visitorCountList};--%>
+<%--    let newBoardCountList = ${newBoardCountList};--%>
+<%--    let newUserCountList = ${newUserCountList};--%>
 
     //3. 차트에 넣기
     Highcharts.chart('container', {
@@ -136,7 +135,7 @@
         //         'target="_blank">Wikipedia.com</a>'
         // },
         xAxis: {
-            categories: dateList
+            // categories: dateList
         },
         // yAxis: {
         //     title: {
@@ -152,16 +151,16 @@
             }
         },
         series: [{
-                name: '방문자 수',
-                data: visitorCountList
+                name: '방문자 수'
+                // data: visitorCountList
             }
             ,{
-                name: '게시글 수',
-                data: newBoardCountList
+                name: '게시글 수'
+                // data: newBoardCountList
             }
             ,{
-                name: '가입자 수',
-                data: newUserCountList
+                name: '가입자 수'
+                // data: newUserCountList
             }
         ]
     });

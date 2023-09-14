@@ -10,8 +10,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="/index"><img src="/static/images/logo.svg" class="mr-2" alt="logo"/></a>
-                <a class="navbar-brand brand-logo-mini" href="/index"><img src="/static/images/logo-mini.svg" alt="logo"/></a>
+                <a class="navbar-brand brand-logo mr-5" href="/"><img src="/static/images/logo.svg" class="mr-2" alt="logo"/></a>
+                <a class="navbar-brand brand-logo-mini" href="/"><img src="/static/images/logo-mini.svg" alt="logo"/></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -19,14 +19,14 @@
                 </button>
                 <ul class="navbar-nav navbar-nav-right">
                     <c:if test="${sessionScope.loginUser != null}">
-                        <li class="mt-lg-auto ">${sessionScope.loginUser.name}님 안녕하세요 &nbsp;&nbsp;</li>
+                        <li class="mt-lg-auto ">${sessionScope.loginUser.getUName()}님 안녕하세요 &nbsp;&nbsp;</li>
                     </c:if>
                 <c:choose>
-                    <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.saveFileName != null}">
+                    <c:when test="${sessionScope.loginUser != null && sessionScope.loginUser.fileNo != 0}">
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="1" data-toggle="dropdown" id="profileDropdown1">
 <%--                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="../../${sessionScope.loginUser.saveFileName}"/>--%>
-                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/user/${sessionScope.loginUser.saveFileName}"/>
+                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown1" alt="profile">
                                 <a class="dropdown-item">
@@ -40,7 +40,7 @@
                             </div>
                         </li>
                     </c:when>
-                    <c:when test="${sessionScope.loginUser == null || sessionScope.loginUser.saveFileName == null}">
+                    <c:when test="${sessionScope.loginUser == null || sessionScope.loginUser.fileNo == 0}">
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="/login" data-toggle="dropdown" id="profileDropdown2">
                                 <img class="img-fluid styled profile_pic rounded-circle" onclick="window.location.href='/login'" width = "200px" src="/static/images/icons/default.png" alt="profile" />

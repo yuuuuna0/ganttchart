@@ -24,33 +24,31 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="id">아이디</label><span style="color: red;">*</span>
-                                            <input type="text" class="form-control" id="id" name="id"
+                                            <label for="uId">아이디</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="uId" name="uId"
                                                    placeholder="아이디를 입력하세요.">
-                                            <label for="id" style="font-size: 8pt">&nbsp;&nbsp;5글자 이상 10글자 이하로 공백을 사용할 수 없습니다.</label>
+                                            <label for="uId" style="font-size: 8pt">&nbsp;&nbsp;5글자 이상 10글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-3 mt-4">
                                             <label></label>
                                             <input type="button" value="중복확인" onclick="validateId()"
                                                    class="btn btn-primary mr-2">
                                         </div>
-<%--                                        <c:if test="${sessionScope.loginUser.grade == 0}">--%>
-<%--                                        <div class="col-3">--%>
-<%--                                            <label for="grade">회원 등급</label><span style="color: red;">*</span>--%>
-<%--                                            <select class="form-control" id="grade" name="grade">--%>
-<%--                                                <option disabled selected></option>--%>
-<%--                                                <option value="0">관리자</option>--%>
-<%--                                                <option value="1">일반회원</option>--%>
-<%--                                            </select>--%>
-<%--                                        </div>--%>
-<%--                                        </c:if>--%>
+                                        <div class="col-3">
+                                            <label for="uTypeNo">회원 권한</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="uTypeNo" name="uTypeNo">
+                                                <option disabled selected></option>
+                                                <option value="1">일반회원</option>
+                                                <option value="2">판매자</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="password">비밀번호</label><span style="color: red;">*</span>
-                                            <input type="password" class="form-control" id="password" name="password"
+                                            <label for="uPassword">비밀번호</label><span style="color: red;">*</span>
+                                            <input type="password" class="form-control" id="uPassword" name="uPassword"
                                                    placeholder="비밀번호를 입력하세요">
-                                            <label style="font-size: 8pt" for="password">&nbsp;&nbsp;영문,특수문자,숫자를 포함하는 6글자 이상 12글자 이하로 공백을 사용할 수 없습니다.</label>
+                                            <label style="font-size: 8pt" for="uPassword">&nbsp;&nbsp;영문,특수문자,숫자를 포함하는 6글자 이상 12글자 이하로 공백을 사용할 수 없습니다.</label>
                                         </div>
                                         <div class="col-6">
                                             <label for="confirmPassword">비밀번호 확인</label><span style="color: red;">*</span>
@@ -60,13 +58,13 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="name">이름</label><span style="color: red;">*</span>
-                                            <input type="text" class="form-control" id="name" name="name"
+                                            <label for="uName">이름</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="uName" name="uName"
                                                    placeholder="이름을 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="gender">성별</label><span style="color: red;">*</span>
-                                            <select class="form-control" id="gender" name="gender">
+                                            <label for="uGender">성별</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="uGender" name="uGender">
                                                 <option disabled selected></option>
                                                 <option value="남">남</option>
                                                 <option value="여">여</option>
@@ -74,31 +72,32 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">이메일</label><span style="color: red;">*</span>
-                                        <input type="email" class="form-control" id="email" name="email"
+                                        <label for="uEmail">이메일</label><span style="color: red;">*</span>
+                                        <input type="email" class="form-control" id="uEmail" name="uEmail"
                                                placeholder="이메일을 입력하세요">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="phone">전화번호</label>
-                                            <input type="text" class="form-control" id="phone" name="phone"
+                                            <label for="uPhone">전화번호</label>
+                                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="uPhone" name="uPhone"
                                                    placeholder="전화번호를 입력하세요">
+                                            <label style="font-size: 8pt" for="uPhone">&nbsp;&nbsp;'-'를 제외한 숫자만 입력하세요</label>
                                         </div>
                                         <div class="col-6">
-                                            <label for="birth">생일</label>
-                                            <input type="date" class="form-control" id="birth" name="birth">
+                                            <label for="uBirth">생일</label>
+                                            <input type="date" class="form-control" id="uBirth" name="uBirth">
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
-                                            <label for="address">주소</label>
-                                            <input type="text" class="form-control" id="address" name="address"
+                                            <label for="uAddress">주소</label>
+                                            <input type="text" class="form-control" id="uAddress" name="uAddress"
                                                    placeholder="주소를 입력하세요">
                                         </div>
                                         <div class="col-6">
-                                            <label for="detailedAddress">&nbsp;</label>
-                                            <input type="text" class="form-control" id="detailedAddress"
-                                                   name="detailedAddress" placeholder="상세주소를 입력하세요">
+                                            <label for="uAddress2">&nbsp;</label>
+                                            <input type="text" class="form-control" id="uAddress2"
+                                                   name="uAddress2" placeholder="상세주소를 입력하세요">
                                         </div>
                                     </div>
                                     <div style="text-align:center;">
@@ -124,11 +123,11 @@
 <script type="text/javascript">
     //1. 주소 api
     window.onload = function () {
-        document.getElementById('address').addEventListener('click', function () {
+        document.getElementById('uAddress').addEventListener('click', function () {
             new daum.Postcode({
                 oncomplete: function (data) { //선택시 입력값 세팅
-                    document.getElementById("address").value = data.address; // 주소 넣기
-                    document.querySelector("input[name=address]").focus(); //상세입력 포커싱
+                    document.getElementById("uAddress").value = data.address; // 주소 넣기
+                    document.querySelector("input[name=uAddress]").focus(); //상세입력 포커싱
                 }
             }).open();
         })
@@ -151,125 +150,143 @@
     //4. 아이디 정규식 체크 및 중복검사
     let vId= 0;
     function validateId(){
-        let id = $('#id').val();
+        let id = $('#uId').val();
         //정규식 체크
         if (id === '') {
             alert('아이디를 입력하세요');
-            $('#id').focus();
+            $('#uId').focus();
             return false;
         }
         if(id.match(/\s/g)){
             alert("아이디는 공백을 사용할 수 없습니다.");
-            $('#id').val('');
-            $('#id').focus();
+            $('#uId').val('');
+            $('#uId').focus();
             return false;
         }
         if(id.length <5 || id.length >10){
             alert("아이디는 5글자 이상 10글자 이하입니다.");
-            $('#id').focus();
+            $('#uId').focus();
             return false;
         }
-        console.log("아이디 정규식체크 확인완료");
-
         $.ajax({
-            url : '/user/idCheck-ajax',
+            url : '/user/idCheck',
             method : 'POST',
             data : {
                 'id' : id
             },
-            success : function(idCount){
-                console.log(idCount);
-                if(idCount === 1){
-                    alert("중복된 아이디입니다.");
-                    $('#id').val('');
-                    return false;
-                } else{
-                    alert("사용할 수 있는 아이디입니다");
-                    $('#id').value = id;
+            success : function(resultJson){
+                if(resultJson.code === 1){
+                    alert(resultJson.msg);
+                    $('#uId').value = id;
                     vId=1;
+                } else{
+                    alert(resultJson.msg);
+                    $('#uId').val('');
+                    return false;
                 }
             },
             error :function (e) {
                 console.log(e);
-            },
-            async : true
+            }
         });
     }
 
     function createUser() {
-        var id = document.getElementById("id").value;
-        var name = document.getElementById("name").value;
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
-        var phone = document.getElementById("phone").value;
-        var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
-        $('#address').val(address);
-        let gender = $('#gender option:selected').val();
-        // let grade = $('#grade option:selected').val();
-        var birth = document.getElementById("birth").value;
+        let uId = $("#uId").val();
+        let uName = $("#uName").val();
+        let uEmail = $("#uEmail").val();
+        let uPassword = $("#uPassword").val();
+        let confirmPassword = $("#confirmPassword").val();
+        let uGender = $('#uGender option:selected').val();
+        let uTypeNo = $('#uTypeNo option:selected').val();
+        let uPhone = $('#uPhone').val();
 
         /**************************** 유효성 검사 ****************************************/
         if (vId === 0){
             alert("아이디 중복확인을 하세요");
             return false;
         }
-        //1) 비밀번호 정규식 검사
-        if (password === '') {
-            alert("비밀번호를 입력하세요");
-            document.getElementById("password").focus();
+        if (uId === '') {
+            alert("아이디를 입력하세요");
+            $("#uId").focus();
             return false;
         }
-        if(password.match(/\s/g) || !password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,12}$/)){
-            alert("비밀번호 형식에 맞게 작성해주세요");
-            $('#password').val('');
-            $('#confirmPassword').val('');
-            document.getElementById("password").focus();
+        if (uPassword === '') {
+            alert("비밀번호를 입력하세요");
+            $("#uPassword").focus();
             return false;
         }
         if (confirmPassword === '') {
             alert("비밀번호 확인을 입력하세요");
-            document.getElementById("confirmPassword").focus();
+            $("#confirmPassword").focus();
             return false;
         }
-        if (name === '') {
+        if (uName === '') {
             alert("이름을 입력하세요");
-            document.getElementById("name").focus();
+            $("#uName").focus();
             return false;
         }
-        if (email === '') {
+        if (uEmail === '') {
             alert("이메일을 입력하세요");
-            document.getElementById("email").focus();
+            $("#uEmail").focus();
             return false;
         }
-        if (!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
+        if (!uEmail.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
             alert("이메일형식에 맞게 작성해주세요");
-            $('#email').val('');
-            document.getElementById("email").focus();
+            $('#uEmail').val('');
+            $("#uEmail").focus();
             return false;
         }
-        // if (grade === '') {
-        //     alert("회원등급을 선택하세요");
-        //     return false;
-        // }
-        if (gender === '') {
+        if(uPhone !== '' && uPhone.match(/^01([0-9]{8,9})$/)){
+            //010도 자꾸 넘어감
+            alert("전화번호 양식에 맞게 입력 해 주세요");
+            $('#uPhone').val();
+            $("#uPhone").focus();
+            return false;
+        }
+        if (uTypeNo === '') {
+            alert("회원등급을 선택하세요");
+            return false;
+        }
+        if (uGender === '') {
             alert("성별을 선택하세요");
             return false;
         }
-        if (password !== confirmPassword) {
+        if (uPassword !== confirmPassword) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            $('#password').val('');
+            $('#uPassword').val('');
             $('#confirmPassword').val('');
-            document.getElementById("confirmPassword").focus();
+            $("#confirmPassword").focus();
             return false;
         }
 
-        document.registerF.method = 'POST';
-        document.registerF.action = '/user/register-action';
-        document.registerF.submit();
 
+        let form = $('#registerF').serializeArray();
+        let file = $('#photoFile')[0].files;
+        let formData = new FormData();
+        for(let i=0;i<form.length;i++){
+            formData.append(form[i].name,form[i].value);
+        }
+        formData.append("file",file[0]);
+        for(let data of formData){
+            console.log(data);
+        }
+
+        $.ajax({
+            url : '/user/register.ajx',
+            method : 'POST',
+            data : formData,
+            contentType : false,
+            processData : false,    //필요여부 확인
+            success : function(resultJson){
+                alert(resultJson.msg);
+                if(resultJson.code === 1){
+                    window.location.href = resultJson.forwardPath;
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
 </script>
-
-</body>
-</html>
