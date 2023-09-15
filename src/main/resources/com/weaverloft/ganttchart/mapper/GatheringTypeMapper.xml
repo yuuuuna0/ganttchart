@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.GatheringTypeMapper">
+<!--1. 모임타입 전체 불러오기    -->
+    <select id="findGathTypeList" resultType="com.weaverloft.ganttchart.dto.GatheringType">
+        select * from gatheringType
+    </select>
+<!--2. 모임타입 추가하기   -->
+    <insert id="createGathType" parameterType="com.weaverloft.ganttchart.dto.GatheringType">
+        <selectKey resultType="java.lang.Integer" keyProperty="gathTypeNo" order="BEFORE">
+            select GatheringType_GATH_TYPE_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into GATHERINGTYPE(gath_type_no,gath_type) values(#{gathTypeNo},#{gathType})
+    </insert>
+<!--3. 모임유형 찾기    -->
+    <select id="findGathTypeByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.GatheringType">
+        select * from gatheringType where gath_type_no=#{gathTypeNo}
+    </select>
+</mapper>
+

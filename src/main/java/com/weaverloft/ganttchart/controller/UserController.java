@@ -72,7 +72,7 @@ public class UserController {
     //1-2. 회원가입액션 AJAX
     @ResponseBody
     @PostMapping("/register.ajx")
-    public Map<String,Object> registerAjax(Users user, @RequestPart(required = false) MultipartFile file){
+    public Map<String,Object> registerAjax(Users user, @RequestPart(required = false) MultipartFile mf){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
@@ -89,22 +89,31 @@ public class UserController {
                 msg = "비밀번호는 영문,숫자,특수문자를 포함한 6글자 이상 12글자 이하로, 공백이 포함될 수 없습니다.";
             }
             //3) 인증메일 발송 --> recipient address is not a valid address 에러
-            String uAuthCode = emailService.sendMail(user.getUId(),1);
-            user.setUAuthCode(uAuthCode);
-            //4) 사진 업로드 --- 확장자 검사 필요함
-            int fileNo=0;
-            if(file != null){
-                System.out.println("사진있음");
-                int result = filesService.createFile(file,1);
-                fileNo = filesService.findCurFileNo();
-            }
-            user.setFileNo(fileNo);
-            //5) 회원가입 완료 --- 직전에 업로드한 fileNo curval 찾아서 회원에 넣어준다. + fileNo 0 만들어야 fk 위반 안하나?
+//            String uAuthCode = emailService.sendMail(user.getUId(),1);
+//            user.setUAuthCode(uAuthCode);
+            //4) 회원가입 완료 --- 직전에 업로드한 fileNo curval 찾아서 회원에 넣어준다. + fileNo 0 만들어야 fk 위반 안하나?
             int result = usersService.createUsers(user);
-            if(result == 1){
+            if(result == 1) {
                 code = 1;
                 msg = "가입하신 이메일로 인증번호가 전송되었습니다.";
-                forwardPath="/user/login";
+                forwardPath = "/user/login";
+            }
+            //5) 사진 업로드 --- 확장자 검사 필요함
+            if(mf != null){
+                System.out.println("사진있음");
+                Map<String,Object> map = filesService.uploadFile(mf,1);
+                Files file = new Files(0,
+                                        (String)map.get("saveName"),
+                                        (String)map.get("originalName"),
+                                        (String)map.get("filePath"),
+                                        (String)map.get("fileExt"),
+                                        "Y",
+                                        user.getUId(),
+                                        0,0,0,
+                                        (Long)map.get("fileSize"));
+                filesService.createFile(file,1);
+                int fileNo = filesService.findCurFileNo();
+                usersService.updateFileNo(user.getUId(),fileNo);
             }
             //7) 로그 추가
 

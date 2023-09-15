@@ -16,4 +16,9 @@ public class Files {
     private String filePath;
     private String fileExt;
     private String isUse;
+    private String uId;
+    private int gathNo;
+    private int reviewNo;
+    private int boardNo;
+    private long fileSize;
 }

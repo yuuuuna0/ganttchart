@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.CityMapper">
+<!--1. 도시 전체 불러오기-->
+    <select id="findCityList" resultType="com.weaverloft.ganttchart.dto.City">
+        select * from city
+    </select>
+<!--2. 도시 추가하기    -->
+    <insert id="createCity" parameterType="com.weaverloft.ganttchart.dto.City">
+        <selectKey resultType="java.lang.Integer" keyProperty="cityNo" order="BEFORE">
+            select City_CITY_NO_SEQ.nextval from dual
+        </selectKey>
+        insert into City(city_no,city) values(#{cityNo},#{city})
+    </insert>
+<!--3. 도시 찾기    -->
+    <select id="findCityByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.City">
+        select * from city where city_no=#{cityNo}
+    </select>
+</mapper>
+

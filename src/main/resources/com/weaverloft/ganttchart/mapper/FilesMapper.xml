@@ -6,15 +6,48 @@
         select FILES_FILE_NO_SEQ.currval from dual
     </select>
 <!--2. 파일 생성-->
-    <insert id="createFile" parameterType="com.weaverloft.ganttchart.dto.Files">
+    <insert id="createUserFile" parameterType="com.weaverloft.ganttchart.dto.Files">
         <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
             select files_file_no_seq.nextval from dual
         </selectKey>
-        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use)
-        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y')
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',#{uId})
+    </insert>
+    <insert id="createGathFile" parameterType="com.weaverloft.ganttchart.dto.Files">
+        <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
+            select files_file_no_seq.nextval from dual
+        </selectKey>
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,gath_no)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{gathNo})
+    </insert>
+    <insert id="createReviewFile" parameterType="com.weaverloft.ganttchart.dto.Files">
+        <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
+            select files_file_no_seq.nextval from dual
+        </selectKey>
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,review_no)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{reviewNo})
+    </insert>
+    <insert id="createBoardFile" parameterType="com.weaverloft.ganttchart.dto.Files">
+        <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
+            select files_file_no_seq.nextval from dual
+        </selectKey>
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,board_no)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{boardNo})
     </insert>
 <!--3. 번호로 파일 찾기    -->
     <select id="findFileByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">
-        select * from files where file_no=#{fileNo}
+        select * from files where file_no=#{fileNo} and is_use='Y'
+    </select>
+<!--6. 게시판번호로 파일리스트 찾기    -->
+    <select id="findFileByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">
+        select * from files where board_no = #{boardNo} and is_use='Y'
+    </select>
+<!--7. 리뷰번호로 파일리스트 찾기    -->
+    <select id="findFileByReviewNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">
+        select * from files where review_no = #{reviewNo} and is_use='Y'
+    </select>
+<!--9. 모임번호로 파일리스트 찾기    -->
+    <select id="findFileByGathNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">
+        select * from files where gath_no = #{gathNo} and is_use='Y'
     </select>
 </mapper>

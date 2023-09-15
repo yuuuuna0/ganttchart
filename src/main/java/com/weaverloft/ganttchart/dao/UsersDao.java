@@ -19,4 +19,7 @@ public interface UsersDao {
 
     int updateUser(Users user) throws Exception;
 
+    int updateFileNo(String uId, int fileNo) throws Exception;
+
+    List<Users> findUserList() throws Exception;
 }

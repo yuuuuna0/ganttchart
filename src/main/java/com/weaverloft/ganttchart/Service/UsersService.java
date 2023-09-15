@@ -24,4 +24,8 @@ public interface UsersService {
     int updateUser(Users user) throws Exception;
 
     int withdrawalUser(String uId, int uStatusNo) throws Exception;
+
+    int updateFileNo(String uId, int fileNo) throws Exception;
+
+    List<Users> findUserList() throws Exception;
 }

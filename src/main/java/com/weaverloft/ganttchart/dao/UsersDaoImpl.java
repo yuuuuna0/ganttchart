@@ -63,5 +63,18 @@ public class UsersDaoImpl implements UsersDao{
         return usersMapper.updateUser(user);
     }
 
+    @Override
+    public int updateFileNo(String uId, int fileNo) throws Exception {
+        Map<String,Object> map =new HashMap<>();
+        map.put("uId",uId);
+        map.put("fileNo",fileNo);
+        return usersMapper.updateFileNo(map);
+    }
+
+    @Override
+    public List<Users> findUserList() throws Exception {
+        return usersMapper.findUserList();
+    }
+
 
 }

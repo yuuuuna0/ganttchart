@@ -32,12 +32,12 @@
                                         <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                         <div class="input-group col-xs-12">
                                             <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >
-                                                <c:forEach items="${boardFileList}" var="boardFile" varStatus="i">
-                                                    <div class="file" id="file${boardFile.fileNo}" style="font-size:12px;">
+                                                <c:forEach items="${fileList}" var="file" varStatus="i">
+                                                    <div class="file" id="file${file.fileNo}" style="font-size:12px;">
                                                             ${boardFile.originalFileName}
-                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${boardFile.fileSize/1000}" integerOnly="true" /> kb</span>
+                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>
                                                                 <span>
-                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${boardFile.fileNo})" /></span>
+                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${file.fileNo})" /></span>
                                                     </div>
                                                 </c:forEach>
                                                 <div id="fileList" >
@@ -48,7 +48,7 @@
                                 </form>
                                     <div style="text-align: center">
                                         <input type="button" id="boardModifyBtn" name="boardModifyBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">
-                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/board/detail/${board.boardNo}'" value="취소">
+                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/board/detail?boardNo=${board.boardNo}'" value="취소">
                                     </div>
                             </div>
                             <hr>
@@ -160,7 +160,7 @@
             formData.append("fileArray", fileArray[i]);
         }
         $.ajax({
-            url : '/board//modify-ajax',
+            url : '/board/modify.ajx?boardNo='+boardNo,
             method : 'POST',
             enctype: 'multipart/form-data',
             contentType : false,

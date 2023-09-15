@@ -44,14 +44,14 @@
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
-                                        <c:forEach items="${boardListPage.itemList}" var="board">
+                                        <c:forEach items="${boardList}" var="board">
                                             <tr style="cursor: pointer;" onclick="goToBoardList('${board.boardNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
                                                 <td>${board.boardNo}</td>
                                                 <td>${board.boardTitle}</td>
                                                 <td>${board.boardContent}</td>
                                                 <c:forEach items="${userList}" var="user">
-                                                    <c:if test="${board.id == user.id}">
-                                                        <td>${user.name}</td>
+                                                    <c:if test="${board.getUId() == user.getUId()}">
+                                                        <td>${user.getUName()}</td>
                                                     </c:if>
                                                 </c:forEach>
 
@@ -64,41 +64,41 @@
                                 </div>
 
                                 <br>
-                                <!-- pagination -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <!-- preview -->
-                                            <c:if test="${boardListPage.pageMaker.prevGroupStartPage > 0}">
-                                                <li class="page-item">
-                                                    <button  class="page-link" value="${boardListPage.pageMaker.prevGroupStartPage}" onclick="searchBoardList(${boardListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </button>
-                                                </li>
-                                            </c:if>
-                                            <!-- n개 고정 -->
-                                                <c:forEach begin="${boardListPage.pageMaker.blockBegin}" end="${boardListPage.pageMaker.blockEnd}" var="no">
-                                                            <c:if test="${no == boardListPage.pageMaker.curPage}">
-                                                                <li class="page-item active">
-                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>
-                                                                </li>
-                                                            </c:if>
-                                                            <c:if test="${no != boardListPage.pageMaker.curPage}">
-                                                                <li class="page-item">
-                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>
-                                                                </li>
-                                                            </c:if>
-                                                </c:forEach>
-                                            <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">
-                                                <li class="page-item">
-                                                    <button class="page-link" value="${boardListPage.pageMaker.nextGroupStartPage}" onclick="searchBoardList(${boardListPage.pageMaker.nextGroupStartPage})" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                        <span class="sr-only">Next</span>
-                                                    </button>
-                                                </li>
-                                            </c:if>
-                                        </ul>
-                                    </nav>
+<%--                                <!-- pagination -->--%>
+<%--                                    <nav aria-label="Page navigation example">--%>
+<%--                                        <ul class="pagination">--%>
+<%--                                            <!-- preview -->--%>
+<%--                                            <c:if test="${boardListPage.pageMaker.prevGroupStartPage > 0}">--%>
+<%--                                                <li class="page-item">--%>
+<%--                                                    <button  class="page-link" value="${boardListPage.pageMaker.prevGroupStartPage}" onclick="searchBoardList(${boardListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">--%>
+<%--                                                        <span aria-hidden="true">&laquo;</span>--%>
+<%--                                                        <span class="sr-only">Previous</span>--%>
+<%--                                                    </button>--%>
+<%--                                                </li>--%>
+<%--                                            </c:if>--%>
+<%--                                            <!-- n개 고정 -->--%>
+<%--                                                <c:forEach begin="${boardListPage.pageMaker.blockBegin}" end="${boardListPage.pageMaker.blockEnd}" var="no">--%>
+<%--                                                            <c:if test="${no == boardListPage.pageMaker.curPage}">--%>
+<%--                                                                <li class="page-item active">--%>
+<%--                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>--%>
+<%--                                                                </li>--%>
+<%--                                                            </c:if>--%>
+<%--                                                            <c:if test="${no != boardListPage.pageMaker.curPage}">--%>
+<%--                                                                <li class="page-item">--%>
+<%--                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>--%>
+<%--                                                                </li>--%>
+<%--                                                            </c:if>--%>
+<%--                                                </c:forEach>--%>
+<%--                                            <c:if test="${boardListPage.pageMaker.nextGroupStartPage <= boardListPage.pageMaker.totPage}">--%>
+<%--                                                <li class="page-item">--%>
+<%--                                                    <button class="page-link" value="${boardListPage.pageMaker.nextGroupStartPage}" onclick="searchBoardList(${boardListPage.pageMaker.nextGroupStartPage})" aria-label="Next">--%>
+<%--                                                        <span aria-hidden="true">&raquo;</span>--%>
+<%--                                                        <span class="sr-only">Next</span>--%>
+<%--                                                    </button>--%>
+<%--                                                </li>--%>
+<%--                                            </c:if>--%>
+<%--                                        </ul>--%>
+<%--                                    </nav>--%>
 
                             </div>
                         </div>
@@ -110,7 +110,7 @@
         <!-- main-panel ends -->
 <script>
     function goToBoardList(boardNo){
-        window.location.href='/board/detail/'+boardNo;
+        window.location.href='/board/detail?boardNo='+boardNo;
     }
 
     // 검색창 입력 후 엔터키 => 검색

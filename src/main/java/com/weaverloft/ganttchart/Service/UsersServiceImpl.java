@@ -81,5 +81,15 @@ public class UsersServiceImpl implements UsersService{
         return usersDao.updateUStatusNo(uId,uStatusNo);
     }
 
+    @Override
+    public int updateFileNo(String uId, int fileNo) throws Exception {
+        return usersDao.updateFileNo(uId,fileNo);
+    }
+
+    @Override
+    public List<Users> findUserList() throws Exception {
+        return usersDao.findUserList();
+    }
+
 
 }

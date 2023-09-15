@@ -119,18 +119,14 @@
         }
 
         formData.append("boardTitle",boardTitle);
-        console.log('boardTitle : ' + boardTitle);
         formData.append("boardContent",boardContent);
-        console.log('boardContent : ' + boardContent);
        //파일리스트 폼에 하나씩 붙여줘야 함 --> 다른 방식 있는지 확인()
         for (var i = 0; i < fileArray.length; i++) {
-            console.log("file : " + fileArray[i]);
-            formData.append("fileArray", fileArray[i]);
+            formData.append("fileList", fileArray[i]);
         }
         $.ajax({
-            url : '/board/register-ajax',
+            url : '/board/register.ajx',
             method : 'POST',
-            enctype: 'multipart/form-data',
             contentType : false,
             processData : false,
             data : formData,

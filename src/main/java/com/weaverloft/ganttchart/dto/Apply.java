@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 @Data
+@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class Apply {
     private int applyNo;
     private Date applyDate;
-    private String mId;
+    private String uId;
     private int gathNo;
     private int applyStatusNo;
 }

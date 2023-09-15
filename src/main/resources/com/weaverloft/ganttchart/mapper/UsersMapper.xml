@@ -8,7 +8,7 @@
 <!--2. 회원가입   -->
     <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
         insert into USERS(U_ID,U_PASSWORD,U_NAME,U_EMAIL,U_GENDER,U_BIRTH,U_PHONE,U_CREATE_DATE,U_ADDRESS,U_ADDRESS2,U_TYPE_NO,U_STATUS_NO,FILE_NO,U_AUTH_CODE)
-        values (#{uId},#{uPassword},#{uName},#{uEmail},#{uGender},#{uBirth},#{uPhone},sysdate,#{uAddress},#{uAddress2},#{uTypeNo},1,#{fileNo},#{uAuthCode})
+        values (#{uId},#{uPassword},#{uName},#{uEmail},#{uGender},#{uBirth},#{uPhone},sysdate,#{uAddress},#{uAddress2},#{uTypeNo},1,0,#{uAuthCode})
     </insert>
 <!--3. 로그인    -->
     <select id="login" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Users">
@@ -32,5 +32,13 @@
         update users set u_name=#{uName}, u_email=#{uEmail}, u_gender=#{uGender}, u_birth=#{uBirth}, u_phone=#{uPhone},u_address=#{uAddress},
                          u_address2={uAddress2}, file_no=#{fileNo} where u_id=#{uId}
     </update>
+<!--8. 회원 파일번호 업데이트 -->
+    <update id="updateFileNo" parameterType="java.util.Map">
+        update users set file_no=#{fileNo} where u_id=#{uId}
+    </update>
+<!--9. 모든 회원 찾기    -->
+    <select id="findUserList" resultType="com.weaverloft.ganttchart.dto.Users">
+        select * from users
+    </select>
 </mapper>
 

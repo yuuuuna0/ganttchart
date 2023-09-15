@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.GatheringMapper">
+
+<!--&lt;!&ndash; 모임&도시 조합    &ndash;&gt;-->
+<!--    <resultMap id="gathWithCity" type="com.weaverloft.ganttchart.dto.Gathering" autoMapping="true">-->
+<!--        <association property="city" javaType="com.weaverloft.ganttchart.dto.City" autoMapping="true"/>-->
+<!--    </resultMap>-->
+<!--&lt;!&ndash; 모임&이미지리스트 조합    &ndash;&gt;-->
+<!--    <resultMap id="gathWithImgWithCity" type="com.weaverloft.ganttchart.dto.Gathering" extends="gathWithCity" autoMapping="true">-->
+<!--        <collection property="fileList" javaType="java.util.List" ofType="com.weaverloft.ganttchart.dto.Files" autoMapping="true"/>-->
+<!--    </resultMap>-->
+
+
+
+<!--1. 모임 전체리스트 찾기-->
+    <select id="findGathList" resultType="com.weaverloft.ganttchart.dto.Gathering" >
+        select * from gathering where not gath_status_no=99
+    </select>
+<!--2. 번호로 모임 찾기    -->
+    <select id="findGathByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Gathering">
+        select * from gathering where gath_no=#{gathNo}
+    </select>
+<!--3. 모임 생성하기    -->
+    <insert id="createGath" parameterType="com.weaverloft.ganttchart.dto.Gathering">
+        <selectKey keyProperty="gathNo" resultType="java.lang.Integer" order="BEFORE">
+            select gathering_gath_no_seq.nextval from dual
+        </selectKey>
+        insert into GATHERING(GATH_NO, GATH_Title, U_ID, GATH_ADDR, GATH_ADDR2, GATH_CLOSE, GATH_DAY, GATH_DESC, GATH_AMOUNT, GATH_CREATE_DATE, GATH_TYPE_NO, GATH_STATUS_NO, CITY_NO, GATH_READCOUNT)
+               VALUES(#{gathNo},#{gathTitle},#{uId},#{gathAddr},#{gathAddr2},#{gathClose},#{gathDay},#{gathDesc},#{gathAmount},sysdate,#{gathTypeNo},1, #{cityNo},0)
+    </insert>
+<!--4. 가장 최신번호 가져오기-->
+    <select id="findCurNo" resultType="java.lang.Integer">
+        select gathering_gath_no_seq.currval from dual
+    </select>
+<!--5. 모임 수정하기-->
+    <update id="updateGath" parameterType="com.weaverloft.ganttchart.dto.Gathering">
+        update gathering set gath_title=#{gathTitle}, gath_addr=#{gathAddr}, gath_addr2=#{gathAddr2}, gath_close=#{gathClose}, gath_day=#{gathDay}, gath_desc=#{gathDesc}, gath_amount=#{gathAmount},gath_type_no=#{gathTypeNo},city_no=#{cityNo}
+        where gath_no=#{gathNo}
+    </update>
+<!--6. 모임 상태 변경하기  -->
+    <update id="updateGathStatusNo" parameterType="java.util.Map">
+        update gathering set gath_status_no=#{gathStatusNo} where gath_no=#{gathNo}
+    </update>
+<!--7. 모임 완전 삭제하기-->
+    <delete id="deleteGath" parameterType="java.lang.Integer">
+        delete gathering where gath_no=#{gathNo}
+    </delete>
+<!--8. 모임 조회수 올리기    -->
+    <update id="increaseReadCount" parameterType="java.lang.Integer">
+        update gathering set gath_readcount=gath_readcount+1 where gath_no=#{gathNo}
+    </update>
+</mapper>

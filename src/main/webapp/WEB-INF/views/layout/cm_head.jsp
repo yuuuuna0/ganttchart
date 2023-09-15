@@ -67,4 +67,6 @@
     <%-- 하이차트   --%>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <%--스마트에디터--%>
+    <script type="text/javascript" src="/smartEditor/js/HuskyEZCreator.js" charset="UTF-8"></script>
 

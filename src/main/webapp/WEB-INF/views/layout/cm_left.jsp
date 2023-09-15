@@ -20,6 +20,7 @@
     </c:if>
     <c:if test="${sessionScope.loginUser == null}">
     <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; align-content: center" value="로그인" onclick="location.href='/user/login'">
+    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="회원가입" onclick="location.href='/user/register'">
     </c:if>
     </div>
     </div>
@@ -49,6 +50,30 @@
         <a class="nav-link" href="/user/login">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">로그인</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/board/register">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">게시글작성</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/board/list?pageNo=1&keyword=">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">게시글리스트</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/gathering/list?pageNo=1&keyword=">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">모임리스트</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/gathering/register">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">모임등록하기</span>
         </a>
         </li>
 <%--    <c:choose>--%>

@@ -22,4 +22,7 @@ public interface UsersMapper {
 
     int updateUser(Users user) throws Exception;
 
+    int updateFileNo(Map<String,Object> map) throws Exception;
+
+    List<Users> findUserList() throws Exception;
 }
