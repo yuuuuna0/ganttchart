@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.ApplyMapper">
+<!--1. 모임 신청하기    -->
+    <insert id="createApply" parameterType="com.weaverloft.ganttchart.dto.Apply">
+        <selectKey keyProperty="applyNo" resultType="java.lang.Integer" order="BEFORE">
+            select apply_apply_no_seq.nextval from dual
+        </selectKey>
+        insert into APPLY(APPLY_NO, APPLY_DATE, U_ID, GATH_NO, APPLY_STATUS_NO)
+               VALUES(#{applyNo},sysdate,#{uId},#{gathNo},1)
+    </insert>
+<!--2. 신청상태 변경하기    -->
+    <update id="changeApplyStatusNo" parameterType="java.util.Map">
+        update apply set apply_status_no=#{applyStatusNo} where apply_no=#{applyNo}
+    </update>
+<!--3. 신청리스트 전체보기    -->
+    <select id="findApplyList" resultType="com.weaverloft.ganttchart.dto.Apply">
+        select * from apply
+    </select>
+<!--4. 해당모임 신청리스트 전체보기    -->
+    <select id="findApplyByGathNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Apply">
+        select * from apply where gath_no=#{gathNo}
+    </select>
+<!--5. 나의 신청리스트 보기    -->
+    <select id="findApplyByUId" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Apply">
+        select * from apply where u_id=#{uId}
+    </select>
+<!--6. 해당모임 신청완료 인원 수 보기    -->
+    <select id="countAcceptedApply" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from apply where gath_no=#{gathNo} and apply_status_no=2
+    </select>
 </mapper>
 

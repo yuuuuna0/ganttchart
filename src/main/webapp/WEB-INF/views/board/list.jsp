@@ -54,7 +54,6 @@
                                                         <td>${user.getUName()}</td>
                                                     </c:if>
                                                 </c:forEach>
-
                                                 <td><fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/></td>
                                                 <td>${board.boardReadcount}</td>
                                             </tr>
@@ -120,7 +119,7 @@
             e.preventDefault();
         }
     });
-    // 게시글 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
+    // 게시글 검색하기
     function searchBoardList(no){
         let keyword = $('#keyword').val();
         let pageNo = no;

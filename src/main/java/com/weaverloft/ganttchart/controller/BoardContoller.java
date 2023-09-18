@@ -1,9 +1,11 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
+import com.weaverloft.ganttchart.Service.CommentsService;
 import com.weaverloft.ganttchart.Service.FilesService;
 import com.weaverloft.ganttchart.Service.UsersService;
 import com.weaverloft.ganttchart.dto.Board;
+import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Files;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +24,13 @@ public class BoardContoller {
     private BoardService boardService;
     private FilesService filesService;
     private UsersService usersService;
+    private CommentsService commentsService;
 
-    public BoardContoller(BoardService boardService, FilesService filesService, UsersService usersService) {
+    public BoardContoller(BoardService boardService, FilesService filesService, UsersService usersService,CommentsService commentsService) {
         this.boardService = boardService;
         this.filesService = filesService;
         this.usersService = usersService;
+        this.commentsService = commentsService;
     }
 
     //1. 게시글리스트페이지
@@ -51,9 +56,13 @@ public class BoardContoller {
             int result = boardService.increaseReadCount(boardNo);
             Board board = boardService.findBoardByNo(boardNo);
             List<Files> filesList = filesService.findFileByBoardNo(boardNo);
+            List<Comments> commentList = commentsService.findCommentByBoardNo(boardNo);
+            List<Comments> preCommentList = commentsService.findPreCommentByBoardNo(boardNo);
             Users user = usersService.findUserById(board.getUId());
             model.addAttribute("board",board);
             model.addAttribute("fileList",filesList);
+            model.addAttribute("commentList",commentList);
+            model.addAttribute("preCommentList",preCommentList);
             model.addAttribute("user",user);
             forwardPath="/board/detail";
         } catch (Exception e){
@@ -75,12 +84,14 @@ public class BoardContoller {
     //3-1. 게시글 작성하기 AJAX
     @ResponseBody
     @PostMapping("/register.ajx")
-    public Map<String,Object> registerAjax(Board board, @RequestPart(required = false) List<MultipartFile> fileList){
+    public Map<String,Object> registerAjax(Board board, @RequestPart(required = false) List<MultipartFile> fileList, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
         String forwardPath ="";
         try{
+            Users user = (Users) session.getAttribute("loginUser");
+            board.setUId(user.getUId());
             int result = boardService.createBoard(board);
             int boardNo = boardService.findCurNo();
             if(fileList != null){

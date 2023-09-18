@@ -12,7 +12,7 @@ public interface FilesService {
     Map<String,Object> uploadFile(MultipartFile file, int fileType) throws Exception;
     int createFile(Files file, int fileType) throws Exception;
 
-    Files fineFileByNo(int fileNo) throws Exception;
+    Files findFileByNo(int fileNo) throws Exception;
 
     List<Files> findFileByBoardNo(int boardNo) throws Exception;
     List<Files> findFileByReviewNo(int reviewNo) throws Exception;

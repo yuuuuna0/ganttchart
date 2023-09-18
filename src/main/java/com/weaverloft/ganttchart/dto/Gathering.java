@@ -31,9 +31,11 @@ public class Gathering {
     private int gathStatusNo;
     private int cityNo;
     private int gathReadcount;
+
     private List<Files> filesList;
     private City city;
     private GatheringType gatheringType;
+    private Users user;
 
 //    public Gathering(int gathNo, String gathTitle, String uId, String gathAddr, String gathAddr2, Date gathClose, Date gathDay, String gathDesc, int gathAmount, Date gathCreateDate, int gathTypeNo, int gathStatusNo, int gathReadCount) {
 //        this.gathNo = gathNo;

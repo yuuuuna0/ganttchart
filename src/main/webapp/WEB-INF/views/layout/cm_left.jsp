@@ -35,46 +35,73 @@
 <br>
     <ul class="nav" style="margin-top:0;">
         <li class="nav-item">
-        <a class="nav-link" href="/index">
+        <a class="nav-link preMenu" href="/">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">메인페이지</span>
         </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="/user/register">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">회원가입</span>
-        </a>
+            <a class="nav-link preMenu" data-toggle="collapse" href="#user" aria-expanded="false" aria-controls="#user">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">사용자</span>
+            </a>
+            <div class="collapse" id="user">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gathering/list?pageNo=1&keyword=">마이페이지</a>
+                    </li>
+                    <c:choose>
+                        <c:when test="${sessionScope.loginUser.getUTypeNo() == 1}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/boardList?uId=${sessionScope.loginUser.getUId()}">게시글 작성현황</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/applyList?uId=${sessionScope.loginUser.getUId()}">모임 신청현황</a>
+                            </li>
+                        </c:when>
+                        <c:when test="${sessionScope.loginUser.getUTypeNo() == 2}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/boardList?uId=${sessionScope.loginUser.getUId()}">게시글 작성현황</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/applyList?uId=${sessionScope.loginUser.getUId()}">모임 개설현황</a>
+                            </li>
+                        </c:when>
+                    </c:choose>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="/user/login">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">로그인</span>
-        </a>
+            <a class="nav-link preMenu"  data-toggle="collapse" href="#gathering" aria-expanded="false" aria-controls="#gathering">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">모임</span>
+            </a>
+            <div class="collapse" id="gathering">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gathering/list?pageNo=1&keyword=">모임리스트</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gathering/register">모임만들기</a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="/board/register">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">게시글작성</span>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="/board/list?pageNo=1&keyword=">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">게시글리스트</span>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="/gathering/list?pageNo=1&keyword=">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">모임리스트</span>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="/gathering/register">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">모임등록하기</span>
-        </a>
+            <a class="nav-link preMenu" data-toggle="collapse" href="#board" aria-expanded="false" aria-controls="#board">
+            <i class="icon-grid menu-icon" ></i>
+            <span class="menu-title">게시판</span>
+            </a>
+            <div class="collapse" id="board">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/list?pageNo=1&keyword=">전체게시글</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/register">게시글 작성</a>
+                    </li>
+                </ul>
+            </div>
         </li>
 <%--    <c:choose>--%>
 <%--        <c:when test="${sessionScope.loginUser.getUTypeNo() == 0}">--%>
@@ -123,3 +150,21 @@
     </ul>
     </nav>
     </div>
+<script>
+    $(document).ready(function(){
+        $('.nav-item').removeClass('active');
+        $('.collapse').removeClass('show');
+
+        //현재 선택된거는 활성되게 해야함
+    });
+
+    $('.preMenu').click(function(e){
+        e.preventDefault();
+
+        $('.preMenu').attr('aria-expanded', 'false');
+        $(this).attr('aria-expanded', 'true');
+        $('.collapse').collapse('hide');
+
+        // e.target.children()
+    });
+</script>

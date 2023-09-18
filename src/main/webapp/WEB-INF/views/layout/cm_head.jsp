@@ -69,4 +69,6 @@
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <%--스마트에디터--%>
     <script type="text/javascript" src="/smartEditor/js/HuskyEZCreator.js" charset="UTF-8"></script>
+    <%--카카오 지도 API--%>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0e11f7a07e83a3f87511dd79bbf6ffe&libraries=services"></script>
 

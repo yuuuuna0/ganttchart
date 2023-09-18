@@ -22,7 +22,7 @@
                                              src="/upload/user/${file.saveName}"/>
                                     </c:if>
                                     <c:if test = "${ sessionScope.loginUser.fileNo == 0}">
-                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "156px" src="/static/images/icons/default.png"/>
+                                        <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
                                     </c:if>
                                 </div>
                                 <form class="forms-sample" name="registerF" id="registerF" accept-charset="utf-8">

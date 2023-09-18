@@ -22,4 +22,6 @@ public interface GatheringMapper {
     int deleteGath(int gathNo) throws Exception;
 
     int increaseReadCount(int gathNo) throws Exception;
+
+    int changeGathStatusByTime() throws Exception;
 }

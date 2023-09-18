@@ -58,4 +58,9 @@ public class GatheringDaoImpl implements GatheringDao {
     public int increaseReadCount(int gathNo) throws Exception {
         return gatheringMapper.increaseReadCount(gathNo);
     }
+
+    @Override
+    public int changeGathStatusByTime() throws Exception {
+        return gatheringMapper.changeGathStatusByTime();
+    }
 }

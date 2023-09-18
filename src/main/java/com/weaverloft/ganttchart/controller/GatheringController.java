@@ -2,12 +2,14 @@ package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.*;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +22,16 @@ public class GatheringController {
     private CityService cityService;
     private UsersService usersService;
     private GatheringTypeService gatheringTypeService;
+    private ApplyService applyService;
 
     public GatheringController(GatheringService gatheringService, FilesService filesService, CityService cityService,
-                               UsersService usersService,GatheringTypeService gatheringTypeService) {
+                               UsersService usersService,GatheringTypeService gatheringTypeService,ApplyService applyService) {
         this.gatheringService = gatheringService;
         this.filesService = filesService;
         this.cityService = cityService;
         this.usersService = usersService;
         this.gatheringTypeService = gatheringTypeService;
+        this.applyService = applyService;
     }
 
     //1. 모임리스트 페이지
@@ -38,7 +42,7 @@ public class GatheringController {
             List<Gathering> gatheringList = gatheringService.findGathList();
             List<Users> userList = usersService.findUserList();
             model.addAttribute("gatheringList", gatheringList);
-            model.addAttribute("useList",userList);
+            model.addAttribute("userList",userList);
             System.out.println("gatheringList = " + gatheringList);
             forwardPath = "/gathering/list";
         } catch (Exception e) {
@@ -54,9 +58,11 @@ public class GatheringController {
         try {
             Gathering gathering = gatheringService.findGathByNo(gathNo);
             List<Files> fileList = filesService.findFileByGathNo(gathNo);
+            List<Apply> applyList = applyService.findApplyByGathNo(gathNo);
             gatheringService.increaseReadCount(gathNo);
             model.addAttribute("gath",gathering);
             model.addAttribute("fileList",fileList);
+            model.addAttribute("applyList",applyList);
             System.out.println("gathering = " + gathering);
             forwardPath = "/gathering/detail";
         } catch (Exception e) {
@@ -203,6 +209,32 @@ public class GatheringController {
     }
 
 
+    //6. 모임 신청하기
+    @GetMapping(value = "/apply", params = "gathNo")
+    public String gathApplyPage(@RequestParam int gathNo, HttpSession session){
+        String forwardPath ="";
+        try{
+            Users loginUser = (Users)session.getAttribute("loginUser");
+            Apply apply = new Apply(0,new Date(),loginUser.getUId(),gathNo,1,loginUser);
+            //중복 신청 안되게 막는 메소드 필요함
+            int result = applyService.createApply(apply);
+            forwardPath="redirect:/gathering/detail?gathNo="+gathNo;    //gathNo 넣어주는법? ajax로 page reload해야하나?
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
+    @GetMapping("/apply/list")
+    public String gathApplyListPage(Model model){
+        String forwardPath="";
+        try{
+            List<Apply> applyList = applyService.findApplyList();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
 
 
 

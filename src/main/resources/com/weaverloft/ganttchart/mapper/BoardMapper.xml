@@ -7,7 +7,11 @@
     </select>
 <!--2. 게시글 번호로 게시글 찾기    -->
     <select id="findBoardByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Board">
-        select * from board where board_no=#{boardNo} and is_use='Y'
+        select * from board where board_no=#{boardNo}
+    </select>
+<!--2. 아이디로 게시글 찾기    -->
+    <select id="findBoardByUId" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Board">
+        select * from board where u_id=#{uId}
     </select>
 <!--3. 가장 최근 게시물번호 찾기 -->
     <select id="findCurNo" resultType="java.lang.Integer">

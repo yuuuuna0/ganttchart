@@ -20,4 +20,6 @@ public interface GatheringService {
     int deleteGath(int gathNo) throws Exception;
 
     int increaseReadCount(int gathNo) throws Exception;
+
+    int changeGathStatusByTime() throws Exception;
 }

@@ -16,34 +16,49 @@
                     <!-- 게시글 -->
                     <input type="hidden" value="${board.boardNo}" id="boardNo">
                     <div class="card-body">
-                        <h4 class="card-title">게시글 상세보기</h4>
+                        <div class="row">
+                        <div class="col-8">
+                            <h4 class="card-title">게시글 상세보기</h4>
+                        </div>
+                        <div class="col-4 flex" style="display: flex; justify-content: flex-end;">
+                            <%--                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">--%>
+                            <input type="button" id="boardCreateBtn" name="boardCreateBtn"
+                                   class="btn btn-primary mr-2"
+                                   onclick="location.href='/board/modify?boardNo=${board.boardNo}'" value="수정">
+                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
+                                   onclick="location.href='/board/delete.action?boardNo=${board.boardNo}'" value="삭제">
+                            <%--                                    </c:if>--%>
+                            <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
+                                   onclick="location.href='/board/list?pageNo=1&keyword='" value="목록으로">
+                        </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-6">
                             <label for="boardTitle">제목</label>
-                            <input type="text" style="width: 50%" class="form-control" id="boardTitle" name="boardTitle"
+                            <input type="text"  class="form-control" id="boardTitle" name="boardTitle"
                                    value="${board.boardTitle}" disabled>
                             </div>
                             <div class="col-6">
                                 <label for="readCount">조회수</label>
-                                <input style="width: 50%; " type="text" class="form-control" id="readCount" name="readCount"
+                                <input style=" display: flex; justify-content: flex-end; " type="text" class="form-control flex" id="readCount" name="readCount"
                                        value="${board.boardReadcount}" disabled>
                             </div>
                         </div>
                         <div class="form-group row" >
                             <div class="col-6">
                             <label for="name">작성자</label>
-                            <input style="width: 50%" type="text" class="form-control" id="name" name="name"
+                            <input  type="text" class="form-control" id="name" name="name"
                                    value="${user.getUName()}" disabled>
                             </div>
                             <div class="col-6">
                             <label for="date">작성일</label>
-                            <input style="width: 50% ;" type="text" class="form-control" id="date" name="date"
+                            <input  type="text" class="form-control" id="date" name="date"
                                    value="<fmt:formatDate value="${board.boardDate}" pattern="yyyy. MM. dd."/>" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="boardContent">내용</label>
-                            <textarea style="width: 76%;" class="form-control" id="boardContent" name="boardContent" rows="4"
+                            <textarea  class="form-control" id="boardContent" name="boardContent" rows="4"
                                       disabled>${board.boardContent}</textarea>
                         </div>
                         <div class="form-group row">
@@ -65,93 +80,84 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="col-4" style="text-align: right; text-align: end">
-<%--                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">--%>
-                                        <input type="button" id="boardCreateBtn" name="boardCreateBtn"
-                                               class="btn btn-primary mr-2"
-                                               onclick="location.href='/board/modify?boardNo=${board.boardNo}'" value="수정">
-                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
-                                               onclick="location.href='/board/delete.action?boardNo=${board.boardNo}'" value="삭제">
-<%--                                    </c:if>--%>
-                                    <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
-                                           onclick="location.href='/board/list?pageNo=1&keyword='" value="목록으로">
-                            </div>
+
                         </div>
                     </div>
                     <hr>
 <%--                    <!-- 댓글 시작 -->--%>
-<%--                    <div class="card-body" style="padding-top: 0;">--%>
-<%--                        <!-- 1. 댓글 목록-->--%>
-<%--                        <div class="comment-group">--%>
-<%--                            <div  id="commentListDiv">--%>
-<%--                                <c:forEach items="${commentsList}" var="comment">--%>
-<%--                                            <c:choose>--%>
-<%--                                                <c:when test="${comment.orders == 0}"> &lt;%&ndash;                                            상위그룹&ndash;%&gt;--%>
-<%--                                                    <div class="col-12 mt-3" style="margin-left: ${(comment.orders+1)*10}px" id="commentDiv${comment.commentsNo}">--%>
-<%--                                                        <span class="mr-3">${comment.id}</span>--%>
-<%--                                                        <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                                        <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>--%>
-<%--                                                        <span>--%>
-<%--                                                            <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="subComments(${comment.commentsNo},${comment.orders+1})"/>--%>
-<%--                                                            <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                            <img src="/static/images/icons/modify.png" name="modifyComment"--%>
-<%--                                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="modifyComments('${comment.commentsNo}');"/>--%>
-<%--                                                            <img src="/static/images/icons/bin.png"--%>
-<%--                                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                                            </c:if>--%>
-<%--                                                        </span>--%>
-<%--                                                    </div>--%>
-<%--                                                </c:when>--%>
-<%--                                                <c:otherwise> &lt;%&ndash;                                            하위그룹&ndash;%&gt;--%>
-<%--                                                    <div class="col-12 mt-3" style="margin-left: ${(comment.orders+1)*30}px" id="commentDiv${comment.commentsNo}">--%>
-<%--                                                        <img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>--%>
-<%--                                                        <span class="mr-3">${comment.id}</span>--%>
-<%--                                                        <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                                        <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>--%>
-<%--                                                        <span>--%>
-<%--                                                            <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                            onclick="subComments(${comment.commentsNo},${comment.orders+1})"/>--%>
-<%--                                                             <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                                <img src="/static/images/icons/modify.png" name="modifyComment"--%>
-<%--                                                                    style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                    onclick="modifyComments('${comment.commentsNo}');"/>--%>
-<%--                                                                 <img src="/static/images/icons/bin.png"--%>
-<%--                                                                      style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                      onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                                             </c:if>--%>
-<%--                                                        </span>--%>
-<%--                                                    </div>--%>
-<%--                                                </c:otherwise>--%>
-<%--                                            </c:choose>--%>
-<%--                                </c:forEach>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
+                    <div class="card-body" style="padding-top: 0;">
+
+                    <!-- 작성폼 -->
+                    <label createCommentsF="후기">후기</label>
+                    <form class="mb-4" id="createCommentsF" name="createCommentsF">
+                        <div class="row">
+                            <div class="col-9">
+                                        <textarea class="form-control" id="commentsContent" name="commentsContent"
+                                                  row="3" placeholder="댓글을 남겨주세요"></textarea>
+                            </div>
+                            <div class="col-3">
+                                <c:if test="${sessionScope.loginUser != null}">
+                                    <input type="button" id="createCommentsBtn" onclick="createComments(0,0,0,0)"
+                                           value="남기기">
+                                </c:if>
+                                <c:if test="${sessionScope.loginUser == null}">
+                                    <input type="button" id="createCommentsBtn" onclick="location.href='/user/login'"
+                                           value="남기기">
+                                </c:if>
+                            </div>
+                        </div>
+                    </form>
 
 
-<%--                            <!-- 작성폼 -->--%>
-<%--                            <label id="msgLabel"></label>--%>
-<%--                            <form class="mb-4" id="createCommentsF" name="createCommentsF">--%>
-<%--                                <div class="row">--%>
-<%--                                    <div class="col-9">--%>
-<%--                                        <textarea class="form-control" id="commentsContent" name="commentsContent"--%>
-<%--                                                  row="3" placeholder="댓글을 남겨주세요"></textarea>--%>
-<%--                                    </div>--%>
-<%--                                    <div class="col-3">--%>
-<%--                                        <c:if test="${sessionScope.loginUser != null}">--%>
-<%--                                        <input type="button" id="createCommentsBtn" onclick="createComments(0,0)"--%>
-<%--                                               value="남기기">--%>
-<%--                                        </c:if>--%>
-<%--                                        <c:if test="${sessionScope.loginUser == null}">--%>
-<%--                                        <input type="button" id="createCommentsBtn" onclick="location.href='/login'"--%>
-<%--                                               value="남기기">--%>
-<%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </form>--%>
 
+
+<%--                        댓글 시작--%>
+                        <div class="commentListDiv">
+                            <c:forEach items="${preCommentList}" var="preComment">
+                                <div class="col-12 mt-3" style="margin-left: 10px" id="groupDiv${preComment.groupNo}">
+                                    <div id="commentDiv${preComment.commentsNo}">
+                                    <span class="mr-3">${preComment.getUId()}</span>
+                                    <span class="mr-3 commentsNo${preComment.commentsNo}">${preComment.commentsContent}</span>
+                                    <span class="mr-2"><fmt:formatDate value="${preComment.commentsDate}" pattern="yyyy. MM. dd."/></span>
+                                    <span>
+                                        <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                             onclick="subComments(${preComment.commentsNo},${preComment.groupNo},${preComment.depth+1},${preComment.orders+1})"/>
+                                        <c:if test="${sessionScope.loginUser.getUId() == preComment.getUId()}">
+                                        <img src="/static/images/icons/modify.png"
+                                              style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                              onclick="modifyComments('${preComment.commentsNo}');"/>
+                                        <img src="/static/images/icons/bin.png"
+                                             style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                             onclick="deleteComments(${preComment.commentsNo});"/>
+                                        </c:if>
+                                    </span>
+                                    </div>
+                                    <c:forEach items="${commentList}" var="comment">
+                                        <c:if test="${preComment.groupNo == comment.groupNo && comment.depth != 0}">
+                                            <div class="col-12 mt-1" style="margin-left: ${(comment.depth+1)*15}px" id="commentDiv${comment.commentsNo}">
+                                                <img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>
+                                                <span class="mr-3">${comment.getUId()}</span>
+                                                <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>
+                                                <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>
+                                                <span>
+                                                    <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                         onclick="subComments(${comment.commentsNo},${preComment.groupNo},${comment.depth+1},${comment.orders+1})"/>
+                                                    <c:if test="${sessionScope.loginUser.getUId() == comment.getUId()}">
+                                                    <img src="/static/images/icons/modify.png"
+                                                         style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                         onclick="modifyComments('${comment.commentsNo}');"/>
+                                                    <img src="/static/images/icons/bin.png"
+                                                         style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"
+                                                         onclick="deleteComments(${comment.commentsNo});"/>
+                                                    </c:if>
+                                                </span>
+                                            </div>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                            </c:forEach>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,32 +191,34 @@
     /******************************** 1. 댓글 작성 **********************************/
     //하위타입 댓글 작성
         //1) 작성 폼 나오기(상위댓글 아래에)
-    function subComments(commentsNo,orders) {
-        console.log("들어오니");
-        $('.subCommentTextDiv').remove();
+    function subComments(commentsNo,groupNo,depth,orders) {
+        $('.subCommentContent').remove();
         let commentDiv = $('#commentDiv'+commentsNo);
-        let html = "<div class ='subCommentTextDiv'><input class='subCommentText' style='margin-left: "+(orders+1)*30+"px' id=subCommentText"+commentsNo+" type='text' class='mr-3' value=''/>" +
-            "<button onclick='createComments(" + commentsNo +","+orders+ ")'>답글달기</button>\n</div>";
+        let html = "<div class ='subCommentContent'><input class='subCommentText' style='margin-left: "+(orders+1)*30+"px' id='subCommentsContent"+commentsNo+"' type='text' class='mr-3' value=''/>" +
+            "<button onclick='createComments(" + commentsNo +","+groupNo+","+depth+","+orders+ ")'>답글달기</button>\n</div>";
         commentDiv.append(html);
     }
 
     //댓글 작성
-    function createComments(no,ordersNo) {
-        let commentsNo = no;
-        let orders = ordersNo;
-        let topCommentsContent = $('#commentsContent').val();
-        let subCommentsContent = $('#subCommentText'+no).val();
-        console.log(subCommentsContent);
+    function createComments(commentsNo2,groupNo2,depth2,orders2) {
+        let groupNo = groupNo2;
+        let depth = depth2;
+        let orders = orders2;
+        let commentsContent;
+        if(depth2 === 0){
+            commentsContent = $('#commentsContent').val();
+        } else {
+            commentsContent = $('#subCommentsContent'+commentsNo2).val();
+        }
         let boardNo = $('#boardNo').val();
         $.ajax({
-            url: '/createComments-ajax',
+            url: '/board/comment/create.ajx',
             method: 'POST',
-            dataType: 'json',
             data: {
-                'commentsNo' : commentsNo,
-                'topCommentsContent': topCommentsContent,
-                'subCommentsContent' : subCommentsContent,
-                'orders': orders,
+                'groupNo' : groupNo,
+                'commentsContent': commentsContent,
+                'depth': depth,
+                'orders' : orders,
                 'boardNo': boardNo
             },
             success: function (resultJson) {
@@ -220,7 +228,6 @@
             },
             error: function (e) {
                 console.log(e);
-                console.log('에러확인');
             },
             async: true
         });
@@ -230,7 +237,7 @@
     function deleteComments(commentsNo) {
         let boardNo = $('#boardNo').val();
         $.ajax({
-            url: '/deleteComment-ajax',
+            url: '/board/comment/delete.ajx',
             method: 'POST',
             data: {
                 'commentsNo': commentsNo,
@@ -266,7 +273,7 @@
 
         let boardNo = $('#boardNo').val();
         $.ajax({
-            url: '/modifyComment-ajax',
+            url: '/board/comment/modify.ajx',
             method: 'POST',
             data: {
                 'commentsNo': commentsNo,
@@ -285,53 +292,68 @@
     }
 
     /******************************** 공통함수(댓글 다시 뿌리기) **********************************/
-    function reload(resultData) {
-        if (resultData.code === 1) {
-            $('#commentListDiv').empty();
+    function reload(resultMap) {
+        if (resultMap.code === 1) {
+            $('.commentListDiv').empty();
             let html = '';
-            for (let i = 0; i < resultData.data.length; i++) {
-                let dataItem = resultData.data[i];
-                let date = new Date(dataItem.commentsDate).toLocaleDateString('ko-KR', {
+            for (let i = 0; i < resultMap.preCommentList.length; i++) {
+                let preComment = resultMap.preCommentList[i];
+                let date = new Date(preComment.commentsDate).toLocaleDateString('ko-KR', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
                 }).replace(/\./g, '.');
-                console.log(dataItem);
-                console.log(resultData.loginUser);
-                if (dataItem.orders === 0) {
-                    //부모댓글일 때 ==> orders=0
-                    html += " <div class='col-12 mt-3' style='margin-left: 10px' id='commentDiv"+dataItem.commentsNo+"'>\n" +
-                        "                                                    <span class='mr-3'>" + dataItem.id + "</span>\n" +
-                        "                                                    <span class='mr-3 commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
-                        "                                                    <span class='mr-2'>" + date + "</span>\n" +
-                        "                                                    <span >\n" +
-                        "                                                        <img src='/static/images/icons/comment.png' class='subCommentsBtn' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='subComments("+dataItem.commentsNo+","+(dataItem.orders+1)+")'/>\n";
-                    if(dataItem.id == resultData.loginUser.id) {
-                        html +=  "                                               <img src='/static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + ")'/>\n" +
-                        "                                                        <img src='/static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
-                    }
-                    html +="                                                    </span>\n" +
-                        "                                                </div>\n";
-                } else {
-                    //답글일 때 ==> orders!=0
-                    html += "                                                <div class='col-11' id='commentDiv"+dataItem.commentsNo+"' style='margin-left: "+(dataItem.orders+1)*30+"px'>\n" +
-                        "                                                    <img src='/static/images/icons/subComment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' />\n" +
-                        "                                                    <span class='mr-3'>" + dataItem.id + "</span>\n" +
-                        "                                                    <span class='mr-3 commentsNo" + dataItem.commentsNo + "'>" + dataItem.commentsContent + "</span>\n" +
-                        "                                                    <span class='mr-2'>" + date + "</span>\n" +
-                        "                                                    <span >\n" +
-                        "                                                     <img src='/static/images/icons/comment.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='subComments("+dataItem.commentsNo+","+(dataItem.orders+1)+")'/>\n";
-                    if(dataItem.id == resultData.loginUser.id) {
-                        html +="                                                 <img src='/static/images/icons/modify.png' name='modifyComment' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='modifyComments(" + dataItem.commentsNo + ")'/>\n" +
-                        "                                                        <img src='/../static/images/icons/bin.png' style='width:14px; height:auto; vertical-align: middle; cursor: pointer;' onclick='deleteComments(" + dataItem.commentsNo + ")'/>\n";
-                    }
-                    html +="                                                    </span>\n" +
-                        "                                                </div>\n";
+            html += '<div class="col-12 mt-3" style="margin-left: 10px" id="groupDiv'+preComment.groupNo+'}">'
+                +' <div id="commentDiv'+preComment.commentsNo+'">'
+                +' <span class="mr-3">'+preComment.uId+'</span>'
+                +' <span class="mr-3 commentsNo'+preComment.commentsNo+'">'+preComment.commentsContent+'</span>'
+                +' <span class="mr-2">'+date+'</span>'
+                +' <span>'
+                +' <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                +' onclick="subComments('+preComment.commentsNo+','+preComment.groupNo+','+(preComment.depth+1)+','+(preComment.orders+1)+'"/>'
+                if(resultMap.loginUser.uId === preComment.uId){
+                    html += '<img src="/static/images/icons/modify.png"'
+                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                        +' onclick="modifyComments('+preComment.commentsNo+');"/>'
+                        +'<img src="/static/images/icons/bin.png"'
+                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                        +' onclick="deleteComments('+preComment.commentsNo+');"/>'
                 }
+                 +'</span>'
+                 +'</div>'
+                 for(let j=0;j<resultMap.commentList.length;j++){
+                     let comment = resultMap.commentList[i];
+                     let date2 = new Date(comment.commentsDate).toLocaleDateString('ko-KR', {
+                         year: 'numeric',
+                         month: '2-digit',
+                         day: '2-digit'
+                     }).replace(/\./g, '.');
+                     if(preComment.groupNo === comment.groupNo && comment.depth !== 0){
+                         html += '<div class="col-12 mt-1" style="margin-left: '+(comment.depth+1)*15+'px" id="commentDiv'+comment.commentsNo+'">'
+                             +'<img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>'
+                             +'<span class="mr-3">'+comment.getUId()+'</span>'
+                             +'<span class="mr-3 commentsNo'+comment.commentsNo+'">'+comment.commentsContent+'</span>'
+                             +'<span class="mr-2">'+date2+'</span>'
+                             +'<span>'
+                             +'<img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                             +'onclick="subComments('+comment.commentsNo+','+preComment.groupNo+','+comment.depth+1+','+comment.orders+1+')"/>'
+                         if(resultMap.loginUser.uId === comment.uId){
+                             html += '<img src="/static/images/icons/modify.png"'
+                                 +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                                 +' onclick="modifyComments('+comment.commentsNo+');"/>'
+                                 +'<img src="/static/images/icons/bin.png"'
+                                 +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                                 +' onclick="deleteComments('+comment.commentsNo+');"/>'
+                         }
+                         +'</span>'
+                         +'</div>'
+                         +'</div>'
+                     }
+                    }
             }
-            $('#commentListDiv').append(html);
+            $('.commentListDiv').append(html);
         } else {
-            alert(resultData.msg);
+            alert(resultMap.msg);
         }
     }
 </script>

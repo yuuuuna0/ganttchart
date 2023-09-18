@@ -31,6 +31,7 @@ public class GatheringServiceImpl implements GatheringService{
         List<Gathering> gatheringList = new ArrayList<>();
         List<Gathering> gatherings = gatheringDao.findGathList();
 
+
         for(int i=0;i<gatherings.size();i++){
             //gathering에 fileList 붙이기
             Gathering gathering = gatherings.get(i);
@@ -82,5 +83,10 @@ public class GatheringServiceImpl implements GatheringService{
     @Override
     public int increaseReadCount(int gathNo) throws Exception {
         return gatheringDao.increaseReadCount(gathNo);
+    }
+
+    @Override
+    public int changeGathStatusByTime() throws Exception {
+        return gatheringDao.changeGathStatusByTime();
     }
 }

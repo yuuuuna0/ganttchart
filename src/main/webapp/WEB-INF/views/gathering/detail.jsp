@@ -14,9 +14,28 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <!-- 게시글 -->
-                    <input type="hidden" value="${gath.gathNo}" id="gathNo">
                     <div class="card-body">
-                        <h4 class="card-title">게시글 상세보기</h4>
+                        <div class="row">
+                            <div class="col-8">
+                                <h4 class="card-title">모임 상세보기</h4>
+                            </div>
+                            <div class="col-4 flex" style="display: flex; justify-content: flex-end;">
+                                <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == gath.getUId()}">
+                                    <input type="button" id="gathCreateBtn" name="gathCreateBtn"
+                                           class="btn btn-primary mr-2"
+                                           onclick="location.href='/gathering/modify?gathNo=${gath.gathNo}'" value="수정">
+                                    <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
+                                           onclick="location.href='/gathering/delete.action?gathNo=${gath.gathNo}'" value="삭제">
+                                </c:if>
+                                <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUTypeNo() == 1}">
+                                    <input type="button" id="gathApplyBtn" name="gathApplyBtn"
+                                           class="btn btn-primary mr-2"
+                                           onclick="location.href='/gathering/apply?gathNo=${gath.gathNo}'" value="신청하기">
+                                </c:if><input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
+                                              onclick="location.href='/gathering/list?pageNo=1&keyword='" value="목록으로">
+                            </div>
+                        </div>
+                        <br>
                         <div class="form-group row">
                             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-indicators">
@@ -83,40 +102,93 @@
                                    value="${gath.gatheringType.gathType}" disabled>
                             </div>
                         </div><div class="form-group row" >
-                            <div class="col-4">
+                            <div class="col-3">
                             <label for="gathDay">모임일</label>
                             <input  type="text" class="form-control" id="gathDay" name="gathDay"
                                      value='<fmt:formatDate value="${gath.gathDay}" pattern="yyyy. MM. dd."/>'  disabled>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                             <label for="gathClose">모집마감일</label>
                             <input  type="text" class="form-control" id="gathClose" name="gathClose"
                                     value='<fmt:formatDate value="${gath.gathClose}" pattern="yyyy. MM. dd."/>' disabled>
-                            </div><div class="col-4">
+                            </div>
+                            <div class="col-3">
+                            <label for="gathAmount">모집상태</label>
+                                <c:choose>
+                                    <c:when test="${gath.gathStatusNo == 1}"><input type="text" class="form-control" id="gathStatus" name="gathStatus" value="모집중" disabled></c:when>
+                                    <c:when test="${gath.gathStatusNo == 2}"><input type="text" class="form-control" id="gathStatus" name="gathStatus" value="인원마감" disabled></c:when>
+                                    <c:when test="${gath.gathStatusNo == 3}"><input type="text" class="form-control" id="gathStatus" name="gathStatus" value="모임완료" disabled></c:when>
+                                </c:choose>
+                            </div>
+                            <div class="col-3">
                             <label for="gathAmount">잔여인원</label>
                             <input  type="text" class="form-control" id="gathAmount" name="gathAmount"
                                    value="${gath.gathAmount}" disabled>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col-6">
                             <label for="gathDesc">내용</label>
                             <textarea class="form-control" id="gathDesc" name="gathDesc" rows="4"
                                       disabled>${gath.gathDesc}</textarea>
-                        </div>
-
-                            <div class=" flex" style="display: flex; justify-content: flex-end;">
-                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == gath.getUId()}">
-                                        <input type="button" id="gathCreateBtn" name="gathCreateBtn"
-                                               class="btn btn-primary mr-2"
-                                               onclick="location.href='/gathering/modify?gathNo=${gath.gathNo}'" value="수정">
-                                        <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
-                                               onclick="location.href='/gathering/delete.action?gathNo=${gath.gathNo}'" value="삭제">
-                                    </c:if><input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
-                                           onclick="location.href='/gathering/list?pageNo=1&keyword='" value="목록으로">
+                            </div>
+                            <div class="col-6" id="map" style="width:500px;height:400px;">
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                <c:if test="${sessionScope.loginUser.getUId() == gath.getUId()}">
+                    <div class="row">
+                        <div class="col-9">
+                            <h4 class="card-title">신청리스트</h4>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>신청번호</th>
+                                <th>프로필사진</th>
+                                <th>아이디</th>
+                                <th>이름</th>
+                                <th>생년월일</th>
+                                <th>성별</th>
+                                <th>신청일</th>
+                                <th>신청상태</th>
+                            </tr>
+                            </thead>
+                            <tbody id="applyTbody">
+                            <c:forEach items="${applyList}" var="apply">
+                                <tr style="cursor: pointer;" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                    <td>${apply.gathNo}</td>
+                                    <td>${apply.users.fileNo}</td>
+                                    <td>${apply.users.getUId()}</td>
+                                    <td>${apply.users.getUName()}</td>
+                                    <td><fmt:formatDate value="${apply.users.getUBirth()}" pattern="yyyy. MM. dd."/></td>
+                                    <td>${apply.users.getUGender()}</td>
+                                    <td><fmt:formatDate value="${apply.applyDate}" pattern="yyyy. MM. dd."/></td>
+                                    <td>
+                                        <select id="applyStatusNo" name="applyStatusNo" onchange="changeStatus(${apply.applyNo})">
+                                            <option value="1" ${apply.applyStatusNo == 1 ? 'selected' : ''}>대기중</option>
+                                            <option value="2" ${apply.applyStatusNo == 2 ? 'selected' : ''}>승인완료</option>
+                                            <option value="3" ${apply.applyStatusNo == 3 ? 'selected' : ''}>거절</option>
+                                        </select>
+<%--                                        <c:choose>--%>
+<%--                                            <c:when test="${apply.applyStatusNo== 1}">대기중</c:when>--%>
+<%--                                            <c:when test="${apply.applyStatusNo == 2}">승인완료</c:when>--%>
+<%--                                            <c:when test="${apply.applyStatusNo == 3}">거절</c:when>--%>
+<%--                                        </c:choose>--%>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    </c:if>
+
                     <hr>
+
+
 <%--                    <!-- 댓글 시작 -->--%>
 <%--                    <div class="card-body" style="padding-top: 0;">--%>
 <%--                        <!-- 1. 댓글 목록-->--%>
@@ -166,32 +238,39 @@
 <%--                                            </c:choose>--%>
 <%--                                </c:forEach>--%>
 <%--                            </div>--%>
-<%--                        </div>--%>
 
 
-<%--                            <!-- 작성폼 -->--%>
-<%--                            <label id="msgLabel"></label>--%>
-<%--                            <form class="mb-4" id="createCommentsF" name="createCommentsF">--%>
-<%--                                <div class="row">--%>
-<%--                                    <div class="col-9">--%>
-<%--                                        <textarea class="form-control" id="commentsContent" name="commentsContent"--%>
-<%--                                                  row="3" placeholder="댓글을 남겨주세요"></textarea>--%>
-<%--                                    </div>--%>
-<%--                                    <div class="col-3">--%>
+
+                            <!-- 작성폼 -->
+                            <label reviewF="후기">후기</label>
+                            <form class="mb-4" id="reviewF" name="reviewF" enctype="multipart/form-data">
+                                <div class="row">
+                                    <c:forEach items="${fileList}" var="file">
+                                    <div class="col-2">
+                                    <img  class="img-fluid styled profile_pic rounded-circle"  width = "auto" src="/upload/review/${file.saveName}" />
+                                    </div>
+                                    </c:forEach>
+                                    <br>
+                                    <hr>
+                                    <div class="col-7">
+                                        <textarea class="form-control" id="reviewContent" name="reviewContent"
+                                                  row="3" placeholder="리뷰를 남겨주세요"></textarea>
+                                    </div>
+
+                                    <div class="col-3">
 <%--                                        <c:if test="${sessionScope.loginUser != null}">--%>
-<%--                                        <input type="button" id="createCommentsBtn" onclick="createComments(0,0)"--%>
-<%--                                               value="남기기">--%>
+                                        <input type="file" id="reviewFile" value="남기기" onchange="addFile()" multiple>
 <%--                                        </c:if>--%>
-<%--                                        <c:if test="${sessionScope.loginUser == null}">--%>
-<%--                                        <input type="button" id="createCommentsBtn" onclick="location.href='/login'"--%>
-<%--                                               value="남기기">--%>
+                                    </div>
+                                    <div class="col-2">
+<%--                                        <c:if test="${sessionScope.loginUser != null}">--%>
+                                        <input type="button" id="createReviewBtn" onclick="createReview(0,0)"
+                                               value="남기기">
 <%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </form>--%>
-
+                                    </div>
+                                </div>
+                            </form>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -199,6 +278,34 @@
 </div>
 <!-- main-panel ends -->
 <script>
+    //카카오 지도 출력
+    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스.
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 3 //지도의 레벨(확대, 축소 정도)
+    };
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    var geocoder = new kakao.maps.services.Geocoder();  // 주소-좌표 변환 객체를 생성합니다
+    let addr = '${gath.gathAddr}';
+    geocoder.addressSearch(addr, function(result, status) {
+
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            // var infowindow = new kakao.maps.InfoWindow({
+            //     // content: '<div style="width:150px;text-align:center;padding:6px 0;"></div>'
+            // });
+            // infowindow.open(map, marker);
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
 
     // 댓글창 입력 후 엔터키 => 검색
     $("#commentsContent").keyup(e => {
@@ -213,6 +320,26 @@
             e.preventDefault();
         }
     });
+    //신청상태 변경
+    function changeStatus(no){
+        let applyStatusNo = $('#applyStatusNo option:selected').val();
+        let applyNo = no;
+        $.ajax({
+            url : '/gathering/apply/change.ajx?applyNo='+no,
+            method : 'POST',
+            data : {
+                'applyStatusNo' : applyStatusNo,
+                'applyNo' : applyNo
+            },
+            success : function(resultMap){
+                if(resultMap.code === 1){
+                    alert("신청상태 변경");
+
+                }
+            }
+        });
+
+    }
 
 
     /********************************  파일 다운로드 **********************************/

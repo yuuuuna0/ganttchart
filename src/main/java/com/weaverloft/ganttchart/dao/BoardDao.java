@@ -16,4 +16,6 @@ public interface BoardDao {
     int increaseReadCount(int boardNo) throws Exception;
 
     int updateBoard(Board board) throws Exception;
+
+    List<Board> findBoardByUId(String uId) throws Exception;
 }

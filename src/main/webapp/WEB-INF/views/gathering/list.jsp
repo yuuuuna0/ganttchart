@@ -16,7 +16,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
-                                        <h4 class="card-title">게시글 목록</h4>
+                                        <h4 class="card-title">모임 리스트</h4>
                                     </div>
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
@@ -31,43 +31,71 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>모임이름</th>
-                                            <th>모임설명</th>
-                                            <th>작성자</th>
-                                            <th>모임일</th>
-                                            <th>모임마감일</th>
-                                            <th>모임상태</th>
-                                            <th>조회수</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="gatheringTbody">
-                                        <c:forEach items="${gatheringList}" var="gathering">
-                                            <tr style="cursor: pointer;" onclick="goToGathList('${gathering.gathNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${gathering.gathNo}</td>
-                                                <td>${gathering.gathTitle}</td>
-                                                <td>${gathering.gathDesc}</td>
-                                                <c:forEach items="${userList}" var="user">
-                                                    <c:if test="${gathering.getUId() == user.getUId()}">
-                                                        <td>${user.getUName()}</td>
-                                                    </c:if>
-                                                </c:forEach>
-
-                                                <td><fmt:formatDate value="${gathering.gathDay}" pattern="yyyy. MM. dd."/></td>
-                                                <td><fmt:formatDate value="${gathering.gathClose}" pattern="yyyy. MM. dd."/></td>
-                                                <td>${gathering.gathStatusNo}</td>
-                                                <td>${gathering.gathReadcount}</td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
+                                <div class="gatheringList row">
+                                    <c:forEach items="${gatheringList}" var="gathering">
+                                        <div class="col-lg-3" style="cursor: pointer;" onclick="goToGathDetail(${gathering.gathNo})" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <div id="carouselExampleIndicators" class="carousel slide gathering-images" data-bs-ride="carousel">
+                                                    <div class="carousel-indicators">
+                                                        <c:forEach items="${gathering.fileList}" varStatus="no">
+                                                            <c:choose>
+                                                                <c:when test="${no.index == 0}">
+                                                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${no.index}" class="active" aria-current="true" aria-label="Slide ${no.index}"></button>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${no.index}" aria-label="Slide ${no.index}"></button>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <div class="carousel-inner">
+                                                        <c:forEach items="${gathering.fileList}" var="file">
+                                                            <div class="carousel-item active">
+                                                                <img src="/upload/gathering/${file.saveName}" style="width: 50%; height: 500px;  object-fit: cover;" class="d-block w-100" alt="...">
+                                                            </div>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Previous</span>
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Next</span>
+                                                    </button>
+                                                </div>
+<%--                                                <img src="/static/images/icons/default.png" style="height: auto; width: 100%"/>--%>
+                                            <div class="gathering-desc">
+                                                <table class="table">
+                                                    <tr><td>${gathering.gathTitle}</td></tr>
+                                                    <tr><td><fmt:formatDate value="${gathering.gathDay}" pattern="yyyy. MM. dd."/></td></tr>
+                                                    <tr><td>${gathering.gathStatusNo}</td></tr>
+                                                    <tr><td>잔여석</td></tr>
+                                                    <tr><td>후기 수</td></tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
                                 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 <br>
+
 <%--                                <!-- pagination -->--%>
 <%--                                    <nav aria-label="Page navigation example">--%>
 <%--                                        <ul class="pagination">--%>
@@ -113,7 +141,7 @@
         </div>
         <!-- main-panel ends -->
 <script>
-    function goToGathList(gathNo){
+    function goToGathDetail(gathNo){
         window.location.href='/gathering/detail?gathNo='+gathNo;
     }
 

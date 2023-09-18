@@ -27,7 +27,7 @@
                                 <div class="form-group">
                                     <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
                                     <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
-                                    <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
+                                    <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
                                     <div class="input-group col-xs-12">
                                         <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
                                         </div>

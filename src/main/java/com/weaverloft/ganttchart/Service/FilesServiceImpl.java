@@ -67,7 +67,7 @@ public class FilesServiceImpl implements FilesService{
 
 
     @Override
-    public Files fineFileByNo(int fileNo) throws Exception {
+    public Files findFileByNo(int fileNo) throws Exception {
         return filesDao.findFileByNo(fileNo);
     }
 

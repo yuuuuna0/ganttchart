@@ -43,7 +43,7 @@
                                 <div class="row form-group">
                                     <div class="col-6">
                                         <label for="gathAddr">주소</label>
-                                        <input type="text" class="form-control" id="gathAddr" name="gathAddr"
+                                        <input type="text" class="form-control" id="gathAddr" name="gathAddr" onclick="addGathAddr()"
                                                placeholder="주소를 입력하세요">
                                     </div>
                                     <div class="col-6">
@@ -69,13 +69,17 @@
                                     <label for="gathContent">내용</label>
                                     <textarea class="form-control" id="gathContent" name="gathContent" rows="10" cols="10" placeholder="내용을 입력하세요" style="width: 100%;"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="gathFileList" class="btn btn-primary mr-2">파일추가</label>
-                                    <input type="file" id="gathFileList" name="gathFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
-                                    <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
-                                    <div class="input-group col-xs-12">
-                                        <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
+                                <div class="row form-group">
+                                    <div class="col-6">
+                                        <label for="gathFileList" class="btn btn-primary mr-2">파일추가</label>
+                                        <input type="file" id="gathFileList" name="gathFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                                        <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
+                                        <div class="input-group col-xs-12">
+                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="col-6" id="map" style="width:500px;height:400px;">
                                     </div>
                                 </div>
                             </form>
@@ -95,21 +99,57 @@
     let gathContent;
     let oEditors = [];
 
-    //페이지 로딩시 필요한
-    $(document).ready(function(){
-        //  1. 스마트에디터
-       // smartEditor();
+    //3. 카카오맵 API
+    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 3 //지도의 레벨(확대, 축소 정도)
+    };
 
-        //2. 주소API
-        document.getElementById('gathAddr').addEventListener('click', function () {
-            new daum.Postcode({
-                oncomplete: function (data) { //선택시 입력값 세팅
-                    document.getElementById("gathAddr").value = data.address; // 주소 넣기
-                    document.querySelector("input[name=gathAddr]").focus(); //상세입력 포커싱
-                }
-            }).open();
-        })
-    });
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+    var geocoder = new kakao.maps.services.Geocoder();  // 주소-좌표 변환 객체를 생성합니다
+
+
+    function addGathAddr(){
+        new daum.Postcode({
+            oncomplete: function (data) { //선택시 입력값 세팅
+                document.getElementById("gathAddr").value = data.address; // 주소 넣기
+                document.querySelector("input[name=gathAddr]").focus(); //상세입력 포커싱
+                checkMaps(data.address);
+            }
+        }).open();
+    }
+
+// 주소로 좌표를 검색합니다
+    function checkMaps(address){
+        let addr = address;
+        geocoder.addressSearch(addr, function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                // var infowindow = new kakao.maps.InfoWindow({
+                //     // content: '<div style="width:150px;text-align:center;padding:6px 0;"></div>'
+                // });
+                // infowindow.open(map, marker);
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+    }
+
     function smartEditor(){
         nhn.husky.EZCreator.createInIFrame({
             oAppRef : oEditors,

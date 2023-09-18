@@ -43,4 +43,9 @@ public class BoardServiceImpl implements BoardService{
     public int updateBoard(Board board) throws Exception {
         return boardDao.updateBoard(board);
     }
+
+    @Override
+    public List<Board> findBoardByUId(String uId) throws Exception {
+        return boardDao.findBoardByUId(uId);
+    }
 }

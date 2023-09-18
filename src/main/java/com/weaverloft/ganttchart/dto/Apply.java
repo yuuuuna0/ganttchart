@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,4 +18,6 @@ public class Apply {
     private String uId;
     private int gathNo;
     private int applyStatusNo;
+
+    private Users users;
 }

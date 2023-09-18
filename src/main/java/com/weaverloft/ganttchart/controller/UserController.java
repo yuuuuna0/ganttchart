@@ -1,20 +1,15 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.weaverloft.ganttchart.Service.FilesService;
-import com.weaverloft.ganttchart.Service.UsersService;
-import com.weaverloft.ganttchart.dto.Files;
-import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.Service.*;
+import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.EmailService;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +20,18 @@ public class UserController {
     private UsersService usersService;
     private FilesService filesService;
     private EmailService emailService;
+    private BoardService boardService;
+    private ApplyService applyService;
+    private GatheringService gatheringService;
 
 
-    public UserController(UsersService usersService, FilesService filesService,EmailService emailService) {
+    public UserController(UsersService usersService, FilesService filesService,EmailService emailService,BoardService boardService,ApplyService applyService,GatheringService gatheringService) {
         this.usersService = usersService;
         this.filesService = filesService;
         this.emailService = emailService;
+        this.boardService = boardService;
+        this.applyService = applyService;
+        this.gatheringService = gatheringService;
     }
 
     //1. 회원가입 페이지
@@ -358,7 +359,8 @@ public class UserController {
         String forwardPath ="";
         try{
             Users user = usersService.findUserById(uId);
-            Files file = filesService.fineFileByNo(user.getFileNo());
+            Files file = filesService.findFileByNo(user.getFileNo());
+            System.out.println("file = " + file);
             model.addAttribute("file",file);
             forwardPath="/user/detail";
         } catch (Exception e){
@@ -408,6 +410,41 @@ public class UserController {
             Users user = (Users) session.getAttribute("loginUser");
             forwardPath = "/user/logout.action";
             int result = usersService.withdrawalUser(user.getUId(),99);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
+    //9. 내가 쓴 게시글 보기
+    @GetMapping(value = "/boardList", params = "uId")
+    public String myBoardList(HttpSession session,Model model){
+        String forwardPath="";
+        try{
+            Users users = (Users)session.getAttribute("loginUser");
+            List<Board> boardList = boardService.findBoardByUId(users.getUId());
+            model.addAttribute("boardList",boardList);
+            forwardPath="/user/boardList";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
+    //10. 내가 지원&참여한 모임 보기
+    @GetMapping(value="applyList",params = "uId")
+    public String myApplyList(@RequestParam String uId,Model model){
+        String forwardPath = "";
+        try{
+            List<Apply> applyList = applyService.findApplyByUId(uId);
+            List<Gathering> gatheringList = new ArrayList<>();
+            for(int i=0;i<applyList.size();i++){
+                Apply apply = applyList.get(i);
+                Gathering gathering = gatheringService.findGathByNo(apply.getGathNo());
+                gatheringList.add(gathering);
+            }
+            model.addAttribute("gatheringList",gatheringList);
+            forwardPath="/user/applyList";
         } catch (Exception e){
             e.printStackTrace();
         }

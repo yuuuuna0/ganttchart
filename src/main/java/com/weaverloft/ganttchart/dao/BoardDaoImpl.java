@@ -43,4 +43,9 @@ public class BoardDaoImpl implements BoardDao{
     public int updateBoard(Board board) throws Exception {
         return boardMapper.updateBoard(board);
     }
+
+    @Override
+    public List<Board> findBoardByUId(String uId) throws Exception {
+        return boardMapper.findBoardByUId(uId);
+    }
 }

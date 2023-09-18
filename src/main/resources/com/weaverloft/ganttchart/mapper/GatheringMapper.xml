@@ -50,4 +50,8 @@
     <update id="increaseReadCount" parameterType="java.lang.Integer">
         update gathering set gath_readcount=gath_readcount+1 where gath_no=#{gathNo}
     </update>
+<!--9. 모임완료로 상태변경    -->
+    <update id="changeGathStatusByTime">
+        update gathering set gath_status_no=3 where gath_day>sysdate
+    </update>
 </mapper>
