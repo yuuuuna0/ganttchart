@@ -24,4 +24,14 @@ public interface GatheringMapper {
     int increaseReadCount(int gathNo) throws Exception;
 
     int changeGathStatusByTime() throws Exception;
+
+    List<Gathering> findTopNGath(int index) throws Exception;
+
+    List<Gathering> findNearGath() throws Exception;
+
+    List<Gathering> findGathByUId(String uId) throws Exception;
+
+    int countGath(String keyword) throws Exception;
+
+    List<Gathering> findGathList2(Map<String, Object> map) throws Exception;
 }

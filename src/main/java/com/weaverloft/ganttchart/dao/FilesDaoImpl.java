@@ -47,4 +47,10 @@ public class FilesDaoImpl implements FilesDao{
     public List<Files> findFileByGathNo(int gathNo) throws Exception {
         return filesMapper.findFileByGathNo(gathNo);
     }
+
+    @Override
+    public int updateIsUse(int fileNo) throws Exception {
+        return filesMapper.updateIsUse(fileNo);
+    }
+
 }

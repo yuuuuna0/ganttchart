@@ -32,7 +32,7 @@ public class Gathering {
     private int cityNo;
     private int gathReadcount;
 
-    private List<Files> filesList;
+    private List<Files> fileList;
     private City city;
     private GatheringType gatheringType;
     private Users user;

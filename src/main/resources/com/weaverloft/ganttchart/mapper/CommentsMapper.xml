@@ -3,7 +3,7 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.CommentsMapper">
 <!--1. 게시글 번호로 댓글 전체 찾기 -->
     <select id="findCommentByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Comments">
-        select * from comments where board_no=#{boardNo} order by group_no,depth,orders,comments_no asc
+        select * from comments where board_no=#{boardNo} order by group_no,depth,orders asc
     </select>
 <!--1-1. 부모댓글 전체 찾기    -->
     <select id="findPreCommentByBoardNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Comments">
@@ -30,11 +30,23 @@
     </select>
 <!--4. 작성하는 댓글 밑으로 orders 증가시키기   -->
     <update id="changeOrders" parameterType="java.util.Map">
-        update Comments set orders=orders+1 where board_no=#{boardNo} and orders>=#{orders}
+        update Comments set orders=orders+1 where board_no=#{boardNo} and <![CDATA[ orders>=#{orders}]]>
     </update>
 <!--5. 같은 그룹에 같은 오더번호 찾기    -->
-    <select id="findSameOrders" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Comments">
-        select * from comments where board_no=#{boardNo} and group_no=#{groupNo} and orders=#{orders}
+    <select id="findSameOrders" parameterType="com.weaverloft.ganttchart.dto.Comments" resultType="java.lang.Integer">
+        select count(*) from comments where board_no=#{boardNo} and group_no=#{groupNo} and  orders=#{orders}
+    </select>
+<!--6. 댓글 삭제    -->
+    <delete id="deleteCommentByNo" parameterType="java.lang.Integer">
+        delete comments where comments_no=#{commentsNo}
+    </delete>
+<!--7. 댓글 수정    -->
+    <update id="updateComment" parameterType="com.weaverloft.ganttchart.dto.Comments">
+        update comments set comments_content=#{commentsContent} where comments_no=#{commentsNo}
+    </update>
+<!--8. 그룹 내 depth 작거나 같은 댓글 갯수     -->
+    <select id="findSameDepth" parameterType="com.weaverloft.ganttchart.dto.Comments" resultType="java.lang.Integer">
+        select count(*) from comments where board_no=#{boardNo} and group_no=#{groupNo} and <![CDATA[  depth<=#{depth} ]]>
     </select>
 </mapper>
 

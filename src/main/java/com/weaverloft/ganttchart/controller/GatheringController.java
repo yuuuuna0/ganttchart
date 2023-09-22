@@ -2,6 +2,7 @@ package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.*;
+import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,27 +24,33 @@ public class GatheringController {
     private UsersService usersService;
     private GatheringTypeService gatheringTypeService;
     private ApplyService applyService;
+    private ReviewService reviewService;
 
     public GatheringController(GatheringService gatheringService, FilesService filesService, CityService cityService,
-                               UsersService usersService,GatheringTypeService gatheringTypeService,ApplyService applyService) {
+                               UsersService usersService,GatheringTypeService gatheringTypeService,ApplyService applyService,
+                               ReviewService reviewService) {
         this.gatheringService = gatheringService;
         this.filesService = filesService;
         this.cityService = cityService;
         this.usersService = usersService;
         this.gatheringTypeService = gatheringTypeService;
         this.applyService = applyService;
+        this.reviewService = reviewService;
     }
 
     //1. 모임리스트 페이지
-    @GetMapping(value = "/list", params = {"pageNo","keyword"})
-    public String listPage(Model model,@RequestParam(required = false, defaultValue = "1")int pageNo, @RequestParam(required = false, defaultValue = "")String keyword) {
+    @GetMapping(value = "/list")
+    public String listPage(Model model,
+                           @RequestParam(required = false, defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) String filterType,
+                           @RequestParam(required = false) String ascDesc){
         String forwardPath = "";
         try {
-            List<Gathering> gatheringList = gatheringService.findGathList();
+            SearchDto<Gathering> searchGathList = gatheringService.findSearchedGathList(pageNo,keyword,filterType,ascDesc);
             List<Users> userList = usersService.findUserList();
-            model.addAttribute("gatheringList", gatheringList);
+            model.addAttribute("searchGathList", searchGathList);
             model.addAttribute("userList",userList);
-            System.out.println("gatheringList = " + gatheringList);
             forwardPath = "/gathering/list";
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,17 +59,19 @@ public class GatheringController {
     }
 
     //2. 모임 상세보기 페이지
-    @GetMapping(value = "/detail", params = "gathNo")
+    @GetMapping(value = "/detail")
     public String detailPage(@RequestParam int gathNo, Model model) {
         String forwardPath = "";
         try {
             Gathering gathering = gatheringService.findGathByNo(gathNo);
             List<Files> fileList = filesService.findFileByGathNo(gathNo);
             List<Apply> applyList = applyService.findApplyByGathNo(gathNo);
+            List<Review> reviewList = reviewService.findReviewByGathNo(gathNo);
             gatheringService.increaseReadCount(gathNo);
             model.addAttribute("gath",gathering);
             model.addAttribute("fileList",fileList);
             model.addAttribute("applyList",applyList);
+            model.addAttribute("reviewList",reviewList);
             System.out.println("gathering = " + gathering);
             forwardPath = "/gathering/detail";
         } catch (Exception e) {
@@ -72,12 +81,16 @@ public class GatheringController {
     }
 
     //3. 모임 수정하기 페이지
-    @GetMapping(value = "/modify",params = "gathNo")
+    @GetMapping(value = "/modify")
     public String modifyPage(@RequestParam int gathNo,Model model){
         String forwardPath = "";
         try {
             Gathering gathering = gatheringService.findGathByNo(gathNo);
-            model.addAttribute("gathering",gathering);
+            List<City> cityList = cityService.findCityList();
+            List<GatheringType> gathTypeList = gatheringTypeService.findGathTypeList();
+            model.addAttribute("cityList",cityList);
+            model.addAttribute("gathTypeList",gathTypeList);
+            model.addAttribute("gath",gathering);
             forwardPath = "/gathering/modify";
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +99,7 @@ public class GatheringController {
     }
     //3-1. 모임 수정하기 AJAX
     @ResponseBody
-    @PostMapping(value = "/modify.ajx",params = "gathNo")
+    @PostMapping(value = "/modify.ajx")
     public Map<String, Object> modifyAjax(@RequestParam int gathNo, Gathering gathering, @RequestPart(required = false) List<MultipartFile> fileList
                                             /*,nameList?*/,List<String> nameList){
         Map<String,Object> resultMap = new HashMap<>();
@@ -197,11 +210,12 @@ public class GatheringController {
         return resultMap;
     }
     //5. 모임 삭제하기 --> 상태변경으로 하는 것 / db 삭제는 아님
-    @RequestMapping(value = "/delete.action", params = "gathNo")
+    @GetMapping(value = "/delete.action")
     public String deleteAction(@RequestParam int gathNo){
         String forwardPath = "";
         try{
             int result = gatheringService.updateGathStatusNo(gathNo,99);
+            forwardPath="redirect:/gathering/list?pageNo=1&keyword=";
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -210,8 +224,12 @@ public class GatheringController {
 
 
     //6. 모임 신청하기
-    @GetMapping(value = "/apply", params = "gathNo")
-    public String gathApplyPage(@RequestParam int gathNo, HttpSession session){
+    @ResponseBody
+    @PostMapping(value = "/apply")
+    public Map<String,Object> gathApplyPage(@RequestParam int gathNo, HttpSession session){
+        Map<String,Object> resultMap = new HashMap<>();
+        int code = 0;
+        String msg = "";
         String forwardPath ="";
         try{
             Users loginUser = (Users)session.getAttribute("loginUser");
@@ -222,7 +240,10 @@ public class GatheringController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return forwardPath;
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("forwardPath",forwardPath);
+        return resultMap;
     }
 
     @GetMapping("/apply/list")

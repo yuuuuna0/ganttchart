@@ -22,4 +22,8 @@ public interface UsersDao {
     int updateFileNo(String uId, int fileNo) throws Exception;
 
     List<Users> findUserList() throws Exception;
+
+    int countUser(String keyword) throws Exception;
+
+    List<Users> findUserList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
 }

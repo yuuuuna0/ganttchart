@@ -66,8 +66,8 @@
                                 </div>
                             </div>
                                 <div class="form-group" id="smarteditor" >
-                                    <label for="gathContent">내용</label>
-                                    <textarea class="form-control" id="gathContent" name="gathContent" rows="10" cols="10" placeholder="내용을 입력하세요" style="width: 100%;"></textarea>
+                                    <label for="gathDesc">내용</label>
+                                    <textarea class="form-control" id="gathDesc" name="gathDesc" rows="10" cols="10" placeholder="내용을 입력하세요" style="width: 100%;"></textarea>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
@@ -96,26 +96,7 @@
     </div>
     <!-- main-panel ends -->
 <script>
-    let gathContent;
-    let oEditors = [];
-
-    //3. 카카오맵 API
-    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-    var options = { //지도를 생성할 때 필요한 기본 옵션
-        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-        level: 3 //지도의 레벨(확대, 축소 정도)
-    };
-
-    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
-        };
-    var geocoder = new kakao.maps.services.Geocoder();  // 주소-좌표 변환 객체를 생성합니다
-
-
+    //1. 주소API
     function addGathAddr(){
         new daum.Postcode({
             oncomplete: function (data) { //선택시 입력값 세팅
@@ -125,8 +106,21 @@
             }
         }).open();
     }
+    //2. 카카오맵 API
+    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 3 //지도의 레벨(확대, 축소 정도)
+    };
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+    var geocoder = new kakao.maps.services.Geocoder();  // 주소-좌표 변환 객체를 생성합니다
 
-// 주소로 좌표를 검색합니다
+    // 주소로 좌표를 검색합니다
     function checkMaps(address){
         let addr = address;
         geocoder.addressSearch(addr, function(result, status) {
@@ -139,35 +133,34 @@
                     map: map,
                     position: coords
                 });
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                // var infowindow = new kakao.maps.InfoWindow({
-                //     // content: '<div style="width:150px;text-align:center;padding:6px 0;"></div>'
-                // });
-                // infowindow.open(map, marker);
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 map.setCenter(coords);
             }
         });
     }
+    // 스마트에디터
+    var gathDesc;
+    var oEditors = [];
 
-    function smartEditor(){
+    var smartEditor = function(){
         nhn.husky.EZCreator.createInIFrame({
             oAppRef : oEditors,
-            elPlaceHolder : "gathContent",
+            elPlaceHolder : "gathDesc",
             sSkinURI: "/smartEditor/SmartEditor2Skin.html",
             fCreator: "createSEditor2"
         });
     }
+    $(document).ready(function(){
+       smartEditor();
+    });
 
     function insertContent() {
-        oEditors.getById("gathContent").exec("UPDATE_CONTENTS_FIELD", []);
-        if (gathContent === '') {
+        oEditors.getById["gathDesc"].exec("UPDATE_CONTENTS_FIELD", []);
+        if (gathDesc === '') {
             alert('내용을 입력 해 주세요');
-            oEditors.getById("gathContent").exec("FOCUS");
+            oEditors.getById("gathDesc").exec("FOCUS");
             return;
         } else {
-            gathContent = $('gathContent').val();
-            alert(gathContent);
+            gathDesc = $('#gathDesc').val();
         }
     }
 
@@ -176,14 +169,13 @@
     let maxCount = 5;     // 최대 첨부 갯수
     let fileArray = [];
     let fileArray2 = [];
-    let dataTransfer = new DataTransfer();  //array를 file로 변경하여 서버로 보내게 해줌
     function changeView(){
         $('#fileList').empty();
         let html = '';
         for(let i=0;i<fileArray.length;i++){
             html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
                 + fileArray[i].name
-                + '<img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;"/></span>'
+                + '&nbsp;<img src="/static/images/icons/X.png" style="width:10px; height:auto; vertical-align: middle; cursor: pointer;"/></span>'
                 + '</div>';
         }
         $('#fileList').append(html);
@@ -193,9 +185,8 @@
     function addFile(){
         //1.파일 갯수 확인
         fileArray2 = $('#gathFileList')[0].files;
-        console.log('fileArray2 : ' + fileArray2);
         if(fileCount + fileArray2.length > maxCount){
-            alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
+            alert("파일은 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
         } else {
             fileCount = fileCount + fileArray2.length;
@@ -204,7 +195,6 @@
         for(let i = 0 ; i < fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
         }
-        console.log(fileArray);
         fileArray2 = [];
         changeView();
     }
@@ -227,9 +217,11 @@
 
     //3. 게시글 작성 --> 스마트에디터 내용 페이지에 널어주기:oEditors.getById is not a function
     function gathWrite() {
-        // insertContent();    //스마트에디터
+        insertContent();    //스마트에디터
+        console.log(gathDesc);
+        debugger;
         let gathTitle = $('#gathTitle').val();
-        gathContent = $('gathContent').val();
+        gathDesc = $('#gathDesc').val();
         let gathAddr = $('#gathAddr').val();
         let gathArrr2 = $('#gathAddr2').val();
         let gathDay = $('#gathDay').val();
@@ -243,9 +235,9 @@
             document.getElementById("gathTitle").focus();
             return false;
         }
-        if(gathContent === ''){
+        if(gathDesc === ''){
             alert("내용을 입력하세요");
-            document.getElementById("gathContent").focus();
+            document.getElementById("gathDesc").focus();
             return false;
         }
         if(gathDay === ''){
@@ -292,6 +284,7 @@
         for(let i=0;i<form.length;i++){
             formData.append(form[i].name,form[i].value);
         }
+        formData.append("gathDesc",gathDesc);   //스마트에디터로 붙였기 때문에 form이 아니라 따로 붙여준다
         for (var i = 0; i < fileArray.length; i++) {
             formData.append("mfList", fileArray[i]);
         }

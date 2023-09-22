@@ -100,12 +100,12 @@
         <!-- main-panel ends -->
 <script type="text/javascript">
     // 생일 양식에 맞게 넣기
-    let rawBitrh = $('#birth').val();
+    let rawBitrh = $('#uBirth').val();
     console.log(rawBitrh);
-    console.log(typeof $('#birth').val());
+    console.log(typeof $('#uBirth').val());
     let birth = new Date(rawBitrh).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\./g, '.');
     console.log(birth);
-    $('#birth').val(birth);
+    $('#uBirth').val(birth);
 </script>
 
 </body>

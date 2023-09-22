@@ -40,7 +40,6 @@
                                             <th>모임설명</th>
                                             <th>모임일</th>
                                             <th>신청마감일</th>
-                                            <th>지원상태</th>
                                             <th>모임상태</th>
                                             <th>기타</th>
                                         </tr>
@@ -54,27 +53,19 @@
                                                 <td><fmt:formatDate value="${gathering.gathDay}" pattern="yyyy. MM. dd."/></td>
                                                 <td><fmt:formatDate value="${gathering.gathClose}" pattern="yyyy. MM. dd."/></td>
                                                 <td>
-<%--                                                   서버에서 apply 붙여줘야함 --%>
-                                                    <c:choose>
-                                                        <c:when test="${apply.applyStatusNo == 1}">대기중</c:when>
-                                                        <c:when test="${apply.applyStatusNo == 2}">승인완료</c:when>
-                                                        <c:when test="${apply.applyStatusNo == 3}">거절</c:when>
-                                                    </c:choose>
+                                                <c:choose>
+                                                    <c:when test="${gathering.gathStatusNo == 1}">
+                                                        모집중
+                                                    </c:when>
+                                                    <c:when test="${gathering.gathStatusNo == 2}">
+                                                        인원마감
+                                                    </c:when>
+                                                    <c:when test="${gathering.gathStatusNo == 3}">
+                                                        모임완료
+                                                    </c:when>
+                                                </c:choose>
                                                 </td>
-                                                    <c:choose>
-                                                        <c:when test="${gathering.gathStatusNo == 1}">
-                                                            <td>모집중</td>
-                                                            <td><input type="button" value="문의하기(클릭시 채팅창 활성)"></td>
-                                                        </c:when>
-                                                        <c:when test="${gathering.gathStatusNo == 2}">
-                                                            <td>인원마감</td>
-                                                        </c:when>
-                                                        <c:when test="${gathering.gathStatusNo == 3}">
-                                                            <td>모임완료</td>
-                                                            <td><input type="button" value="리뷰남기기" onclick="window.location.href='/gathring/review/register?gathNo=${gathering.gathNo}'"></td>
-                                                        </c:when>
-                                                    </c:choose>
-                                                <td>
+                                                <td><input type="button" value="참여리스트"></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>

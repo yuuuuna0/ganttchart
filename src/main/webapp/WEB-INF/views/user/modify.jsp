@@ -18,12 +18,12 @@
                             <form class="forms-sample" name="modifyF" id="modifyF" enctype="multipart/form-data">
                             <!-- 프로필사진 업로드 -->
                             <div class="form-group" style="text-align: center">
-<%--                                <c:if test = "${ loginMember.saveFileName != null}">--%>
-<%--                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/users/${loginMember.saveFileName}"/>--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test = "${ loginMember.saveFileName == null}">--%>
+                                <c:if test = "${ file != null}">
+                                    <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/user/${file.saveName}"/>
+                                </c:if>
+                                <c:if test = "${ file == null}">
                                     <img id="prevPhoto" class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>
-<%--                                </c:if>--%>
+                                </c:if>
                                 <br>
                                 <br>
                                 <label for="photoFile" class="file-upload-browse btn btn-primary">사진 변경</label>
@@ -31,59 +31,63 @@
                             </div>
                                 <div class="row form-group">
                                     <div class="col-6">
-                                    <label for="id">아이디</label>
-                                    <input readonly  type="text" class="form-control" id="id" name="id" value="${loginMember.getMId()}">
+                                    <label for="uId">아이디</label>
+                                    <input readonly  type="text" class="form-control" id="uId" name="uId" value="${user.getUId()}">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-4">
+                                        <label for="uPassword">비밀번호</label>
+                                        <input readonly type="password" class="form-control" id="uPassword" name="uPassword" value="xxxxx" >
+                                    </div>
+                                    <div class="col-2 mt-auto">
+                                        <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/user/modifyPassword'" >
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
-                                        <label for="password">비밀번호</label>
-                                        <input readonly type="password" class="form-control" id="password" name="password" value="xxxxx" >
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-6">
-                                        <label for="name">이름</label>
-                                        <input  type="text" class="form-control" id="name" name="name" value="${loginMember.getMName()}">
+                                        <label for="uName">이름</label>
+                                        <input  type="text" class="form-control" id="uName" name="uName" value="${user.getUName()}">
                                     </div>
                                     <div class="col-6">
-                                        <label for="gender">성별</label>
-                                        <select class="form-control" id="gender" name="gender">
-                                            <c:if test="${loginMember.getMGender() == '남'}">
-                                                <option value="1" selected>남</option>
-                                                <option value="2">여</option>
-                                            </c:if>
-                                            <c:if test="${loginMember.getMGender() == '여'}">
-                                                <option value="1" >남</option>
-                                                <option value="2" selected>여</option>
-                                            </c:if>
+                                        <label for="uGender">성별</label>
+                                        <select class="form-control" id="uGender" name="uGender">
+                                            <c:choose>
+                                                <c:when test="${user.getUGender() == '남'}">
+                                                <option value="남" selected>남</option>
+                                                <option value="여">여</option>
+                                                </c:when>
+                                                <c:when test="${user.getUGender() == '여'}">
+                                                <option value="남" >남</option>
+                                                <option value="여" selected>여</option>
+                                                </c:when>
+                                            </c:choose>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input  type="email" class="form-control" id="email" name="email" value="${loginMember.getMEmail()}">
+                                    <label for="uEmail">이메일</label>
+                                    <input  type="email" class="form-control" id="uEmail" name="uEmail" value="${user.getUEmail()}">
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
-                                        <label for="phone">전화번호</label>
-                                        <input  type="text" class="form-control" id="phone" name="phone" value="${loginMember.getMPhone()}">
+                                        <label for="uPhone">전화번호</label>
+                                        <input  type="text" class="form-control" id="uPhone" name="uPhone" value="${user.getUPhone()}">
                                     </div>
                                     <div class="col-6">
-                                        <label for="birth">생일</label>
-                                        <input type="date" class="form-control" id="birth" name="birth"
-                                               value="${loginMember.getMBirth()}" pattern='yyyy. MM. dd.'/>
+                                        <label for="uBirth">생일</label>
+                                        <input type="date" class="form-control" id="uBirth" name="uBirth"/>
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-6">
-                                        <label for="address">주소</label>
-                                        <input type="text" class="form-control" id="address" name="address" value="${loginMember.getMAddr()}">
+                                        <label for="uAddress">주소</label>
+                                        <input type="text" class="form-control" id="uAddress" name="uAddress" value="${user.getUAddress()}">
                                     </div>
                                     <div class="col-6">
-                                        <label for="detailedAddress">&nbsp;</label>
-                                        <input type="text" class="form-control" id="detailedAddress"
-                                               name="detailedAddress" placeholder="상세주소를 입력하세요">
+                                        <label for="uAddress2">&nbsp;</label>
+                                        <input type="text" class="form-control" id="uAddress2"
+                                               name="uAddress2" value="${user.getUAddress2()}">
                                     </div>
                                 </div>
                                 <div style="text-align:center;">
@@ -104,27 +108,30 @@
 
 <script type="text/javascript">
     // 생일 양식에 맞게 넣기
-    let rawBitrh = $('#birth').val();
-    console.log(rawBitrh);
-    console.log(typeof $('#birth').val());
-    let birth = new Date(rawBitrh).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\./g, '.');
-    console.log(birth);
-    $('#birth').val(birth);
+    let uBirthStr = '${user.getUBirth()}';
+    let dateParts = uBirthStr.split(' ');
+    let year = dateParts[5];
+    let month = (['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].indexOf(dateParts[1]) + 1).toString().padStart(2, '0');
+    let day = dateParts[2];
+    uBirthStr = year+'-'+month+'-'+day;
+    let uBirth = new Date(uBirthStr);
+    console.log(uBirth);
+    $('#uBirth').val(uBirth);
 
     //1. 주소 api
     window.onload = function () {
-        document.getElementById('address').addEventListener('click', function () {
+        document.getElementById('uAddress').addEventListener('click', function () {
             new daum.Postcode({
                 oncomplete: function (data) { //선택시 입력값 세팅
-                    document.getElementById("address").value = data.address; // 주소 넣기
-                    document.querySelector("input[name=address]").focus(); //상세입력 포커싱
+                    document.getElementById("uAddress").value = data.address; // 주소 넣기
+                    document.querySelector("input[name=uAddress]").focus(); //상세입력 포커싱
                 }
             }).open();
         })
     };
-    // //2. birth -> datepicker 이용
+    // //2. birth -> datepicker 이용해야 생일 양식에 넣을 수 있을듯
     // window.onload = function () {
-    //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
+    //     $("#uBirth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
     // };
 
     //3. 파일 업로드시 이미지 보여주기
@@ -138,52 +145,67 @@
         }
     }
 
-    //3. 회원가입 버튼 클릭 -> 유효성 검사 -> register-action 실행
+    //3.
     function modifyUser(){
-        var formData = new FormData();
-        var id = document.getElementById("id").value;
-        var name = document.getElementById("name").value;
-        var email = document.getElementById("email").value;
-        var phone = document.getElementById("phone").value;
-        var address = document.getElementById("address").value + document.getElementById("detailedAddress").value;
-        var gender = 0;
-        //users.gender = document.querySelector('input[name=gender]:checked')[0].value;
-        var birth = document.getElementById("birth").value;
+        let uName = $("#uName").val();
+        let uEmail = $("#uEmail").val();
+        let uGender = $('#uGender option:selected').val();
+        let uPhone = $('#uPhone').val();
 
-        formData.append("id",id);
-        formData.append("name",name);
-        formData.append("email",email);
-        formData.append("phone",phone);
-        formData.append("address",address);
-        formData.append("gender",gender);
-        formData.append("birth",birth);
-
-        console.log(photoFile.files[0]);
-
-        /**************************** 유효성 검사 ****************************************/
-        if(name === ''){
-            document.getElementById("nameVal").innerText="이름을 입력하세요";
-            document.getElementById("name").focus();
+        if (uName === '') {
+            alert("이름을 입력하세요");
+            $("#uName").focus();
             return false;
         }
-        if(email === ''){
-            document.getElementById("emailVal").innerText="이메일을 입력하세요";
-            document.getElementById("email").focus();
+        if (uEmail === '') {
+            alert("이메일을 입력하세요");
+            $("#uEmail").focus();
             return false;
         }
-        if(phone === ''){
-            document.getElementById("phoneVal").innerText="전화번호를 입력하세요";
-            document.getElementById("phone").focus();
+        if (!uEmail.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i)){
+            alert("이메일형식에 맞게 작성해주세요");
+            $('#uEmail').val('');
+            $("#uEmail").focus();
             return false;
         }
+        if (uGender === '') {
+            alert("성별을 선택하세요");
+            return false;
+        }
+        //전화번호 정규식
+        // let result1 = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+        // if(!result1.test(uPhone)){
+        //     alert("전화번호 양식에 맞게 입력 해 주세요");
+        //     $('#uPhone').val();
+        //     $("#uPhone").focus();
+        //     return false;
+        // }
 
-        document.modifyF.method = 'POST';
-        document.modifyF.action = 'modifyUser-action';
-        document.modifyF.submit();
+        let form = $('#modifyF').serializeArray();
+        let file = $('#photoFile')[0].files;
+        let formData = new FormData();
+        for(let i=0;i<form.length;i++){
+            formData.append(form[i].name,form[i].value);
+        }
+        formData.append("mf",file[0]);
 
+        $.ajax({
+            url : '/user/modify.ajx',
+            method : 'POST',
+            data : formData,
+            contentType : false,
+            processData : false,    //필요여부 확인
+            success : function(resultJson){
+                if(resultJson.code === 1){
+                    window.location.href = resultJson.forwardPath;
+                } else{
+                    alert(resultJson.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
 
 </script>
-
-</body>
-</html>

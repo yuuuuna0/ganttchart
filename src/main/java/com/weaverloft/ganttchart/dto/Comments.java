@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class Comments {
     private int commentsNo;
     private String commentsContent;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date commentsDate;
     private String uId;
     private int boardNo;

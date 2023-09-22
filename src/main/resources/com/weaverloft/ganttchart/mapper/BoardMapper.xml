@@ -5,6 +5,31 @@
     <select id="findBoardList" resultType="com.weaverloft.ganttchart.dto.Board">
         select * from board
     </select>
+<!--1-1. 필터링된 게시글 전체 개수    -->
+    <select id="countBoard" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from board
+        where 1=1
+        <if test="keyword != null">
+            and (u_id like '%'||#{keyword}||'%' or board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%')
+        </if>
+    </select>
+<!--1-2. 전처리 된 게시글리스트    -->
+    <select id="findBoardList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Board">
+        select *
+        from(select rownum idx, b.*
+        from (select *
+        from board
+        order by board_no) b
+        where 1=1
+        <if test="keyword != null">
+            and (u_id like '%'||#{keyword}||'%' or board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%')
+        </if>
+        <if test="filterType != null and filterType != ''">
+            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
+        </if>
+        ) afterb
+        <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+    </select>
 <!--2. 게시글 번호로 게시글 찾기    -->
     <select id="findBoardByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Board">
         select * from board where board_no=#{boardNo}
@@ -33,4 +58,15 @@
     <update id="updateBoard" parameterType="com.weaverloft.ganttchart.dto.Board">
         update board set board_title=#{boardTitle}, board_content=#{boardContent} where board_no=#{boardNo}
     </update>
+<!--7. 조회수 topN 게시글    -->
+    <select id="findTopNBoard" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Board">
+        select *
+        from ( select rownum idx, b.*
+               from ( select *
+                      from board
+                      order by BOARD_READCOUNT desc
+                    ) b
+             )
+        <![CDATA[ where idx <= #{index} ]]>
+    </select>
 </mapper>

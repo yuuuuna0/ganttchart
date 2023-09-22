@@ -14,5 +14,12 @@ public interface CommentsDao {
 
     List<Comments> findPreCommentByBoardNo(int boardNo) throws Exception;
 
-    Comments findSameOrders(int orders, int boardNo,int groupNo) throws Exception;
+    int findSameOrders(Comments comments) throws Exception;
+
+    int deleteCommentByNo(int commentsNo) throws Exception;
+
+    int updateComment(Comments comments) throws Exception;
+
+    int findSameDepth(Comments comments) throws Exception;
+
 }

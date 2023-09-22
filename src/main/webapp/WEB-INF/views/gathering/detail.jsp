@@ -90,7 +90,8 @@
                             <input  type="text" class="form-control" id="date" name="date"
                                    value="<fmt:formatDate value="${gath.gathCreateDate}" pattern="yyyy. MM. dd."/>" disabled>
                             </div>
-                        </div><div class="form-group row" >
+                        </div>
+                        <div class="form-group row" >
                             <div class="col-6">
                             <label for="city">지역</label>
                             <input  type="text" class="form-control" id="city" name="city"
@@ -101,7 +102,8 @@
                             <input  type="text" class="form-control" id="gathType" name="gathType"
                                    value="${gath.gatheringType.gathType}" disabled>
                             </div>
-                        </div><div class="form-group row" >
+                        </div>
+                        <div class="form-group row" >
                             <div class="col-3">
                             <label for="gathDay">모임일</label>
                             <input  type="text" class="form-control" id="gathDay" name="gathDay"
@@ -129,7 +131,7 @@
                         <div class="row form-group">
                             <div class="col-6">
                             <label for="gathDesc">내용</label>
-                            <textarea class="form-control" id="gathDesc" name="gathDesc" rows="4"
+                            <textarea class="form-control" id="gathDesc" name="gathDesc" rows="10"
                                       disabled>${gath.gathDesc}</textarea>
                             </div>
                             <div class="col-6" id="map" style="width:500px;height:400px;">
@@ -184,93 +186,32 @@
                             </tbody>
                         </table>
                     </div>
-                    </c:if>
-
+                </c:if>
+                    </div>
                     <hr>
 
-
-<%--                    <!-- 댓글 시작 -->--%>
-<%--                    <div class="card-body" style="padding-top: 0;">--%>
-<%--                        <!-- 1. 댓글 목록-->--%>
-<%--                        <div class="comment-group">--%>
-<%--                            <div  id="commentListDiv">--%>
-<%--                                <c:forEach items="${commentsList}" var="comment">--%>
-<%--                                            <c:choose>--%>
-<%--                                                <c:when test="${comment.orders == 0}"> &lt;%&ndash;                                            상위그룹&ndash;%&gt;--%>
-<%--                                                    <div class="col-12 mt-3" style="margin-left: ${(comment.orders+1)*10}px" id="commentDiv${comment.commentsNo}">--%>
-<%--                                                        <span class="mr-3">${comment.id}</span>--%>
-<%--                                                        <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                                        <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>--%>
-<%--                                                        <span>--%>
-<%--                                                            <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="subComments(${comment.commentsNo},${comment.orders+1})"/>--%>
-<%--                                                            <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                            <img src="/static/images/icons/modify.png" name="modifyComment"--%>
-<%--                                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="modifyComments('${comment.commentsNo}');"/>--%>
-<%--                                                            <img src="/static/images/icons/bin.png"--%>
-<%--                                                                 style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                 onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                                            </c:if>--%>
-<%--                                                        </span>--%>
-<%--                                                    </div>--%>
-<%--                                                </c:when>--%>
-<%--                                                <c:otherwise> &lt;%&ndash;                                            하위그룹&ndash;%&gt;--%>
-<%--                                                    <div class="col-12 mt-3" style="margin-left: ${(comment.orders+1)*30}px" id="commentDiv${comment.commentsNo}">--%>
-<%--                                                        <img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>--%>
-<%--                                                        <span class="mr-3">${comment.id}</span>--%>
-<%--                                                        <span class="mr-3 commentsNo${comment.commentsNo}">${comment.commentsContent}</span>--%>
-<%--                                                        <span class="mr-2"><fmt:formatDate value="${comment.commentsDate}" pattern="yyyy. MM. dd."/></span>--%>
-<%--                                                        <span>--%>
-<%--                                                            <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                            onclick="subComments(${comment.commentsNo},${comment.orders+1})"/>--%>
-<%--                                                             <c:if test="${sessionScope.loginUser.id == comment.id}">--%>
-<%--                                                                <img src="/static/images/icons/modify.png" name="modifyComment"--%>
-<%--                                                                    style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                    onclick="modifyComments('${comment.commentsNo}');"/>--%>
-<%--                                                                 <img src="/static/images/icons/bin.png"--%>
-<%--                                                                      style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"--%>
-<%--                                                                      onclick="deleteComments(${comment.commentsNo});"/>--%>
-<%--                                                             </c:if>--%>
-<%--                                                        </span>--%>
-<%--                                                    </div>--%>
-<%--                                                </c:otherwise>--%>
-<%--                                            </c:choose>--%>
-<%--                                </c:forEach>--%>
-<%--                            </div>--%>
-
-
-
-                            <!-- 작성폼 -->
-                            <label reviewF="후기">후기</label>
-                            <form class="mb-4" id="reviewF" name="reviewF" enctype="multipart/form-data">
-                                <div class="row">
-                                    <c:forEach items="${fileList}" var="file">
-                                    <div class="col-2">
-                                    <img  class="img-fluid styled profile_pic rounded-circle"  width = "auto" src="/upload/review/${file.saveName}" />
-                                    </div>
+<%-- 후기 --%>
+                    <div class="card-body">
+                        <h4 class="card-title">후기</h4>
+                            <div class="form-group">
+                                <label for="reviewFileList">사진</label>
+                                <div id="reviewFileList">
+                                    <c:forEach items="${reviewFileList}" var="reviewFile">
+                                        <img src="/upload/review/${reviewFile.saveName}"
                                     </c:forEach>
-                                    <br>
-                                    <hr>
-                                    <div class="col-7">
-                                        <textarea class="form-control" id="reviewContent" name="reviewContent"
-                                                  row="3" placeholder="리뷰를 남겨주세요"></textarea>
-                                    </div>
-
-                                    <div class="col-3">
-<%--                                        <c:if test="${sessionScope.loginUser != null}">--%>
-                                        <input type="file" id="reviewFile" value="남기기" onchange="addFile()" multiple>
-<%--                                        </c:if>--%>
-                                    </div>
-                                    <div class="col-2">
-<%--                                        <c:if test="${sessionScope.loginUser != null}">--%>
-                                        <input type="button" id="createReviewBtn" onclick="createReview(0,0)"
-                                               value="남기기">
-<%--                                        </c:if>--%>
-                                    </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="form-group" >
+                                <label for="boardContent">내용</label>
+                                <textarea class="form-control" id="boardContent" name="boardContent" rows="4" placeholder="내용을 입력하세요"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
+                                <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                            </div>
                     </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -297,12 +238,6 @@
                 map: map,
                 position: coords
             });
-            // 인포윈도우로 장소에 대한 설명을 표시합니다
-            // var infowindow = new kakao.maps.InfoWindow({
-            //     // content: '<div style="width:150px;text-align:center;padding:6px 0;"></div>'
-            // });
-            // infowindow.open(map, marker);
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             map.setCenter(coords);
         }
     });
@@ -323,19 +258,22 @@
     //신청상태 변경
     function changeStatus(no){
         let applyStatusNo = $('#applyStatusNo option:selected').val();
-        let applyNo = no;
+        let gathNo = ${gath.gathNo};
         $.ajax({
             url : '/gathering/apply/change.ajx?applyNo='+no,
             method : 'POST',
             data : {
                 'applyStatusNo' : applyStatusNo,
-                'applyNo' : applyNo
+                'applyNo' : no,
+                'gathNo' :gathNo
             },
             success : function(resultMap){
                 if(resultMap.code === 1){
                     alert("신청상태 변경");
-
                 }
+            },
+            error : function(e){
+                console.log(e);
             }
         });
 

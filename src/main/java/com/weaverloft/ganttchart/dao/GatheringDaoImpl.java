@@ -63,4 +63,35 @@ public class GatheringDaoImpl implements GatheringDao {
     public int changeGathStatusByTime() throws Exception {
         return gatheringMapper.changeGathStatusByTime();
     }
+
+    @Override
+    public List<Gathering> findTopNGath(int index) throws Exception {
+        return gatheringMapper.findTopNGath(index);
+    }
+
+    @Override
+    public List<Gathering> findNearGath() throws Exception {
+        return gatheringMapper.findNearGath();
+    }
+
+    @Override
+    public List<Gathering> findGathByUId(String uId) throws Exception {
+        return gatheringMapper.findGathByUId(uId);
+    }
+
+    @Override
+    public int countGath(String keyword) throws Exception {
+        return gatheringMapper.countGath(keyword);
+    }
+
+    @Override
+    public List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("contentBegin",contentBegin);
+        map.put("contentEnd",contentEnd);
+        map.put("keyword",keyword);
+        map.put("filterType",filterType);
+        map.put("ascDesc",ascDesc);
+        return gatheringMapper.findGathList2(map);
+    }
 }

@@ -18,4 +18,10 @@ public interface BoardDao {
     int updateBoard(Board board) throws Exception;
 
     List<Board> findBoardByUId(String uId) throws Exception;
+
+    List<Board> findTopNBoard(int index) throws Exception;
+
+    int countBoard(String keyword) throws Exception;
+
+    List<Board> findBoardList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
 }

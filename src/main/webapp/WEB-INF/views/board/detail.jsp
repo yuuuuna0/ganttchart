@@ -16,21 +16,21 @@
                     <!-- 게시글 -->
                     <input type="hidden" value="${board.boardNo}" id="boardNo">
                     <div class="card-body">
-                        <div class="row">
-                        <div class="col-8">
-                            <h4 class="card-title">게시글 상세보기</h4>
-                        </div>
-                        <div class="col-4 flex" style="display: flex; justify-content: flex-end;">
-                            <%--                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">--%>
-                            <input type="button" id="boardCreateBtn" name="boardCreateBtn"
-                                   class="btn btn-primary mr-2"
-                                   onclick="location.href='/board/modify?boardNo=${board.boardNo}'" value="수정">
-                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
-                                   onclick="location.href='/board/delete.action?boardNo=${board.boardNo}'" value="삭제">
-                            <%--                                    </c:if>--%>
-                            <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
-                                   onclick="location.href='/board/list?pageNo=1&keyword='" value="목록으로">
-                        </div>
+                        <div class="form-group row">
+                            <div class="col-8">
+                                <h4 class="card-title">게시글 상세보기</h4>
+                            </div>
+                            <div class="col-4 flex" style="display: flex; justify-content: flex-end;">
+                                <%--                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">--%>
+                                <input type="button" id="boardCreateBtn" name="boardCreateBtn"
+                                       class="btn btn-primary mr-2"
+                                       onclick="location.href='/board/modify?boardNo=${board.boardNo}'" value="수정">
+                                <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
+                                       onclick="location.href='/board/delete.action?boardNo=${board.boardNo}'" value="삭제">
+                                <%--                                    </c:if>--%>
+                                <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
+                                       onclick="location.href='/board/list?pageNo=1&keyword='" value="목록으로">
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-6">
@@ -61,34 +61,35 @@
                             <textarea  class="form-control" id="boardContent" name="boardContent" rows="4"
                                       disabled>${board.boardContent}</textarea>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-5">
-                            <label for="fileList">첨부파일</label>
-                            <div class="input-group col-xs-12">
-                                <div style="width: 100%; height: auto; padding: 10px; overflow: auto; border: 1px solid #989898;"
-                                     id="fileList">
-                                    <c:forEach items="${fileList}" var="file">
-                                        <div id="file'+ fileNo + '" style="font-size:12px;">
-                                                ${file.originalName}
-                                                    <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>
-                                                    <span>
-                                            <img  src="/../static/images/icons/download.png"
-                                                 style="width:15px; height:auto; vertical-align: middle; cursor: pointer; margin-left: 3px" onclick="fileDownload(${file.fileNo});"/></span>
+                        <c:if test="${fileList != null}">
+                            <div class="form-group row">
+                                <div class="col-5">
+                                <label for="fileList">첨부파일</label>
+                                <div class="input-group col-xs-12">
+                                    <div style="width: 100%; height: auto; padding: 10px; overflow: auto; border: 1px solid #989898;"
+                                         id="fileList">
+                                        <c:forEach items="${fileList}" var="file">
+                                            <div id="file'+ fileNo + '" style="font-size:12px;">
+                                                    ${file.originalName}
+                                                        <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>
+                                                        <span>
+                                                <img  src="/static/images/icons/download.png"
+                                                     style="width:15px; height:auto; vertical-align: middle; cursor: pointer; margin-left: 3px" onclick="fileDownload(${file.fileNo});"/></span>
 
-                                        </div>
-                                    </c:forEach>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                            </div>
-
-                        </div>
+                        </c:if>
                     </div>
                     <hr>
 <%--                    <!-- 댓글 시작 -->--%>
                     <div class="card-body" style="padding-top: 0;">
 
                     <!-- 작성폼 -->
-                    <label createCommentsF="후기">후기</label>
+                    <label for="createCommentsF">댓글</label>
                     <form class="mb-4" id="createCommentsF" name="createCommentsF">
                         <div class="row">
                             <div class="col-9">
@@ -171,13 +172,13 @@
     // 댓글창 입력 후 엔터키 => 검색
     $("#commentsContent").keyup(e => {
         if (e.keyCode === 13) {
-            createComments(0,0);
+            createComments(0,0,0,0);
             e.preventDefault();
         }
     });
     $(".subCommentText").keyup(e => {
         if (e.keyCode === 13) {
-            createComments(0,0);
+            createComments(0,0,0,0);
             e.preventDefault();
         }
     });
@@ -194,7 +195,7 @@
     function subComments(commentsNo,groupNo,depth,orders) {
         $('.subCommentContent').remove();
         let commentDiv = $('#commentDiv'+commentsNo);
-        let html = "<div class ='subCommentContent'><input class='subCommentText' style='margin-left: "+(orders+1)*30+"px' id='subCommentsContent"+commentsNo+"' type='text' class='mr-3' value=''/>" +
+        let html = "<div class ='subCommentContent'><input class='subCommentText' style='margin-left: "+(depth)*20+"px' id='subCommentsContent"+commentsNo+"' type='text' class='mr-3' value=''/>" +
             "<button onclick='createComments(" + commentsNo +","+groupNo+","+depth+","+orders+ ")'>답글달기</button>\n</div>";
         commentDiv.append(html);
     }
@@ -203,7 +204,7 @@
     function createComments(commentsNo2,groupNo2,depth2,orders2) {
         let groupNo = groupNo2;
         let depth = depth2;
-        let orders = orders2;
+        // let orders = orders2;
         let commentsContent;
         if(depth2 === 0){
             commentsContent = $('#commentsContent').val();
@@ -218,11 +219,12 @@
                 'groupNo' : groupNo,
                 'commentsContent': commentsContent,
                 'depth': depth,
-                'orders' : orders,
+                // 'orders' : orders,
                 'boardNo': boardNo
             },
             success: function (resultJson) {
                 console.log(resultJson);
+                debugger;
                 reload(resultJson);
                 $('#commentsContent').val('');
             },
@@ -244,6 +246,7 @@
                 'boardNo': boardNo
             },
             success: function (resultJson) {
+                console.log(resultJson);
                 reload(resultJson);
             },
             error: function (e) {
@@ -257,23 +260,16 @@
     function modifyComments(commentsNo) {
         let commentsContent = $('.commentsNo'+commentsNo).text();
         $('.commentsNo' + commentsNo).empty();  //span 이름이 겹쳤음
-        let html = "<input type='text' class='mr-3 subCommentText' id='modifyText"+commentsNo+"' value='"+commentsContent+"'/>" +
+        let html = "<input type='text' class='mr-3 modifyCommentText' id='modifyText"+commentsNo+"' value='"+commentsContent+"'/>" +
             "<button onclick='modifyCommentsAction(" + commentsNo + ")'>수정하기</button>";
         $('.commentsNo' + commentsNo).append(html);
     }
 
     function modifyCommentsAction(commentsNo) {
         let commentsContent = $('#modifyText' + commentsNo).val();    //왜 ""로 들어가지?
-        console.log(commentsNo);
-        console.log($('#commentsNo' + commentsNo));
-        console.log(commentsContent);
-        console.log($('#commentsNo' + commentsNo).val());
-
-        console.log($('#commentsNo2').val());
-
         let boardNo = $('#boardNo').val();
         $.ajax({
-            url: '/board/comment/modify.ajx',
+            url: '/board/comment/modify.ajx?commentsNo='+commentsNo,
             method: 'POST',
             data: {
                 'commentsNo': commentsNo,
@@ -305,13 +301,13 @@
                 }).replace(/\./g, '.');
             html += '<div class="col-12 mt-3" style="margin-left: 10px" id="groupDiv'+preComment.groupNo+'}">'
                 +' <div id="commentDiv'+preComment.commentsNo+'">'
-                +' <span class="mr-3">'+preComment.uId+'</span>'
+                +' <span class="mr-3">'+preComment.uid+'</span>'
                 +' <span class="mr-3 commentsNo'+preComment.commentsNo+'">'+preComment.commentsContent+'</span>'
                 +' <span class="mr-2">'+date+'</span>'
                 +' <span>'
                 +' <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
                 +' onclick="subComments('+preComment.commentsNo+','+preComment.groupNo+','+(preComment.depth+1)+','+(preComment.orders+1)+'"/>'
-                if(resultMap.loginUser.uId === preComment.uId){
+                if(resultMap.loginUser.uid === preComment.uid){
                     html += '<img src="/static/images/icons/modify.png"'
                         +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
                         +' onclick="modifyComments('+preComment.commentsNo+');"/>'
@@ -331,13 +327,13 @@
                      if(preComment.groupNo === comment.groupNo && comment.depth !== 0){
                          html += '<div class="col-12 mt-1" style="margin-left: '+(comment.depth+1)*15+'px" id="commentDiv'+comment.commentsNo+'">'
                              +'<img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>'
-                             +'<span class="mr-3">'+comment.getUId()+'</span>'
+                             +'<span class="mr-3">'+comment.uid+'</span>'
                              +'<span class="mr-3 commentsNo'+comment.commentsNo+'">'+comment.commentsContent+'</span>'
                              +'<span class="mr-2">'+date2+'</span>'
                              +'<span>'
                              +'<img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
                              +'onclick="subComments('+comment.commentsNo+','+preComment.groupNo+','+comment.depth+1+','+comment.orders+1+')"/>'
-                         if(resultMap.loginUser.uId === comment.uId){
+                         if(resultMap.loginUser.uid === comment.uid){
                              html += '<img src="/static/images/icons/modify.png"'
                                  +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
                                  +' onclick="modifyComments('+comment.commentsNo+');"/>'
@@ -346,10 +342,10 @@
                                  +' onclick="deleteComments('+comment.commentsNo+');"/>'
                          }
                          +'</span>'
-                         +'</div>'
-                         +'</div>'
+                         +'</div>';
                      }
                     }
+                +'</div>'
             }
             $('.commentListDiv').append(html);
         } else {

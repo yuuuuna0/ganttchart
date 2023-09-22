@@ -8,6 +8,7 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Files;
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,19 @@ public class BoardContoller {
     }
 
     //1. 게시글리스트페이지
-    @GetMapping(value = "/list", params = {"pageNo","keyword"})
-    public String listPage(Model model,@RequestParam(required = false, defaultValue = "1")int pageNo, @RequestParam(required = false, defaultValue = "")String keyword){
+    @GetMapping(value = "/list")
+    public String listPage(Model model,
+                           @RequestParam(required = false, defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) String filterType,
+                           @RequestParam(required = false) String ascDesc){
         String forwardPath = "";
         try{
-            List<Board> boardList = boardService.findBoardList();
+            SearchDto<Board> searchBoardList = boardService.findSearchedUserList(pageNo,keyword,filterType,ascDesc);
             List<Users> userList = usersService.findUserList();
-            model.addAttribute("boardList",boardList);
+            model.addAttribute("searchBoardList",searchBoardList);
             model.addAttribute("userList",userList);
+            model.addAttribute("keyword",keyword);
             forwardPath="/board/list";
         } catch (Exception e){
             e.printStackTrace();
@@ -49,18 +55,18 @@ public class BoardContoller {
         return forwardPath;
     }
     //2. 게시글 상세보기 페이지
-    @GetMapping(value = "/detail", params = "boardNo")
+    @GetMapping(value = "/detail")
     public String detailPage(@RequestParam int boardNo, Model model){
         String forwardPath = "";
         try{
             int result = boardService.increaseReadCount(boardNo);
             Board board = boardService.findBoardByNo(boardNo);
-            List<Files> filesList = filesService.findFileByBoardNo(boardNo);
+            List<Files> fileList = filesService.findFileByBoardNo(boardNo);
             List<Comments> commentList = commentsService.findCommentByBoardNo(boardNo);
             List<Comments> preCommentList = commentsService.findPreCommentByBoardNo(boardNo);
             Users user = usersService.findUserById(board.getUId());
             model.addAttribute("board",board);
-            model.addAttribute("fileList",filesList);
+            model.addAttribute("fileList",fileList);
             model.addAttribute("commentList",commentList);
             model.addAttribute("preCommentList",preCommentList);
             model.addAttribute("user",user);
@@ -125,15 +131,15 @@ public class BoardContoller {
         return resultMap;
     }
     //4. 게시글 수정하기 페이지
-    @GetMapping(value = "/modify", params = "boardNo")
+    @GetMapping(value = "/modify")
     public String modifyPage(@RequestParam int boardNo,Model model){
         String forwardPath = "";
         try{
             Board board = boardService.findBoardByNo(boardNo);
-            List<Files> filesList = filesService.findFileByBoardNo(boardNo);
+            List<Files> fileList = filesService.findFileByBoardNo(boardNo);
             Users user = usersService.findUserById(board.getUId());
             model.addAttribute("board",board);
-            model.addAttribute("fileList",filesList);
+            model.addAttribute("fileList",fileList);
             model.addAttribute("user",user);
             forwardPath="/board/modify";
         } catch (Exception e){
@@ -143,7 +149,7 @@ public class BoardContoller {
     }
     //4-1. 게시글 수정하기 AJAX
     @ResponseBody
-    @PostMapping(value = "/modify.ajx", params = "boardNo")
+    @PostMapping(value = "/modify.ajx")
     public Map<String,Object> modifyAjax(@RequestParam int boardNo, Board board, @RequestPart(required = false) List<MultipartFile> fileList
                                             /*,들어오는파일리스트이름?? list? map?*/, List<String> nameList){
         Map<String,Object> resultMap = new HashMap<>();

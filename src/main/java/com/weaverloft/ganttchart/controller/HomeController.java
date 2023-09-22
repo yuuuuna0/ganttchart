@@ -1,8 +1,12 @@
 package com.weaverloft.ganttchart.controller;
 
 
+import com.weaverloft.ganttchart.Service.BoardService;
+import com.weaverloft.ganttchart.Service.GatheringService;
 import com.weaverloft.ganttchart.Service.MenuService;
 import com.weaverloft.ganttchart.Service.UsersService;
+import com.weaverloft.ganttchart.dto.Board;
+import com.weaverloft.ganttchart.dto.Gathering;
 import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
@@ -18,8 +22,12 @@ import java.util.List;
 @Controller
 public class HomeController {
     private MenuService menuService;
-    public HomeController(MenuService menuService) {
+    private BoardService boardService;
+    private GatheringService gatheringService;
+    public HomeController(MenuService menuService,BoardService boardService,GatheringService gatheringService) {
         this.menuService = menuService;
+        this.boardService = boardService;
+        this.gatheringService = gatheringService;
     }
 
     //공통으로 붙이는 부분에 대해 어떻게 분리시킬 것인지 생각해야함
@@ -30,6 +38,7 @@ public class HomeController {
         String forwardPath ="";
         try{
             Users loginUser = (Users)session.getAttribute("loginuser");
+            /*********************공통 메뉴부분 -> 분리 필요한 부분**********************************/
             List<Menu> menuList = menuService.findUserMenuList();
             if(loginUser != null) {
                 switch (loginUser.getUTypeNo()) {
@@ -42,11 +51,18 @@ public class HomeController {
                     case 2:
                         menuList = menuService.findSellerMenuList();
                         break;
-                    default:
                 }
             }
-
             model.addAttribute("menuList",menuList);
+            /*************************************************************/
+            List<Board> topNboardList = boardService.findTopNBoard(5);
+            List<Gathering> topNGathList = gatheringService.findTopNGath(5);
+            List<Gathering> nearGathList = gatheringService.findNearGath();
+            model.addAttribute("topNboardList",topNboardList);
+            model.addAttribute("topNGathList",topNGathList);
+            model.addAttribute("nearGathList",nearGathList);
+
+
             forwardPath="/index";
         } catch (Exception e){
             e.printStackTrace();
@@ -66,7 +82,7 @@ public class HomeController {
     }
 
     //3. 파일 다운로드 --> 파일 다운로드 구현해야함
-    @PostMapping(value = "/download", params = "fileNo")
+    @PostMapping(value = "/download")
     public void downloadFile(@RequestParam int fileNo){
 
     }

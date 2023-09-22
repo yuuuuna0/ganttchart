@@ -17,163 +17,152 @@
                             <div class="card-body">
                                 <h4 class="card-title">메뉴 수정하기</h4>
                                 <form name="menuModifyF" id="menuModifyF">
-                                <div class="row">
-                                    <div class="form-group col-12">
-                                        <label for="menuNo">메뉴번호</label>
-                                        <input type="text" class="form-control" id="menuNo" name="menuNo" value="${menu.menuNo}" disabled>
-                                    </div>
-                                    <div class="form-group col-6">
-                                    <label for="menuLevel">메뉴레벨</label>
-                                    <select class="form-control" id="menuLevel" name="menuLevel" >
-                                    <c:choose>
-                                        <c:when test="${menu.menuOrder == 0}">
-                                            <option value="1" selected>+ 상위탭</option>
-                                            <option value="2">+ 하위탭</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="1" >+ 상위탭</option>
-                                            <option value="2" selected>+ 하위탭</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                    <label for="parentId">상위탭</label>
-                                    <c:choose>
-                                        <c:when test="${menu.menuOrder == 0}">
-                                            <select class="form-control" id="parentId" name="parentId" disabled>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <select class="form-control" id="parentId" name="parentId" >
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <option selected disabled></option>
-                                    <c:forEach items="${preMenuList}" var="preMenu">
-                                        <option value="${preMenu.menuNo}">${preMenu.menuTitle}</option>
-                                    </c:forEach>
-                                    </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="menuTitle">메뉴명</label>
-                                        <input type="text" class="form-control" id="menuTitle" name="menuTitle"  value="${menu.menuTitle}" />
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="menuDesc">메뉴설명</label>
-                                        <input type="text" class="form-control" id="menuDesc" name="menuDesc"  value="${menu.menuDesc}" />
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="menuUrl">URL</label>
-                                        <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" />
-                                    </div>
-                                    <div class="form-group col-6">
-                                    <label for="useYN">공개여부</label>
-                                    <select class="form-control" id="useYN" name="useYN">
-                                    <c:choose>
-                                        <c:when test="${menu.useYN == 0}">
-                                            <option disabled ></option>
-                                            <option value="0" selected>공개</option>
-                                            <option value="1">비공개</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option disabled ></option>
-                                            <option value="0">공개</option>
-                                            <option value="1" selected>비공개</option>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    </select>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <label for="menuNo">메뉴번호</label>
+                                            <input type="text" class="form-control" id="menuNo" name="menuNo" value="${menu.menuNo}" disabled>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="orders">메뉴레벨</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="orders" name="orders" disabled>
+                                            <c:choose>
+                                                <c:when test="${menu.orders == 0}">
+                                                    <option value="0" selected>+ 상위탭</option>
+                                                    <option value="1" >+ 하위탭</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="0" >+ 상위탭</option>
+                                                    <option value="1" selected>+ 하위탭</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="parentId">상위탭</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="parentId" name="parentId">
+                                                <option disabled selected></option>
+                                                <c:forEach items="${menuList}" var="menuL">
+                                                    <c:if test="${menuL.menuNo == menuL.parentId}">
+                                                    <option value="${menuL.menuNo}">${menuL.menuTitle}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="menuTitle">메뉴명</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="menuTitle" name="menuTitle"  value="${menu.menuTitle}" />
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="menuDesc">메뉴설명</label>
+                                            <input type="text" class="form-control" id="menuDesc" name="menuDesc"  value="${menu.menuDesc}" />
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="menuUrl">URL</label><span style="color: red;">*</span>
+                                            <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" />
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="uTypeNo">사용등급</label>
+                                            <select  class="form-control" id="uTypeNo" name="uTypeNo">
+                                                <option value="1" disabled selected></option>
+                                                <option value="0">관리자</option>
+                                                <option value="2">주최자</option>
+                                                <option value="1">사용자</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group col-12">
-                                        <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                         <div style="text-align: right">
                                             <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="modifyMenu(${menu.menuNo})" value="수정완료">
-                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/menu/list'" value="취소">
+                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/menu/list?pageNo=1&keyword='" value="목록으로">
                                         </div>
-                                        </c:if>
                                     </div>
                                 </div>
                             </form>
-                            </div>
                         </div>
+<%--                       CORD BODY END --%>
                     </div>
                 </div>
             </div>
-            <!-- content-wrapper ends -->
         </div>
+        <!-- content-wrapper ends -->
+    </div>
         <!-- main-panel ends -->
 <script>
-    $('#menuLevel').change(function(){
-    let menuLevelSelect = $('#menuLevel');
-    let parentIdSelect = $('#parentId');
-
-    if (menuLevelSelect.val() === "2") { // 하위탭이 선택된 경우
-    parentIdSelect.prop('disabled', false); // 상위탭 선택창 활성화
-    } else {
-    parentIdSelect.prop('disabled', true); // 상위탭 선택창 비활성화
+    window.onload = function(){
+        if(${menu.orders == 0}){ //
+            let parentIdSelect = $('#parentId');
+            parentIdSelect.prop('disabled', true);
+        }
+        $('#uTypeNo').val(${menu.getUTypeNo()});
     }
+    $('#orders').change(function(){
+        let ordersSelect = $('#orders');
+        let parentIdSelect = $('#parentId');
+
+        if (ordersSelect.val() === "1") { // 하위탭이 선택된 경우
+            parentIdSelect.prop('disabled', false); // 상위탭 선택창 활성화
+        } else {
+            document.getElementById("parentId").selectedIndex = 0;  //selectedIndex는 제이쿼리에서 사용 안됨
+            parentIdSelect.prop('disabled', true); // 상위탭 선택창 비활성화
+        }
     });
 
     //1. 메뉴 수정
     function modifyMenu(no){
-    let menuNo = no;
-    let menuLevel = $('#menuLevel option:selected').val();
-    let parentId;
-    if(menuLevel === "1"){
-        parentId = no;
-    }
-    if(menuLevel === "2") { //문자열로 비교
-    parentId = $('#parentId option:selected').val();
-    }
-    console.log(parentId);
-    let menuTitle = $('#menuTitle').val();
-    let menuDesc = $('#menuDesc').val();
-    let menuUrl = $('#menuUrl').val();
-    let useYN = $('#useYN option:selected').val();
+        let menuNo = no;
+        let orders = $('#orders option:selected').val();
+        let parentId = no;
+        if(orders === "1"){
+            parentId = $('#parentId option:selected').val();
+        }
+        let menuTitle = $('#menuTitle').val();
+        let menuDesc = $('#menuDesc').val();
+        let menuUrl = $('#menuUrl').val();
+        let uTypeNo = $('#uTypeNo option:selected').val();
 
-    if(menuTitle === ''){
-    alert("메뉴명을 입력하세요");
-    document.getElementById("menuTitle").focus();
-    return false;
-    }
-    if(menuDesc === ''){
-    alert("메뉴설명을 입력하세요");
-    document.getElementById("menuDesc").focus();
-    return false;
-    }
-    if(menuUrl === ''){
-    alert("url을 입력하세요");
-    document.getElementById("menuUrl").focus();
-    return false;
-    }
-    if(useYN === ''){
-    alert("사용레벨을 선택하세요");
-    }
+        if(orders === ''){
+            alert("메뉴레벨을 선택하세요");
+            return false;
+        }
+        if(orders === 2 && parentId ===''){
+            alert("상위탭을 선택하세요");
+            return false;
+        }
+        if(menuTitle === ''){
+            alert("메뉴명을 입력하세요");
+            document.getElementById("menuTitle").focus();
+            return false;
+        }
+        if(menuUrl === ''){
+            alert("url을 입력하세요");
+            document.getElementById("menuUrl").focus();
+            return false;
+        }
 
-    $.ajax({
-    url : '/menu/modify-ajax',
-    method : 'POST',
-    data :{
-        'menuNo' : menuNo,
-    'menuTitle' : menuTitle,
-    'menuDesc' : menuDesc,
-    'menuUrl' : menuUrl,
-    'useYN' : useYN,
-    'parentId' : parentId,
-    'menuLevel' : menuLevel
-    },
-    success: function(resultJson){
-    if(resultJson.code ===1){
-    window.location.href = '/menu/detail?menuNo='+no;
-    } else {
-    alert(resultJson.msg);
+        debugger;
+        $.ajax({
+            url : '/menu/modify.ajx?menuNo='+menuNo,
+            method : 'POST',
+            data :{
+                'menuNo' : menuNo,
+                'menuTitle' : menuTitle,
+                'menuDesc' : menuDesc,
+                'menuUrl' : menuUrl,
+                'orders' : orders,
+                'parentId' : parentId,
+                'uTypeNo' : uTypeNo
+            },
+            success: function(resultJson){
+                if(resultJson.code === 1){
+                    window.location.href = '/menu/detail?menuNo='+no;
+                } else {
+                    alert(resultJson.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
-    },
-    error : function(e){
-    console.log(e);
-    }
-    });
-    }
-
 
 </script>
-</html>

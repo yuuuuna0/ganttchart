@@ -33,16 +33,16 @@ public class FilesServiceImpl implements FilesService{
         String filePath="";
         switch(fileType){
             case 1: //프로필 업로드
-                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\user\\";
+                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\target\\ganttchart\\resources\\upload\\user\\";
                 break;
             case 2: //모임사진 업로드
-                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\gathering\\";
+                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\target\\ganttchart\\resources\\upload\\gathering\\";
                 break;
             case 3: //후기사진 업로드
-                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\review\\";
+                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\target\\ganttchart\\resources\\upload\\review\\";
                 break;
             case 4: //게시글 파일 업로드
-                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\src\\main\\webapp\\resources\\upload\\board\\";
+                filePath = "C:\\home\\01.Project\\01.InteliJ\\ganttchart\\target\\ganttchart\\resources\\upload\\board\\";
                 break;
         }
         File folder = new File(filePath);
@@ -85,6 +85,12 @@ public class FilesServiceImpl implements FilesService{
     public List<Files> findFileByGathNo(int gathNo) throws Exception {
         return filesDao.findFileByGathNo(gathNo);
     }
+
+    @Override
+    public int updateIsUse(int fileNo) throws Exception {
+        return filesDao.updateIsUse(fileNo);
+    }
+
 
     //1. 파일 확장자
     private String fileExt(String originalName){

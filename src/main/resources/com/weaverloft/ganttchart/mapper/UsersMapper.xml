@@ -30,7 +30,7 @@
 <!--7. 회원정보 업데이트    -->
     <update id="updateUser" parameterType="com.weaverloft.ganttchart.dto.Users">
         update users set u_name=#{uName}, u_email=#{uEmail}, u_gender=#{uGender}, u_birth=#{uBirth}, u_phone=#{uPhone},u_address=#{uAddress},
-                         u_address2={uAddress2}, file_no=#{fileNo} where u_id=#{uId}
+                         u_address2=#{uAddress2}, file_no=#{fileNo} where u_id=#{uId}
     </update>
 <!--8. 회원 파일번호 업데이트 -->
     <update id="updateFileNo" parameterType="java.util.Map">
@@ -39,6 +39,31 @@
 <!--9. 모든 회원 찾기    -->
     <select id="findUserList" resultType="com.weaverloft.ganttchart.dto.Users">
         select * from users
+    </select>
+<!--9-1. 전체 회원 수    -->
+    <select id="countUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from users
+        where 1=1
+        <if test="keyword != null">
+            and (u_id like '%'||#{keyword}||'%' or u_name like '%'||#{keyword}||'%')
+        </if>
+    </select>
+<!--9-2. 전처리 된 회원리스트 찾기    -->
+    <select id="findUserList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Users">
+        select *
+            from(select rownum idx, u.*
+                    from (select *
+                            from users
+                            order by u_create_date) u
+                    where 1=1
+                    <if test="keyword != null">
+                    and (u_id like '%'||#{keyword}||'%' or u_name like '%'||#{keyword}||'%')
+                    </if>
+                    <if test="filterType != null">
+                        <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
+                        </if>
+                ) afteru
+        <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
     </select>
 </mapper>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.ReviewMapper">
+<!--1. 리뷰 작성하기 -->
+    <insert id="createReview" parameterType="com.weaverloft.ganttchart.dto.Review">
+        <selectKey resultType="java.lang.Integer" keyProperty="reviewNo" order="BEFORE">
+            select review_review_no_seq.nextval from dual
+        </selectKey>
+        insert into Review(REVIEW_NO, REVIEW_CONTENT, REVIEW_DATE, U_ID, GATH_NO, REVEIW_RATING)
+               values(#{reviewNo},#{reviewContent},sysdate,#{uId},#{gathNo},#{reviewRating})
+    </insert>
+<!--2. 모임번호로 후기리스트 불러오기   -->
+    <select id="findReviewByGathNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Review">
+        select * from review where gath_no=#{gathNo}
+    </select>
+</mapper>
+

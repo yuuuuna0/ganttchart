@@ -33,44 +33,44 @@
                                     </ul>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
+                                    <table class="table" >
+                                        <thead >
                                         <tr>
                                             <th>No</th>
                                             <th>메뉴</th>
-                                            <th>Url</th>
                                             <th>메뉴 설명</th>
+                                            <th>Url</th>
                                             <th>상위탭</th>
-                                            <th>사용여부</th>
+                                            <th style="text-align: center;">사용등급</th>
+                                            <th style="text-align: center;">삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
-                                        <c:forEach items="${menuListPage.itemList}" var="menu">
+                                        <c:forEach items="${searchMenuList.itemList}" var="menu">
                                             <tr style="cursor: pointer;" onclick="goToMenu('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
                                                 <td>${menu.menuNo}</td>
                                                 <td>${menu.menuTitle}</td>
-                                                <td>${menu.menuUrl}</td>
                                                 <td>${menu.menuDesc}</td>
+                                                <td>${menu.menuUrl}</td>
                                                 <c:choose>
                                                     <c:when test="${menu.menuNo == menu.parentId}">
                                                         <td>-</td>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:forEach items="${preMenuList}" var = "preMenu">
-                                                            <c:if test="${menu.parentId == preMenu.menuNo}">
-                                                                <td>${preMenu.menuTitle}</td>
+                                                        <c:forEach items="${searchMenuList.itemList}" var="menu2">
+                                                            <c:if test="${menu.parentId == menu2.menuNo}">
+                                                                <td>${menu2.menuTitle}</td>
                                                             </c:if>
                                                         </c:forEach>
                                                     </c:otherwise>
                                                 </c:choose>
-                                            <td onclick="event.cancelBubble=true">
-                                            <c:if test="${menu.useYN == 1}">
-                                            <input class="usage" type="checkbox" value="${menu.menuNo}" />
-                                            </c:if>
-                                            <c:if test="${menu.useYN == 0}">
-                                            <input class="usage" type="checkbox" value="${menu.menuNo}" checked/>
-                                             </c:if>
-                                            </td>
+                                                <td style="text-align: center;" onclick="event.cancelBubble=true" >
+                                                    <input type="radio" class="btn-check uTypeNo${menu.menuNo}" name="options-outlined${menu.menuNo}" id="success-outlined${menu.menuNo}" autocomplete="off" value="1">
+                                                    <label class="btn btn-outline-secondary" for="success-outlined${menu.menuNo}" style="padding: 10px;">일반회원</label>
+                                                    <input type="radio" class="btn-check uTypeNo${menu.menuNo}" name="options-outlined${menu.menuNo}" id="danger-outlined${menu.menuNo}" autocomplete="off" value="2">
+                                                    <label class="btn btn-outline-secondary ml-1" for="danger-outlined${menu.menuNo}" style="padding: 10px;">주최자</label>
+                                                </td>
+                                                <td onclick="event.cancelBubble=true" style="text-align: center;"><img src="/static/images/icons/X.png" style="width: 10px; height: 10px;" onclick="deleteMenu(${menu.menuNo})"></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -78,42 +78,44 @@
                                 </div>
 
                                 <br>
-                                <!-- pagination -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <!-- preview -->
-                                            <c:if test="${menuListPage.pageMaker.prevGroupStartPage > 0}">
-                                                <li class="page-item">
-                                                <button  class="page-link" value="${menuListPage.pageMaker.prevGroupStartPage}" onclick="searchMenuList(${menuListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                </button>
-                                                </li>
-                                            </c:if>
-                                            <!-- n개 고정 -->
-                                                <c:forEach begin="${menuListPage.pageMaker.blockBegin}" end="${menuListPage.pageMaker.blockEnd}" var="no">
-                                                            <c:if test="${no == menuListPage.pageMaker.curPage}">
-                                                                <li class="page-item active">
-                                                                <button class="page-link" value="${no}" onclick="searchMenuList(${no})">${no}</button>
-                                                                </li>
-                                                            </c:if>
-                                                            <c:if test="${no != menuListPage.pageMaker.curPage}">
-                                                                <li class="page-item">
-                                                                <button class="page-link" value="${no}" onclick="searchMenuList(${no})">${no}</button>
-                                                                </li>
-                                                            </c:if>
+                                <div class="row" >
+                                    <div class="col-6 ml-3">
+                                        <!-- pagination -->
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <!-- preview -->
+                                                <c:if test="${searchMenuList.pageMaker.blockBegin != 1}">
+                                                    <li class="page-item">
+                                                        <button  class="page-link" value="${searchMenuList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchMenuList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </button>
+                                                    </li>
+                                                </c:if>
+                                                <!-- n개 고정 -->
+                                                <c:forEach begin="${searchMenuList.pageMaker.blockBegin}" end="${searchMenuList.pageMaker.blockEnd}" var="no">
+                                                    <c:if test="${no == searchMenuList.pageMaker.curPage}">
+                                                        <li class="page-item active">
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${no != searchMenuList.pageMaker.curPage}">
+                                                        <li class="page-item">
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                        </li>
+                                                    </c:if>
                                                 </c:forEach>
-                                            <c:if test="${menuListPage.pageMaker.nextGroupStartPage <= menuListPage.pageMaker.totPage}">
-                                                <li class="page-item">
-                                                    <button class="page-link" value="${menuListPage.pageMaker.nextGroupStartPage}" onclick="searchMenuList(${menuListPage.pageMaker.nextGroupStartPage})" aria-label="Next">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                        <span class="sr-only">Next</span>
-                                                    </button>
-                                                </li>
-                                            </c:if>
-                                        </ul>
-                                    </nav>
+                                                <c:if test="${searchMenuList.pageMaker.blockEnd!=1 && searchMenuList.pageMaker.blockEnd <= searchMenuList.pageMaker.totPage}">
+                                                    <li class="page-item">
+                                                        <button class="page-link" value="${searchMenuList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchMenuList.pageMaker.nextBlockBegin})" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                            <span class="sr-only">Next</span>
+                                                        </button>
+                                                    </li>
+                                                </c:if>
+                                            </ul>
+                                        </nav>
+                                    </div>
 
                             </div>
                         </div>
@@ -124,10 +126,34 @@
         </div>
         <!-- main-panel ends -->
 <script>
-    function deleteMenu(e,no){
-        e.stopPropagation();
-        window.location.href = '/menu/delete-action?menuNo='+no;
+    function deleteMenu(menuNo){
+        // e.stopPropagation();
+        window.location.href = '/menu/delete.aciton?menuNo='+menuNo;
     }
+
+    $('.uTypeNo').click(function(e){
+        //사용등급 변경하기
+        let uTypeNo = e.target.value;
+        let menuNo = '${menu.menuNo}';
+        console.log(uTypeNo);
+        $.ajax({
+            url : '/menu/modifyUType.ajax?menuNo='+menuNo,
+            method : 'POST',
+            data : {
+                'menuNo' : menuNo,
+                'uTypeNo' : uTypeNo
+            },
+            success : function (resultMap){
+                console.log(resultMap.code);
+            },
+            error: function (e){
+                console.log(e);
+            }
+
+        });
+    });
+
+
 
     function goToMenu(no){
         window.location.href='/menu/detail?menuNo='+no;
@@ -139,6 +165,11 @@
             e.preventDefault();
         }
     });
+
+
+
+
+
     // 메뉴 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
     function searchMenuList(no){
     let keyword = $('#keyword').val();

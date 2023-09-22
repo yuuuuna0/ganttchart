@@ -40,7 +40,23 @@ public class CommentsServiceImpl implements CommentsService{
     }
 
     @Override
-    public Comments findSameOrders(int orders, int boardNo, int groupNo) throws Exception {
-        return commentsDao.findSameOrders(orders,boardNo,groupNo);
+    public int findSameOrders(Comments comments) throws Exception {
+        return commentsDao.findSameOrders(comments);
     }
+
+    @Override
+    public int deleteCommentByNo(int commentsNo) throws Exception {
+        return commentsDao.deleteCommentByNo(commentsNo);
+    }
+
+    @Override
+    public int updateComment(Comments comments) throws Exception {
+        return commentsDao.updateComment(comments);
+    }
+
+    @Override
+    public int findSameDepth(Comments comments) throws Exception {
+        return commentsDao.findSameDepth(comments);
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dto.Gathering;
+import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.SearchDto;
 
 import java.util.List;
 
@@ -22,4 +24,12 @@ public interface GatheringService {
     int increaseReadCount(int gathNo) throws Exception;
 
     int changeGathStatusByTime() throws Exception;
+
+    List<Gathering> findTopNGath(int index) throws Exception;
+
+    List<Gathering> findNearGath() throws Exception;
+
+    List<Gathering> findGathByUId(String uId) throws Exception;
+
+    SearchDto<Gathering> findSearchedGathList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception;
 }

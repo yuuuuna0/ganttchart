@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.SearchDto;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface UsersService {
     int updateFileNo(String uId, int fileNo) throws Exception;
 
     List<Users> findUserList() throws Exception;
+
+    SearchDto<Users> findSearchedUserList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception;
 }

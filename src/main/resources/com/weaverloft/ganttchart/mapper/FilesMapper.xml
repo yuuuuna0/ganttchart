@@ -50,4 +50,9 @@
     <select id="findFileByGathNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">
         select * from files where gath_no = #{gathNo} and is_use='Y'
     </select>
+<!--10. 파일 상태여부 N으로 변경하기    -->
+    <update id="updateIsUse" parameterType="java.util.Map">
+        update Files set is_use='N' where file_no=#{fileNo}
+    </update>
+
 </mapper>

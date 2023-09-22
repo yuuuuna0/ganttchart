@@ -237,13 +237,14 @@
             $("#uEmail").focus();
             return false;
         }
-        if(uPhone !== '' && uPhone.match(/^01([0-9]{7,8})$/)){
-            //010도 자꾸 넘어감 --> 안먹음
-            alert("전화번호 양식에 맞게 입력 해 주세요");
-            $('#uPhone').val();
-            $("#uPhone").focus();
-            return false;
-        }
+        //전화번호 정규식
+        // let result1 = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+        // if(!result1.test(uPhone)){
+        //     alert("전화번호 양식에 맞게 입력 해 주세요");
+        //     $('#uPhone').val();
+        //     $("#uPhone").focus();
+        //     return false;
+        // }
         if (uTypeNo === '') {
             alert("회원등급을 선택하세요");
             return false;
@@ -268,9 +269,6 @@
             formData.append(form[i].name,form[i].value);
         }
         formData.append("mf",file[0]);
-        for(let data of formData){
-            console.log(data);
-        }
 
         $.ajax({
             url : '/user/register.ajx',

@@ -76,5 +76,21 @@ public class UsersDaoImpl implements UsersDao{
         return usersMapper.findUserList();
     }
 
+    @Override
+    public int countUser(String keyword) throws Exception {
+        return usersMapper.countUser(keyword);
+    }
+
+    @Override
+    public List<Users> findUserList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("contentBegin",contentBegin);
+        map.put("contentEnd",contentEnd);
+        map.put("keyword",keyword);
+        map.put("filterType",filterType);
+        map.put("ascDesc",ascDesc);
+        return usersMapper.findUserList2(map);
+    }
+
 
 }

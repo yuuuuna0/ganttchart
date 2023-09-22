@@ -2,6 +2,9 @@ package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dao.UsersDao;
 import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.util.PageMaker;
+import com.weaverloft.ganttchart.util.SearchDto;
+import io.micrometer.core.instrument.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,6 +92,19 @@ public class UsersServiceImpl implements UsersService{
     @Override
     public List<Users> findUserList() throws Exception {
         return usersDao.findUserList();
+    }
+
+
+    @Override
+    public SearchDto<Users> findSearchedUserList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception {
+        //조건에 맞는 전체 사용자 수
+        int totUserCount = usersDao.countUser(keyword);
+        //페이지네이션에 필요한 변수들 얻기
+        PageMaker pageMaker = new PageMaker(totUserCount,pageNo);
+        //페이징&필터된 데이터 얻기
+        List<Users> userList = usersDao.findUserList2(pageMaker.getContentBegin(),pageMaker.getContentEnd(),keyword,filterType,ascDesc);
+        SearchDto<Users> searchUserList = new SearchDto<Users>(userList,pageMaker,totUserCount);
+        return searchUserList;
     }
 
 

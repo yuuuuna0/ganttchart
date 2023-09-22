@@ -24,4 +24,14 @@ public interface GatheringDao {
     int increaseReadCount(int gathNo) throws Exception;
 
     int changeGathStatusByTime() throws Exception;
+
+    List<Gathering> findTopNGath(int index) throws Exception;
+
+    List<Gathering> findNearGath() throws Exception;
+
+    List<Gathering> findGathByUId(String uId) throws Exception;
+
+    int countGath(String keyword) throws Exception;
+
+    List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
 }

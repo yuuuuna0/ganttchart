@@ -4,6 +4,7 @@ import com.weaverloft.ganttchart.dto.Board;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
@@ -21,4 +22,10 @@ public interface BoardMapper {
     int updateBoard(Board board) throws Exception;
 
     List<Board> findBoardByUId(String uId) throws Exception;
+
+    List<Board> findTopNBoard(int index) throws Exception;
+
+    int countBoard(String keyword) throws Exception;
+
+    List<Board> findBoardList2(Map<String, Object> map) throws Exception;
 }

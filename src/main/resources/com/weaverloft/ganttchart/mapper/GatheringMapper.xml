@@ -15,7 +15,32 @@
 
 <!--1. 모임 전체리스트 찾기-->
     <select id="findGathList" resultType="com.weaverloft.ganttchart.dto.Gathering" >
-        select * from gathering where not gath_status_no=99
+        select * from gathering where not gath_status_no=99 order by gath_day desc
+    </select>
+<!--1-1. 전처리 된 모임리스트 개수    -->
+    <select id="countGath" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from gathering
+        where not gath_status_no=99
+        <if test="keyword != null">
+            and (u_id like '%'||#{keyword}||'%' or gath_title like '%'||#{keyword}||'%' or gath_desc like '%'||#{keyword}||'%')
+        </if>
+    </select>
+<!--1-2. 전처리 된 모임리스트-->
+    <select id="findGathList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Gathering">
+        select *
+        from(select rownum idx, g.*
+        from (select *
+        from gathering
+        order by gath_no) g
+        where not gath_status_no=99
+        <if test="keyword != null">
+            and (u_id like '%'||#{keyword}||'%' or gath_title like '%'||#{keyword}||'%' or gath_desc like '%'||#{keyword}||'%')
+        </if>
+        <if test="filterType != null">
+            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
+        </if>
+        ) afterg
+        <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
     </select>
 <!--2. 번호로 모임 찾기    -->
     <select id="findGathByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Gathering">
@@ -52,6 +77,28 @@
     </update>
 <!--9. 모임완료로 상태변경    -->
     <update id="changeGathStatusByTime">
-        update gathering set gath_status_no=3 where gath_day>sysdate
+        update gathering set gath_status_no=3 <![CDATA[where gath_day < SYSDATE]]>
     </update>
+<!--10. 조회수 topN 모임(아직 모집중인)    -->
+    <select id="findTopNGath" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Gathering">
+        select *
+        from ( select rownum idx, g.*
+               from ( select *
+                      from gathering
+                      where gath_Status_No = 1 or gath_Status_No = 2
+                      order by gath_READCOUNT desc
+                    ) g
+             )
+        <![CDATA[ where idx <= #{index} ]]>
+    </select>
+<!--11. 종료임박한 모임    -->
+    <select id="findNearGath" resultType="com.weaverloft.ganttchart.dto.Gathering">
+        select * from gathering
+        where gath_close > sysdate and not gath_status_no=99
+        order by gath_close asc
+    </select>
+<!--12. 내가 개설한 모임 리스트    -->
+    <select id="findGathByUId" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Gathering">
+        select * from gathering where u_id=#{uId} and not gath_status_no=99
+    </select>
 </mapper>

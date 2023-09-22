@@ -25,4 +25,8 @@ public interface UsersMapper {
     int updateFileNo(Map<String,Object> map) throws Exception;
 
     List<Users> findUserList() throws Exception;
+
+    int countUser(String keyword) throws Exception;
+
+    List<Users> findUserList2(Map<String, Object> map) throws Exception;
 }

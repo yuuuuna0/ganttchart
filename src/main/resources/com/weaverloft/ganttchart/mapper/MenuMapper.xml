@@ -3,10 +3,36 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.MenuMapper">
 <!--1. 메뉴 전체 찾기-->
     <select id="findMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
-        select * from menu
+        select * from menu order by parent_id desc,orders,menu_no asc
     </select>
-    <select id="findAdminMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
-        select * from menu where u_type_no = 0
+<!--2. 메뉴 개수 세기    -->
+    <select id="countMenu" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from menu
+        where 1=1
+        <if test="keyword != null">
+            and (menu_title like '%'||#{keyword}||'%' or menu_desc like '%'||#{keyword}||'%' or menu_url like '%'||#{keyword}||'%')
+        </if>
+    </select>
+<!--2-2. 전처리된 메뉴리스트 찾기    -->
+    <select id="findMenuList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select *
+        from(select rownum idx, m.*
+        from (select *
+        from menu
+        order by menu_no) m
+        where 1=1
+        <if test="keyword != null">
+            and (menu_title like '%'||#{keyword}||'%' or menu_desc like '%'||#{keyword}||'%' or menu_url like '%'||#{keyword}||'%')
+        </if>
+        <if test="filterType != null">
+            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
+        </if>
+        ) afterm
+        <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+    </select>
+<!--1-1. 번호로 메뉴 찾기    -->
+    <select id="findMenuByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
+        select * from menu where menu_no=#{menuNo}
     </select>
     <select id="findUserMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
         select * from menu where u_type_no = 1
@@ -15,18 +41,39 @@
         select * from menu where u_type_no = 2
     </select>
 <!--2. 메뉴 등록하기    -->
-    <insert id="createMenu1" parameterType="com.weaverloft.ganttchart.dto.Menu">
+    <insert id="createMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
         <selectKey keyProperty="menuNo" resultType="java.lang.Integer" order="BEFORE">
             select menu_menu_no_seq.nextval from dual
         </selectKey>
         insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, U_TYPE_NO)
-        values (#{menuNo},#{menuNo},1,#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
+        values (#{menuNo},#{menuNo},0,#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
     </insert>
-    <insert id="createMenu2" parameterType="com.weaverloft.ganttchart.dto.Menu">
+    <insert id="createSubMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
         <selectKey keyProperty="menuNo" resultType="java.lang.Integer" order="BEFORE">
             select menu_menu_no_seq.nextval from dual
         </selectKey>
         insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, U_TYPE_NO)
-        values (#{menuNo},#{parentId},2,#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
+        values (#{menuNo},#{parentId},#{orders},#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
     </insert>
+<!--3. 상위탭에 속한 메뉴 개수 찾기    -->
+    <select id="countMenuByparentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+       select count(*) from menu where parent_id=#{parentId}
+    </select>
+<!--4. 최근 등록한 메뉴 번호 남기기    -->
+    <select id="findCurNo" resultType="java.lang.Integer">
+        select menu_menu_no_seq.currval from dual
+    </select>
+<!--5. 메뉴 업데이트하기    -->
+    <update id="updateMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
+        update menu set parent_id=#{parentId},orders=#{orders},menu_title=#{menuTitle},menu_url=#{menuUrl},menu_desc=#{menuDesc},u_type_no=#{uTypeNo}
+        where menu_no=#{menuNo}
+    </update>
+<!--6. 사용등급 변경    -->
+    <update id="updateMenuUType" parameterType="java.util.Map">
+        update menu set u_type_no=#{uTypeNo} where menu_no=#{menuNo}
+    </update>
+<!--7. 메뉴 삭제    -->
+    <delete id="deleteMenu" parameterType="java.lang.Integer">
+        delete menu  where menu_no=#{menuNo}
+    </delete>
 </mapper>

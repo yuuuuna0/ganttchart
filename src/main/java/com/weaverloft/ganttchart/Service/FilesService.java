@@ -17,4 +17,6 @@ public interface FilesService {
     List<Files> findFileByBoardNo(int boardNo) throws Exception;
     List<Files> findFileByReviewNo(int reviewNo) throws Exception;
     List<Files> findFileByGathNo(int gathNo) throws Exception;
+
+    int updateIsUse(int fileNo) throws Exception;
 }

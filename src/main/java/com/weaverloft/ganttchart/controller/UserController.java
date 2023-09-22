@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.controller;
 import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.EmailService;
+import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +71,7 @@ public class UserController {
         resultMap.put("msg",msg);
         return resultMap;
     }
-    //1-2. 회원가입액션 AJAX
+    //1-2. 회원가입액션 AJAX --> 이메일 문제 해결
     @ResponseBody
     @PostMapping("/register.ajx")
     public Map<String,Object> registerAjax(Users user, @RequestPart(required = false) MultipartFile mf){
@@ -150,30 +151,35 @@ public class UserController {
         String forwardPath = "";
         try{
             Users user = usersService.findUserById(uId);
-            boolean result = usersService.login(uId,uPassword,user.getUPassword());
-            if(!result){
+            if(user == null){
                 code = 4;
                 msg = "존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다.";
-            } else {
-                switch(user.getUStatusNo()){
-                    case 1:     //이메일 인증 전
-                        code =2;
-                        forwardPath = "/user/emailAuth";
-                        break;
-                    case 2:     //이메일 인증 후
-                        code = 1;
-                        forwardPath = "/";
-                        break;
-                    case 3:     //임시비번상태
-                        code = 3;
-                        forwardPath = "/user/modifyPassword";
-                        break;
-                    case 98:    //휴면계정 --> 어떻게 처리할지?
-                        code = 98;
-                        break;
+            } else{
+                boolean result = usersService.login(uId,uPassword,user.getUPassword());
+                if(!result){
+                    code = 4;
+                    msg = "존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다.";
+                } else {
+                    switch (user.getUStatusNo()) {
+                        case 1:     //이메일 인증 전
+                            code = 2;
+                            forwardPath = "/user/emailAuth";
+                            break;
+                        case 2:     //이메일 인증 후
+                            code = 1;
+                            forwardPath = "/";
+                            break;
+                        case 3:     //임시비번상태
+                            code = 3;
+                            forwardPath = "/user/modifyPassword";
+                            break;
+                        case 98:    //휴면계정 --> 어떻게 처리할지?
+                            code = 98;
+                            break;
+                    }
+                    session.setAttribute("loginUser", user);
+                    session.setMaxInactiveInterval(60 * 30);  //세션유지 30분
                 }
-                session.setAttribute("loginUser", user);
-                session.setMaxInactiveInterval(60*30);  //세션유지 30분
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -354,8 +360,8 @@ public class UserController {
     }
 
     //6. 마이페이지
-    @GetMapping(value="/detail", params="uId")
-    public String detailPage(String uId,Model model){
+    @GetMapping(value="/detail")
+    public String detailPage(@RequestParam String uId,Model model){
         String forwardPath ="";
         try{
             Users user = usersService.findUserById(uId);
@@ -369,12 +375,14 @@ public class UserController {
         return forwardPath;
     }
     //7. 정보수정페이지
-    @GetMapping(value="/modify", params="uId")
+    @GetMapping(value="/modify")
     public String modifyPage(@RequestParam String uId, Model model){
         String forwardPath ="";
         try{
             Users user = usersService.findUserById(uId);
+            Files file = filesService.findFileByNo(user.getFileNo());
             model.addAttribute("user",user);
+            model.addAttribute("file",file);
             forwardPath="/user/modify";
         } catch (Exception e){
             e.printStackTrace();
@@ -384,13 +392,34 @@ public class UserController {
     //7-1 정보수정 AJAX
     @ResponseBody
     @PostMapping("/modify.ajx")
-    public Map<String,Object> modifyAjax(Users user,@RequestParam(required = false) MultipartFile file){
+    public Map<String,Object> modifyAjax(Users user,@RequestParam(required = false) MultipartFile mf,HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
         String forwardPath = "";
         try{
+            Users loginUser = (Users)session.getAttribute("loginUser");
+            if(mf != null){
+                filesService.updateIsUse(loginUser.getFileNo());
+                Map<String,Object> map = filesService.uploadFile(mf,1);
+                Files file = new Files(0,
+                        (String)map.get("saveName"),
+                        (String)map.get("originalName"),
+                        (String)map.get("filePath"),
+                        (String)map.get("fileExt"),
+                        "Y",
+                        user.getUId(),
+                        0,0,0,
+                        (Long)map.get("fileSize"));
+                filesService.createFile(file,1);
+                int fileNo = filesService.findCurFileNo();
+                user.setFileNo(fileNo);
+            }
             int result = usersService.updateUser(user);
+            if(result == 1){
+                code = 1;
+                forwardPath = "/user/detail?uId="+user.getUId();
+            }
         } catch (Exception e){
             e.printStackTrace();
             code = 99;
@@ -417,8 +446,8 @@ public class UserController {
     }
 
     //9. 내가 쓴 게시글 보기
-    @GetMapping(value = "/boardList", params = "uId")
-    public String myBoardList(HttpSession session,Model model){
+    @GetMapping(value = "/boardList")
+    public String myBoardList(@RequestParam String uId, HttpSession session,Model model){
         String forwardPath="";
         try{
             Users users = (Users)session.getAttribute("loginUser");
@@ -432,7 +461,7 @@ public class UserController {
     }
 
     //10. 내가 지원&참여한 모임 보기
-    @GetMapping(value="applyList",params = "uId")
+    @GetMapping(value="applyList")
     public String myApplyList(@RequestParam String uId,Model model){
         String forwardPath = "";
         try{
@@ -444,11 +473,62 @@ public class UserController {
                 gatheringList.add(gathering);
             }
             model.addAttribute("gatheringList",gatheringList);
+            model.addAttribute("applyList",applyList);
             forwardPath="/user/applyList";
         } catch (Exception e){
             e.printStackTrace();
         }
         return forwardPath;
+    }
+    //11. 내가 개설한 모임 보기
+    @GetMapping(value = "/gatheringList")
+    public String myGathRegisterList(@RequestParam String uId,Model model){
+        String forwardPath ="";
+        try{
+            List<Gathering> gatheringList = gatheringService.findGathByUId(uId);
+            model.addAttribute("gatheringList",gatheringList);
+            forwardPath="/user/gatheringList";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+
+    //12. 회원리스트
+    @GetMapping(value = "/list")
+    public String listPage(Model model,
+                           @RequestParam(required = false, defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) String filterType,
+                           @RequestParam(required = false) String ascDesc){
+        String forwardPath = "";
+        try{
+            SearchDto<Users> searchUserList = usersService.findSearchedUserList(pageNo,keyword,filterType,ascDesc);
+            model.addAttribute("searchUserList",searchUserList);
+            forwardPath = "/user/list";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forwardPath;
+    }
+    //12-1. 회원리스트 AJAX
+    @ResponseBody
+    @PostMapping("list.ajx")
+    public Map<String,Object> listAjax(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                       @RequestParam(required = false) String keyword,
+                                       @RequestParam(required = false) String filterType,
+                                       @RequestParam(required = false) String ascDesc){
+        Map<String,Object> resultMap = new HashMap<>();
+        try{
+            resultMap.put("pageNo",pageNo);
+            resultMap.put("keyword",keyword);
+            resultMap.put("filterType",filterType);
+            resultMap.put("ascDesc",ascDesc);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultMap;
+
     }
 
 

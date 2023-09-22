@@ -46,11 +46,23 @@ public class CommentsDaoImpl implements CommentsDao{
     }
 
     @Override
-    public Comments findSameOrders(int orders, int boardNo, int groupNo) throws Exception {
-        Map<String,Object> map = new HashMap<>();
-        map.put("orders",orders);
-        map.put("boardNo",boardNo);
-        map.put("groupNo",groupNo);
-        return commentsMapper.findSameOrders(map);
+    public int findSameOrders(Comments comments) throws Exception {
+        return commentsMapper.findSameOrders(comments);
     }
+
+    @Override
+    public int deleteCommentByNo(int commentsNo) throws Exception {
+        return commentsMapper.deleteCommentByNo(commentsNo);
+    }
+
+    @Override
+    public int updateComment(Comments comments) throws Exception {
+        return commentsMapper.updateComment(comments);
+    }
+
+    @Override
+    public int findSameDepth(Comments comments) throws Exception {
+        return commentsMapper.findSameDepth(comments);
+    }
+
 }

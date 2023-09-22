@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dto.Board;
+import com.weaverloft.ganttchart.util.SearchDto;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface BoardService {
     int updateBoard(Board board) throws Exception;
 
     List<Board> findBoardByUId(String uId) throws Exception;
+
+    List<Board> findTopNBoard(int index) throws Exception;
+
+    SearchDto<Board> findSearchedUserList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception;
 }

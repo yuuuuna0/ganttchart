@@ -36,31 +36,61 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>아이디</th>
-                                            <th>회원등급</th>
-                                            <th>이름</th>
-                                            <th>생일</th>
-                                            <th>성별</th>
+                                            <th>아이디
+                                                <span>
+                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_id','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_id','desc')">
+                                                </span>
+                                            </th>
+                                            <th>회원등급
+                                                <span>
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_type_no','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_type_no','desc')">
+                                                </span>
+                                            </th>
+                                            <th>이름
+                                                <span>
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_name','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_name','desc')">
+                                                </span>
+                                            </th>
+                                            <th>생일
+                                                <span>
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_birth','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_birth','desc')">
+                                                </span>
+                                            </th>
+                                            <th>성별
+                                                <span>
+                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_gender','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_gender','desc')">
+                                                </span>
+                                            </th>
                                             <th>전화번호</th>
                                             <th>이메일</th>
                                             <th>주소</th>
-                                            <th>인증상태</th>
-                                            <th>가입일</th>
+                                            <th>가입일
+                                                <span>
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_create_date','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_create_date','desc')">
+                                                </span>
+                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${userListPage.itemList}" var="user">
-                                            <tr onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${user.id}</td>
-                                                <td>${user.grade}</td>
-                                                <td>${user.name}</td>
-                                                <td><fmt:formatDate value="${user.birth}" pattern="yyyy. MM. dd."/></td>
-                                                <td>${user.gender}</td>
-                                                <td>${user.phone}</td>
-                                                <td>${user.email}</td>
-                                                <td>${user.address}</td>
-                                                <td>${user.authStatus}</td>
-                                                <td><fmt:formatDate value="${user.createDate}" pattern="yyyy. MM. dd."/></td>
+                                        <c:forEach items="${searchUserList.itemList}" var="user">
+                                            <tr style="cursor: pointer;" onclick="goToDetail('${user.getUId()}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <td>${user.getUId()}</td>
+                                                <td>
+                                                ${user.getUTypeNo()==1 ? '일반회원' : '주최자'}
+                                                </td>
+                                                <td>${user.getUName()}</td>
+                                                <td><fmt:formatDate value="${user.getUBirth()}" pattern="yyyy. MM. dd."/></td>
+                                                <td>${user.getUGender()}</td>
+                                                <td>${user.getUPhone()}</td>
+                                                <td>${user.getUEmail()}</td>
+                                                <td>${user.getUAddress()}  ${user.getUAddress2()}</td>
+                                                <td><fmt:formatDate value="${user.getUCreateDate()}" pattern="yyyy. MM. dd."/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -69,35 +99,35 @@
 <br>
 <br>
                                 <div class="row" >
-                                    <div class="col-6">
+                                    <div class="col-6 ml-3">
                                         <!-- pagination -->
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination">
                                                 <!-- preview -->
-                                                <c:if test="${userListPage.pageMaker.prevGroupStartPage > 0}">
+                                                <c:if test="${searchUserList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${userListPage.pageMaker.prevGroupStartPage}" onclick="searchUserList(${userListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchUserList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchUserList.pageMaker.prevBlockBegin})" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
                                                     </li>
                                                 </c:if>
                                                 <!-- n개 고정 -->
-                                                <c:forEach begin="${userListPage.pageMaker.blockBegin}" end="${userListPage.pageMaker.blockEnd}" var="no">
-                                                    <c:if test="${no == userListPage.pageMaker.curPage}">
+                                                <c:forEach begin="${searchUserList.pageMaker.blockBegin}" end="${searchUserList.pageMaker.blockEnd}" var="no">
+                                                    <c:if test="${no == searchUserList.pageMaker.curPage}">
                                                         <li class="page-item active">
                                                             <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
-                                                    <c:if test="${no != userListPage.pageMaker.curPage}">
+                                                    <c:if test="${no != searchUserList.pageMaker.curPage}">
                                                         <li class="page-item">
                                                             <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
-                                                <c:if test="${userListPage.pageMaker.nextGroupStartPage <= userListPage.pageMaker.totPage}">
+                                                <c:if test="${searchUserList.pageMaker.blockEnd!=1 && searchUserList.pageMaker.blockEnd <= searchUserList.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <button class="page-link" value="${userListPage.pageMaker.nextGroupStartPage}" onclick="searchUserList(${userListPage.pageMaker.nextGroupStartPage})" aria-label="Next">
+                                                        <button class="page-link" value="${searchUserList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchUserList.pageMaker.nextBlockBegin})" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
                                                         </button>
@@ -128,10 +158,47 @@
             e.preventDefault();
         }
     });
-    // 게시글 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
+    // 회원 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
     function searchUserList(no){
-        let keyword = $('#keyword').val();
         let pageNo = no;
-        window.location.href='/user/list?pageNo='+pageNo+'&keyword='+keyword;
+        let keyword = $('#keyword').val();
+        $.ajax({
+            url : '/user/list.ajx',
+            method : 'POST',
+            data : {
+                'pageNo' : pageNo,
+                'keyword' : keyword,
+            },
+            success : function (resultMap){
+                console.log("여기로 돌아온 상태");
+                console.log(resultMap);
+                debugger;
+                window.location.href="/user/list?pageNo="+resultMap.pageNo+"&keyword="+resultMap.keyword+"&filterType="+resultMap.filterType+"&ascDesc"+resultMap.ascDesc;
+            },
+            error : function (e){
+                console.log(e);
+            }
+        });
+    }
+    function goToDetail(id){
+        let uId = id;
+        window.location.href='/user/detail?uId='+uId;
+    }
+
+    function sortUser(filterTypeStr, ascDescStr){
+        let filterType = filterTypeStr;
+        let ascDesc = ascDescStr;
+        let keyword = $('#keyword').val();
+        let pageNo = 1;
+        $.ajax({
+            url : '/user/list',
+            method : 'GET',
+            data : {
+                'pageNo' : pageNo,
+                'keyword' : keyword,
+                'filterType' : filterType,
+                'ascDesc' : ascDesc
+            }
+        });
     }
 </script>

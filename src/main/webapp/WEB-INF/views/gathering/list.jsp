@@ -32,9 +32,9 @@
                                     </ul>
                                 </div>
                                 <div class="gatheringList row">
-                                    <c:forEach items="${gatheringList}" var="gathering">
+                                    <c:forEach items="${searchGathList.itemList}" var="gathering">
                                         <div class="col-lg-3" style="cursor: pointer;" onclick="goToGathDetail(${gathering.gathNo})" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <div id="carouselExampleIndicators" class="carousel slide gathering-images" data-bs-ride="carousel">
+                                                <div id="carouselExampleIndicators" class="carousel slide gathering-images" data-bs-ride="carousel" >
                                                     <div class="carousel-indicators">
                                                         <c:forEach items="${gathering.fileList}" varStatus="no">
                                                             <c:choose>
@@ -47,10 +47,10 @@
                                                             </c:choose>
                                                         </c:forEach>
                                                     </div>
-                                                    <div class="carousel-inner">
+                                                    <div class="carousel-inner" style="width: 100%; height: 200px;" >
                                                         <c:forEach items="${gathering.fileList}" var="file">
-                                                            <div class="carousel-item active">
-                                                                <img src="/upload/gathering/${file.saveName}" style="width: 50%; height: 500px;  object-fit: cover;" class="d-block w-100" alt="...">
+                                                            <div class="carousel-item active" >
+                                                                <img src="/upload/gathering/${file.saveName}" style="width: 100%; height: 100%; background-size:contain;"  >
                                                             </div>
                                                         </c:forEach>
                                                     </div>
@@ -66,71 +66,64 @@
 <%--                                                <img src="/static/images/icons/default.png" style="height: auto; width: 100%"/>--%>
                                             <div class="gathering-desc">
                                                 <table class="table">
-                                                    <tr><td>${gathering.gathTitle}</td></tr>
-                                                    <tr><td><fmt:formatDate value="${gathering.gathDay}" pattern="yyyy. MM. dd."/></td></tr>
-                                                    <tr><td>${gathering.gathStatusNo}</td></tr>
-                                                    <tr><td>잔여석</td></tr>
-                                                    <tr><td>후기 수</td></tr>
+                                                    <tr ><td align="center" style="padding: 10px 20px;">${gathering.gathTitle}</td></tr>
+                                                    <tr><td align="center"  style="padding: 10px 20px;"><fmt:formatDate value="${gathering.gathDay}" pattern="yyyy. MM. dd."/></td></tr>
+                                                    <tr><td align="center"  style="padding: 10px 20px;">
+                                                            <c:choose>
+                                                                <c:when test="${gathering.gathStatusNo==1}">모집중</c:when>
+                                                                <c:when test="${gathering.gathStatusNo==2}">인원마감</c:when>
+                                                                <c:when test="${gathering.gathStatusNo==3}">모임완료</c:when>
+                                                            </c:choose>
+                                                    </td></tr>
+<%--                                                    <tr><td align="center"  style="padding: 10px 20px;">잔여석</td></tr>--%>
+<%--                                                    <tr><td align="center"  style="padding: 10px 20px;">후기 수</td></tr>--%>
                                                 </table>
                                             </div>
+                                            <br>
                                         </div>
                                     </c:forEach>
                                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                 <br>
-
-<%--                                <!-- pagination -->--%>
-<%--                                    <nav aria-label="Page navigation example">--%>
-<%--                                        <ul class="pagination">--%>
-<%--                                            <!-- preview -->--%>
-<%--                                            <c:if test="${gatheringListPage.pageMaker.prevGroupStartPage > 0}">--%>
-<%--                                                <li class="page-item">--%>
-<%--                                                    <button  class="page-link" value="${gatheringListPage.pageMaker.prevGroupStartPage}" onclick="searchBoardList(${gatheringListPage.pageMaker.prevGroupStartPage})" aria-label="Previous">--%>
-<%--                                                        <span aria-hidden="true">&laquo;</span>--%>
-<%--                                                        <span class="sr-only">Previous</span>--%>
-<%--                                                    </button>--%>
-<%--                                                </li>--%>
-<%--                                            </c:if>--%>
-<%--                                            <!-- n개 고정 -->--%>
-<%--                                                <c:forEach begin="${gatheringListPage.pageMaker.blockBegin}" end="${gatheringListPage.pageMaker.blockEnd}" var="no">--%>
-<%--                                                            <c:if test="${no == gatheringListPage.pageMaker.curPage}">--%>
-<%--                                                                <li class="page-item active">--%>
-<%--                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>--%>
-<%--                                                                </li>--%>
-<%--                                                            </c:if>--%>
-<%--                                                            <c:if test="${no != gatheringListPage.pageMaker.curPage}">--%>
-<%--                                                                <li class="page-item">--%>
-<%--                                                                    <button class="page-link" value="${no}" onclick="searchBoardList(${no})">${no}</button>--%>
-<%--                                                                </li>--%>
-<%--                                                            </c:if>--%>
-<%--                                                </c:forEach>--%>
-<%--                                            <c:if test="${gatheringListPage.pageMaker.nextGroupStartPage <= gatheringListPage.pageMaker.totPage}">--%>
-<%--                                                <li class="page-item">--%>
-<%--                                                    <button class="page-link" value="${gatheringListPage.pageMaker.nextGroupStartPage}" onclick="searchBoardList(${gatheringListPage.pageMaker.nextGroupStartPage})" aria-label="Next">--%>
-<%--                                                        <span aria-hidden="true">&raquo;</span>--%>
-<%--                                                        <span class="sr-only">Next</span>--%>
-<%--                                                    </button>--%>
-<%--                                                </li>--%>
-<%--                                            </c:if>--%>
-<%--                                        </ul>--%>
-<%--                                    </nav>--%>
+                                <div class="row" >
+                                    <div class="col-6 ml-3">
+                                        <!-- pagination -->
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <!-- preview -->
+                                                <c:if test="${searchGathList.pageMaker.blockBegin != 1}">
+                                                    <li class="page-item">
+                                                        <button  class="page-link" value="${searchGathList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchGathList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </button>
+                                                    </li>
+                                                </c:if>
+                                                <!-- n개 고정 -->
+                                                <c:forEach begin="${searchGathList.pageMaker.blockBegin}" end="${searchGathList.pageMaker.blockEnd}" var="no">
+                                                    <c:if test="${no == searchGathList.pageMaker.curPage}">
+                                                        <li class="page-item active">
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${no != searchGathList.pageMaker.curPage}">
+                                                        <li class="page-item">
+                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                        </li>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${searchGathList.pageMaker.blockEnd!=1 && searchGathList.pageMaker.blockEnd <= searchGathList.pageMaker.totPage}">
+                                                    <li class="page-item">
+                                                        <button class="page-link" value="${searchGathList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchGathList.pageMaker.nextBlockBegin})" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                            <span class="sr-only">Next</span>
+                                                        </button>
+                                                    </li>
+                                                </c:if>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

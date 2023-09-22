@@ -12,7 +12,7 @@
     <div class="mt-lg-3">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
 
-    <div class="row mt-lg-1 ">
+    <div class="row mt-lg-1 " style="padding-left: 10px ">
     <div class="col-4" style="display: flex; ">
     <c:if test="${sessionScope.loginUser != null}">
     <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="로그아웃" onclick="location.href='/user/logout.action'">
@@ -48,7 +48,7 @@
             <div class="collapse" id="user">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link" href="/gathering/list?pageNo=1&keyword=">마이페이지</a>
+                        <a class="nav-link" href="/user/detail?uId=${sessionScope.loginUser.getUId()}">마이페이지</a>
                     </li>
                     <c:choose>
                         <c:when test="${sessionScope.loginUser.getUTypeNo() == 1}">
@@ -64,7 +64,7 @@
                                 <a class="nav-link" href="/user/boardList?uId=${sessionScope.loginUser.getUId()}">게시글 작성현황</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/user/applyList?uId=${sessionScope.loginUser.getUId()}">모임 개설현황</a>
+                                <a class="nav-link" href="/user/gatheringList?uId=${sessionScope.loginUser.getUId()}">모임 개설현황</a>
                             </li>
                         </c:when>
                     </c:choose>
@@ -99,6 +99,27 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/board/register">게시글 작성</a>
+                    </li>
+                </ul>
+            </div>
+        </li> <li class="nav-item">
+            <a class="nav-link preMenu" data-toggle="collapse" href="#admin" aria-expanded="false" aria-controls="#admin">
+            <i class="icon-grid menu-icon" ></i>
+            <span class="menu-title">관리자</span>
+            </a>
+            <div class="collapse" id="admin">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/list?pageNo=1">전체회원</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/menu/list?pageNo=1">전체메뉴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gathering/list?pageNo=1">전체모임</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/list?pageNo=1">전체게시글</a>
                     </li>
                 </ul>
             </div>

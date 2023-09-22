@@ -22,24 +22,26 @@
                                 <form class="form-sample" name="menuRegisterF" id="menuRegisterF">
                                     <div class="row">
                                         <div class="form-group col-6">
-                                            <label for="menuLevel">메뉴레벨</label>
-                                            <select class="form-control" id="menuLevel" name="menuLevel">
+                                            <label for="orders">메뉴레벨</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="orders" name="orders">
                                                 <option selected disabled></option>
-                                                <option value="1">+ 상위탭</option>
-                                                <option value="2">+ 하위탭</option>
+                                                <option value="0">+ 상위탭</option>
+                                                <option value="1">+ 하위탭</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label for="parentId">상위탭</label>
+                                            <label for="parentId">상위탭</label><span style="color: red;">*</span>
                                             <select class="form-control" id="parentId" name="parentId" disabled>
-                                                <option selected disabled></option>
-                                                <c:forEach items="${preMenuList}" var="preMenu">
-                                                    <option value="${preMenu.menuNo}">${preMenu.menuTitle}</option>
+                                                <option value="0" selected disabled></option>
+                                                <c:forEach items="${menuList}" var="menu">
+                                                    <c:if test="${menu.menuNo == menu.parentId}">
+                                                    <option value="${menu.menuNo}">${menu.menuTitle}</option>
+                                                    </c:if>
                                                 </c:forEach>
                                             </select>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label for="menuTitle">메뉴명</label>
+                                            <label for="menuTitle">메뉴명</label><span style="color: red;">*</span>
                                             <input type="text" class="form-control" id="menuTitle" name="menuTitle"  />
                                         </div>
                                         <div class="form-group col-6">
@@ -47,24 +49,23 @@
                                             <input type="text" class="form-control" id="menuDesc" name="menuDesc"  />
                                         </div>
                                         <div class="form-group col-6">
-                                            <label for="menuUrl">URL</label>
+                                            <label for="menuUrl">URL</label><span style="color: red;">*</span>
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"   />
                                         </div>
                                         <div class="form-group col-6">
-                                                <label for="useYN">공개여부</label>
-                                                <select class="form-control" id="useYN" name="useYN">
-                                                    <option disabled selected></option>
-                                                    <option value="0">공개</option>
-                                                    <option value="1">비공개</option>
+                                                <label for="uTypeNo">사용등급</label>
+                                                <select class="form-control" id="uTypeNo" name="uTypeNo">
+                                                    <option value="1" disabled selected></option>
+                                                    <option value="0">관리자</option>
+                                                    <option value="2">주최자</option>
+                                                    <option value="1">사용자</option>
                                                 </select>
                                         </div>
                                         <div class="form-group col-12">
-                                            <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                                 <div style="text-align: center">
                                                 <input type="button" id="menuRegisterBtn" name="menuRegisterBtn" class="btn btn-primary mr-2" onclick="registerMenu()" value="작성">
                                                 <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" value="취소">
                                                 </div>
-                                            </c:if>
                                         </div>
                                     </div>
                                 </form>
@@ -79,13 +80,14 @@
         <!-- main-panel ends -->
 <script>
 
-    $('#menuLevel').change(function(){
-        let menuLevelSelect = $('#menuLevel');
+    $('#orders').change(function(){
+        let ordersSelect = $('#orders');
         let parentIdSelect = $('#parentId');
 
-        if (menuLevelSelect.val() === "2") { // 하위탭이 선택된 경우
+        if (ordersSelect.val() === "1") { // 하위탭이 선택된 경우
             parentIdSelect.prop('disabled', false); // 상위탭 선택창 활성화
         } else {
+            document.getElementById("parentId").selectedIndex = 0;  //selectedIndex는 제이쿼리에서 사용 안됨
             parentIdSelect.prop('disabled', true); // 상위탭 선택창 비활성화
         }
     });
@@ -93,22 +95,22 @@
 
     //1. 메뉴 작성
     function registerMenu(){
-        let menuLevel = $('#menuLevel option:selected').val();
+        let orders = $('#orders option:selected').val();
         let parentId;
-        if(menuLevel === "2") { //문자열로 비교
-        parentId = $('#parentId option:selected').val();
+        if(orders === "1") { //문자열로 비교
+            parentId = $('#parentId option:selected').val();
         }
-        console.log(parentId);
         let menuTitle = $('#menuTitle').val();
         let menuDesc = $('#menuDesc').val();
         let menuUrl = $('#menuUrl').val();
-        let useYN = $('#useYN option:selected').val();
+        let uTypeNo = $('#uTypeNo option:selected').val();
 
-        if(menuLevel === ''){
+
+        if(orders === ''){
             alert("메뉴레벨을 선택하세요");
             return false;
         }
-        if(menuLevel === 2 && parentId ===''){
+        if(orders === 2 && parentId ===''){
             alert("상위탭을 선택하세요");
             return false;
         }
@@ -117,39 +119,31 @@
             document.getElementById("menuTitle").focus();
             return false;
         }
-        if(menuDesc === ''){
-            alert("메뉴설명을 입력하세요");
-            document.getElementById("menuDesc").focus();
-            return false;
-        }
         if(menuUrl === ''){
             alert("url을 입력하세요");
             document.getElementById("menuUrl").focus();
             return false;
         }
-        if(useYN === ''){
-            alert("사용레벨을 선택하세요");
-        }
         $.ajax({
-            url : '/menu//register-ajax',
+            url : '/menu/register.ajx',
             method : 'POST',
             data :{
                 'menuTitle' : menuTitle,
                 'menuDesc' : menuDesc,
                 'menuUrl' : menuUrl,
-                'useYN' : useYN,
                 'parentId' : parentId,
-                'menuLevel' : menuLevel
+                'orders' : orders,
+                'uTypeNo' : uTypeNo
             },
-            success: function(resultJson){
-                if(resultJson.code ===1){
-                    window.location.href = '/menu/list?pageNo=1&keyword=';
+            success: function(resultMap){
+                if(resultMap.code ===1){
+                    window.location.href = resultMap.forwardPath;
                 } else {
-                    alert(resultJson.msg);
+                    alert(resultMap.msg);
                 }
             },
             error : function(e){
-                    console.log(e);
+                console.log(e);
             }
         });
     }

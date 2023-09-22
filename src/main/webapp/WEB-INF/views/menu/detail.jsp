@@ -34,35 +34,26 @@
                                         <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" disabled/>
                                     </div>
                                     <div class="form-group col-6"></div>
-                                    <c:choose>
-                                        <c:when test="${menu.parentId == 0}">
                                         <div class="form-group col-6">
-                                            <label for="parentMenu1">상위탭</label>
-                                                    <input type="text" class="form-control" id="parentMenu1" value="-" disabled/>
+                                            <label for="parentMenu">상위탭</label>
+                                                    <input type="text" class="form-control" id="parentMenu"
+                                                           value="${menu.orders == 0 ? '-': menu.menuTitle }" disabled/>
                                         </div>
                                         <div class="col-6">
                                             <label for="subMenuList">하위탭</label>
                                             <select class="form-control" id="subMenuList" name="subMenuList">
-                                                <c:forEach items="${subMenuList}" var="subMenu">
-                                                    <option value="${subMenu.menuNo}" disabled>${subMenu.menuTitle}</option>
-                                                </c:forEach>
+                                            <c:forEach items="${menuList}" var="menuL">
+                                                <c:if test="${menu.menuNo == menuL.parentId && menu.menuNo != menu.parentId}">
+                                                <option disabled>${menuL.menuTitle} </option>
+                                                </c:if>
+                                            </c:forEach>
                                             </select>
                                         </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                        <div class="form-group col-6">
-                                            <label for="parentMenu2">상위탭</label>
-                                            <input type="text" class="form-control" id="parentMenu2"  value="${preMenu.menuTitle}" disabled/>
-                                        </div>
-                                        </c:otherwise>
-                                    </c:choose>
                                     <div class="form-group col-12">
-                                        <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.grade == 0}">
                                         <div style="text-align: right">
                                             <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/menu/modify?menuNo=${menu.menuNo}'" value="수정">
                                             <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/menu/delete-action?menuNo=${menu.menuNo}'" value="삭제">
                                         </div>
-                                        </c:if>
                                     </div>
                                 </div>
                                 </div>
