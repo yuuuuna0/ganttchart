@@ -70,16 +70,28 @@
         //1.파일 갯수 확인
         fileArray2 = $('#boardFileList')[0].files;
         console.log('fileArray2 : ' + fileArray2);
+        console.log('fileCount: '+fileCount);
         if(fileCount + fileArray2.length > maxCount){
             alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
         } else {
             fileCount = fileCount + fileArray2.length;
         }
-        //fileArray = $('#boardFileList')[0].files;
+        //파일 중복검사
+        for(let i=0;i<fileArray2.length;i++){
+            let file2 = fileArray2[i];
+            for(let j =0; j<fileArray.length;j++){
+                let file = fileArray[j];
+                if(file2.name === file.name){
+                    alert("중복된 파일을 업로드할 수 없습니다.");
+                    return;
+                }
+            }
+        }
         for(let i = 0 ; i < fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
         }
+
         console.log(fileArray);
         fileArray2 = [];
         changeView();
@@ -95,9 +107,11 @@
         for(let i=0 ; i<fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
         }
+        --fileCount;
         console.log(fileArray);
         fileArray2=[];
         changeView();
+        console.log('지웠을 때 fileCount: '+fileCount);
     }
 
     //3. 게시글 작성

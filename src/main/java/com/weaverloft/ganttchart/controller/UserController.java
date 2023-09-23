@@ -361,13 +361,13 @@ public class UserController {
 
     //6. 마이페이지
     @GetMapping(value="/detail")
-    public String detailPage(@RequestParam String uId,Model model){
+    public String detailPage(@RequestParam String uId,Model model,HttpSession session){
         String forwardPath ="";
         try{
             Users user = usersService.findUserById(uId);
             Files file = filesService.findFileByNo(user.getFileNo());
-            System.out.println("file = " + file);
             model.addAttribute("file",file);
+            model.addAttribute("user",user);
             forwardPath="/user/detail";
         } catch (Exception e){
             e.printStackTrace();

@@ -108,15 +108,13 @@
 
 <script type="text/javascript">
     // 생일 양식에 맞게 넣기
-    let uBirthStr = '${user.getUBirth()}';
-    let dateParts = uBirthStr.split(' ');
-    let year = dateParts[5];
-    let month = (['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].indexOf(dateParts[1]) + 1).toString().padStart(2, '0');
-    let day = dateParts[2];
-    uBirthStr = year+'-'+month+'-'+day;
-    let uBirth = new Date(uBirthStr);
-    console.log(uBirth);
-    $('#uBirth').val(uBirth);
+    <%--let uBirthStr = '${user.getUBirth()}';--%>
+    <%--let dateParts = uBirthStr.split(' ');--%>
+    <%--let year = dateParts[5];--%>
+    <%--let month = (['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].indexOf(dateParts[1]) + 1).toString().padStart(2, '0');--%>
+    <%--let day = dateParts[2];--%>
+    <%--uBirthStr = year+'-'+month+'-'+day;--%>
+    <%--let uBirth = new Date(uBirthStr);--%>
 
     //1. 주소 api
     window.onload = function () {
@@ -183,12 +181,13 @@
 
         let form = $('#modifyF').serializeArray();
         let file = $('#photoFile')[0].files;
+
         let formData = new FormData();
         for(let i=0;i<form.length;i++){
             formData.append(form[i].name,form[i].value);
         }
         formData.append("mf",file[0]);
-
+        debugger;
         $.ajax({
             url : '/user/modify.ajx',
             method : 'POST',
