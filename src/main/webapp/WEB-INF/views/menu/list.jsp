@@ -65,9 +65,9 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <td style="text-align: center;" onclick="event.cancelBubble=true" >
-                                                    <input type="radio" class="btn-check uTypeNo${menu.menuNo}" name="options-outlined${menu.menuNo}" id="success-outlined${menu.menuNo}" autocomplete="off" value="1">
+                                                    <input type="radio" class="btn-check auth" name="options-outlined${menu.menuNo}" id="success-outlined${menu.menuNo}" autocomplete="off" value="1">
                                                     <label class="btn btn-outline-secondary" for="success-outlined${menu.menuNo}" style="padding: 10px;">일반회원</label>
-                                                    <input type="radio" class="btn-check uTypeNo${menu.menuNo}" name="options-outlined${menu.menuNo}" id="danger-outlined${menu.menuNo}" autocomplete="off" value="2">
+                                                    <input type="radio" class="btn-check auth" name="options-outlined${menu.menuNo}" id="danger-outlined${menu.menuNo}" autocomplete="off" value="2">
                                                     <label class="btn btn-outline-secondary ml-1" for="danger-outlined${menu.menuNo}" style="padding: 10px;">주최자</label>
                                                 </td>
                                                 <td onclick="event.cancelBubble=true" style="text-align: center;"><img src="/static/images/icons/X.png" style="width: 10px; height: 10px;" onclick="deleteMenu(${menu.menuNo})"></td>
@@ -86,7 +86,7 @@
                                                 <!-- preview -->
                                                 <c:if test="${searchMenuList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${searchMenuList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchMenuList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchMenuList.pageMaker.prevBlockBegin}" onclick="searchMenu(${searchMenuList.pageMaker.prevBlockBegin})" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
@@ -96,18 +96,18 @@
                                                 <c:forEach begin="${searchMenuList.pageMaker.blockBegin}" end="${searchMenuList.pageMaker.blockEnd}" var="no">
                                                     <c:if test="${no == searchMenuList.pageMaker.curPage}">
                                                         <li class="page-item active">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchMenu(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                     <c:if test="${no != searchMenuList.pageMaker.curPage}">
                                                         <li class="page-item">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchMenu(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
                                                 <c:if test="${searchMenuList.pageMaker.blockEnd!=1 && searchMenuList.pageMaker.blockEnd <= searchMenuList.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <button class="page-link" value="${searchMenuList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchMenuList.pageMaker.nextBlockBegin})" aria-label="Next">
+                                                        <button class="page-link" value="${searchMenuList.pageMaker.nextBlockBegin}" onclick="searchMenu(${searchMenuList.pageMaker.nextBlockBegin})" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
                                                         </button>
@@ -131,17 +131,17 @@
         window.location.href = '/menu/delete.aciton?menuNo='+menuNo;
     }
 
-    $('.uTypeNo').click(function(e){
+    $('.auth').click(function(e){
         //사용등급 변경하기
-        let uTypeNo = e.target.value;
+        let auth = e.target.value;
         let menuNo = '${menu.menuNo}';
-        console.log(uTypeNo);
+        console.log(auth);
         $.ajax({
-            url : '/menu/modifyUType.ajax?menuNo='+menuNo,
+            url : '/menu/modifyAuth.ajax?menuNo='+menuNo,
             method : 'POST',
             data : {
                 'menuNo' : menuNo,
-                'uTypeNo' : uTypeNo
+                'auth' : auth
             },
             success : function (resultMap){
                 console.log(resultMap.code);
@@ -161,7 +161,7 @@
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            searchMenuList(1);
+            searchMenu(1);
             e.preventDefault();
         }
     });
@@ -171,40 +171,10 @@
 
 
     // 메뉴 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
-    function searchMenuList(no){
+    function searchMenu(no){
     let keyword = $('#keyword').val();
     let pageNo = no;
-    window.location.href='/menu/list?pageNo='+pageNo+'&keyword='+keyword;
+        window.location.href='/board/list?pageNo='+pageNo+'&keyword='+keyword+"&filterType="+filterType+"&ascDesc="+ascDesc;
     }
-    //메뉴 사용여부 확인하기
-    $('.usage').change(function(e){
-        let useYN;
-        let menuNo = e.target.value;
-        if (e.target.checked){
-            useYN = 0;   //메뉴 사용함
-        } else {
-            useYN = 1;  //메뉴 사용안함
-        }
-        $.ajax({
-            url : '/menu/usage-ajax',
-            method : 'POST',
-            data : {
-                'menuNo' : menuNo,
-                'useYN' : useYN
-            },
-            success : function(resultMap){
-                if(resultMap.code ===1){
-                    console.log("성공");
-                } else {
-                    alert(resultMap.msg);
-                }
-            },
-            error:function(e){
-                console.log(e);
-            }
-        });
-
-    });
-
 </script>
 

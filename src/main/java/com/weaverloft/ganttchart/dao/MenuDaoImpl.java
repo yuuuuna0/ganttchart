@@ -67,10 +67,10 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public int updateMenuUType(int menuNo, int uTypeNo) throws Exception {
+    public int updateMenuUType(int menuNo, String auth) throws Exception {
         Map<String,Object> map = new HashMap<>();
         map.put("menuNo",menuNo);
-        map.put("uTypeNo",uTypeNo);
+        map.put("auth",auth);
         return menuMapper.updateMenuUType(map);
     }
 

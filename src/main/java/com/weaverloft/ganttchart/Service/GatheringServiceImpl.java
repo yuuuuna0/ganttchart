@@ -109,13 +109,13 @@ public class GatheringServiceImpl implements GatheringService{
     }
 
     @Override
-    public SearchDto<Gathering> findSearchedGathList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception {
+    public SearchDto<Gathering> findSearchedGathList(int pageNo, String keyword, String filterType, String ascDesc, int cityNo, int gathTypeNo, int gathStatusNo) throws Exception {
         //조건에 맞는 전체 사용자 수
         int totGathCount = gatheringDao.countGath(keyword);
         //페이지네이션에 필요한 변수들 얻기
         PageMaker pageMaker = new PageMaker(totGathCount,pageNo);
         //페이징&필터된 데이터 얻기
-        List<Gathering> gatheringList = gatheringDao.findGathList2(pageMaker.getContentBegin(),pageMaker.getContentEnd(),keyword,filterType,ascDesc);
+        List<Gathering> gatheringList = gatheringDao.findGathList2(pageMaker.getContentBegin(),pageMaker.getContentEnd(),keyword,filterType,ascDesc, cityNo, gathTypeNo, gathStatusNo);
         List<Gathering> gathList = new ArrayList<>();
 
         for(int i=0;i<gatheringList.size();i++){

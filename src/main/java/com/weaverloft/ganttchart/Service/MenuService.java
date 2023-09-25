@@ -27,7 +27,7 @@ public interface MenuService {
 
     int updateMenu(Menu menu) throws Exception;
 
-    int updateMenuUType(int menuNo, int uTypeNo) throws Exception;
+    int updateMenuUType(int menuNo, String auth) throws Exception;
 
     int deleteMenu(int menuNo) throws Exception;
 

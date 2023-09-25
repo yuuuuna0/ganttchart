@@ -33,5 +33,5 @@ public interface GatheringDao {
 
     int countGath(String keyword) throws Exception;
 
-    List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
+    List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc, int cityNo, int gathTypeNo, int gathStatusNo) throws Exception;
 }

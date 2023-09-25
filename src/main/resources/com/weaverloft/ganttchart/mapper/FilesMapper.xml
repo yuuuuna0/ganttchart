@@ -10,29 +10,29 @@
         <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
             select files_file_no_seq.nextval from dual
         </selectKey>
-        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id)
-        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',#{uId})
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,file_size)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',#{uId},#{fileSize})
     </insert>
     <insert id="createGathFile" parameterType="com.weaverloft.ganttchart.dto.Files">
         <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
             select files_file_no_seq.nextval from dual
         </selectKey>
-        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,gath_no)
-        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{gathNo})
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,gath_no,file_size)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{gathNo},#{fileSize})
     </insert>
     <insert id="createReviewFile" parameterType="com.weaverloft.ganttchart.dto.Files">
         <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
             select files_file_no_seq.nextval from dual
         </selectKey>
-        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,review_no)
-        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{reviewNo})
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,review_no,file_size)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{reviewNo},#{fileSize})
     </insert>
     <insert id="createBoardFile" parameterType="com.weaverloft.ganttchart.dto.Files">
         <selectKey keyProperty="fileNo" resultType="java.lang.Integer" order="BEFORE">
             select files_file_no_seq.nextval from dual
         </selectKey>
-        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,board_no)
-        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{boardNo})
+        insert into files(file_no,save_name,original_name,file_path,file_ext,is_use,u_id,board_no,file_size)
+        values(#{fileNo},#{saveName},#{originalName},#{filePath},#{fileExt},'Y',null,#{boardNo},#{fileSize})
     </insert>
 <!--3. 번호로 파일 찾기    -->
     <select id="findFileByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Files">

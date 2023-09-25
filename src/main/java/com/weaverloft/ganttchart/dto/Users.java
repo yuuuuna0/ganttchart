@@ -26,8 +26,9 @@ public class Users {
     private Date uCreateDate;
     private String uAddress;
     private String uAddress2;
-    private int uTypeNo;
+    private String auth;
     private int uStatusNo;
     private int fileNo;
     private String uAuthCode;
+    private int enabled;
 }

@@ -38,16 +38,17 @@
                         </div>
                         <h4>Hello! let's get started</h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
-                            <div class="form-group">
+                        <div class="form-group">
                                 <input type="text" class="form-control form-control-lg" id="uId" name="uId" placeholder="ID">
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control form-control-lg" id="uPassword" name="uPassword" placeholder="Password">
                             </div>
                             <div class="mt-3">
+<%--                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
                                 <input type="button" id="loginBtn" name="loginBtn" onclick="loginAction();" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="로그인">
                             </div>
-                            <div class="my-2 d-flex justify-content-between align-items-center">
+                        <div class="my-2 d-flex justify-content-between align-items-center">
                                 <div class="form-check">
                                     <label class="form-check-label text-muted">
                                         <input type="checkbox" class="form-check-input" id= "checkId" name="checkId">

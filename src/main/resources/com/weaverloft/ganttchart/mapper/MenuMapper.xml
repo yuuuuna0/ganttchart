@@ -3,7 +3,7 @@
 <mapper namespace="com.weaverloft.ganttchart.mapper.MenuMapper">
 <!--1. 메뉴 전체 찾기-->
     <select id="findMenuList" resultType="com.weaverloft.ganttchart.dto.Menu">
-        select * from menu order by parent_id desc,orders,menu_no asc
+        select * from menu order by parent_id,orders,menu_no
     </select>
 <!--2. 메뉴 개수 세기    -->
     <select id="countMenu" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -45,15 +45,15 @@
         <selectKey keyProperty="menuNo" resultType="java.lang.Integer" order="BEFORE">
             select menu_menu_no_seq.nextval from dual
         </selectKey>
-        insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, U_TYPE_NO)
-        values (#{menuNo},#{menuNo},0,#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
+        insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, AUTH)
+        values (#{menuNo},#{menuNo},0,#{menuTitle},#{menuUrl},#{menuDesc},#{auth})
     </insert>
     <insert id="createSubMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
         <selectKey keyProperty="menuNo" resultType="java.lang.Integer" order="BEFORE">
             select menu_menu_no_seq.nextval from dual
         </selectKey>
-        insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, U_TYPE_NO)
-        values (#{menuNo},#{parentId},#{orders},#{menuTitle},#{menuUrl},#{menuDesc},#{uTypeNo})
+        insert into Menu(MENU_NO, PARENT_ID, ORDERS, MENU_TITLE, MENU_URL, MENU_DESC, AUTH)
+        values (#{menuNo},#{parentId},#{orders},#{menuTitle},#{menuUrl},#{menuDesc},#{auth})
     </insert>
 <!--3. 상위탭에 속한 메뉴 개수 찾기    -->
     <select id="countMenuByparentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -65,12 +65,12 @@
     </select>
 <!--5. 메뉴 업데이트하기    -->
     <update id="updateMenu" parameterType="com.weaverloft.ganttchart.dto.Menu">
-        update menu set parent_id=#{parentId},orders=#{orders},menu_title=#{menuTitle},menu_url=#{menuUrl},menu_desc=#{menuDesc},u_type_no=#{uTypeNo}
+        update menu set parent_id=#{parentId},orders=#{orders},menu_title=#{menuTitle},menu_url=#{menuUrl},menu_desc=#{menuDesc},AUTH=#{auth}
         where menu_no=#{menuNo}
     </update>
 <!--6. 사용등급 변경    -->
     <update id="updateMenuUType" parameterType="java.util.Map">
-        update menu set u_type_no=#{uTypeNo} where menu_no=#{menuNo}
+        update menu set auth=#{suth} where menu_no=#{menuNo}
     </update>
 <!--7. 메뉴 삭제    -->
     <delete id="deleteMenu" parameterType="java.lang.Integer">

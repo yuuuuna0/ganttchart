@@ -31,5 +31,5 @@ public interface GatheringService {
 
     List<Gathering> findGathByUId(String uId) throws Exception;
 
-    SearchDto<Gathering> findSearchedGathList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception;
+    SearchDto<Gathering> findSearchedGathList(int pageNo, String keyword, String filterType, String ascDesc, int cityNo, int gathTypeNo, int gathStatusNo) throws Exception;
 }

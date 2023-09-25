@@ -17,4 +17,6 @@ public interface ApplyDao {
     int changeApplyStatusNo(int applyNo, int applyStatusNo) throws Exception;
 
     int countAcceptedApply(int gathNo) throws Exception;
+
+    boolean checkDuplication(int gathNo, String uId) throws Exception;
 }

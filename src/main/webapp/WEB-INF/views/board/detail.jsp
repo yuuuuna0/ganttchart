@@ -58,8 +58,8 @@
                         </div>
                         <div class="form-group">
                             <label for="boardContent">내용</label>
-                            <textarea  class="form-control" id="boardContent" name="boardContent" rows="4"
-                                      disabled>${board.boardContent}</textarea>
+                            <div  class="form-control" style="height: 400px;" id="boardContent" name="boardContent"
+                                      disabled>${board.boardContent}</div>
                         </div>
                         <c:if test="${fileList != null}">
                             <div class="form-group row">
@@ -186,7 +186,7 @@
 
     /********************************  파일 다운로드 **********************************/
     function fileDownload(no){
-        window.location.href='/board/downloadFile?fileNo='+no;
+        window.location.href='/board/download?fileNo='+no;
     }
 
     /******************************** 1. 댓글 작성 **********************************/

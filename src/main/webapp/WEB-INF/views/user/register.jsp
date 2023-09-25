@@ -35,11 +35,11 @@
                                                    class="btn btn-primary mr-2">
                                         </div>
                                         <div class="col-3">
-                                            <label for="uTypeNo">회원 권한</label><span style="color: red;">*</span>
-                                            <select class="form-control" id="uTypeNo" name="uTypeNo">
+                                            <label for="auth">회원 권한</label><span style="color: red;">*</span>
+                                            <select class="form-control" id="auth" name="auth">
                                                 <option disabled selected></option>
-                                                <option value="1">일반회원</option>
-                                                <option value="2">판매자</option>
+                                                <option value="ROLE_USER">일반회원</option>
+                                                <option value="ROLE_HOST">주최자</option>
                                             </select>
                                         </div>
                                     </div>
@@ -79,9 +79,7 @@
                                     <div class="row form-group">
                                         <div class="col-6">
                                             <label for="uPhone">전화번호</label>
-                                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="uPhone" name="uPhone"
-                                                   placeholder="전화번호를 입력하세요">
-                                            <label style="font-size: 8pt" for="uPhone">&nbsp;&nbsp;'-'를 제외한 숫자만 입력하세요</label>
+                                            <input type="text" oninput="uPhone(this)" maxlength="13" placeholder="전화번호를 입력해보세요!" class="form-control" id="uPhone" name="uPhone">
                                         </div>
                                         <div class="col-6">
                                             <label for="uBirth">생일</label>
@@ -190,6 +188,11 @@
             }
         });
     }
+    function uPhone(value) {
+        target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+    }
 
     function createUser() {
         let uId = $("#uId").val();
@@ -198,8 +201,8 @@
         let uPassword = $("#uPassword").val();
         let confirmPassword = $("#confirmPassword").val();
         let uGender = $('#uGender option:selected').val();
-        let uTypeNo = $('#uTypeNo option:selected').val();
-        let uPhone = $('#uPhone').val();
+        let auth = $('#auth option:selected').val();
+       // let uPhone = $('#uPhone').val();
 
         /**************************** 유효성 검사 ****************************************/
         if (vId === 0){
@@ -237,15 +240,8 @@
             $("#uEmail").focus();
             return false;
         }
-        //전화번호 정규식
-        // let result1 = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-        // if(!result1.test(uPhone)){
-        //     alert("전화번호 양식에 맞게 입력 해 주세요");
-        //     $('#uPhone').val();
-        //     $("#uPhone").focus();
-        //     return false;
-        // }
-        if (uTypeNo === '') {
+
+        if (auth === '') {
             alert("회원등급을 선택하세요");
             return false;
         }

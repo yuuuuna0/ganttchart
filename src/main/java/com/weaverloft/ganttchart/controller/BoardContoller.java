@@ -1,20 +1,22 @@
 package com.weaverloft.ganttchart.controller;
 
-import com.weaverloft.ganttchart.Service.BoardService;
-import com.weaverloft.ganttchart.Service.CommentsService;
-import com.weaverloft.ganttchart.Service.FilesService;
-import com.weaverloft.ganttchart.Service.UsersService;
-import com.weaverloft.ganttchart.dto.Board;
-import com.weaverloft.ganttchart.dto.Comments;
-import com.weaverloft.ganttchart.dto.Files;
-import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.Service.*;
+import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +28,22 @@ public class BoardContoller {
     private FilesService filesService;
     private UsersService usersService;
     private CommentsService commentsService;
+    private MenuService menuService;
 
-    public BoardContoller(BoardService boardService, FilesService filesService, UsersService usersService,CommentsService commentsService) {
+    public BoardContoller(BoardService boardService, FilesService filesService, UsersService usersService,CommentsService commentsService,MenuService menuService) {
         this.boardService = boardService;
         this.filesService = filesService;
         this.usersService = usersService;
         this.commentsService = commentsService;
+        this.menuService = menuService;
+    }
+
+    //메뉴리스트
+    @ModelAttribute("menuList")
+    public List<Menu> menuList() throws Exception{
+        List<Menu> menuList = menuService.findMenuList();
+        System.out.println("menuList = " + menuList);
+        return menuList;
     }
 
     //1. 게시글리스트페이지
@@ -78,7 +90,7 @@ public class BoardContoller {
     }
     //3. 게시글 작성하기 페이지
     @GetMapping("/register")
-    public String registerPage(){
+    public String registerPage(Model model){
         String forwardPath = "";
         try{
             forwardPath="/board/register";
@@ -151,7 +163,7 @@ public class BoardContoller {
     @ResponseBody
     @PostMapping(value = "/modify.ajx")
     public Map<String,Object> modifyAjax(@RequestParam int boardNo, Board board, @RequestPart(required = false) List<MultipartFile> fileList
-                                            /*,들어오는파일리스트이름?? list? map?*/, List<String> nameList){
+                                           ,@RequestParam(required = false) List<String> nameList){
         Map<String,Object> resultMap = new HashMap<>();
         int code = 0;
         String msg = "";
@@ -202,4 +214,42 @@ public class BoardContoller {
         return resultMap;
     }
 
+    @GetMapping("/download")
+    public void downloadFile(@RequestParam int fileNo, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Files file = filesService.findFileByNo(fileNo);
+            String saveFileName = file.getSaveName();
+            String originalFileName = file.getOriginalName();
+            String filePath = file.getFilePath();
+
+            // globals.properties
+            File downloadFile = new File(filePath + saveFileName);
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(downloadFile));
+            //byte fileByte[] = FileUtils.readFileToByteArray(downloadFile);
+
+            //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
+            String header = request.getHeader("User-Agent");
+            String fileName;
+
+            if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+                //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
+                fileName = URLEncoder.encode(originalFileName, "UTF-8");
+            } else {
+                //나머지 브라우저에서 인코딩
+                fileName = new String(originalFileName.getBytes("UTF-8"), "iso-8859-1");
+            }
+            //형식을 모르는 파일첨부용 contentType
+            response.setContentType("application/octet-stream");
+            //다운로드와 다운로드될 파일이름
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + originalFileName + "\"");
+            //파일복사
+            FileCopyUtils.copy(in, response.getOutputStream());
+            in.close();
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -5,16 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Data
-@Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu {
-    private int menuNo;
-    private int parentId;
-    private int orders;
-    private String menuTitle;
-    private String menuUrl;
-    private String menuDesc;
-    private String auth;
+@Component
+public class ErrorLog {
+    private int errorNo;
+    private String errorDesc;
+    private Date errorDate;
+    private String errorLocation;
 }

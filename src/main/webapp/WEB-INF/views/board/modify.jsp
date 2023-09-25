@@ -23,28 +23,28 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="boardContent">내용</label>
-                                        <textarea class="form-control" id="boardContent" name="boardContent" rows="4" >${board.boardContent}</textarea>
+                                        <textarea class="form-control" id="boardContent" name="boardContent"></textarea>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="fileList">첨부파일</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
-                                        <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
-                                        <span style="font-size:10px; color: gray;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
-                                        <div class="input-group col-xs-12">
-                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >
-                                                <c:forEach items="${fileList}" var="file" varStatus="i">
-                                                    <div class="file" id="file${file.fileNo}" style="font-size:12px;">
-                                                            ${boardFile.originalFileName}
-                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>
-                                                                <span>
-                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${file.fileNo})" /></span>
-                                                    </div>
-                                                </c:forEach>
-                                                <div id="fileList" >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+<%--                                    <div class="form-group">--%>
+<%--                                        <label for="fileList">첨부파일</label>&nbsp;&nbsp;&nbsp;&nbsp;--%>
+<%--                                        <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>--%>
+<%--                                        <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>--%>
+<%--                                        <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>--%>
+<%--                                        <div class="input-group col-xs-12">--%>
+<%--                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >--%>
+<%--                                                <c:forEach items="${fileList}" var="file" varStatus="i">--%>
+<%--                                                    <div class="file" id="file${file.fileNo}" style="font-size:12px;">--%>
+<%--                                                            ${boardFile.originalFileName}--%>
+<%--                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>--%>
+<%--                                                                <span>--%>
+<%--                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${file.fileNo})" /></span>--%>
+<%--                                                    </div>--%>
+<%--                                                </c:forEach>--%>
+<%--                                                <div id="fileList" >--%>
+<%--                                                </div>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
                                 </form>
                                     <div style="text-align: center">
                                         <input type="button" id="boardModifyBtn" name="boardModifyBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">
@@ -61,6 +61,32 @@
         </div>
         <!-- main-panel ends -->
 <script>
+    // 스마트에디터
+    var boardContent;
+    var oEditors = [];
+
+    var smartEditor = function(){
+        nhn.husky.EZCreator.createInIFrame({
+            oAppRef : oEditors,
+            elPlaceHolder : "boardContent",
+            sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+            fCreator: "createSEditor2"
+        });
+    }
+    $(document).ready(function(){
+        smartEditor();
+    });
+
+    function insertContent() {
+        oEditors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+        if (boardContent === '') {
+            alert('내용을 입력 해 주세요');
+            oEditors.getById("boardContent").exec("FOCUS");
+            return;
+        } else {
+            boardContent = $('#boardContent').val();
+        }
+    }
 
 
     /******************************** 1. 게시글 수정 **********************************/
@@ -125,8 +151,9 @@
     // --> 기존파일: 남아있는 파일 이름보내서 원래 파일에 있는지 없는지 보고 매칭해서 없으면 삭제
     // 새롭게 추가된 파일들은 input태그에 담겨있으니까 formdata에 담겨서 전달되는것!!
     function modifyBoard(no) {
+        insertContent();
         let boardTitle = document.getElementById("boardTitle").value;
-        let boardContent = document.getElementById("boardContent").value;
+        boardContent = document.getElementById("boardContent").value;
         let boardNo = no;
         let formData = new FormData;
 

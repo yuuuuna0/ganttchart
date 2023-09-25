@@ -20,19 +20,19 @@
                                     <label for="boardTitle">제목</label>
                                     <input type="text" class="form-control" id="boardTitle" name="boardTitle" placeholder="제목을 입력하세요">
                                 </div>
-                                <div class="form-group" >
+                                <div class="form-group" id="smarteditor">
                                     <label for="boardContent">내용</label>
                                     <textarea class="form-control" id="boardContent" name="boardContent" rows="4" placeholder="내용을 입력하세요"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
-                                    <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
-                                    <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
-                                    <div class="input-group col-xs-12">
-                                        <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
-                                        </div>
-                                    </div>
-                                </div>
+<%--                                <div class="form-group">--%>
+<%--                                    <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>--%>
+<%--                                    <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>--%>
+<%--                                    <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>--%>
+<%--                                    <div class="input-group col-xs-12">--%>
+<%--                                        <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
+<%--                                </div>--%>
                             </form>
                             <div style="display: flex; float:right; margin-right: 20px;">
                                 <input type="button" id="boardWriteBtn" name="boardWriteBtn" class="btn btn-primary mr-2" onclick="boardWrite()" value="작성">
@@ -47,6 +47,35 @@
     </div>
     <!-- main-panel ends -->
 <script>
+    // 스마트에디터
+    var boardContent;
+    var oEditors = [];
+
+    var smartEditor = function(){
+        nhn.husky.EZCreator.createInIFrame({
+            oAppRef : oEditors,
+            elPlaceHolder : "boardContent",
+            sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+            fCreator: "createSEditor2"
+        });
+    }
+    $(document).ready(function(){
+        smartEditor();
+    });
+
+    function insertContent() {
+        oEditors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+        if (boardContent === '') {
+            alert('내용을 입력 해 주세요');
+            oEditors.getById("boardContent").exec("FOCUS");
+            return;
+        } else {
+            boardContent = $('#boardContent').val();
+        }
+    }
+
+
+
 /******************************** 1. 게시글 작성 **********************************/
     let fileCount = 0;      // 파일 현재 필드 숫자 -> maxCount와 비교
     let maxCount = 5;     // 최대 첨부 갯수
@@ -69,8 +98,6 @@
     function addFile(){
         //1.파일 갯수 확인
         fileArray2 = $('#boardFileList')[0].files;
-        console.log('fileArray2 : ' + fileArray2);
-        console.log('fileCount: '+fileCount);
         if(fileCount + fileArray2.length > maxCount){
             alert("파일을 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
@@ -91,8 +118,6 @@
         for(let i = 0 ; i < fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
         }
-
-        console.log(fileArray);
         fileArray2 = [];
         changeView();
     }
@@ -108,18 +133,15 @@
             fileArray.push(fileArray2[i]);
         }
         --fileCount;
-        console.log(fileArray);
         fileArray2=[];
         changeView();
-        console.log('지웠을 때 fileCount: '+fileCount);
     }
 
     //3. 게시글 작성
     function boardWrite() {
+        insertContent();    //스마트에디터
         var boardTitle = document.getElementById("boardTitle").value;
-        var boardContent = document.getElementById("boardContent").value;
-        // let form = $('#boardWriteF')[0];
-        // let formData = new FormData(form);
+        boardContent = $('#boardContent').val();
         let formData = new FormData;
         if(boardTitle === ''){
             alert("제목을 입력하세요");

@@ -29,5 +29,10 @@
     <select id="countAcceptedApply" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(*) from apply where gath_no=#{gathNo} and apply_status_no=2
     </select>
+<!--7. 중복신청 확인하기    -->
+    <select id="checkDuplication" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from apply where u_id=#{uId} and gath_no=#{gathNo}
+    </select>
+
 </mapper>
 

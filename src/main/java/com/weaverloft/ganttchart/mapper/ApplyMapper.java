@@ -18,4 +18,6 @@ public interface ApplyMapper {
 
     int changeApplyStatusNo(Map<String,Object> map) throws Exception;
     int countAcceptedApply(int gathNo) throws Exception;
+
+    int checkDuplication(Map<String, Object> map) throws Exception;
 }

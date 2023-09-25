@@ -86,7 +86,7 @@
                                                 <!-- preview -->
                                                 <c:if test="${searchBoardList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${searchBoardList.pageMaker.prevBlockBegin}" onclick="searchBoard(${searchBoardList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchBoardList.pageMaker.prevBlockBegin}" onclick="searchBoard(${searchBoardList.pageMaker.prevBlockBegin},'','')" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
@@ -133,7 +133,7 @@
     // 검색창 입력 후 엔터키 => 검색
     $("#keyword").keyup(e => {
         if (e.keyCode === 13) {
-            // searchBoardList(1);
+            searchBoard(1,'','')
             e.preventDefault();
         }
     });
@@ -146,7 +146,6 @@
         let pageNo = no;
         filterType = "";
         ascDesc ="";
-        debugger;
         if(filterType2 !== ""){
             filterType = filterType2;
         }

@@ -7,8 +7,8 @@
     </select>
 <!--2. 회원가입   -->
     <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
-        insert into USERS(U_ID,U_PASSWORD,U_NAME,U_EMAIL,U_GENDER,U_BIRTH,U_PHONE,U_CREATE_DATE,U_ADDRESS,U_ADDRESS2,U_TYPE_NO,U_STATUS_NO,FILE_NO,U_AUTH_CODE)
-        values (#{uId},#{uPassword},#{uName},#{uEmail},#{uGender},#{uBirth},#{uPhone},sysdate,#{uAddress},#{uAddress2},#{uTypeNo},1,0,#{uAuthCode})
+        insert into USERS(U_ID,U_PASSWORD,U_NAME,U_EMAIL,U_GENDER,U_BIRTH,U_PHONE,U_CREATE_DATE,U_ADDRESS,U_ADDRESS2,AUTH,U_STATUS_NO,FILE_NO,U_AUTH_CODE,ENABLED)
+        values (#{uId},#{uPassword},#{uName},#{uEmail},#{uGender},#{uBirth},#{uPhone},sysdate,#{uAddress},#{uAddress2},#{auth},1,0,#{uAuthCode},1)
     </insert>
 <!--3. 로그인    -->
     <select id="login" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Users">

@@ -1,11 +1,9 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.GatheringService;
+import com.weaverloft.ganttchart.Service.MenuService;
 import com.weaverloft.ganttchart.Service.ReviewService;
-import com.weaverloft.ganttchart.dto.Files;
-import com.weaverloft.ganttchart.dto.Gathering;
-import com.weaverloft.ganttchart.dto.Review;
-import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.dto.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +18,22 @@ import java.util.Map;
 public class ReviewController {
     private ReviewService reviewService;
     private GatheringService gatheringService;
+    private MenuService menuService;
 
-    public ReviewController(ReviewService reviewService,GatheringService gatheringService) {
+    public ReviewController(ReviewService reviewService,GatheringService gatheringService,MenuService menuService) {
         this.reviewService = reviewService;
         this.gatheringService = gatheringService;
+        this.menuService = menuService;
     }
+
+    //메뉴리스트
+    @ModelAttribute("menuList")
+    public List<Menu> menuList() throws Exception{
+        List<Menu> menuList = menuService.findMenuList();
+        System.out.println("menuList = " + menuList);
+        return menuList;
+    }
+
     //1.리뷰작성 페이지
     @GetMapping(value = "/register")
     public String createReviewPage(@RequestParam int gathNo,Model model){

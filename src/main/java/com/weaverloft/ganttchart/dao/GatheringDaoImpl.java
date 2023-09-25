@@ -85,13 +85,16 @@ public class GatheringDaoImpl implements GatheringDao {
     }
 
     @Override
-    public List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception {
+    public List<Gathering> findGathList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc, int cityNo, int gathTypeNo, int gathStatusNo) throws Exception {
         Map<String,Object> map = new HashMap<>();
         map.put("contentBegin",contentBegin);
         map.put("contentEnd",contentEnd);
         map.put("keyword",keyword);
         map.put("filterType",filterType);
         map.put("ascDesc",ascDesc);
+        map.put("cityNo",cityNo);
+        map.put("gathTypeNo",gathTypeNo);
+        map.put("gathStatusNo",gathStatusNo);
         return gatheringMapper.findGathList2(map);
     }
 }

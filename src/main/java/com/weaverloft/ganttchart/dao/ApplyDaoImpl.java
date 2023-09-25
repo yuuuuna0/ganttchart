@@ -48,4 +48,16 @@ public class ApplyDaoImpl implements ApplyDao{
     public int countAcceptedApply(int gathNo) throws Exception {
         return applyMapper.countAcceptedApply(gathNo);
     }
+
+    @Override
+    public boolean checkDuplication(int gathNo, String uId) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("gathNo",gathNo);
+        map.put("uId",uId);
+        if(applyMapper.checkDuplication(map)==1){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

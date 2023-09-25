@@ -1,4 +1,4 @@
-<%--
+ <%--
   Created by IntelliJ IDEA.
   User: jyn93
   Date: 2023-08-16
@@ -82,7 +82,7 @@
                                             <tr style="cursor: pointer;" onclick="goToDetail('${user.getUId()}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
                                                 <td>${user.getUId()}</td>
                                                 <td>
-                                                ${user.getUTypeNo()==1 ? '일반회원' : '주최자'}
+                                                ${user.auth=='ROLE_USER' ? '일반회원' : '주최자'}
                                                 </td>
                                                 <td>${user.getUName()}</td>
                                                 <td><fmt:formatDate value="${user.getUBirth()}" pattern="yyyy. MM. dd."/></td>
@@ -137,7 +137,7 @@
                                         </nav>
                                     </div>
                                     <div class="col-6 ">
-                                        <input class="float-right" type="button" value="엑셀 다운로드" onclick="location.href='/download';">
+                                        <input class="float-right" type="button" value="엑셀 다운로드" onclick="location.href='/admin/user/list/download';">
                                     </div>
                                 </div>
 

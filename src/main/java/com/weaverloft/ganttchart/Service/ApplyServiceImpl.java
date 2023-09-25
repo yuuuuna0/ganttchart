@@ -65,4 +65,9 @@ public class ApplyServiceImpl implements ApplyService{
         return applyDao.countAcceptedApply(gathNo);
     }
 
+    @Override
+    public boolean checkDuplication(int gathNo, String uId) throws Exception {
+        return applyDao.checkDuplication(gathNo,uId);
+    }
+
 }

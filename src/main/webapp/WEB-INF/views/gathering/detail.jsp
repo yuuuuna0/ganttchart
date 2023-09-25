@@ -30,7 +30,7 @@
                                 <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUTypeNo() == 1}">
                                     <input type="button" id="gathApplyBtn" name="gathApplyBtn"
                                            class="btn btn-primary mr-2"
-                                           onclick="location.href='/gathering/apply?gathNo=${gath.gathNo}'" value="신청하기">
+                                           onclick="applyGath(${gath.gathNo})" value="신청하기">
                                 </c:if><input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
                                               onclick="location.href='/gathering/list?pageNo=1&keyword='" value="목록으로">
                             </div>
@@ -201,14 +201,6 @@
                                     </c:forEach>
                                 </div>
                             </div>
-                            <div class="form-group" >
-                                <label for="boardContent">내용</label>
-                                <textarea class="form-control" id="boardContent" name="boardContent" rows="4" placeholder="내용을 입력하세요"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
-                                <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
-                            </div>
                     </div>
 
                 </div>
@@ -219,6 +211,28 @@
 </div>
 <!-- main-panel ends -->
 <script>
+    //모임 신청하기
+    function applyGath(no){
+        let gathNo = no;
+        $.ajax({
+            url : '/gathering/apply.ajx',
+            method : 'POST',
+            data : {
+                'gathNo' : gathNo
+            },
+            success : function (resultMap){
+                if(resultMap.code == 1){
+                    alert(resultMap.msg);
+                } else{
+                    alert(resultMap.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
+    }
+
     //카카오 지도 출력
     var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스.
     var options = { //지도를 생성할 때 필요한 기본 옵션
@@ -260,16 +274,17 @@
         let applyStatusNo = $('#applyStatusNo option:selected').val();
         let gathNo = ${gath.gathNo};
         $.ajax({
-            url : '/gathering/apply/change.ajx?applyNo='+no,
+            url : '/gathering/apply/change.ajx',
             method : 'POST',
             data : {
                 'applyStatusNo' : applyStatusNo,
                 'applyNo' : no,
-                'gathNo' :gathNo
+                'gathNo' : gathNo
             },
             success : function(resultMap){
                 if(resultMap.code === 1){
                     alert("신청상태 변경");
+                    $('#gathAmount').val(${gath.gathAmount}-resultMap.acceptedPerson);
                 }
             },
             error : function(e){

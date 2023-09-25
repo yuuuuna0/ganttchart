@@ -14,6 +14,7 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <!-- 게시글 -->
+                    <form id="modifyF" name="mofidyF">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-8">
@@ -156,8 +157,12 @@
                                 <div class="input-group col-xs-12">
                                     <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileList" >
                                         <c:forEach items="${gath.fileList}" var="file">
-                                            <span>${file.originalName}</span>&nbsp<span><img src="/static/images/icons/X.png"> </span>
+                                            <div class="existedFile" id="file${file.fileNo}" style="font-size:12px;" onclick="deleteTextFile(${file.fileNo})">
+                                                <span class="nameList">${file.originalName}</span>&nbsp<span><img src="/static/images/icons/X.png" style="width:10px; height:auto; vertical-align: middle; cursor: pointer;"> </span>
+                                            </div>
                                         </c:forEach>
+                                        <div id="fileList2">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -165,6 +170,7 @@
                             </div>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -215,7 +221,160 @@
         }
     });
 
-    function modifyGath(){
 
+    let fileCount = $('.existedFile').length;// 파일 현재 필드 숫자 -> maxCount와 비교
+    console.log(fileCount);
+    let maxCount = 5;     // 최대 첨부 갯수
+    let fileArray = [];
+    let fileArray2 = [];
+    //기존 파일 지우기
+    function deleteTextFile(no){
+        $('#file'+no).remove();
+        --fileCount;
+        console.log(fileCount);
+    }
+    //파일업로드
+    function changeView(){
+        $('#fileList2').empty();
+        let html = '';
+        for(let i=0;i<fileArray.length;i++){
+            html+=  '<div id="file' + i + '" style="font-size:12px;" onclick="deleteFile( ' + i + ')">'
+                + fileArray[i].name
+                + '&nbsp;<img src="/static/images/icons/X.png" style="width:10px; height:auto; vertical-align: middle; cursor: pointer;"/></span>'
+                + '</div>';
+        }
+        $('#fileList2').append(html);
+    }
+
+    //1. 파일추가
+    function addFile(){
+        //1.파일 갯수 확인
+        fileArray2 = $('#gathFileList')[0].files;
+        if(fileCount + fileArray2.length > maxCount){
+            alert("파일은 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
+            return;
+        } else {
+            fileCount = fileCount + fileArray2.length;
+        }
+        //fileArray = $('#gathFileList')[0].files;
+        for(let i = 0 ; i < fileArray2.length ; i++){
+            fileArray.push(fileArray2[i]);
+        }
+        fileArray2 = [];
+        changeView();
+    }
+
+    //2. 파일 삭제
+    function deleteFile(no){
+        for(let i=0 ; i<fileArray.length ; i++){
+            fileArray2.push(fileArray[i]);
+        }
+        fileArray2.splice(no,1);
+        fileArray =[];
+        for(let i=0 ; i<fileArray2.length ; i++){
+            fileArray.push(fileArray2[i]);
+        }
+        console.log(fileArray);
+        fileArray2=[];
+        --fileCount;
+        changeView();
+    }
+
+    //3. 모임수정
+    function modifyGath() {
+        let gathNo = ${gath.gathNo};
+        console.log(gathNo);
+        let gathTitle = $('#gathTitle').val();
+        let gathDesc = $('#gathDesc').val();
+        let gathAddr = $('#gathAddr').val();
+        let gathArrr2 = $('#gathAddr2').val();
+        let gathDay = new Date($('#gathDay').val());
+        let gathClose = new Date($('#gathClose').val());
+        let gathAmount = $('#gathAmount').val();
+        let cityNo = $('#cityNo option:selected').val();
+        let gathTypeNo = $('#gathTypeNo option:selected').val();
+
+        if(gathTitle === ''){
+            alert("제목을 입력하세요");
+            document.getElementById("gathTitle").focus();
+            return false;
+        }
+        if(gathDesc === ''){
+            alert("내용을 입력하세요");
+            document.getElementById("gathDesc").focus();
+            return false;
+        }
+        if(gathDay === ''){
+            alert("모임일을 입력하세요");
+            document.getElementById("gathDay").focus();
+            return false;
+        }
+        if(gathClose === ''){
+            alert("모집마감일을 입력하세요");
+            document.getElementById("gathClose").focus();
+            return false;
+        }
+        if(gathDay <= gathClose){
+            alert("모집일은 모집마감일 이후여야합니다.");
+            document.getElementById("gathDay").focus();
+            return false;
+        }
+        let today= new Date();
+        if(gathDay <= today || gathClose <= today){
+            alert("모집일과 모집마감일은 현재날짜 이후여야합니다.");
+            $('#gathDay').val('');
+            $('#gathClose').val('');
+            document.getElementById("gathDay").focus();
+            return false;
+        }
+        if(cityNo === ''){
+            alert("모임위치를 선택하세요");
+            document.getElementById("cityNo").focus();
+            return false;
+        }
+        if(gathAmount === ''){
+            alert("모집인원을 선택하세요");
+            document.getElementById("gathAmount").focus();
+            return false;
+        }
+        if(gathTypeNo === ''){
+            alert("모임유형을 선택하세요");
+            document.getElementById("gathTypeNo").focus();
+            return false;
+        }
+
+        let form = $('#modifyF').serializeArray();
+        let formData = new FormData();
+        formData.append("gathNo",gathNo);
+        //개별 값 하나씩 폼데이터에 붙여줘야함
+        for(let i=0;i<form.length;i++){
+            formData.append(form[i].name,form[i].value);
+        }
+        for (var i = 0; i < fileArray.length; i++) {
+            formData.append("mfList", fileArray[i]);
+        }
+        let nameList=[];
+        $('.nameList').each(function() {
+            nameList.push($(this).text());
+        });
+        formData.append("nameList",nameList);
+
+        $.ajax({
+            url : '/gathering/modify.ajx',
+            method : 'POST',
+            contentType : false,
+            processData : false,
+            data : formData,
+            success : function (resultMap) {
+                if(resultMap.code === 1){
+                    window.location.href=resultMap.forwardPath;
+                } else {
+                    alert(resultMap.msg);
+                }
+            },
+            error : function(e){
+                console.log(e);
+            }
+        });
     }
 </script>

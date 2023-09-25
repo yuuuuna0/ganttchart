@@ -24,20 +24,30 @@ public class UserController {
     private BoardService boardService;
     private ApplyService applyService;
     private GatheringService gatheringService;
+    private MenuService menuService;
 
 
-    public UserController(UsersService usersService, FilesService filesService,EmailService emailService,BoardService boardService,ApplyService applyService,GatheringService gatheringService) {
+    public UserController(UsersService usersService, FilesService filesService,EmailService emailService,BoardService boardService,ApplyService applyService,GatheringService gatheringService,MenuService menuService) {
         this.usersService = usersService;
         this.filesService = filesService;
         this.emailService = emailService;
         this.boardService = boardService;
         this.applyService = applyService;
         this.gatheringService = gatheringService;
+        this.menuService = menuService;
+    }
+
+    //메뉴리스트
+    @ModelAttribute("menuList")
+    public List<Menu> menuList() throws Exception{
+        List<Menu> menuList = menuService.findMenuList();
+        System.out.println("menuList = " + menuList);
+        return menuList;
     }
 
     //1. 회원가입 페이지
     @GetMapping("/register")
-    public String registerPage(){
+    public String registerPage(Model model){
         String forwardPath = "";
         try{
             forwardPath = "/user/register";
@@ -91,8 +101,8 @@ public class UserController {
                 msg = "비밀번호는 영문,숫자,특수문자를 포함한 6글자 이상 12글자 이하로, 공백이 포함될 수 없습니다.";
             }
             //3) 인증메일 발송 --> recipient address is not a valid address 에러
-//            String uAuthCode = emailService.sendMail(user.getUId(),1);
-//            user.setUAuthCode(uAuthCode);
+            String uAuthCode = emailService.sendMail(user.getUEmail(),1);
+            user.setUAuthCode(uAuthCode);
             //4) 회원가입 완료 --- 직전에 업로드한 fileNo curval 찾아서 회원에 넣어준다. + fileNo 0 만들어야 fk 위반 안하나?
             int result = usersService.createUsers(user);
             if(result == 1) {
@@ -206,7 +216,7 @@ public class UserController {
 
     //3. 이메일 인증 페이지
     @GetMapping("/emailAuth")
-    public String emailAuthPage(){
+    public String emailAuthPage(Model model){
         String forwatdPath ="";
         try{
             forwatdPath="/user/emailAuth";
@@ -245,7 +255,7 @@ public class UserController {
 
     //4. 아이디 찾기 페이지
     @GetMapping("/findId")
-    public String findIdPage(){
+    public String findIdPage(Model model){
         String forwardPath ="";
         try{
             forwardPath = "/user/findId";
@@ -282,7 +292,7 @@ public class UserController {
     }
     //5. 비밀번호 찾기 페이지
     @GetMapping("/findPassword")
-    public String findPasswordPage(){
+    public String findPasswordPage(Model model){
         String forwardPath="";
         try{
             forwardPath = "/user/findPassword";
@@ -325,7 +335,7 @@ public class UserController {
     }
     //5-2. 비밀번호 변경 페이지
     @GetMapping("/modifyPassword")
-    public String modifyPasswordPage(){
+    public String modifyPasswordPage(Model model){
         String forwardPath="";
         try{
             forwardPath = "/user/modifyPassword";

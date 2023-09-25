@@ -73,7 +73,7 @@
 <!--        </jsp-property-group>-->
 <!--    </jsp-config>-->
 
-<!--    &lt;!&ndash; Spring security 적용&ndash;&gt;-->
+    <!-- Spring security 적용-->
 <!--    <filter>-->
 <!--        <filter-name>springSecurityFilterChain</filter-name>-->
 <!--        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->

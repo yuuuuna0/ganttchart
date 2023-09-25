@@ -12,6 +12,7 @@ import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,7 +31,13 @@ public class HomeController {
         this.gatheringService = gatheringService;
     }
 
-    //공통으로 붙이는 부분에 대해 어떻게 분리시킬 것인지 생각해야함
+    //메뉴리스트
+    @ModelAttribute("menuList")
+    public List<Menu> menuList() throws Exception{
+        List<Menu> menuList = menuService.findMenuList();
+        System.out.println("menuList = " + menuList);
+        return menuList;
+    }
 
     //1. 메인페이지
     @GetMapping("/")
@@ -38,31 +45,12 @@ public class HomeController {
         String forwardPath ="";
         try{
             Users loginUser = (Users)session.getAttribute("loginuser");
-            /*********************공통 메뉴부분 -> 분리 필요한 부분**********************************/
-            List<Menu> menuList = menuService.findUserMenuList();
-            if(loginUser != null) {
-                switch (loginUser.getUTypeNo()) {
-                    case 0:
-                        menuList = menuService.findAdminMenuList();
-                        break;
-                    case 1:
-                        menuList = menuService.findUserMenuList();
-                        break;
-                    case 2:
-                        menuList = menuService.findSellerMenuList();
-                        break;
-                }
-            }
-            model.addAttribute("menuList",menuList);
-            /*************************************************************/
             List<Board> topNboardList = boardService.findTopNBoard(5);
             List<Gathering> topNGathList = gatheringService.findTopNGath(5);
             List<Gathering> nearGathList = gatheringService.findNearGath();
             model.addAttribute("topNboardList",topNboardList);
             model.addAttribute("topNGathList",topNGathList);
             model.addAttribute("nearGathList",nearGathList);
-
-
             forwardPath="/index";
         } catch (Exception e){
             e.printStackTrace();

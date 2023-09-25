@@ -15,10 +15,50 @@
                         <div class="card" id="gatheringListPage">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-9">
+                                    <div class="col-12">
                                         <h4 class="card-title">모임 리스트</h4>
                                     </div>
-                                    <ul class="col-3 right">
+                                    <div class="category col-9 mt-2"  onclick="searchGath(1)">
+                                        <div id="filterList">
+                                            <h6>지역별</h6>
+                                            <ul>
+                                                <li>
+                                                    <label>
+                                                        <c:forEach items="${cityList}" var="city">
+                                                        <input type="checkbox" id="city-checkbox${city.cityNo}" name="city-checkbox" value="${city.cityNo}">
+                                                            ${city.city}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </c:forEach>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h6>종류별</h6>
+                                            <ul>
+                                                <li>
+                                                    <label>
+                                                        <c:forEach items="${gathTypeList}" var="gathType">
+                                                            <input type="checkbox" id="gathType-checkbox${gathType.gathTypeNo}" name="gathType-checkbox" value="${gathType.gathTypeNo}">
+                                                            ${gathType.gathType}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </c:forEach>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h6>모집상태별</h6>
+                                            <ul>
+                                                <li>
+                                                    <label>
+                                                            <input type="checkbox" id="gathStatus-checkbox1" name="gathStatus-checkbox" value="1" >모집중&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <input type="checkbox" id="gathStatus-checkbox2" name="gathStatus-checkbox" value="2" >인원마감&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <input type="checkbox" id="gathStatus-checkbox3" name="gathStatus-checkbox" value="3" >모임완료&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <ul class="col-3">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
                                                 <button class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchGathList(1);" style="cursor: pointer;">
@@ -26,7 +66,7 @@
                                                         <i class="icon-search"></i>
                                                     </span>
                                                 </button>
-                                                <input type="text" class="form-control" id="keyword" name="keyword" value="${keyword}" placeholder="검색" aria-label="search" aria-describedby="search">
+                                                <input type="text" class="form-control" id="keyword" name="keyword" value="${filterMap.keyword}" placeholder="검색" aria-label="search" aria-describedby="search">
                                             </div>
                                         </li>
                                     </ul>
@@ -93,7 +133,7 @@
                                                 <!-- preview -->
                                                 <c:if test="${searchGathList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${searchGathList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchGathList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchGathList.pageMaker.prevBlockBegin}" onclick="searchGath(${searchGathList.pageMaker.prevBlockBegin})" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
@@ -103,18 +143,18 @@
                                                 <c:forEach begin="${searchGathList.pageMaker.blockBegin}" end="${searchGathList.pageMaker.blockEnd}" var="no">
                                                     <c:if test="${no == searchGathList.pageMaker.curPage}">
                                                         <li class="page-item active">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchGath(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                     <c:if test="${no != searchGathList.pageMaker.curPage}">
                                                         <li class="page-item">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchGath(${no})">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
                                                 <c:if test="${searchGathList.pageMaker.blockEnd!=1 && searchGathList.pageMaker.blockEnd <= searchGathList.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <button class="page-link" value="${searchGathList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchGathList.pageMaker.nextBlockBegin})" aria-label="Next">
+                                                        <button class="page-link" value="${searchGathList.pageMaker.nextBlockBegin}" onclick="searchGath(${searchGathList.pageMaker.nextBlockBegin})" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
                                                         </button>
@@ -137,19 +177,64 @@
     function goToGathDetail(gathNo){
         window.location.href='/gathering/detail?gathNo='+gathNo;
     }
-
     // 검색창 입력 후 엔터키 => 검색
     $("#keyword").keyup(e => {
         if (e.keyCode === 13) {
-            searchBoardList(1);
+            searchGath(1);
             e.preventDefault();
         }
     });
-    // 게시글 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
-    function searchBoardList(no){
+    //체크박스 데이터 넣기
+    $(document).ready(function(){
+        $('#city-checkbox${filterMap.cityNo}').click();
+        $('#gathTypeNo-checkbox${filterMap.gathTypeNo}').click();
+        $('#gathStatusNo-checkbox${filterMap.gathStatusNo}').click();
+        e.preventDefault();
+    });
+    // 모임 검색하기
+    // $(document).on('change','#city-checkbox,#gathType-checkbox,#gathStatus-checkbox',searchGath);
+    function searchGath(no){
         let keyword = $('#keyword').val();
         let pageNo = no;
-        window.location.href='/gathering/list?pageNo='+pageNo+'&keyword='+keyword;
+        let cityNo;
+        let gathTypeNo;
+        let gathStatusNo;
+        if($('input[name="city-checkbox"]:checked').length==1){
+            cityNo=$('input[name="city-checkbox"]:checked').val();
+        } else{
+            cityNo=0;
+        }
+        if($('input[name="gathType-checkbox"]:checked').length==1){
+            gathTypeNo=$('input[name="gathType-checkbox"]:checked').val();
+        } else{
+            gathTypeNo=0;
+        }
+        if($('input[name="gathStatus-checkbox"]:checked').length==1){
+            gathStatusNo=$('input[name="gathStatus-checkbox"]:checked').val();
+        } else{
+            gathStatusNo=0;
+        }
+        window.location.href='/gathering/list?pageNo='+pageNo+'&keyword='+keyword+'&cityNo='+cityNo+'&gathTypeNo='+gathTypeNo+'&gathStatusNo='+gathStatusNo;
     }
+
+    //2. 체크박스 하나만 선택하기
+    $('input[type="checkbox"][name="city-checkbox"]').click(function(){
+        if($(this).prop('checked')){
+            $('input[type="checkbox"][name="city-checkbox"]').prop('checked',false);
+            $(this).prop('checked',true);
+        }
+    });
+    $('input[type="checkbox"][name="gathType-checkbox"]').click(function(){
+        if($(this).prop('checked')){
+            $('input[type="checkbox"][name="gathType-checkbox"]').prop('checked',false);
+            $(this).prop('checked',true);
+        }
+    });
+    $('input[type="checkbox"][name="gathStatus-checkbox"]').click(function(){
+        if($(this).prop('checked')){
+            $('input[type="checkbox"][name="gathStatus-checkbox"]').prop('checked',false);
+            $(this).prop('checked',true);
+        }
+    });
 
 </script>
