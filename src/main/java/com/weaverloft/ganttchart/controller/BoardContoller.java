@@ -1,6 +1,7 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.*;
+import com.weaverloft.ganttchart.controller.annotation.LoginCheck;
 import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +89,7 @@ public class BoardContoller {
         return forwardPath;
     }
     //3. 게시글 작성하기 페이지
+    @LoginCheck
     @GetMapping("/register")
     public String registerPage(Model model){
         String forwardPath = "";
@@ -100,6 +101,7 @@ public class BoardContoller {
         return forwardPath;
     }
     //3-1. 게시글 작성하기 AJAX
+    @LoginCheck
     @ResponseBody
     @PostMapping("/register.ajx")
     public Map<String,Object> registerAjax(Board board, @RequestPart(required = false) List<MultipartFile> fileList, HttpSession session){
@@ -143,6 +145,7 @@ public class BoardContoller {
         return resultMap;
     }
     //4. 게시글 수정하기 페이지
+    @LoginCheck
     @GetMapping(value = "/modify")
     public String modifyPage(@RequestParam int boardNo,Model model){
         String forwardPath = "";
@@ -160,6 +163,7 @@ public class BoardContoller {
         return forwardPath;
     }
     //4-1. 게시글 수정하기 AJAX
+    @LoginCheck
     @ResponseBody
     @PostMapping(value = "/modify.ajx")
     public Map<String,Object> modifyAjax(@RequestParam int boardNo, Board board, @RequestPart(required = false) List<MultipartFile> fileList
@@ -212,6 +216,19 @@ public class BoardContoller {
         resultMap.put("msg",msg);
         resultMap.put("forwardPath",forwardPath);
         return resultMap;
+    }
+
+    //5. 게시글 삭제하기
+    @LoginCheck
+    @GetMapping("/delete.action")
+    public String deleteBoard(@RequestParam int boardNo){
+        String forwardPath="";
+        try{
+            int result = boardService.deleteBoard(boardNo);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return  forwardPath;
     }
 
     @GetMapping("/download")

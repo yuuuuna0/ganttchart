@@ -1,10 +1,7 @@
 package com.weaverloft.ganttchart.controller;
 
 
-import com.weaverloft.ganttchart.Service.BoardService;
-import com.weaverloft.ganttchart.Service.GatheringService;
-import com.weaverloft.ganttchart.Service.MenuService;
-import com.weaverloft.ganttchart.Service.UsersService;
+import com.weaverloft.ganttchart.Service.*;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Gathering;
 import com.weaverloft.ganttchart.dto.Menu;
@@ -17,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -25,10 +24,12 @@ public class HomeController {
     private MenuService menuService;
     private BoardService boardService;
     private GatheringService gatheringService;
-    public HomeController(MenuService menuService,BoardService boardService,GatheringService gatheringService) {
+//    private AllLogService allLogService;
+    public HomeController(MenuService menuService,BoardService boardService,GatheringService gatheringService/*,AllLogService allLogService*/) {
         this.menuService = menuService;
         this.boardService = boardService;
         this.gatheringService = gatheringService;
+//        this.allLogService = allLogService;
     }
 
     //메뉴리스트
@@ -51,6 +52,29 @@ public class HomeController {
             model.addAttribute("topNboardList",topNboardList);
             model.addAttribute("topNGathList",topNGathList);
             model.addAttribute("nearGathList",nearGathList);
+            //차트붙이기
+            //차트 붙이기
+            //1) 날짜리스트 붙이기
+            List<String> dateList = new ArrayList<>();
+            List<Integer> newApplyCountList = new ArrayList<>();
+            List<Integer> newUserCountList = new ArrayList<>();
+            List<Integer> newBoardCountList = new ArrayList<>();
+//            for(int i=0;i<7;i++){
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.add(Calendar.DAY_OF_MONTH,-(6-i));
+//                newApplyCountList.add(allLogService.newApplyCountList(,calendar.getTime()));
+//                newUserCountList.add(allLogService.countPersonPerDay(1,calendar.getTime()));
+//                newBoardCountList.add(boardService.countNewBoardPerDay(calendar.getTime())); //보드서비스
+//                SimpleDateFormat format = new SimpleDateFormat("YYYY.MM.dd.");
+//                dateList.add("'"+format.format(calendar.getTime())+"'");
+//            }
+//            System.out.println("newUserCountList = " + newUserCountList);
+//            model.addAttribute("dateList",dateList);
+//            model.addAttribute("visitorCountList",visitorCountList);
+//            model.addAttribute("newUserCountList",newUserCountList);
+//            model.addAttribute("newBoardCountList",newBoardCountList);
+
+
             forwardPath="/index";
         } catch (Exception e){
             e.printStackTrace();
@@ -62,28 +86,11 @@ public class HomeController {
     public String errorPage(){
         String forwardPath ="";
         try{
-
+            forwardPath="/error";
         } catch (Exception e){
             e.printStackTrace();
         }
         return forwardPath;
     }
-
-    //3. 파일 다운로드 --> 파일 다운로드 구현해야함
-    @PostMapping(value = "/download")
-    public void downloadFile(@RequestParam int fileNo){
-
-    }
-
-//    @GetMapping("/user/register")
-//    public String registerPage(){
-//        String forwardPath = "";
-//        try{
-//            forwardPath = "/user/register";
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return forwardPath;
-//    }
 
 }

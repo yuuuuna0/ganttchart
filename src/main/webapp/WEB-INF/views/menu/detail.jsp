@@ -36,8 +36,12 @@
                                     <div class="form-group col-6"></div>
                                         <div class="form-group col-6">
                                             <label for="parentMenu">상위탭</label>
+                                            <c:forEach items="${menuList}" var="menuList">
+                                                <c:if test="${menu.parentId == menuList.menuNo}">
                                                     <input type="text" class="form-control" id="parentMenu"
-                                                           value="${menu.orders == 0 ? '-': menu.menuTitle }" disabled/>
+                                                           value="${menuList.menuTitle}" disabled/>
+                                                </c:if>
+                                            </c:forEach>
                                         </div>
                                         <div class="col-6">
                                             <label for="subMenuList">하위탭</label>
@@ -51,8 +55,8 @@
                                         </div>
                                     <div class="form-group col-12">
                                         <div style="text-align: right">
-                                            <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/menu/modify?menuNo=${menu.menuNo}'" value="수정">
-                                            <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/menu/delete-action?menuNo=${menu.menuNo}'" value="삭제">
+                                            <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="location.href='/admin/menu/modify?menuNo=${menu.menuNo}'" value="수정">
+                                            <input type="button" id="deleteBtn" name="deleteBtn" class="btn btn-light" onclick="location.href='/admin/menu/delete.action?menuNo=${menu.menuNo}'" value="삭제">
                                         </div>
                                     </div>
                                 </div>

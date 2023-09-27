@@ -71,7 +71,7 @@
                                                         </c:when>
                                                         <c:when test="${gathering.gathStatusNo == 3}">
                                                             <td>모임완료</td>
-                                                            <td><input type="button" value="리뷰남기기" onclick="window.location.href='/gathring/review/register?gathNo=${gathering.gathNo}'"></td>
+                                                            <td><button id="createReview" value="${gathering.gathNo}" onclick="event.cancelBubble=true">리뷰남기기</button></td>
                                                         </c:when>
                                                     </c:choose>
                                                 <td>
@@ -145,5 +145,10 @@
         let pageNo = no;
         window.location.href='/gathering/list?pageNo='+pageNo+'&keyword='+keyword;
     }
+    $('#createReview').click(function(e){
+        let gathNo = e.target.value;
+        window.location.href='/gathering/review/register?gathNo='+gathNo;
+    });
+
 
 </script>

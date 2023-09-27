@@ -2,12 +2,12 @@ package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.BoardService;
 import com.weaverloft.ganttchart.Service.CommentsService;
+import com.weaverloft.ganttchart.controller.annotation.LoginCheck;
 import com.weaverloft.ganttchart.dto.Comments;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,7 @@ public class CommentController {
     }
 
     //1. 댓글 남기기 -> 1) 부모댓글(depth:1) 2) 자식댓글
+    @LoginCheck
     @PostMapping("/create.ajx")
     public Map<String,Object> createComment(Comments comments, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
@@ -62,6 +63,7 @@ public class CommentController {
         return resultMap;
     }
     //2. 댓글 수정하기
+    @LoginCheck
     @PostMapping(value = "modify.ajx",params = "commentsNo")
     public Map<String,Object> modifyAjax(Comments comments, HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();
@@ -88,6 +90,7 @@ public class CommentController {
         return resultMap;
     }
     //3. 댓긇 삭제하기
+    @LoginCheck
     @PostMapping(value = "/delete.ajx", params = "commentsNo")
     public Map<String,Object> deleteAjax(int commentsNo,int boardNo,HttpSession session){
         Map<String,Object> resultMap = new HashMap<>();

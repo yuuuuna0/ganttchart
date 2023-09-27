@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.mapper;
 import com.weaverloft.ganttchart.dto.Board;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,8 @@ public interface BoardMapper {
     int countBoard(String keyword) throws Exception;
 
     List<Board> findBoardList2(Map<String, Object> map) throws Exception;
+
+    int countNewBoardPerDay(Date time) throws Exception;
+
+    int deleteBoard(int boardNo) throws Exception;
 }

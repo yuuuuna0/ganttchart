@@ -28,7 +28,7 @@ public interface MenuMapper {
 
     int updateMenu(Menu menu) throws Exception;
 
-    int updateMenuUType(Map<String, Object> map) throws Exception;
+    int updateMenuAuth(Map<String, Object> map) throws Exception;
 
     int deleteMenu(int menuNo) throws Exception;
 

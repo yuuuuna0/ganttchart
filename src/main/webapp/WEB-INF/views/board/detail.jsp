@@ -21,13 +21,13 @@
                                 <h4 class="card-title">게시글 상세보기</h4>
                             </div>
                             <div class="col-4 flex" style="display: flex; justify-content: flex-end;">
-                                <%--                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">--%>
+                                                                    <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUId() == board.getUId()}">
                                 <input type="button" id="boardCreateBtn" name="boardCreateBtn"
                                        class="btn btn-primary mr-2"
                                        onclick="location.href='/board/modify?boardNo=${board.boardNo}'" value="수정">
                                 <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
                                        onclick="location.href='/board/delete.action?boardNo=${board.boardNo}'" value="삭제">
-                                <%--                                    </c:if>--%>
+                                                                    </c:if>
                                 <input type="button" id="listBtn" name="listBtn" class="btn btn-primary ml-2"
                                        onclick="location.href='/board/list?pageNo=1&keyword='" value="목록으로">
                             </div>
@@ -224,7 +224,6 @@
             },
             success: function (resultJson) {
                 console.log(resultJson);
-                debugger;
                 reload(resultJson);
                 $('#commentsContent').val('');
             },
@@ -292,6 +291,7 @@
         if (resultMap.code === 1) {
             $('.commentListDiv').empty();
             let html = '';
+            let button = '';
             for (let i = 0; i < resultMap.preCommentList.length; i++) {
                 let preComment = resultMap.preCommentList[i];
                 let date = new Date(preComment.commentsDate).toLocaleDateString('ko-KR', {
@@ -299,31 +299,39 @@
                     month: '2-digit',
                     day: '2-digit'
                 }).replace(/\./g, '.');
+                if(resultMap.loginUser.uid === preComment.uid){
+                    button += '<span><img src="/static/images/icons/modify.png"'
+                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                        +' onclick="modifyComments('+preComment.commentsNo+');"/></span>'
+                        +'<span><img src="/static/images/icons/bin.png"'
+                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                        +' onclick="deleteComments('+preComment.commentsNo+');"/></span>'
+                }
             html += '<div class="col-12 mt-3" style="margin-left: 10px" id="groupDiv'+preComment.groupNo+'}">'
                 +' <div id="commentDiv'+preComment.commentsNo+'">'
                 +' <span class="mr-3">'+preComment.uid+'</span>'
                 +' <span class="mr-3 commentsNo'+preComment.commentsNo+'">'+preComment.commentsContent+'</span>'
                 +' <span class="mr-2">'+date+'</span>'
-                +' <span>'
-                +' <img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                +' onclick="subComments('+preComment.commentsNo+','+preComment.groupNo+','+(preComment.depth+1)+','+(preComment.orders+1)+'"/>'
-                if(resultMap.loginUser.uid === preComment.uid){
-                    html += '<img src="/static/images/icons/modify.png"'
-                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                        +' onclick="modifyComments('+preComment.commentsNo+');"/>'
-                        +'<img src="/static/images/icons/bin.png"'
-                        +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                        +' onclick="deleteComments('+preComment.commentsNo+');"/>'
-                }
-                 +'</span>'
-                 +'</div>'
+                +' <span><img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                +' onclick="subComments('+preComment.commentsNo+','+preComment.groupNo+','+(preComment.depth+1)+','+(preComment.orders+1)+')"/></span>'
+                +button+'</div>'
+
                  for(let j=0;j<resultMap.commentList.length;j++){
-                     let comment = resultMap.commentList[i];
+                     let comment = resultMap.commentList[j];
                      let date2 = new Date(comment.commentsDate).toLocaleDateString('ko-KR', {
                          year: 'numeric',
                          month: '2-digit',
                          day: '2-digit'
                      }).replace(/\./g, '.');
+                     let button2='';
+                     if(resultMap.loginUser.uid === comment.uid){
+                         button2 += '<span><img src="/static/images/icons/modify.png"'
+                             +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                             +' onclick="modifyComments('+comment.commentsNo+');"/></span>'
+                             +'<span><img src="/static/images/icons/bin.png"'
+                             +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
+                             +' onclick="deleteComments('+comment.commentsNo+');"/></span>'
+                     }
                      if(preComment.groupNo === comment.groupNo && comment.depth !== 0){
                          html += '<div class="col-12 mt-1" style="margin-left: '+(comment.depth+1)*15+'px" id="commentDiv'+comment.commentsNo+'">'
                              +'<img src="/../static/images/icons/subComment.png" style="width:15px; height:auto; vertical-align: middle;"/>'
@@ -332,20 +340,11 @@
                              +'<span class="mr-2">'+date2+'</span>'
                              +'<span>'
                              +'<img class="subCommentsBtn" src="/static/images/icons/comment.png" style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                             +'onclick="subComments('+comment.commentsNo+','+preComment.groupNo+','+comment.depth+1+','+comment.orders+1+')"/>'
-                         if(resultMap.loginUser.uid === comment.uid){
-                             html += '<img src="/static/images/icons/modify.png"'
-                                 +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                                 +' onclick="modifyComments('+comment.commentsNo+');"/>'
-                                 +'<img src="/static/images/icons/bin.png"'
-                                 +' style="width:14px; height:auto; vertical-align: middle; cursor: pointer;"'
-                                 +' onclick="deleteComments('+comment.commentsNo+');"/>'
-                         }
-                         +'</span>'
-                         +'</div>';
+                             +'onclick="subComments('+comment.commentsNo+','+preComment.groupNo+','+comment.depth+1+','+comment.orders+1+')"/></span>'
+                             +button2+'</div>'
                      }
                     }
-                +'</div>'
+                html +='</div>'
             }
             $('.commentListDiv').append(html);
         } else {

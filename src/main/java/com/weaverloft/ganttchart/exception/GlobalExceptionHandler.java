@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected String  ExceptionHandler(Model model){
+        String forward ="";
+        try{
+            model.addAttribute("msg","관리자에게 문의하세요");
+            forward = "redirect:/error";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return forward;
+    }
+    @ExceptionHandler(SQLException.class)
+    protected String  SQLExceptionHandler(Model model){
         String forward ="";
         try{
             model.addAttribute("msg","관리자에게 문의하세요");

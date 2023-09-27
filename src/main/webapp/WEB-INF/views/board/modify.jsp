@@ -25,26 +25,26 @@
                                         <label for="boardContent">내용</label>
                                         <textarea class="form-control" id="boardContent" name="boardContent"></textarea>
                                     </div>
-<%--                                    <div class="form-group">--%>
-<%--                                        <label for="fileList">첨부파일</label>&nbsp;&nbsp;&nbsp;&nbsp;--%>
-<%--                                        <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>--%>
-<%--                                        <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>--%>
-<%--                                        <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>--%>
-<%--                                        <div class="input-group col-xs-12">--%>
-<%--                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >--%>
-<%--                                                <c:forEach items="${fileList}" var="file" varStatus="i">--%>
-<%--                                                    <div class="file" id="file${file.fileNo}" style="font-size:12px;">--%>
-<%--                                                            ${boardFile.originalFileName}--%>
-<%--                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>--%>
-<%--                                                                <span>--%>
-<%--                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${file.fileNo})" /></span>--%>
-<%--                                                    </div>--%>
-<%--                                                </c:forEach>--%>
-<%--                                                <div id="fileList" >--%>
-<%--                                                </div>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                    </div>--%>
+                                    <div class="form-group">
+                                        <label for="fileList">첨부파일</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label for="boardFileList" class="btn btn-primary mr-2">파일추가</label>
+                                        <input type="file" id="boardFileList" name="boardFileList" onchange="addFile()" style="appearance: none; -webkit-appearance: none; display: none"  multiple>
+                                        <span style="font-size:10px;">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
+                                        <div class="input-group col-xs-12">
+                                            <div style="width: 500px; height: 200px; padding: 10px; overflow: auto; border: 1px solid #989898;" id="fileNameList" >
+                                                <c:forEach items="${fileList}" var="file" varStatus="i">
+                                                    <div class="file" id="file${file.fileNo}" style="font-size:12px;">
+                                                            ${boardFile.originalFileName}
+                                                                <span style="margin-left: 3px"><fmt:parseNumber value="${file.fileSize/1000}" integerOnly="true" /> kb</span>
+                                                                <span>
+                                                                    <img src="/static/images/icons/X.png" style="width:15px; height:auto; vertical-align: middle; cursor: pointer;" onclick="deleteFileDiv(${file.fileNo})" /></span>
+                                                    </div>
+                                                </c:forEach>
+                                                <div id="fileList" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                                     <div style="text-align: center">
                                         <input type="button" id="boardModifyBtn" name="boardModifyBtn" class="btn btn-primary mr-2" onclick="modifyBoard(${board.boardNo})" value="수정완료">

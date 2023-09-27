@@ -7,6 +7,7 @@ import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,5 +74,15 @@ public class BoardDaoImpl implements BoardDao{
         map.put("filterType",filterType);
         map.put("ascDesc",ascDesc);
         return boardMapper.findBoardList2(map);
+    }
+
+    @Override
+    public int countNewBoardPerDay(Date time) throws Exception {
+        return boardMapper.countNewBoardPerDay(time);
+    }
+
+    @Override
+    public int deleteBoard(int boardNo) throws Exception {
+        return boardMapper.deleteBoard(boardNo);
     }
 }

@@ -22,12 +22,12 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchMenu(1,'','')" style="cursor: pointer;">
+                                                <btn class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchGath(1,'','')" style="cursor: pointer;">
                                                     <span class="input-group-text">
                                                         <i class="icon-search"></i>
                                                     </span>
                                                 </btn>
-                                                <input type="text" class="form-control" id="keyword" name="keyword" placeholder="검색" aria-label="search" aria-describedby="search">
+                                                <input type="text" class="form-control" id="keyword" name="keyword" value="${keyword}" placeholder="검색" aria-label="search" aria-describedby="search">
                                             </div>
                                         </li>
                                     </ul>
@@ -38,50 +38,57 @@
                                         <tr>
                                             <th>No
                                                 <span>
-                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchMenu(1,'menu_no','asc')">
-                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchMenu(1,'menu_no','desc')">
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_no','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_no','desc')">
                                                 </span>
                                             </th>
-                                            <th>메뉴</th>
-                                            <th>메뉴 설명</th>
-                                            <th>Url</th>
-                                            <th>상위탭</th>
-                                            <th style="text-align: center;">사용등급
+                                            <th>모임</th>
+                                            <th>주최자</th>
+                                            <th>모임일
                                                 <span>
-                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchMenu(1,'auth','asc')">
-                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchMenu(1,'auth','desc')">
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_day','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_day','desc')">
+                                                </span>
+                                            </th>
+                                            <th>모임마감일
+                                                <span>
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_close','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_close','desc')">
+                                                </span>
+                                            </th>
+                                            <th style="text-align: center;">도시<span>
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'city_no','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'city_no','desc')">
+                                                </span>
+                                            </th>
+                                            <th style="text-align: center;">모임종류<span>
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_type_no','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_type_no','desc')">
+                                                </span>
+                                            </th>
+                                            <th style="text-align: center;">조회수<span>
+                                                <img class="asc" src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_readcount','asc')">
+                                                <img class="desc" src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="searchGath(1,'gath_readcount','desc')">
                                                 </span>
                                             </th>
                                             <th style="text-align: center;">삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody id="boardTbody">
-                                        <c:forEach items="${searchMenuList.itemList}" var="menu">
-                                            <tr style="cursor: pointer;" onclick="goToMenu('${menu.menuNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                                <td>${menu.menuNo}</td>
-                                                <td>${menu.menuTitle}</td>
-                                                <td>${menu.menuDesc}</td>
-                                                <td>${menu.menuUrl}</td>
-                                                <td>
+                                        <c:forEach items="${searchGathList.itemList}" var="gath">
+                                            <tr style="cursor: pointer;" onclick="goToMenu('${gath.gathNo}')" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
+                                                <td>${gath.gathNo}</td>
+                                                <td>${gath.gathTitle}</td>
+                                                <td>${gath.getUId()}</td>
+                                                <td>${gath.gathDay}</td>
+                                                <td>${gath.gathClose}</td>
+                                                <td>도시
                                                 <c:choose>
-                                                    <c:when test="${menu.menuNo == menu.parentId}">
-                                                        -
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:forEach items="${searchMenuList.itemList}" var="menu2">
-                                                            <c:if test="${menu.parentId == menu2.menuNo}">
-                                                                ${menu2.menuTitle}
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </c:otherwise>
+                                                    <c:when test="${}"></c:when>
                                                 </c:choose>
                                                 </td>
-                                                <td style="text-align: center;" onclick="event.cancelBubble=true" >
-                                                    <input type="radio" class="btn-check auth" name="options-outlined${menu.menuNo}" id="success-outlined${menu.menuNo}" autocomplete="off" value="ROLE_USER">
-                                                    <label class="btn btn-outline-secondary" for="success-outlined${menu.menuNo}" style="padding: 10px;">일반회원</label>
-                                                    <input type="radio" class="btn-check auth" name="options-outlined${menu.menuNo}" id="danger-outlined${menu.menuNo}" autocomplete="off" value="ROLE_HOST">
-                                                    <label class="btn btn-outline-secondary ml-1" for="danger-outlined${menu.menuNo}" style="padding: 10px;">주최자</label>
-                                                </td>
+                                                <td>모임종류</td>
+                                                <td>${gath.gathReadcount}</td>
                                                 <td onclick="event.cancelBubble=true" style="text-align: center;"><img src="/static/images/icons/X.png" style="width: 10px; height: 10px;" onclick="deleteMenu(${menu.menuNo})"></td>
                                             </tr>
                                         </c:forEach>
@@ -96,30 +103,30 @@
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination">
                                                 <!-- preview -->
-                                                <c:if test="${searchMenuList.pageMaker.blockBegin != 1}">
+                                                <c:if test="${searchGathList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${searchMenuList.pageMaker.prevBlockBegin}" onclick="searchMenu(${searchMenuList.pageMaker.prevBlockBegin},'','')" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchGathList.pageMaker.prevBlockBegin}" onclick="searchGath(${searchGathList.pageMaker.prevBlockBegin},'','')" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
                                                     </li>
                                                 </c:if>
                                                 <!-- n개 고정 -->
-                                                <c:forEach begin="${searchMenuList.pageMaker.blockBegin}" end="${searchMenuList.pageMaker.blockEnd}" var="no">
-                                                    <c:if test="${no == searchMenuList.pageMaker.curPage}">
+                                                <c:forEach begin="${searchGathList.pageMaker.blockBegin}" end="${searchGathList.pageMaker.blockEnd}" var="no">
+                                                    <c:if test="${no == searchGathList.pageMaker.curPage}">
                                                         <li class="page-item active">
-                                                            <button class="page-link" value="${no}" onclick="searchMenu(${no},'','')">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchGath(${no},'','')">${no}</button>
                                                         </li>
                                                     </c:if>
-                                                    <c:if test="${no != searchMenuList.pageMaker.curPage}">
+                                                    <c:if test="${no != searchGathList.pageMaker.curPage}">
                                                         <li class="page-item">
-                                                            <button class="page-link" value="${no}" onclick="searchMenu(${no},'','')">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchGath(${no},'','')">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
-                                                <c:if test="${searchMenuList.pageMaker.blockEnd!=1 && searchMenuList.pageMaker.blockEnd <= searchMenuList.pageMaker.totPage}">
+                                                <c:if test="${searchGathList.pageMaker.blockEnd!=1 && searchGathList.pageMaker.blockEnd <= searchGathList.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <button class="page-link" value="${searchMenuList.pageMaker.nextBlockBegin}" onclick="searchMenu(${searchMenuList.pageMaker.nextBlockBegin},'','')" aria-label="Next">
+                                                        <button class="page-link" value="${searchGathList.pageMaker.nextBlockBegin}" onclick="searchGath(${searchGathList.pageMaker.nextBlockBegin},'','')" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
                                                         </button>
@@ -177,7 +184,7 @@
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            searchMenu(1,'','');
+            searchGath(1,'','');
             e.preventDefault();
         }
     });
@@ -185,7 +192,7 @@
     let filterType;
     let ascDesc;
     // 게시글 검색하기
-    function searchMenu(no,filterType2,ascDesc2){
+    function searchGath(no,filterType2,ascDesc2){
         let keyword = $('#keyword').val();
         let pageNo = no;
         filterType = "";

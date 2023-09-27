@@ -1,8 +1,10 @@
 package com.weaverloft.ganttchart.Service;
 
 import com.weaverloft.ganttchart.dao.ApplyDao;
+import com.weaverloft.ganttchart.dao.FilesDao;
 import com.weaverloft.ganttchart.dao.UsersDao;
 import com.weaverloft.ganttchart.dto.Apply;
+import com.weaverloft.ganttchart.dto.Files;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import java.util.List;
 public class ApplyServiceImpl implements ApplyService{
     private ApplyDao applyDao;
     private UsersDao usersDao;
+    private FilesDao filesDao;
 
-    public ApplyServiceImpl(ApplyDao applyDao,UsersDao usersDao) {
+    public ApplyServiceImpl(ApplyDao applyDao,UsersDao usersDao,FilesDao filesDao) {
         this.applyDao = applyDao;
         this.usersDao = usersDao;
+        this.filesDao = filesDao;
     }
 
     @Override
@@ -36,6 +40,8 @@ public class ApplyServiceImpl implements ApplyService{
         for(int i=0;i<applies.size();i++){
             Apply apply = applies.get(i);
             Users user = usersDao.findUserById(apply.getUId());
+            Files file = filesDao.findFileByNo(user.getFileNo());
+            user.setFile(file);
             apply.setUsers(user);
             applyList.add(apply);
         }

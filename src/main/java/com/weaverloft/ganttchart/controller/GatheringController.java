@@ -1,9 +1,10 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.*;
+import com.weaverloft.ganttchart.controller.annotation.HostCheck;
+import com.weaverloft.ganttchart.controller.annotation.LoginCheck;
 import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.SearchDto;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class GatheringController {
     }
 
     //1. 모임리스트 페이지
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list")    // 
     public String listPage(Model model,
                            @RequestParam(required = false, defaultValue = "1") int pageNo,
                            @RequestParam(required = false) String keyword,
@@ -87,14 +88,15 @@ public class GatheringController {
         String forwardPath = "";
         try {
             Gathering gathering = gatheringService.findGathByNo(gathNo);
-            List<Files> fileList = filesService.findFileByGathNo(gathNo);
             List<Apply> applyList = applyService.findApplyByGathNo(gathNo);
             List<Review> reviewList = reviewService.findReviewByGathNo(gathNo);
+            int acceptedPerson = applyService.countAcceptedApply(gathNo);
+            System.out.println("acceptedPerson = " + acceptedPerson);
             gatheringService.increaseReadCount(gathNo);
             model.addAttribute("gath",gathering);
-            model.addAttribute("fileList",fileList);
             model.addAttribute("applyList",applyList);
             model.addAttribute("reviewList",reviewList);
+            model.addAttribute("acceptedPerson",acceptedPerson);
             System.out.println("gathering = " + gathering);
             forwardPath = "/gathering/detail";
         } catch (Exception e) {
@@ -104,6 +106,8 @@ public class GatheringController {
     }
 
     //3. 모임 수정하기 페이지
+    @HostCheck
+    @LoginCheck
     @GetMapping(value = "/modify")
     public String modifyPage(@RequestParam int gathNo,Model model){
         String forwardPath = "";
@@ -123,6 +127,8 @@ public class GatheringController {
         return forwardPath;
     }
     //3-1. 모임 수정하기 AJAX
+    @HostCheck
+    @LoginCheck
     @ResponseBody
     @PostMapping(value = "/modify.ajx")
     public Map<String, Object> modifyAjax(@RequestParam int gathNo, Gathering gathering, @RequestPart(required = false) List<MultipartFile> mfList
@@ -177,6 +183,8 @@ public class GatheringController {
         return resultMap;
     }
     //4. 모임 작성하기 페이지
+    @HostCheck
+    @LoginCheck
     @GetMapping(value = "/register")
     public String registerPage(Model model){
         String forwardPath = "";
@@ -192,6 +200,8 @@ public class GatheringController {
         return forwardPath;
     }
     //4-1. 모임 작성하기 AJAX
+    @HostCheck
+    @LoginCheck
     @ResponseBody
     @PostMapping("/register.ajx")
     public Map<String,Object> registerAjax(Gathering gathering, @RequestPart(required = false) List<MultipartFile> mfList, HttpSession session){ //map 안에 gathering 자동 맵핑되어서 gathering object 전달됨, 이외의 데이터들은 다른 key로 같이 넘어올거같음
@@ -235,6 +245,8 @@ public class GatheringController {
         return resultMap;
     }
     //5. 모임 삭제하기 --> 상태변경으로 하는 것 / db 삭제는 아님
+    @HostCheck
+    @LoginCheck
     @GetMapping(value = "/delete.action")
     public String deleteAction(@RequestParam int gathNo){
         String forwardPath = "";
@@ -249,6 +261,7 @@ public class GatheringController {
 
 
     //6. 모임 신청하기
+    @LoginCheck
     @ResponseBody
     @PostMapping(value = "/apply.ajx")
     public Map<String,Object> gathApplyPage(@RequestParam int gathNo, HttpSession session){

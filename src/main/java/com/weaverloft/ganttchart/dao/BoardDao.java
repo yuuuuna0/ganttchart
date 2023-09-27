@@ -2,6 +2,7 @@ package com.weaverloft.ganttchart.dao;
 
 import com.weaverloft.ganttchart.dto.Board;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BoardDao {
@@ -24,4 +25,8 @@ public interface BoardDao {
     int countBoard(String keyword) throws Exception;
 
     List<Board> findBoardList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
+
+    int countNewBoardPerDay(Date time) throws Exception;
+
+    int deleteBoard(int boardNo) throws Exception;
 }

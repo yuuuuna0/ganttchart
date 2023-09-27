@@ -68,8 +68,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public int updateMenuUType(int menuNo, String auth) throws Exception {
-        return menuDao.updateMenuUType(menuNo,auth);
+    public int updateMenuAuth(int menuNo, String auth) throws Exception {
+        return menuDao.updateMenuAuth(menuNo,auth);
     }
 
     @Override

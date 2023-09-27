@@ -31,4 +31,6 @@ public class Users {
     private int fileNo;
     private String uAuthCode;
     private int enabled;
+
+    private Files file;
 }

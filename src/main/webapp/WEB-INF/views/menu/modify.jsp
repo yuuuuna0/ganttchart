@@ -61,22 +61,21 @@
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"  value="${menu.menuUrl}" />
                                         </div>
                                         <div class="form-group col-6">
-                                            <label for="uTypeNo">사용등급</label>
-                                            <select  class="form-control" id="uTypeNo" name="uTypeNo">
-                                                <option value="1" disabled selected></option>
-                                                <option value="0">관리자</option>
-                                                <option value="2">주최자</option>
-                                                <option value="1">사용자</option>
+                                            <label for="auth">사용등급</label>
+                                            <select class="form-control" id="auth" name="auth">
+                                                <option value="ROLE_USER" disabled selected></option>
+                                                <option value="ROLE_ADMIN">관리자</option>
+                                                <option value="ROLE_HOST">주최자</option>
+                                                <option value="ROLE_USER">사용자</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group col-12">
                                         <div style="text-align: right">
                                             <input type="button" id="MenuModifyBtn" name="MenuModifyBtn" class="btn btn-primary mr-2" onclick="modifyMenu(${menu.menuNo})" value="수정완료">
-                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/menu/list?pageNo=1&keyword='" value="목록으로">
+                                            <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light" onclick="location.href='/admin/menu/list?pageNo=1&keyword='" value="목록으로">
                                         </div>
                                     </div>
-                                </div>
                             </form>
                         </div>
 <%--                       CORD BODY END --%>
@@ -93,7 +92,7 @@
             let parentIdSelect = $('#parentId');
             parentIdSelect.prop('disabled', true);
         }
-        $('#uTypeNo').val(${menu.getUTypeNo()});
+        $('#auth').val('${menu.auth}');
     }
     $('#orders').change(function(){
         let ordersSelect = $('#orders');
@@ -118,7 +117,7 @@
         let menuTitle = $('#menuTitle').val();
         let menuDesc = $('#menuDesc').val();
         let menuUrl = $('#menuUrl').val();
-        let uTypeNo = $('#uTypeNo option:selected').val();
+        let auth = $('#auth option:selected').val();
 
         if(orders === ''){
             alert("메뉴레벨을 선택하세요");
@@ -138,10 +137,8 @@
             document.getElementById("menuUrl").focus();
             return false;
         }
-
-        debugger;
         $.ajax({
-            url : '/menu/modify.ajx?menuNo='+menuNo,
+            url : '/admin/menu/modify.ajx?menuNo='+menuNo,
             method : 'POST',
             data :{
                 'menuNo' : menuNo,
@@ -150,11 +147,11 @@
                 'menuUrl' : menuUrl,
                 'orders' : orders,
                 'parentId' : parentId,
-                'uTypeNo' : uTypeNo
+                'auth' : auth
             },
             success: function(resultJson){
                 if(resultJson.code === 1){
-                    window.location.href = '/menu/detail?menuNo='+no;
+                    window.location.href = '/admin/menu/detail?menuNo='+no;
                 } else {
                     alert(resultJson.msg);
                 }

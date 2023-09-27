@@ -28,7 +28,7 @@
     <c:if test="${sessionScope.loginUser.auth == 'ROLE_ADMIN'}">
         <div class="row mt-lg-1 ">
         <div class="col-4 ">
-        <input type="button" class="btn btn-light ml-5" style="width: 230%; height: 100%; font-size: 10pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/menu/register'">
+        <input type="button" class="btn btn-light ml-5" style="width: 230%; height: 100%; font-size: 10pt; padding: 2pt;" value="메뉴 추가" onclick="location.href='/admin/menu/register'">
         </div>
         </div>
     </c:if><c:if test="${sessionScope.loginUser.auth == 'ROLE_HOST'}">
@@ -41,25 +41,72 @@
 <br>
     <ul class="nav" style="margin-top:0;">
     <c:forEach items="${menuList}" var="premenu">
-        <c:if test="${premenu.orders == 0 }"> <%--&& premenu.auth == sessionScope.loginUser.auth}"> 비회원일때 뭐 보여ㅑ줄지 생각해야함 --%>
-        <li class="nav-item">
-            <a class="nav-link preMenu" data-toggle="collapse" href="#${premenu.menuUrl}" aria-expanded="false" aria-controls="#${premenu.menuUrl}">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">${premenu.menuTitle}</span>
-        </a>
-            <div class="collapse" id="${premenu.menuUrl}">
-                <ul class="nav flex-column sub-menu">
-                    <c:forEach items="${menuList}" var="menu">
-                        <c:if test="${premenu.menuNo == menu.parentId && menu.menuNo != menu.parentId}"> <%--&& menu.auth == sessionScope.loginUser.auth}">--%>
+<%--        시큐리티 적용 못해서 케이스 구분해줌--%>
+        <c:choose>
+            <c:when test="${sessionScope.loginUser.auth == 'ROLE_ADMIN'}">
+            <c:if test="${premenu.orders == 0 }"> <%--&& premenu.auth == sessionScope.loginUser.auth}"> 비회원일때 뭐 보여ㅑ줄지 생각해야함 --%>
+            <li class="nav-item">
+                <a class="nav-link preMenu" data-toggle="collapse" href="#${premenu.menuUrl}" aria-expanded="false" aria-controls="#${premenu.menuUrl}">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">${premenu.menuTitle}</span>
+            </a>
+                <div class="collapse" id="${premenu.menuUrl}">
+                    <ul class="nav flex-column sub-menu">
+                        <c:forEach items="${menuList}" var="menu">
+                            <c:if test="${premenu.menuNo == menu.parentId && menu.menuNo != menu.parentId }">  <%--&& menu.auth == sessionScope.loginUser.auth}">--%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${menu.menuUrl}">${menu.menuTitle}</a>
+                        </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </li>
+            </c:if>
+            </c:when>
+            <c:when test="${sessionScope.loginUser.auth == 'ROLE_HOST'}">
+            <c:if test="${premenu.orders == 0 && (premenu.auth =='ROLE_USER' || premenu.auth =='ROLE_HOST')}">
+            <li class="nav-item">
+                <a class="nav-link preMenu" data-toggle="collapse" href="#${premenu.menuUrl}" aria-expanded="false" aria-controls="#${premenu.menuUrl}">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">${premenu.menuTitle}</span>
+            </a>
+                <div class="collapse" id="${premenu.menuUrl}">
+                    <ul class="nav flex-column sub-menu">
+                        <c:forEach items="${menuList}" var="menu">
+                            <c:if test="${premenu.menuNo == menu.parentId && menu.menuNo != menu.parentId && (menu.auth =='ROLE_USER' || menu.auth =='ROLE_HOST') }">  <%--&& menu.auth == sessionScope.loginUser.auth}">--%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${menu.menuUrl}">${menu.menuTitle}</a>
+                        </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </li>
+            </c:if>
+            </c:when>
+            <c:otherwise>
+                <c:if test="${premenu.orders == 0 && premenu.auth =='ROLE_USER'}">
                     <li class="nav-item">
-                        <a class="nav-link" href="${menu.menuUrl}">${menu.menuTitle}</a>
+                        <a class="nav-link preMenu" data-toggle="collapse" href="#${premenu.menuUrl}" aria-expanded="false" aria-controls="#${premenu.menuUrl}">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">${premenu.menuTitle}</span>
+                        </a>
+                        <div class="collapse" id="${premenu.menuUrl}">
+                            <ul class="nav flex-column sub-menu">
+                                <c:forEach items="${menuList}" var="menu">
+                                    <c:if test="${premenu.menuNo == menu.parentId && menu.menuNo != menu.parentId && menu.auth =='ROLE_USER' }">  <%--&& menu.auth == sessionScope.loginUser.auth}">--%>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="${menu.menuUrl}">${menu.menuTitle}</a>
+                                        </li>
+                                    </c:if>
+                                </c:forEach>
+                            </ul>
+                        </div>
                     </li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-            </div>
-        </li>
-        </c:if>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
     </c:forEach>
     </ul>
     </nav>

@@ -23,4 +23,14 @@ public class ReviewDaoImpl implements ReviewDao{
     public List<Review> findReviewByGathNo(int gathNo) throws Exception {
         return reviewMapper.findReviewByGathNo(gathNo);
     }
+
+    @Override
+    public int findCurNo() throws Exception {
+        return reviewMapper.findCurNo();
+    }
+
+    @Override
+    public Review findReviewByReviewNo(int reviewNo) throws Exception {
+        return reviewMapper.findReviewByReviewNo(reviewNo);
+    }
 }

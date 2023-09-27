@@ -23,12 +23,12 @@
                                             <h6>지역별</h6>
                                             <ul>
                                                 <li>
-                                                    <label>
                                                         <c:forEach items="${cityList}" var="city">
-                                                        <input type="checkbox" id="city-checkbox${city.cityNo}" name="city-checkbox" value="${city.cityNo}">
+                                                        <label>
+                                                            <input type="checkbox" id="city-checkbox${city.cityNo}" name="city-checkbox" value="${city.cityNo}">
                                                             ${city.city}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </label>
                                                         </c:forEach>
-                                                    </label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -36,12 +36,12 @@
                                             <h6>종류별</h6>
                                             <ul>
                                                 <li>
-                                                    <label>
                                                         <c:forEach items="${gathTypeList}" var="gathType">
-                                                            <input type="checkbox" id="gathType-checkbox${gathType.gathTypeNo}" name="gathType-checkbox" value="${gathType.gathTypeNo}">
-                                                            ${gathType.gathType}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <label>
+                                                                <input type="checkbox" id="gathType-checkbox${gathType.gathTypeNo}" name="gathType-checkbox" value="${gathType.gathTypeNo}">
+                                                                ${gathType.gathType}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            </label>
                                                         </c:forEach>
-                                                    </label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -49,11 +49,9 @@
                                             <h6>모집상태별</h6>
                                             <ul>
                                                 <li>
-                                                    <label>
-                                                            <input type="checkbox" id="gathStatus-checkbox1" name="gathStatus-checkbox" value="1" >모집중&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <input type="checkbox" id="gathStatus-checkbox2" name="gathStatus-checkbox" value="2" >인원마감&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <input type="checkbox" id="gathStatus-checkbox3" name="gathStatus-checkbox" value="3" >모임완료&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    </label>
+                                                    <label><input type="checkbox" id="gathStatus-checkbox1" name="gathStatus-checkbox" value="1" >모집중&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                    <label><input type="checkbox" id="gathStatus-checkbox2" name="gathStatus-checkbox" value="2" >인원마감&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                    <label><input type="checkbox" id="gathStatus-checkbox3" name="gathStatus-checkbox" value="3" >모임완료&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -186,12 +184,20 @@
     });
     //체크박스 데이터 넣기
     $(document).ready(function(){
-        $('#city-checkbox${filterMap.cityNo}').click();
-        $('#gathTypeNo-checkbox${filterMap.gathTypeNo}').click();
-        $('#gathStatusNo-checkbox${filterMap.gathStatusNo}').click();
-        e.preventDefault();
+        <%--$('#city-checkbox${filterMap.cityNo}').click();--%>
+        <%--$('#gathTypeNo-checkbox${filterMap.gathTypeNo}').click();--%>
+        <%--$('#gathStatusNo-checkbox${filterMap.gathStatusNo}').click();--%>
+
+        $('#city-checkbox${filterMap.cityNo}').attr("checked", true);
+        $('#gathType-checkbox${filterMap.gathTypeNo}').attr("checked", true);
+        $('#gathStatus-checkbox${filterMap.gathStatusNo}').attr("checked", true);
+
+        console.log(${filterMap.cityNo});
+        console.log(${filterMap.gathTypeNo});
+        console.log(${filterMap.gathStatusNo});
+        // e.preventDefault();
     });
-    // 모임 검색하기
+    // 모임 검색하기 --> ajax로 하면 다중 체크박스 해서 데이터 가져올 수 있음
     // $(document).on('change','#city-checkbox,#gathType-checkbox,#gathStatus-checkbox',searchGath);
     function searchGath(no){
         let keyword = $('#keyword').val();

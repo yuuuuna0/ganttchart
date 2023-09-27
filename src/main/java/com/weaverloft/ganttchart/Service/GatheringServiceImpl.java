@@ -4,9 +4,7 @@ import com.weaverloft.ganttchart.dao.CityDao;
 import com.weaverloft.ganttchart.dao.FilesDao;
 import com.weaverloft.ganttchart.dao.GatheringDao;
 import com.weaverloft.ganttchart.dao.GatheringTypeDao;
-import com.weaverloft.ganttchart.dto.Files;
-import com.weaverloft.ganttchart.dto.Gathering;
-import com.weaverloft.ganttchart.dto.Users;
+import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Service;
@@ -118,15 +116,19 @@ public class GatheringServiceImpl implements GatheringService{
         List<Gathering> gatheringList = gatheringDao.findGathList2(pageMaker.getContentBegin(),pageMaker.getContentEnd(),keyword,filterType,ascDesc, cityNo, gathTypeNo, gathStatusNo);
         List<Gathering> gathList = new ArrayList<>();
 
+
         for(int i=0;i<gatheringList.size();i++){
             //gathering에 fileList 붙이기
             Gathering gathering = gatheringList.get(i);
             List<Files> fileList = filesDao.findFileByGathNo(gathering.getGathNo());
-            //city 붙이기?
+            City city = cityDao.findCityByNo(gathering.getCityNo());
+            GatheringType gathType = gatheringTypeDao.findGathTypeByNo(gathering.getGathTypeNo());
             if(fileList.size() != 0) {
                 gathering.setFileList(fileList);
             }
             gathList.add(gathering);
+            gathering.setCity(city);
+            gathering.setGatheringType(gathType);
         }
         SearchDto<Gathering> searchGathList = new SearchDto<Gathering>(gathList,pageMaker,totGathCount);
         return searchGathList;

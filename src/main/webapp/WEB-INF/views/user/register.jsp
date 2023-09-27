@@ -20,7 +20,7 @@
                                         <br>
                                         <br>
                                         <label for="photoFile" class="file-upload-browse btn btn-primary">사진 추가</label>
-                                        <input type="file"  id="photoFile" name="photoFile" accept="img/*" style="display: none;" onchange="uploadPhoto(this)">
+                                        <input type="file"  id="photoFile" name="photoFile" style="display: none;" onchange="uploadPhoto(this)">
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-6">
@@ -130,13 +130,18 @@
             }).open();
         })
     };
-    // //2. birth -> datepicker 이용
-    // window.onload = function () {
-    //     $("#birth").datepicker({dateFormat: 'yyyy-MM-dd'});    //시간되면 년도 옮기는 옵션 추가하기
-    // };
 
-    //3. 파일 업로드시 이미지 보여주기
     function uploadPhoto(input){
+        //확장자 검사
+        let str = $('#photoFile').val();
+        var fileName = str.split('\\').pop().toLowerCase();
+        var ext =  fileName.split('.').pop().toLowerCase();
+        let allowedExt = ['jpg', 'png', 'jpeg', 'gif','bmp'];
+        if(allowedExt.indexOf(ext) === -1){
+            alert(ext+'파일은 업로드 하실 수 없습니다.');
+            return false;
+        }
+
         if(input.files && input.files[0]){
             var reader = new FileReader();
             reader.onload = function(e){

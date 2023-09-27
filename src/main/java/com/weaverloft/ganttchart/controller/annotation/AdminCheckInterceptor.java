@@ -3,13 +3,14 @@ package com.weaverloft.ganttchart.controller.annotation;
 import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Component
-public class AdminCheckInterceptor {
+public class AdminCheckInterceptor implements HandlerInterceptor {
     public AdminCheckInterceptor() {
     }
 

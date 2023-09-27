@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
+    <resultMap id="userWithFile" type="com.weaverloft.ganttchart.dto.Users" autoMapping="true">
+        <association property="file" javaType="com.weaverloft.ganttchart.dto.Files" autoMapping="true"/>
+    </resultMap>
 <!--1. 아이디로 회원 찾기-->
     <select id="findUserById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
         select * from users where u_id=#{uId}
+    </select>
+    <select id="findUserById2" parameterType="java.lang.String" resultMap="userWithFile">
+        select u.*,f.* from users u
+                        join files f on u.file_no=f.file_no
+                 where u_id=#{uId}
     </select>
 <!--2. 회원가입   -->
     <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
@@ -37,8 +45,9 @@
         update users set file_no=#{fileNo} where u_id=#{uId}
     </update>
 <!--9. 모든 회원 찾기    -->
-    <select id="findUserList" resultType="com.weaverloft.ganttchart.dto.Users">
-        select * from users
+    <select id="findUserList" resultMap="userWithFile">
+        select u.*,f.* from users u
+                                join files f on u.file_no=f.file_no
     </select>
 <!--9-1. 전체 회원 수    -->
     <select id="countUser" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -54,16 +63,18 @@
             from(select rownum idx, u.*
                     from (select *
                             from users
-                            order by u_create_date) u
+        ORDER BY u_create_date
+        <if test="filterType != null  and filterType != ''">
+            ,${filterType} ${ascDesc}
+        </if>) u
                     where 1=1
                     <if test="keyword != null">
                     and (u_id like '%'||#{keyword}||'%' or u_name like '%'||#{keyword}||'%')
                     </if>
-                    <if test="filterType != null">
-                        <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
-                        </if>
+
                 ) afteru
         <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+
     </select>
 </mapper>
 

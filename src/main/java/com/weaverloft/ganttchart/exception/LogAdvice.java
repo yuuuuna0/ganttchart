@@ -9,7 +9,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 @Component
@@ -27,6 +29,26 @@ public class LogAdvice {
 
     @AfterThrowing(pointcut="execution(* com.weaverloft.ganttchart.*.*.*(..))", throwing = "e")
     public void logAdvice(JoinPoint joinPoint, Exception e){
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        String errorLocation = methodSignature.toString();
+        //에러 남기기 --> id 어떻게 남기지?
+        String id ="";
+        ErrorLog errorLog = new ErrorLog(0,e.getMessage(),new Date(),errorLocation);
+        System.out.println("errorLog = " + errorLog);
+        errorLogService.createLog(errorLog);
+    }
+    @AfterThrowing(pointcut="execution(* com.weaverloft.ganttchart.*.*.*(..))", throwing = "e")
+    public void logAdvice(JoinPoint joinPoint, SQLException e){
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        String errorLocation = methodSignature.toString();
+        //에러 남기기 --> id 어떻게 남기지?
+        String id ="";
+        ErrorLog errorLog = new ErrorLog(0,e.getMessage(),new Date(),errorLocation);
+        System.out.println("errorLog = " + errorLog);
+        errorLogService.createLog(errorLog);
+    }
+    @AfterThrowing(pointcut="execution(* com.weaverloft.ganttchart.*.*.*(..))", throwing = "e")
+    public void logAdvice(JoinPoint joinPoint, NoHandlerFoundException e){
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String errorLocation = methodSignature.toString();
         //에러 남기기 --> id 어떻게 남기지?

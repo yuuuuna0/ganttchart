@@ -3,6 +3,7 @@ package com.weaverloft.ganttchart.Service;
 import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.util.SearchDto;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BoardService {
@@ -23,4 +24,8 @@ public interface BoardService {
     List<Board> findTopNBoard(int index) throws Exception;
 
     SearchDto<Board> findSearchedUserList(int pageNo, String keyword, String filterType, String ascDesc) throws Exception;
+
+    int countNewBoardPerDay(Date time) throws Exception;
+
+    int deleteBoard(int boardNo) throws Exception;
 }

@@ -15,20 +15,22 @@
     </select>
 <!--1-2. 전처리 된 게시글리스트    -->
     <select id="findBoardList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Board">
-        select afterb.*
+        select *
         from(select rownum idx, b.*
         from (select *
         from board
-        order by board_no) b
+           order by board_no
+        <if test="filterType != null  and filterType != ''">
+            ,${filterType} ${ascDesc}
+        </if>) b
         where 1=1
         <if test="keyword != null and keyword != ''">
-            <![CDATA[ and (u_id like '%'||#{keyword}||'%' or board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%')]]>
+             and (u_id like '%'||#{keyword}||'%' or board_title like '%'||#{keyword}||'%' or board_content like '%'||#{keyword}||'%')
         </if>
-        <if test="filterType != null and filterType != ''">
-            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
-        </if>
-        ) afterb
+        )
         <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+
+
     </select>
 <!--2. 게시글 번호로 게시글 찾기    -->
     <select id="findBoardByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Board">
@@ -69,4 +71,12 @@
              )
         <![CDATA[ where idx <= #{index} ]]>
     </select>
+<!--8. 오늘 생긴 게시물        -->
+    <select id="countNewBoardPerDay" parameterType="java.util.Date" resultType="java.lang.Integer">
+        select count(*) from BOARD where TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') = TO_CHAR(#{boardDate}, 'YYYY-MM-DD')
+    </select>
+<!-- 9. 게시글 삭제   -->
+    <delete id="deleteBoard" parameterType="java.lang.Integer">
+        delete board where board_no=#{boardNo}
+    </delete>
 </mapper>

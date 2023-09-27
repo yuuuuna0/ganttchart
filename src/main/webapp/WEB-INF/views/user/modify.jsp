@@ -134,6 +134,15 @@
 
     //3. 파일 업로드시 이미지 보여주기
     function uploadPhoto(input){
+        //확장자 검사
+        let str = $('#photoFile').val();
+        var fileName = str.split('\\').pop().toLowerCase();
+        var ext =  fileName.split('.').pop().toLowerCase();
+        let allowedExt = ['jpg', 'png', 'jpeg', 'gif','bmp'];
+        if(allowedExt.indexOf(ext) === -1){
+            alert(ext+'파일은 업로드 하실 수 없습니다.');
+            return false;
+        }
         if(input.files && input.files[0]){
             var reader = new FileReader();
             reader.onload = function(e){
@@ -149,6 +158,7 @@
         let uEmail = $("#uEmail").val();
         let uGender = $('#uGender option:selected').val();
         let uPhone = $('#uPhone').val();
+        // let uBirth = $('#uBirth').val();
 
         if (uName === '') {
             alert("이름을 입력하세요");
@@ -170,6 +180,9 @@
             alert("성별을 선택하세요");
             return false;
         }
+        <%--if(uBirth === ''){--%>
+        <%--    uBirth = ${user.getUBirth()}--%>
+        <%--}--%>
         //전화번호 정규식
         // let result1 = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
         // if(!result1.test(uPhone)){
@@ -187,7 +200,6 @@
             formData.append(form[i].name,form[i].value);
         }
         formData.append("mf",file[0]);
-        debugger;
         $.ajax({
             url : '/user/modify.ajx',
             method : 'POST',

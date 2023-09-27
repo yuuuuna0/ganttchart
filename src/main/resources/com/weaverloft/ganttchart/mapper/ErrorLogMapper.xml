@@ -6,7 +6,7 @@
         <selectKey keyProperty="errorNo" resultType="java.lang.Integer" order="BEFORE">
             select errorlog_error_no_seq.nextval from dual
         </selectKey>
-        insert into APPLY(ERROR_NO, ERROR_DESC, ERROR_DATE, ERROR_LOCATION)
+        insert into ErrorLog(ERROR_NO, ERROR_DESC, ERROR_DATE, ERROR_LOCATION)
                VALUES(#{errorNo},#{errorDesc},sysdate,#{errorLocation})
     </insert>
 

@@ -1,12 +1,11 @@
 package com.weaverloft.ganttchart.controller;
 
 import com.weaverloft.ganttchart.Service.ApplyService;
+import com.weaverloft.ganttchart.controller.annotation.HostCheck;
+import com.weaverloft.ganttchart.controller.annotation.LoginCheck;
 import com.weaverloft.ganttchart.dto.Apply;
-import com.weaverloft.ganttchart.dto.Users;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +19,8 @@ public class ApplyController {
 
 
     //1. 모임 신청여부 변경하기
+    @HostCheck
+    @LoginCheck
     @ResponseBody
     @PostMapping(value = "/change.ajx")  //리턴타입 void?
     public Map<String,Object> changeApply( Apply apply){

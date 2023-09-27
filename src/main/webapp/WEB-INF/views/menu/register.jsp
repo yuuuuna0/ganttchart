@@ -53,12 +53,12 @@
                                             <input type="text" class="form-control" id="menuUrl" name="menuUrl"   />
                                         </div>
                                         <div class="form-group col-6">
-                                                <label for="uTypeNo">사용등급</label>
-                                                <select class="form-control" id="uTypeNo" name="uTypeNo">
-                                                    <option value="1" disabled selected></option>
-                                                    <option value="0">관리자</option>
-                                                    <option value="2">주최자</option>
-                                                    <option value="1">사용자</option>
+                                                <label for="auth">사용등급</label>
+                                                <select class="form-control" id="auth" name="auth">
+                                                    <option value="ROLE_USER" disabled selected></option>
+                                                    <option value="ROLE_ADMIN">관리자</option>
+                                                    <option value="ROLE_HOST">주최자</option>
+                                                    <option value="ROLE_USER">사용자</option>
                                                 </select>
                                         </div>
                                         <div class="form-group col-12">
@@ -103,7 +103,7 @@
         let menuTitle = $('#menuTitle').val();
         let menuDesc = $('#menuDesc').val();
         let menuUrl = $('#menuUrl').val();
-        let uTypeNo = $('#uTypeNo option:selected').val();
+        let auth = $('#auth option:selected').val();
 
 
         if(orders === ''){
@@ -125,7 +125,7 @@
             return false;
         }
         $.ajax({
-            url : '/menu/register.ajx',
+            url : '/admin/menu/register.ajx',
             method : 'POST',
             data :{
                 'menuTitle' : menuTitle,
@@ -133,7 +133,7 @@
                 'menuUrl' : menuUrl,
                 'parentId' : parentId,
                 'orders' : orders,
-                'uTypeNo' : uTypeNo
+                'auth' : auth
             },
             success: function(resultMap){
                 if(resultMap.code ===1){

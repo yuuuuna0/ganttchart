@@ -81,7 +81,6 @@
     let maxCount = 5;     // 최대 첨부 갯수
     let fileArray = [];
     let fileArray2 = [];
-    let dataTransfer = new DataTransfer();  //array를 file로 변경하여 서버로 보내게 해줌
     function changeView(){
         $('#fileList').empty();
         let html = '';

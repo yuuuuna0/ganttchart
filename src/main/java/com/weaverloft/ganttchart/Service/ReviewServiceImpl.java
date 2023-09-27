@@ -36,4 +36,17 @@ public class ReviewServiceImpl implements ReviewService{
         }
         return reviewList;
     }
+
+    @Override
+    public int findCurNo() throws Exception {
+        return reviewDao.findCurNo();
+    }
+
+    @Override
+    public Review findReviewByReviewNo(int reviewNo) throws Exception {
+        Review review = reviewDao.findReviewByReviewNo(reviewNo);
+        List<Files> fileList = filesDao.findFileByReviewNo(review.getReviewNo());
+        review.setFileList(fileList);
+        return review;
+    }
 }

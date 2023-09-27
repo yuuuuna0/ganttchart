@@ -7,6 +7,7 @@ import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.SearchDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,5 +68,15 @@ public class BoardServiceImpl implements BoardService{
         List<Board> boardList = boardDao.findBoardList2(pageMaker.getContentBegin(),pageMaker.getContentEnd(),keyword,filterType,ascDesc);
         SearchDto<Board> searchBoardList = new SearchDto<Board>(boardList,pageMaker,totBoardCount);
         return searchBoardList;
+    }
+
+    @Override
+    public int countNewBoardPerDay(Date time) throws Exception {
+        return boardDao.countNewBoardPerDay(time);
+    }
+
+    @Override
+    public int deleteBoard(int boardNo) throws Exception {
+        return boardDao.deleteBoard(boardNo);
     }
 }

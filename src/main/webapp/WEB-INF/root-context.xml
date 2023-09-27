@@ -22,37 +22,6 @@
         <constructor-arg ref="hikariConfig"/>
     </bean>
 
-    <!-- 배치  -->
-    <!-- create job-meta tables automatically -->
-<!--    <jdbc:initialize-database data-source="dataSource">-->
-<!--        <jdbc:script-->
-<!--                location="org/springframework/batch/core/schema-drop-sqlite.sql" />-->
-<!--        <jdbc:script location="org/springframework/batch/core/schema-sqlite.sql" />-->
-<!--    </jdbc:initialize-database>-->
-
-    <!-- stored job-meta in memory -->
-    <!--
-    <bean id="jobRepository"
-      class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
-        <property name="transactionManager" ref="transactionManager" />
-    </bean>
-    -->
-
-<!--    &lt;!&ndash; stored job-meta in database &ndash;&gt;-->
-<!--    <bean id="jobRepository"-->
-<!--          class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">-->
-<!--        <property name="dataSource" ref="dataSource" />-->
-<!--        <property name="transactionManager" ref="transactionManager" />-->
-<!--        <property name="databaseType" value="sqlite" />-->
-<!--    </bean>-->
-
-<!--    <bean id="transactionManager" class=-->
-<!--            "org.springframework.batch.support.transaction.ResourcelessTransactionManager" />-->
-
-<!--    <bean id="jobLauncher"-->
-<!--          class="org.springframework.batch.core.launch.support.SimpleJobLauncher">-->
-<!--        <property name="jobRepository" ref="jobRepository" />-->
-<!--    </bean>-->
 
     <!-- Mysql <-> Mybatis를 연결해주는 객체 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

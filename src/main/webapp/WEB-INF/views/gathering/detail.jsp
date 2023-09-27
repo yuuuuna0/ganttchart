@@ -27,7 +27,7 @@
                                     <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-light"
                                            onclick="location.href='/gathering/delete.action?gathNo=${gath.gathNo}'" value="삭제">
                                 </c:if>
-                                <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.getUTypeNo() == 1}">
+                                <c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.auth == 'ROLE_USER'}">
                                     <input type="button" id="gathApplyBtn" name="gathApplyBtn"
                                            class="btn btn-primary mr-2"
                                            onclick="applyGath(${gath.gathNo})" value="신청하기">
@@ -39,7 +39,7 @@
                         <div class="form-group row">
                             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-indicators">
-                                    <c:forEach items="${fileList}" varStatus="no">
+                                    <c:forEach items="${gath.fileList}" varStatus="no">
                                         <c:choose>
                                         <c:when test="${no.index == 0}">
                                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${no.index}" class="active" aria-current="true" aria-label="Slide ${no.index}"></button>
@@ -51,7 +51,7 @@
                                     </c:forEach>
                                 </div>
                                 <div class="carousel-inner">
-                                    <c:forEach items="${fileList}" var="file">
+                                    <c:forEach items="${gath.fileList}" var="file">
                                     <div class="carousel-item active">
                                         <img src="/upload/gathering/${file.saveName}" style="width: 50%; height: 500px;  object-fit: cover;" class="d-block w-100" alt="...">
                                     </div>
@@ -162,8 +162,10 @@
                             <tbody id="applyTbody">
                             <c:forEach items="${applyList}" var="apply">
                                 <tr style="cursor: pointer;" onmouseover="this.style.background='gray'" onmouseout="this.style.background='white'">
-                                    <td>${apply.gathNo}</td>
-                                    <td>${apply.users.fileNo}</td>
+                                    <td>${apply.applyNo}</td>
+                                    <td>
+                                        <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/upload/user/${apply.users.file.saveName}"/>
+                                    </td>
                                     <td>${apply.users.getUId()}</td>
                                     <td>${apply.users.getUName()}</td>
                                     <td><fmt:formatDate value="${apply.users.getUBirth()}" pattern="yyyy. MM. dd."/></td>
@@ -175,11 +177,6 @@
                                             <option value="2" ${apply.applyStatusNo == 2 ? 'selected' : ''}>승인완료</option>
                                             <option value="3" ${apply.applyStatusNo == 3 ? 'selected' : ''}>거절</option>
                                         </select>
-<%--                                        <c:choose>--%>
-<%--                                            <c:when test="${apply.applyStatusNo== 1}">대기중</c:when>--%>
-<%--                                            <c:when test="${apply.applyStatusNo == 2}">승인완료</c:when>--%>
-<%--                                            <c:when test="${apply.applyStatusNo == 3}">거절</c:when>--%>
-<%--                                        </c:choose>--%>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -194,10 +191,22 @@
                     <div class="card-body">
                         <h4 class="card-title">후기</h4>
                             <div class="form-group">
-                                <label for="reviewFileList">사진</label>
-                                <div id="reviewFileList">
-                                    <c:forEach items="${reviewFileList}" var="reviewFile">
-                                        <img src="/upload/review/${reviewFile.saveName}"
+                                <label for="reviewList"></label>
+                                <div id="reviewList">
+                                    <c:forEach items="${reviewList}" var="review">
+                                        <div class="form-group row" id="reviewNo${review.reviewNo}">
+                                            <div class="col-2">
+                                            ${review.getUId()}<span class="ml-3"><fmt:formatDate value="${review.reviewDate}" pattern="yyyy. MM. dd."/></span>
+                                                <span>${review.reviewRating}점</span>
+                                                <br>
+                                            ${review.reviewContent}
+                                            </div>
+                                            <c:forEach items="${review.fileList}" var="file">
+                                            <div class="col-2">
+                                                <img src="/upload/review/${file.saveName}">
+                                            </div>
+                                            </c:forEach>
+                                        </div>
                                     </c:forEach>
                                 </div>
                             </div>
@@ -273,6 +282,7 @@
     function changeStatus(no){
         let applyStatusNo = $('#applyStatusNo option:selected').val();
         let gathNo = ${gath.gathNo};
+        debugger;
         $.ajax({
             url : '/gathering/apply/change.ajx',
             method : 'POST',

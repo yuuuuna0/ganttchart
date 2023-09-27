@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weaverloft.ganttchart.mapper.AllLogMapper">
+<!--    &lt;!&ndash; 1. 로그 남기기 &ndash;&gt;-->
+<!--    <insert id="createLog" parameterType="java.util.Map">-->
+<!--        <selectKey resultType="java.lang.Integer" keyProperty="logNo" order="BEFORE">-->
+<!--            select USERS_LOG_LOG_NO_SEQ.nextval from DUAL-->
+<!--        </selectKey>-->
+<!--        insert into USERS_LOG(log_no, log_date, log_status,id)-->
+<!--        values (#{logNo},sysdate,#{logStatus},#{id})-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 2. 로그 전체 수 &ndash;&gt;-->
+<!--    <select id="findUsersLogCount" resultType="java.lang.Integer">-->
+<!--        select count(*) from USERS_LOG-->
+<!--        where 1=1-->
+<!--        <if test="keyword !=null">-->
+<!--            and id like '%'||#{keyword}||'%' or LOG_STATUS like '%'||#{keyword}||'%'-->
+<!--        </if>-->
+<!--    </select>-->
+<!--    &lt;!&ndash; 3. 로그리스트 출력 -> 페이징, 검색 &ndash;&gt;-->
+<!--    <select id="findUserLog" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.UsersLog">-->
+<!--        select  *-->
+<!--        from (  select rownum idx, ul.*-->
+<!--        from (  select *-->
+<!--        from USERS_LOG-->
+<!--        order by LOG_NO desc ) ul-->
+<!--        where 1=1-->
+<!--        <if test="keyword !=null">-->
+<!--            and ul.id like '%'||#{keyword}||'%' or ul.LOG_STATUS like '%'||#{keyword}||'%'-->
+<!--        </if>)-->
+<!--        <![CDATA[ where idx >= #{pageBegin} and idx <= #{pageEnd} ]]>-->
+<!--        order by LOG_DATE desc-->
+<!--    </select>-->
+<!--    &lt;!&ndash;    &lt;!&ndash; 4. 1주일동안 인증완료로 안 바뀐 아이디 찾기 (logStatus가 1주일동안 0->1 안변한) &ndash;&gt;&ndash;&gt;-->
+<!--    &lt;!&ndash;    <select id="findUnAuthUsers" resultType="java.lang.String">&ndash;&gt;-->
+<!--    &lt;!&ndash;        select id&ndash;&gt;-->
+<!--    &lt;!&ndash;        from USERS_LOG&ndash;&gt;-->
+<!--    &lt;!&ndash;        where LOG_STATUS=0&ndash;&gt;-->
+<!--    &lt;!&ndash;        <![CDATA[ and log_date <= sysdate-7]]>&ndash;&gt;-->
+<!--    &lt;!&ndash;          AND NOT EXISTS (&ndash;&gt;-->
+<!--    &lt;!&ndash;                        SELECT *&ndash;&gt;-->
+<!--    &lt;!&ndash;                        FROM USERS_LOG&ndash;&gt;-->
+<!--    &lt;!&ndash;                        WHERE LOG_STATUS = 1&ndash;&gt;-->
+<!--    &lt;!&ndash;                        )&ndash;&gt;-->
+<!--    &lt;!&ndash;    </select>&ndash;&gt;-->
+<!--    &lt;!&ndash; 5. 60일동안 로그인 안 한 아이디 찾기 (logStatus 10인지 60일이 지난 아이디)  &ndash;&gt;-->
+<!--    <select id="findDormacyUsers" resultType="java.lang.String">-->
+<!--        select ul.id, ul.log_no, ul.log_status, ul.log_date-->
+<!--        from (-->
+<!--                 select id, max(log_no) log_no-->
+<!--                 from(-->
+<!--                         select *-->
+<!--                         from users_log-->
+<!--                         where log_status=10-->
+<!--                         order by log_no desc)-->
+<!--                 group by id) a-->
+<!--                 join users_log ul on a.log_no =ul.log_no-->
+<!--        <![CDATA[ where ul.log_date <= sysdate-60]]>-->
+<!--    </select>-->
+<!--    &lt;!&ndash; 6. 하루 XXX 수    &ndash;&gt;-->
+<!--    <select id="countPersonPerDay" parameterType="java.util.Map" resultType="java.lang.Integer">-->
+<!--        select count(*) from USERS_LOG where LOG_STATUS = ${logStatus}-->
+<!--                                         and TO_CHAR(log_date, 'YYYY-MM-DD') = TO_CHAR(#{logDate}, 'YYYY-MM-DD')-->
+<!--    </select>-->
+
+</mapper>
+

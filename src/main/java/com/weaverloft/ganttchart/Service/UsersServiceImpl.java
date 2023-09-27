@@ -1,14 +1,18 @@
 package com.weaverloft.ganttchart.Service;
 
+import com.weaverloft.ganttchart.dao.FilesDao;
 import com.weaverloft.ganttchart.dao.UsersDao;
+import com.weaverloft.ganttchart.dto.Files;
 import com.weaverloft.ganttchart.dto.Users;
 import com.weaverloft.ganttchart.util.PageMaker;
 import com.weaverloft.ganttchart.util.SearchDto;
 import io.micrometer.core.instrument.search.Search;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,16 +20,21 @@ import java.util.regex.Pattern;
 @Service
 public class UsersServiceImpl implements UsersService{
     private UsersDao usersDao;
+    private FilesDao filesDao;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UsersServiceImpl(UsersDao usersDao) {
+    public UsersServiceImpl(UsersDao usersDao,FilesDao filesDao) {
         this.usersDao = usersDao;
+        this.filesDao = filesDao;
     }
 
     @Override
     public Users findUserById(String id) throws Exception {
-        return usersDao.findUserById(id);
+        Users user = usersDao.findUserById(id);
+        Files file = filesDao.findFileByNo(user.getFileNo());
+        user.setFile(file);
+        return user;
     }
 
     @Override
@@ -91,7 +100,15 @@ public class UsersServiceImpl implements UsersService{
 
     @Override
     public List<Users> findUserList() throws Exception {
-        return usersDao.findUserList();
+        List<Users> usersList = usersDao.findUserList();
+        List<Users> usersList2 = new ArrayList<>();
+        for(int i=0;i<usersList.size();i++){
+            Users user =usersList.get(i);
+            Files file = filesDao.findFileByNo(user.getFileNo());
+            user.setFile(file);
+            usersList2.add(user);
+        }
+        return usersList2;
     }
 
 

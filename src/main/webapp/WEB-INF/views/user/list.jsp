@@ -22,7 +22,7 @@
                                     <ul class="col-3 right">
                                         <li class="nav-item nav-search d-none d-lg-block">
                                             <div class="input-group">
-                                                <div class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchUserList(1)"  style="cursor: pointer;">
+                                                <div class="input-group-prepend hover-cursor" id="searchBtn" onclick="searchUser(1,'','')"  style="cursor: pointer;">
                                                     <span class="input-group-text" id="search">
                                                         <i class="icon-search"></i>
                                                     </span>
@@ -38,32 +38,32 @@
                                         <tr>
                                             <th>아이디
                                                 <span>
-                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_id','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_id','desc')">
+                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_id','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_id','desc')">
                                                 </span>
                                             </th>
                                             <th>회원등급
                                                 <span>
-                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_type_no','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_type_no','desc')">
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_type_no','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_type_no','desc')">
                                                 </span>
                                             </th>
                                             <th>이름
                                                 <span>
-                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_name','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_name','desc')">
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_name','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_name','desc')">
                                                 </span>
                                             </th>
                                             <th>생일
                                                 <span>
-                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_birth','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_birth','desc')">
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_birth','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_birth','desc')">
                                                 </span>
                                             </th>
                                             <th>성별
                                                 <span>
-                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_gender','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_gender','desc')">
+                                                <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_gender','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_gender','desc')">
                                                 </span>
                                             </th>
                                             <th>전화번호</th>
@@ -71,8 +71,8 @@
                                             <th>주소</th>
                                             <th>가입일
                                                 <span>
-                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser('u_create_date','asc')">
-                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser('u_create_date','desc')">
+                                                 <img src="/static/images/icons/triangleUp.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_create_date','asc')">
+                                                <img src="/static/images/icons/triangleDown.png" style="width:10px;height: 5px;" onclick="sortUser(1,'u_create_date','desc')">
                                                 </span>
                                             </th>
                                         </tr>
@@ -106,7 +106,7 @@
                                                 <!-- preview -->
                                                 <c:if test="${searchUserList.pageMaker.blockBegin != 1}">
                                                     <li class="page-item">
-                                                        <button  class="page-link" value="${searchUserList.pageMaker.prevBlockBegin}" onclick="searchUserList(${searchUserList.pageMaker.prevBlockBegin})" aria-label="Previous">
+                                                        <button  class="page-link" value="${searchUserList.pageMaker.prevBlockBegin}" onclick="searchUser(${searchUserList.pageMaker.prevBlockBegin},'','')" aria-label="Previous">
                                                             <span aria-hidden="true">&laquo;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </button>
@@ -116,18 +116,18 @@
                                                 <c:forEach begin="${searchUserList.pageMaker.blockBegin}" end="${searchUserList.pageMaker.blockEnd}" var="no">
                                                     <c:if test="${no == searchUserList.pageMaker.curPage}">
                                                         <li class="page-item active">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchUser(${no},'','')">${no}</button>
                                                         </li>
                                                     </c:if>
                                                     <c:if test="${no != searchUserList.pageMaker.curPage}">
                                                         <li class="page-item">
-                                                            <button class="page-link" value="${no}" onclick="searchUserList(${no})">${no}</button>
+                                                            <button class="page-link" value="${no}" onclick="searchUser(${no},'','')">${no}</button>
                                                         </li>
                                                     </c:if>
                                                 </c:forEach>
                                                 <c:if test="${searchUserList.pageMaker.blockEnd!=1 && searchUserList.pageMaker.blockEnd <= searchUserList.pageMaker.totPage}">
                                                     <li class="page-item">
-                                                        <button class="page-link" value="${searchUserList.pageMaker.nextBlockBegin}" onclick="searchUserList(${searchUserList.pageMaker.nextBlockBegin})" aria-label="Next">
+                                                        <button class="page-link" value="${searchUserList.pageMaker.nextBlockBegin}" onclick="searchUser(${searchUserList.pageMaker.nextBlockBegin},'','')" aria-label="Next">
                                                             <span aria-hidden="true">&raquo;</span>
                                                             <span class="sr-only">Next</span>
                                                         </button>
@@ -154,51 +154,31 @@
     // 검색창 입력 후 엔터키 => 검색
     $("#searchBtn").keyup(e => {
         if (e.keyCode === 13) {
-            searchUserList(1);
+            searchUser(1,'','');
             e.preventDefault();
         }
     });
     // 회원 검색하기 ---> 검색후 페이지까지 들어가는데 버튼이 안먹는중,,,
-    function searchUserList(no){
-        let pageNo = no;
+    let filterType;
+    let ascDesc;
+    // 게시글 검색하기
+    function searchUser(no,filterType2,ascDesc2){
         let keyword = $('#keyword').val();
-        $.ajax({
-            url : '/user/list.ajx',
-            method : 'POST',
-            data : {
-                'pageNo' : pageNo,
-                'keyword' : keyword,
-            },
-            success : function (resultMap){
-                console.log("여기로 돌아온 상태");
-                console.log(resultMap);
-                debugger;
-                window.location.href="/user/list?pageNo="+resultMap.pageNo+"&keyword="+resultMap.keyword+"&filterType="+resultMap.filterType+"&ascDesc"+resultMap.ascDesc;
-            },
-            error : function (e){
-                console.log(e);
-            }
-        });
+        let pageNo = no;
+        filterType = "";
+        ascDesc ="";
+        if(filterType2 !== ""){
+            filterType = filterType2;
+        }
+        if(ascDesc2 !== ""){
+            ascDesc = ascDesc2;
+        }
+        window.location.href='/admin/user/list?pageNo='+pageNo+'&keyword='+keyword+"&filterType="+filterType+"&ascDesc="+ascDesc;
     }
+
     function goToDetail(id){
         let uId = id;
         window.location.href='/user/detail?uId='+uId;
     }
 
-    function sortUser(filterTypeStr, ascDescStr){
-        let filterType = filterTypeStr;
-        let ascDesc = ascDescStr;
-        let keyword = $('#keyword').val();
-        let pageNo = 1;
-        $.ajax({
-            url : '/user/list',
-            method : 'GET',
-            data : {
-                'pageNo' : pageNo,
-                'keyword' : keyword,
-                'filterType' : filterType,
-                'ascDesc' : ascDesc
-            }
-        });
-    }
 </script>

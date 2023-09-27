@@ -13,23 +13,30 @@
             and (menu_title like '%'||#{keyword}||'%' or menu_desc like '%'||#{keyword}||'%' or menu_url like '%'||#{keyword}||'%')
         </if>
     </select>
+
+
+
 <!--2-2. 전처리된 메뉴리스트 찾기    -->
     <select id="findMenuList2" parameterType="java.util.Map" resultType="com.weaverloft.ganttchart.dto.Menu">
         select *
         from(select rownum idx, m.*
         from (select *
         from menu
-        order by menu_no) m
+        ORDER BY menu_no asc
+        <if test="filterType != null  and filterType != ''">
+            ,${filterType} ${ascDesc}
+        </if>) m
         where 1=1
-        <if test="keyword != null">
+        <if test="keyword != null and keyword != ''">
             and (menu_title like '%'||#{keyword}||'%' or menu_desc like '%'||#{keyword}||'%' or menu_url like '%'||#{keyword}||'%')
-        </if>
-        <if test="filterType != null">
-            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
         </if>
         ) afterm
         <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+
     </select>
+
+
+
 <!--1-1. 번호로 메뉴 찾기    -->
     <select id="findMenuByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Menu">
         select * from menu where menu_no=#{menuNo}
@@ -69,8 +76,8 @@
         where menu_no=#{menuNo}
     </update>
 <!--6. 사용등급 변경    -->
-    <update id="updateMenuUType" parameterType="java.util.Map">
-        update menu set auth=#{suth} where menu_no=#{menuNo}
+    <update id="updateMenuAuth" parameterType="java.util.Map">
+        update menu set auth=#{auth} where menu_no=#{menuNo}
     </update>
 <!--7. 메뉴 삭제    -->
     <delete id="deleteMenu" parameterType="java.lang.Integer">

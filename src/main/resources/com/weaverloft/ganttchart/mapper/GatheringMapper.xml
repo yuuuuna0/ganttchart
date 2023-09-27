@@ -31,7 +31,10 @@
         from(select rownum idx, g.*
         from (select *
         from gathering
-        order by gath_no) g
+        ORDER BY gath_no
+        <if test="filterType != null  and filterType != ''">
+            ,${filterType} ${ascDesc}
+        </if>) g
         where not gath_status_no=99
         <if test="keyword != null">
             and (u_id like '%'||#{keyword}||'%' or gath_title like '%'||#{keyword}||'%' or gath_desc like '%'||#{keyword}||'%')
@@ -45,11 +48,9 @@
         <if test="gathStatusNo != 0">
             and gath_status_no=#{gathStatusNo}
         </if>
-        <if test="filterType != null">
-            <![CDATA[ORDER BY #{filterType} #{ascDesc}]]>
-        </if>
         ) afterg
         <![CDATA[ where idx >= #{contentBegin} and idx <= #{contentEnd} ]]>
+
     </select>
 <!--2. 번호로 모임 찾기    -->
     <select id="findGathByNo" parameterType="java.lang.Integer" resultType="com.weaverloft.ganttchart.dto.Gathering">

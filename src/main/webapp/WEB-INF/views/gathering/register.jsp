@@ -185,12 +185,26 @@
     function addFile(){
         //1.파일 갯수 확인
         fileArray2 = $('#gathFileList')[0].files;
+        //확장자 검사
+
+        for(let i=0;i<fileArray2.length;i++){
+            let str = fileArray2[i].name;       //for문 변수 중복선언됨
+            var fileName = str.split('\\').pop().toLowerCase();
+            var ext =  fileName.split('.').pop().toLowerCase();
+            let allowedExt = ['jpg', 'png', 'jpeg', 'gif','bmp'];
+            if(allowedExt.indexOf(ext) === -1){
+                alert(ext+'파일은 업로드 하실 수 없습니다.');
+                return false;
+            }
+        }
+
         if(fileCount + fileArray2.length > maxCount){
             alert("파일은 최대 "+maxCount+"개까지 업로드 할 수 있습니다.");
             return;
-        } else {
-            fileCount = fileCount + fileArray2.length;
         }
+            fileCount = fileCount + fileArray2.length;
+
+
         //fileArray = $('#gathFileList')[0].files;
         for(let i = 0 ; i < fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
@@ -209,7 +223,7 @@
         for(let i=0 ; i<fileArray2.length ; i++){
             fileArray.push(fileArray2[i]);
         }
-        console.log(fileArray);
+        --fileCount;        //--변수 || 변수-- 차리
         fileArray2=[];
         changeView();
     }
@@ -219,7 +233,6 @@
     function gathWrite() {
         insertContent();    //스마트에디터
         console.log(gathDesc);
-        debugger;
         let gathTitle = $('#gathTitle').val();
         gathDesc = $('#gathDesc').val();
         let gathAddr = $('#gathAddr').val();
@@ -284,7 +297,7 @@
         for(let i=0;i<form.length;i++){
             formData.append(form[i].name,form[i].value);
         }
-        formData.append("gathDesc",gathDesc);   //스마트에디터로 붙였기 때문에 form이 아니라 따로 붙여준다
+        //formData.append("gathDesc",gathDesc);   //스마트에디터로 붙였기 때문에 form이 아니라 따로 붙여준다
         for (var i = 0; i < fileArray.length; i++) {
             formData.append("mfList", fileArray[i]);
         }
