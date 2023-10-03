@@ -26,8 +26,8 @@
                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="이메일을 입력하세요">
                                 </div>
                                 <input id="findIdBtn" type="button" onclick="modifyPassword();" class="btn btn-primary mr-2" value="비밀번호 변경">
-                                <input type="button" id="cancelBtn" onclick="location.href='/user/logout.action'" class="btn btn-light" value="취소">
-                                <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
+                                <input type="button" id="cancelBtn" onclick="location.href='/logout.action'" class="btn btn-light" value="취소">
+                                <a href="/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                             </form>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
             return false;
         }
         $.ajax({
-            url : '/user/modifyPassword.ajx',
+            url : '/modifyPassword.ajx',
             method : 'post',
             data : {
                 'uPassword' : uPassword

@@ -5,6 +5,7 @@ import com.weaverloft.ganttchart.controller.annotation.HostCheck;
 import com.weaverloft.ganttchart.controller.annotation.LoginCheck;
 import com.weaverloft.ganttchart.dto.*;
 import com.weaverloft.ganttchart.util.EmailService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user/*")
+@Log4j2
 public class UserController {
     private UsersService usersService;
     private FilesService filesService;
@@ -50,7 +51,7 @@ public class UserController {
     public String registerPage(Model model) {
         String forwardPath = "";
         try {
-            forwardPath = "/user/register";
+            forwardPath = "/register";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,7 +111,7 @@ public class UserController {
             if (result == 1) {
                 code = 1;
                 msg = "가입하신 이메일로 인증번호가 전송되었습니다.";
-                forwardPath = "/user/login";
+                forwardPath = "/login";
                 //5) 사진 업로드 --- > !!!!code 2일 떄 파일이 올라가게 됨
                 if (mf != null) {
                     System.out.println("사진있음");
@@ -140,17 +141,27 @@ public class UserController {
         return resultMap;
     }
 
-    //2. 로그인 페이지
+    //2. 로그인 페이지 --> 시큐리티에 넘기기?
     @GetMapping("/login")
-    public String loginPage() {
-        String forwardPath = "";
-        try {
-            forwardPath = "/user/login";
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void loginPage(String error, String logout, Model model){
+        log.info("error" + error);
+        log.info("logout" + logout);
+        if(error != null){
+            model.addAttribute("error","로그인에러");
         }
-        return forwardPath;
+        if(logout != null){
+            model.addAttribute("logout","로그아웃");
+        }
     }
+//    public String loginPage() {
+//        String forwardPath = "";
+//        try {
+//            forwardPath = "/login";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return forwardPath;
+//    }
 
     //2-1. 로그인액션 AJAX
     @ResponseBody
@@ -174,7 +185,7 @@ public class UserController {
                     switch (user.getUStatusNo()) {
                         case 1:     //이메일 인증 전
                             code = 2;
-                            forwardPath = "/user/emailAuth";
+                            forwardPath = "/emailAuth";
                             break;
                         case 2:     //이메일 인증 후
                             code = 1;
@@ -182,7 +193,7 @@ public class UserController {
                             break;
                         case 3:     //임시비번상태
                             code = 3;
-                            forwardPath = "/user/modifyPassword";
+                            forwardPath = "/modifyPassword";
                             break;
                         case 98:    //휴면계정 --> 어떻게 처리할지?
                             code = 98;
@@ -205,17 +216,20 @@ public class UserController {
 
     //2-2. 로그아웃 액션
     @LoginCheck
-    @RequestMapping("/logout.action")
-    public String logoutAction(HttpSession session) {
-        String forwardPath = "";
-        try {
-            session.invalidate();
-            forwardPath = "redirect:/";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return forwardPath;
+    @GetMapping("/logout.action")
+    public void logoutAction(){
+        log.info("로그아웃액션!!");
     }
+//    public void logoutAction() {
+//        String forwardPath = "";
+//        try {
+//            session.invalidate();
+//            forwardPath = "redirect:/";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return forwardPath;
+//    }
 
     //3. 이메일 인증 페이지
     @LoginCheck
@@ -223,7 +237,7 @@ public class UserController {
     public String emailAuthPage(Model model) {
         String forwatdPath = "";
         try {
-            forwatdPath = "/user/emailAuth";
+            forwatdPath = "/emailAuth";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,7 +278,7 @@ public class UserController {
     public String findIdPage(Model model) {
         String forwardPath = "";
         try {
-            forwardPath = "/user/findId";
+            forwardPath = "/findId";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -303,7 +317,7 @@ public class UserController {
     public String findPasswordPage(Model model) {
         String forwardPath = "";
         try {
-            forwardPath = "/user/findPassword";
+            forwardPath = "/findPassword";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -330,7 +344,7 @@ public class UserController {
                     usersService.updatePassword(uId, tempPassword);
                     usersService.updateUStatusNo(uId, 3);
                     msg = "가입하신 이메일로 임시비밀번호가 전송되었습니다.";
-                    forwardPath = "/user/login";
+                    forwardPath = "/login";
                 } else {
                     code = 2;
                     msg = "입력하신 정보와 일치하는 회원이 존재하지 않습니다.";
@@ -353,7 +367,7 @@ public class UserController {
     public String modifyPasswordPage(Model model) {
         String forwardPath = "";
         try {
-            forwardPath = "/user/modifyPassword";
+            forwardPath = "/modifyPassword";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -374,7 +388,7 @@ public class UserController {
             usersService.updatePassword(loginUser.getUId(), uPassword);
             usersService.updateUStatusNo(loginUser.getUId(), 2);
             code = 1;
-            forwardPath = "/user/logout.action";
+            forwardPath = "/logout.action";
         } catch (Exception e) {
             e.printStackTrace();
             code = 99;
@@ -396,7 +410,7 @@ public class UserController {
             Files file = filesService.findFileByNo(user.getFileNo());
             model.addAttribute("file", file);
             model.addAttribute("user", user);
-            forwardPath = "/user/detail";
+            forwardPath = "/detail";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -413,7 +427,7 @@ public class UserController {
             Files file = filesService.findFileByNo(user.getFileNo());
             model.addAttribute("user", user);
             model.addAttribute("file", file);
-            forwardPath = "/user/modify";
+            forwardPath = "/modify";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -452,7 +466,7 @@ public class UserController {
             int result = usersService.updateUser(user);
             if (result == 1) {
                 code = 1;
-                forwardPath = "/user/detail?uId=" + user.getUId();
+                forwardPath = "/detail?uId=" + user.getUId();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -472,7 +486,7 @@ public class UserController {
         String forwardPath = "";
         try {
             Users user = (Users) session.getAttribute("loginUser");
-            forwardPath = "/user/logout.action";
+            forwardPath = "/logout.action";
             int result = usersService.withdrawalUser(user.getUId(), 99);
         } catch (Exception e) {
             e.printStackTrace();

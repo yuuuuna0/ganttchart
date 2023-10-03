@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
+@Component
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
-public class UserType {
-    private int uTypeNo;
-    private String uType;
+public class Roles {
+    private String authority;
+    private String roleName;
 }

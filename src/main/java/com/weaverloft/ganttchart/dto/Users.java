@@ -5,9 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Component
@@ -26,11 +33,11 @@ public class Users {
     private Date uCreateDate;
     private String uAddress;
     private String uAddress2;
-    private String auth;
     private int uStatusNo;
     private int fileNo;
     private String uAuthCode;
     private int enabled;
 
     private Files file;
+    private List<Authorities> authList;
 }

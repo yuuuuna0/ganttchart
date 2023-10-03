@@ -2,45 +2,64 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <context:component-scan base-package="com.weaverloft.ganttchart"/>
 
     <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    <bean id="customAccessDenied" class="com.weaverloft.ganttchart.security.CustomAccessDeniedHandler" />
+    <bean id="customLoginSuccess" class="com.weaverloft.ganttchart.security.CustomLoginSuccessHandler" />
+    <bean id="customUsersService" class="com.weaverloft.ganttchart.security.CustomUserDetailService"/>
+
     <security:http auto-config="true" use-expressions="true">
         <!-- 아래의 순서 중요함! permitAll을 맨 위로 올리면 필터링 없이 다 들어가짐  -->
-        <security:intercept-url pattern="/host/**" access="hasAnyRole('ROLE_HOST','ROLE_ADMIN')"/>
-        <security:intercept-url pattern="/user/**" access="hasAnyRole('ROLE_USER','ROLE_HOST','ROLE_ADMIN')"/>
+<!--        <security:intercept-url pattern="/host/**" access="hasAnyRole('ROLE_HOST','ROLE_ADMIN')"/>-->
+        <security:intercept-url pattern="/user/**" access="hasAnyRole('ROLE_USER')"/>
         <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <security:intercept-url pattern="/**" access="permitAll"/>
 
-            <security:form-login
-                username-parameter="u_id"
-                password-parameter="u_password"
-                login-processing-url="/user/login.ajx"
-                login-page="/user/login"
-                authentication-failure-url="/login?error=1"
-            />
-            <security:logout
-                logout-url="/user/logout.action"
-                logout-success-url="/"
-                delete-cookies=""
-            />
-<!--    한 개 이상의 세션 생성되지 않게 하며 더 생    -->
-        <security:session-management invalid-session-url="/user/login">
-            <security:concurrency-control max-sessions="1" expired-url="/user/login"
-                                          error-if-maximum-exceeded="true"/>
-        </security:session-management>
+        <security:form-login login-page="/login"
+                             login-processing-url="/login.ajx"
+                             authentication-success-handler-ref="customLoginSuccess"/>
+        <security:logout logout-url="/logout.action"
+                         logout-success-url="/"
+                         invalidate-session="true"/>
+        <security:access-denied-handler ref="customAccessDenied"/>
     </security:http>
 
-
     <security:authentication-manager>
-        <security:authentication-provider>
+        <security:authentication-provider user-service-ref="customUsersService">
             <security:password-encoder ref="bcryptPasswordEncoder"/>
-            <security:jdbc-user-service data-source-ref="dataSource"
-            users-by-username-query="SELECT U_ID,U_PASSWORD,ENABLED FROM USERS WHERE U_ID=?"
-            authorities-by-username-query="SELECT U_ID,U_PASSWORD,U_TYPE_NO as authority FROM USERS WHERE U_ID=?"/>
+<!--            <security:jdbc-user-service data-source-ref="dataSource"-->
+<!--                users-by-username-query="SELECT U_ID,U_PASSWORD,ENABLED from USERS WHERE U_ID=?"-->
+<!--                authorities-by-username-query="SELECT U_ID,U_PASSWORD,ROLE"-->
+<!--            />-->
+<!--            <security:user-service>-->
+<!--                <security:user name="admin" password="{noop}admin1!"-->
+<!--                      authorities="ROLE_USER, ROLE_ADMIN" />-->
+<!--                <security:user name="user1" password="{noop}user1!" authorities="ROLE_USER" />-->
+<!--            </security:user-service>-->
+
         </security:authentication-provider>
     </security:authentication-manager>
+
+
+
+
+<!--    <security:authentication-manager>-->
+<!--        <security:authentication-provider>-->
+<!--            <security:password-encoder ref="bcryptPasswordEncoder"/>-->
+<!--            <security:jdbc-user-service data-source-ref="dataSource"/>-->
+<!--            users-by-username-query="SELECT U_ID,U_PASSWORD,ENABLED FROM USERS WHERE U_ID=?"-->
+<!--            authorities-by-username-query="SELECT U_ID,U_PASSWORD,U_TYPE_NO as authority FROM USERS WHERE U_ID=?"/>-->
+<!--        </security:authentication-provider>-->
+<!--    </security:authentication-manager>-->
+<!--    <jdbc:embedded-database id="dataSource"/>-->
 </beans>
 
 

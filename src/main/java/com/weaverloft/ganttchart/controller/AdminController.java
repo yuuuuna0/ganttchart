@@ -42,7 +42,6 @@ public class AdminController {
     @ModelAttribute("menuList")
     public List<Menu> menuList() throws Exception{
         List<Menu> menuList = menuService.findMenuList();
-        System.out.println("menuList = " + menuList);
         return menuList;
     }
 

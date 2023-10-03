@@ -92,5 +92,10 @@ public class UsersDaoImpl implements UsersDao{
         return usersMapper.findUserList2(map);
     }
 
+    @Override
+    public Users getUserById(String uId) {
+        return usersMapper.getUserById(uId);
+    }
+
 
 }

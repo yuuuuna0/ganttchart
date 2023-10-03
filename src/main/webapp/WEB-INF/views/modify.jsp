@@ -41,7 +41,7 @@
                                         <input readonly type="password" class="form-control" id="uPassword" name="uPassword" value="xxxxx" >
                                     </div>
                                     <div class="col-2 mt-auto">
-                                        <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/user/modifyPassword'" >
+                                        <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/modifyPassword'" >
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -201,7 +201,7 @@
         }
         formData.append("mf",file[0]);
         $.ajax({
-            url : '/user/modify.ajx',
+            url : '/modify.ajx',
             method : 'POST',
             data : formData,
             contentType : false,

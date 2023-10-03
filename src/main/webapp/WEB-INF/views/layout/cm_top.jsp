@@ -29,7 +29,7 @@
 <%--                                <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png"/>--%>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profile" aria-labelledby="profileDropdown1">
-                                <a class="dropdown-item" href="/user/detail">
+                                <a class="dropdown-item" href="/detail">
                                     <i class="ti-settings text-primary"></i>
                                     마이페이지
                                 </a>
@@ -59,7 +59,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item nav-profile dropdown">
-                            <a class="nav-link dropdown-toggle" href="/user/login" data-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="/login" data-toggle="dropdown">
                                 <img class="img-fluid styled profile_pic rounded-circle"  width = "200px" src="/static/images/icons/default.png" onclick="location.href='/login'" alt="profile"/>
                             </a>
                         </li>

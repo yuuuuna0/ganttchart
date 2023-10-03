@@ -38,6 +38,7 @@
                         </div>
                         <h4>Hello! let's get started</h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
+                        <input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                                 <input type="text" class="form-control form-control-lg" id="uId" name="uId" placeholder="ID">
                             </div>
@@ -55,8 +56,8 @@
                                         Keep me signed in
                                     </label>
                                 </div>
-                                <a href="/user/findId" class="auth-link text-black">Forgot Id?</a>
-                                <a href="/user/findPassword" class="auth-link text-black">Forgot password?</a>
+                                <a href="/findId" class="auth-link text-black">Forgot Id?</a>
+                                <a href="/findPassword" class="auth-link text-black">Forgot password?</a>
                             </div>
 <%--                            <div class="mb-2">--%>
 <%--                                <button type="button" class="btn btn-block btn-facebook auth-form-btn">--%>
@@ -64,7 +65,7 @@
 <%--                                </button>--%>
 <%--                            </div>--%>
                             <div class="text-center mt-4 font-weight-light">
-                                Don't have an account? <a href="/user/register" class="text-primary">Create</a>
+                                Don't have an account? <a href="/register" class="text-primary">Create</a>
                             </div>
                     </div>
                 </div>
@@ -101,11 +102,17 @@
         }
         //2. 값이 있을 경우 ajax
         $.ajax({
-            url : '/user/login.ajx',
+            url : '/login.ajx',
             method : 'post',
             data : {
                 'uId' : uId,
                 'uPassword' : uPassword
+            },
+            beforeSend : function(xhr) {
+                //이거 안하면 403 error
+                //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+                var $token = $("#token");
+                xhr.setRequestHeader($token.data("token-name"), $token.val());
             },
             success : function(resultJson){
                 if(resultJson.code === 1){

@@ -15,12 +15,12 @@
     <div class="row mt-lg-1 " style="padding-left: 10px ">
     <div class="col-4" style="display: flex; ">
     <c:if test="${sessionScope.loginUser != null}">
-    <input type="button" class="btn btn-light ml-3" style="width: 120%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="로그아웃" onclick="location.href='/user/logout.action'">
-    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="마이페이지" onclick="location.href='/user/detail?uId=${sessionScope.loginUser.getUId()}'">
+    <input type="button" class="btn btn-light ml-3" style="width: 120%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="로그아웃" onclick="location.href='/logout.action'">
+    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="마이페이지" onclick="location.href='/detail?uId=${sessionScope.loginUser.getUId()}'">
     </c:if>
     <c:if test="${sessionScope.loginUser == null}">
-    <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; align-content: center" value="로그인" onclick="location.href='/user/login'">
-    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="회원가입" onclick="location.href='/user/register'">
+    <input type="button" class="btn btn-light ml-4" style="width: 100%; height: 100%; font-size: 10pt; padding: 2pt; align-content: center" value="로그인" onclick="location.href='/login'">
+    <input type="button" class="btn btn-light ml-5" style="width: 150%; height: 100%; font-size: 10pt; padding: 2pt; justify-content: center" value="회원가입" onclick="location.href='/register'">
     </c:if>
     </div>
     </div>

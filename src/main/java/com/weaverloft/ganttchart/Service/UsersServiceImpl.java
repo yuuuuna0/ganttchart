@@ -9,6 +9,9 @@ import com.weaverloft.ganttchart.util.SearchDto;
 import io.micrometer.core.instrument.search.Search;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +21,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class UsersServiceImpl implements UsersService{
+public class UsersServiceImpl implements UsersService, UserDetailsService {
     private UsersDao usersDao;
     private FilesDao filesDao;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
     public UsersServiceImpl(UsersDao usersDao,FilesDao filesDao) {
         this.usersDao = usersDao;
         this.filesDao = filesDao;
     }
 
+
     @Override
-    public Users findUserById(String id) throws Exception {
-        Users user = usersDao.findUserById(id);
+    public Users findUserById(String uId) throws Exception {
+        Users user = usersDao.findUserById(uId);
         Files file = filesDao.findFileByNo(user.getFileNo());
         user.setFile(file);
         return user;
@@ -123,6 +126,7 @@ public class UsersServiceImpl implements UsersService{
         SearchDto<Users> searchUserList = new SearchDto<Users>(userList,pageMaker,totUserCount);
         return searchUserList;
     }
+
 
 
 }

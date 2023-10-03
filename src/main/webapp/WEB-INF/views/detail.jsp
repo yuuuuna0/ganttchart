@@ -38,7 +38,7 @@
                                             <input readonly type="password" class="form-control" id="uPassword" name="uPassword" value="xxxxx" >
                                         </div>
                                         <div class="col-2 mt-auto">
-                                            <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/user/modifyPassword'" >
+                                            <input type="button" class="btn btn-primary mr-2" id="passwordBtn" name="passwordBtn" value="비밀번호 변경" onclick="location.href='/modifyPassword'" >
                                         </div>
                                     </div>
                                     <div class="row form-group">
@@ -86,8 +86,8 @@
                                         </div>
                                     </div>
                                     <div style="text-align:center;">
-                                        <input type="button" class="btn btn-primary mr-2" value="회원수정" onclick="location.href='/user/modify?uId=${user.getUId()}'">
-                                        <input type="button" class="btn btn-light" value="회원탈퇴" onclick="location.href='/user/withdrawal.action';" >
+                                        <input type="button" class="btn btn-primary mr-2" value="회원수정" onclick="location.href='/modify?uId=${user.getUId()}'">
+                                        <input type="button" class="btn btn-light" value="회원탈퇴" onclick="location.href='/withdrawal.action';" >
                                     </div>
                                 </form>
                             </div>

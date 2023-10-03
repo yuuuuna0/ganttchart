@@ -102,7 +102,7 @@
                                            value="남기기">
                                 </c:if>
                                 <c:if test="${sessionScope.loginUser == null}">
-                                    <input type="button" id="createCommentsBtn" onclick="location.href='/user/login'"
+                                    <input type="button" id="createCommentsBtn" onclick="location.href='/login'"
                                            value="남기기">
                                 </c:if>
                             </div>

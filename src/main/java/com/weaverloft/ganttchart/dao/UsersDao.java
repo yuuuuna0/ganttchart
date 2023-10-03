@@ -26,4 +26,6 @@ public interface UsersDao {
     int countUser(String keyword) throws Exception;
 
     List<Users> findUserList2(int contentBegin, int contentEnd, String keyword, String filterType, String ascDesc) throws Exception;
+
+    Users getUserById(String uId);
 }

@@ -102,7 +102,7 @@
                                         <input type="button" onclick="createUser()" class="btn btn-primary mr-2"
                                                value="회원가입">
                                         <input type="button" class="btn btn-light" value="취소"
-                                               onclick="location.href='/user/login'">
+                                               onclick="location.href='/login'">
                                     </div>
                                 </form>
                             </div>
@@ -172,7 +172,7 @@
             return false;
         }
         $.ajax({
-            url : '/user/idCheck',
+            url : '/idCheck',
             method : 'POST',
             data : {
                 'id' : id
@@ -272,7 +272,7 @@
         formData.append("mf",file[0]);
 
         $.ajax({
-            url : '/user/register.ajx',
+            url : '/register.ajx',
             method : 'POST',
             data : formData,
             contentType : false,

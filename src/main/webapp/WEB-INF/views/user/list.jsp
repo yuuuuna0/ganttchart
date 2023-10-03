@@ -178,7 +178,7 @@
 
     function goToDetail(id){
         let uId = id;
-        window.location.href='/user/detail?uId='+uId;
+        window.location.href='/detail?uId='+uId;
     }
 
 </script>

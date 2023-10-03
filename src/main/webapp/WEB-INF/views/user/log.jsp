@@ -129,6 +129,6 @@
     function searchLogList(no){
         let keyword = $('#keyword').val();
         let pageNo = no;
-        window.location.href='/user/log?pageNo='+pageNo+'&keyword='+keyword;
+        window.location.href='/log?pageNo='+pageNo+'&keyword='+keyword;
     }
 </script>

@@ -6,6 +6,8 @@ import com.weaverloft.ganttchart.dto.Board;
 import com.weaverloft.ganttchart.dto.Gathering;
 import com.weaverloft.ganttchart.dto.Menu;
 import com.weaverloft.ganttchart.dto.Users;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,22 +23,21 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+    private UsersService usersService;
     private MenuService menuService;
     private BoardService boardService;
     private GatheringService gatheringService;
-//    private AllLogService allLogService;
-    public HomeController(MenuService menuService,BoardService boardService,GatheringService gatheringService/*,AllLogService allLogService*/) {
+    public HomeController(UsersService usersService,MenuService menuService,BoardService boardService,GatheringService gatheringService) {
+        this.usersService = usersService;
         this.menuService = menuService;
         this.boardService = boardService;
         this.gatheringService = gatheringService;
-//        this.allLogService = allLogService;
     }
 
     //메뉴리스트
     @ModelAttribute("menuList")
     public List<Menu> menuList() throws Exception{
         List<Menu> menuList = menuService.findMenuList();
-        System.out.println("menuList = " + menuList);
         return menuList;
     }
 
@@ -46,6 +47,7 @@ public class HomeController {
         String forwardPath ="";
         try{
             Users loginUser = (Users)session.getAttribute("loginuser");
+            Users users = usersService.findUserById("admin");
             List<Board> topNboardList = boardService.findTopNBoard(5);
             List<Gathering> topNGathList = gatheringService.findTopNGath(5);
             List<Gathering> nearGathList = gatheringService.findNearGath();
@@ -93,4 +95,10 @@ public class HomeController {
         return forwardPath;
     }
 
+    //3. 접근불가 페이지
+    @GetMapping("/accessError")
+    public void accssDenied(Authentication auth,Model model) {
+        System.out.println("auth = " + auth);
+        model.addAttribute("msg", "접근할 수 없는 페이지입니다.");
+    }
 }

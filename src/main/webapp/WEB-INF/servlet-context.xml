@@ -49,26 +49,26 @@
 
     <!-- Interceptors -->
     <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-<!--            <mvc:exclude-mapping path="/webapp/resources/**"/>-->
-            <mvc:exclude-mapping path="/resources/**" />
-            <mvc:exclude-mapping path="/webapp/resources/*/**"/>
-<!--            <mvc:exclude-mapping path="/css/**" />-->
-<!--            <mvc:exclude-mapping path="/img/**" />-->
-<!--            <mvc:exclude-mapping path="/js/**" />-->
-<!--            <mvc:exclude-mapping path="/resources/upload/**"/>-->
-            <bean id="hostCheckInterceptor" class="com.weaverloft.ganttchart.controller.annotation.HostCheckInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <mvc:exclude-mapping path="/webapp/resources/*/**"/>
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/webapp/resources/**"/>&ndash;&gt;-->
 <!--            <mvc:exclude-mapping path="/resources/**" />-->
-<!--            <mvc:exclude-mapping path="/css/**" />-->
-<!--            <mvc:exclude-mapping path="/img/**" />-->
-<!--            <mvc:exclude-mapping path="/js/**" />-->
-            <bean id="adminCheckInterceptor" class="com.weaverloft.ganttchart.controller.annotation.AdminCheckInterceptor" />
-        </mvc:interceptor>
+<!--            <mvc:exclude-mapping path="/webapp/resources/*/**"/>-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/css/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/img/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/js/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/resources/upload/**"/>&ndash;&gt;-->
+<!--            <bean id="hostCheckInterceptor" class="com.weaverloft.ganttchart.controller.annotation.HostCheckInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**" />-->
+<!--            <mvc:exclude-mapping path="/webapp/resources/*/**"/>-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/resources/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/css/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/img/**" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <mvc:exclude-mapping path="/js/**" />&ndash;&gt;-->
+<!--            <bean id="adminCheckInterceptor" class="com.weaverloft.ganttchart.controller.annotation.AdminCheckInterceptor" />-->
+<!--        </mvc:interceptor>-->
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/webapp/resources/*/**"/>

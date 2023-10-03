@@ -29,4 +29,6 @@ public interface UsersMapper {
     int countUser(String keyword) throws Exception;
 
     List<Users> findUserList2(Map<String, Object> map) throws Exception;
+
+    Users getUserById(String uId);
 }

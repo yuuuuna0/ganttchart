@@ -20,7 +20,7 @@
                                     <input class="form-control" id="uAuthCode" name="uAuthCode" type="text"/>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <a class="small" href="/user/login">Return to login</a>
+                                    <a class="small" href="/login">Return to login</a>
                                     <button class="btn btn-primary" onclick="emailAuthAction()">Verify</button>
                                 </div>
                         </div>
@@ -41,7 +41,7 @@
             return false;
         }
         $.ajax({
-            url : '/user/emailAuth.ajx',
+            url : '/emailAuth.ajx',
             method : 'POST',
             data : {
                 'uAuthCode' : uAuthCode

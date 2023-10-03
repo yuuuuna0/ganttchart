@@ -29,7 +29,7 @@
                                 </div>
                                 <input type="button" onclick="findPasswordAction()" id="findPasswordBtn" class="btn btn-primary mr-2" value="비밀번호찾기">
                                 <input type="button" id="cancelBtn" onclick="location.href='/login'" class="btn btn-light" value="취소">
-                                <a href="/user/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
+                                <a href="/register" class="auth-link text-black float-right" style="font-size: 10pt">Need an account? Sign up!</a>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
             return false;
         }
             $.ajax({
-                url : '/user/findPassword.ajx',
+                url : '/findPassword.ajx',
                 method : "POST",
                 data : {
                     'uId': uId,

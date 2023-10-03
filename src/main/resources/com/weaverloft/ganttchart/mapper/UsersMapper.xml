@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weaverloft.ganttchart.mapper.UsersMapper">
+<!--    <resultMap id="userWithAuth" type="com.weaverloft.ganttchart.dto.Users" autoMapping="true">-->
+<!--        <collection property="authorityList" resultMap="authMap"/>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="authMap" type="com.weaverloft.ganttchart.dto.Authorities">-->
+<!--        <result property="uId" column="u_id"/>-->
+<!--        <result property="authority" column="authority"/>-->
+<!--    </resultMap>-->
     <resultMap id="userWithFile" type="com.weaverloft.ganttchart.dto.Users" autoMapping="true">
         <association property="file" javaType="com.weaverloft.ganttchart.dto.Files" autoMapping="true"/>
     </resultMap>
@@ -8,11 +15,26 @@
     <select id="findUserById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
         select * from users where u_id=#{uId}
     </select>
+<!--&lt;!&ndash;1. 아이디로 회원 찾기(시큐리티)&ndash;&gt;-->
+<!--    <select id="findUserById" parameterType="java.lang.String" resultMap="userWithAuth">-->
+<!--        select u.*,a.*-->
+<!--        from users u-->
+<!--        join authorities a on u.u_id=a.u_id-->
+<!--        where u.u_id=#{uId}-->
+<!--    </select>-->
+<!--1. 아이디로 회원 찾기 -->
     <select id="findUserById2" parameterType="java.lang.String" resultMap="userWithFile">
         select u.*,f.* from users u
                         join files f on u.file_no=f.file_no
-                 where u_id=#{uId}
+                 where u_id=#{uId} and f.is_use='Y'
     </select>
+    <select id="getUserById" parameterType="java.lang.String" resultType="com.weaverloft.ganttchart.dto.Users">
+        select * from Users where u_id=#{uId}
+    </select>
+
+
+
+
 <!--2. 회원가입   -->
     <insert id="createUsers" parameterType="com.weaverloft.ganttchart.dto.Users">
         insert into USERS(U_ID,U_PASSWORD,U_NAME,U_EMAIL,U_GENDER,U_BIRTH,U_PHONE,U_CREATE_DATE,U_ADDRESS,U_ADDRESS2,AUTH,U_STATUS_NO,FILE_NO,U_AUTH_CODE,ENABLED)
